@@ -125,4 +125,7 @@ export class CoursesService {
     return this.http.get(`${environment.apiAddress}/courses/course-students`, params);
   }
 
+  getAllCourses(){
+    return this.http.get(`${environment.apiAddress}/courses`);
+  }
 }

@@ -165,5 +165,10 @@ module.exports = () => {
         res.json(resp);
     });
 
+    // get courses
+    router.get('/courses', async (req, res, next) => {
+        const resp = await coursesServices.getAllCourses();
+        res.json(resp);
+    });
     return router;
 }

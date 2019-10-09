@@ -941,6 +941,24 @@ class CoursesService {
         return payload;
 
     }
+    /**
+     * @return {string[]} categories
+     */
+    async getAllCourses() {
+        let payload = [];
+
+        let coursesRef = await database.ref('/courses').orderByValue();
+        coursesRef.forEach( (course) => {
+            payload.push({
+                name: course.name,
+                id: course.key,
+                instructor_name: course.instructor_name
+            })
+        })
+
+        return payload;
+    }
+
 
 }
 
