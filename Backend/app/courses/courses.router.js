@@ -159,5 +159,11 @@ module.exports = () => {
         const resp = await coursesServices.removeDiscussion(req.body.course, req.body.discussion);
         res.json(resp);
     });
+
+    router.get('/course-student', async(req, res, next) => {
+        const resp = await coursesServices.getStudents(req.query.course, req.query.student);
+        res.json(resp);
+    });
+
     return router;
 }

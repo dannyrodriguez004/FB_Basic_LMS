@@ -1,4 +1,5 @@
-<h3 mat-dialog-title>Add New Course</h3>
+<div mat-dialog-content>
+  <h3 mat-dialog-title>Add New Course</h3>
 <form [formGroup]="courseForm">
 
   <mat-form-field appearance="outline">
@@ -37,13 +38,6 @@
     <input matInput formControlName="MAX_SIZE" type="number" [min]="0" [max]="100" placeholder="0 - 100" required>
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Open/Close Course</mat-label>
-    <input matInput formControlName="isOpen" type="boolean"required>
-        <mat-option value="{{!isOpen}}">{{"Open"}}</mat-option>
-        <mat-option value="{{!isOpen}}">{{"Closed"}}</mat-option>
-  </mat-form-field>
-
   <div>
     <mat-label><strong>Course Description:</strong></mat-label>
     <angular-editor formControlName="description" [config]="config"></angular-editor>
@@ -58,3 +52,4 @@
   <button (click)="onNoClick()" mat-raised-button color="warn">Cancel</button>
   <button (click)="addCourse()" mat-raised-button color="primary">Create</button>
 </mat-dialog-actions>
+</div>

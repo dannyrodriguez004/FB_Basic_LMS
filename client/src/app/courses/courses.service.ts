@@ -120,8 +120,9 @@ export class CoursesService {
     return this.http.post(`${environment.apiAddress}/courses/remove-discussion`, {course: course, discussion: discussion});
   }
 
-  course(course_id) {
-    const id = {params: new HttpParams().set('id', `${course_id}`)};
-    return this.http.get(`${environment.apiAddress}/courses/id`, id);
+  getStudents(course_id) {
+    const params = { params: new HttpParams().set('course', `${course_id}`)};
+    return this.http.get(`${environment.apiAddress}/courses/course-students`, params);
   }
+
 }

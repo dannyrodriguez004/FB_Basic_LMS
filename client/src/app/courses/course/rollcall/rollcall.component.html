@@ -1,16 +1,14 @@
-<mat-card class="example-card">
-  <mat-card-content>
 
-    <p *ngFor="let student of students">
-    <strong>Student: </strong>{{student.name}}
-      <br>
-<!--      <strong>Email: </strong>{{instructorEmail}}-->
-    </p>
-
-<!--   -->
-
-<!--    <mat-nav-list *ngIf="this.isAdmin()">-->
-<!--      <a (click)="getCourseInfo()" mat-list-item class="add_button"><mat-icon>edit</mat-icon>Edit Course Details</a>-->
-<!--    </mat-nav-list>-->
-  </mat-card-content>
-</mat-card>
+  <mat-card *ngIf="1 > students.length">
+    <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
+    <div *ngIf="1 > students.length" class="empty_message">
+      There are no students.
+    </div>
+  </mat-card>
+  <mat-card>
+    <div *ngFor="let student of students">
+      <ul>
+        {{student.name}}
+</ul>
+    </div>
+  </mat-card>

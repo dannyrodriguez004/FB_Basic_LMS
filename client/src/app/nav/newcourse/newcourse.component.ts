@@ -71,7 +71,7 @@ export class NewcourseComponent implements OnInit {
         instructor_id: this.courseForm.value.instructor,
         description: this.courseForm.value.description,
         MAX_SIZE: this.courseForm.value.MAX_SIZE,
-        isOpen: this.courseForm.value.isOpen,
+        isOpen: true,
         endEnrollDate: this.courseForm.value.endEnrollDate,
         category: this.courseForm.value.category
       }

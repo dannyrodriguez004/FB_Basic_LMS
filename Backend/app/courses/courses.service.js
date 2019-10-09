@@ -3,9 +3,6 @@ const database = require('firebase-admin').database();
 const MAX_POSTS = 50;
 
 class CoursesService {
-
-    course_id =  database.ref('/courses/' + + id).once('value');
-
     constructor() {}
 
     /**
@@ -910,9 +907,41 @@ class CoursesService {
         return true;
     }
 
-    course(){
-        return this.course_id;
+
+    /**  ---------------------- getStudentsForCourse  ----------------------
+     *
+     * @param {string} course_id
+     *
+     * @returns json object with array of student objects
+     */
+
+    async getStudents(course, student_id) {
+        let payload = {id: '', name: '', email: ''};
+
+        try {
+
+            let current_student = await database.ref('/courses').child(course)
+                .child('students').child(student_id).once('value');
+
+            payload.name = current_student.child('name').val();
+            payload.id = current_student.key;
+
+            // current_module.child('email').forEach( (student) => {
+            //     payload.email.push({
+            //         id: student.key,
+            //         stu: current_student.key,
+            //         name: student.child('title').val()
+            //     });
+            // });
+
+        } catch (err) {
+            console.error(err);
+        }
+
+        return payload;
+
     }
+
 }
 
 

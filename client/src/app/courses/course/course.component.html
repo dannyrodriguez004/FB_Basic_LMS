@@ -21,7 +21,7 @@
                 <app-modules [current_course]="current_course" *ngIf="isEqual('Modules')"></app-modules>
                 <app-grades [current_course]="current_course" *ngIf="isEqual('Grades')"></app-grades>
                 <app-discussions [current_course]="current_course" *ngIf="isEqual('Discussions')"></app-discussions>
-                <app-rollcall [courseData]="current_course" *ngIf="isEqual('Roll Call')"></app-rollcall>
+                <app-rollcall [current_course]="current_course" *ngIf="isEqual('Roll Call')"></app-rollcall>
                 <app-discussion [current_course]="current_course" *ngIf="isEqual('Discussion')"></app-discussion>
                 <app-document-viewer *ngIf="isEqual('ViewDocument')"></app-document-viewer>
                 <app-pages  [current_course]="current_course" *ngIf="isEqual('Page')"></app-pages>

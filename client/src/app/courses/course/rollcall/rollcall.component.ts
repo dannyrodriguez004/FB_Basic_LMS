@@ -10,13 +10,14 @@ import {Students} from '../../courses.models';
   styleUrls: ['./rollcall.component.scss']
 })
 
-export class RollcallComponent implements OnInit, OnChanges {
+export class RollcallComponent implements OnInit {
 
-  subscriptions: Subscription[] = [];
-  students: {name: string, id: string}[] = [];
-
-  // private course_id = '-Lp5NZdSH8TLyL92KkIq';
-  @Input('courseData') courseData: {id: string, name: string, description: string, instructor: string, student: string};
+  private subscriptions: Subscription[] = [];
+  // private students: Students[] =  [];
+  loading = true;
+  private students =  [];
+  student: {id: string, name: string}[]
+  @Input('current_course') current_course: string;
 
   constructor(
     private courseServices: CoursesService,
@@ -24,23 +25,17 @@ export class RollcallComponent implements OnInit, OnChanges {
   ) {
   }
 
-loadStudents(){
-  this.subscriptions.push(this.courseServices.getCourseInfo(this.courseData.student).subscribe( (resp: Students[]) => {
-    this.students = resp;
-  }));
-}
-
-  ngOnInit() {
-  this.loadStudents();
-  this.subscriptions.push(this.courseServices.getAllStudents().subscribe( (resp: {name: string, id: string}[]) => {
-      this.students = resp;
-    }));
+  loadData() {
+    // const student = this.courseServices.getStudents(this.current_course);
+    this.subscriptions.push(this.courseServices.getStudents(this.current_course)
+      .subscribe( (resp: []) => {
+        this.students = resp;
+        this.loading = false;
+      }));
   }
-
-
-  ngOnChanges() {
-    this.ngOnInit();
-
+  ngOnInit() {
+    this.loading = true;
+    this.loadData();
   }
 
   isAdmin() {
