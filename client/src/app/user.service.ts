@@ -9,6 +9,7 @@ export class UserService {
 
   private student_id = "haslhadsfapsjdfp"; // debugging value
   private isAdmin = true;
+  private FBLoggedIn = true;
 
   constructor(private http: HttpClient) { }
 
@@ -45,6 +46,14 @@ export class UserService {
 
   getIsAdmin() {
     return this.isAdmin;
+  }
+
+  fbLoggedIn() {
+    return this.FBLoggedIn;
+  }
+
+  toggleLoggedIn() {
+    this.FBLoggedIn = !this.FBLoggedIn;
   }
 
   ToggleIsAdmin() {

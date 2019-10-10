@@ -57,7 +57,10 @@ class UsersSerivce {
             var users = await database.ref('/students').orderByKey().equalTo(user.key).once('value');
             if(!users.hasChildren()) {
                 await database.ref('/students').child(user.key).set({
-                    name: user.name,
+                    fname: user.fname.trim(),
+                    lname: user.lname.trim(),
+                    phone: user.phone.trim(),
+                    email: user.email.trim(),
                 });
             }
         } catch (err) {
