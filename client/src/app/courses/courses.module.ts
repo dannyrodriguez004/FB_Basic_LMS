@@ -50,6 +50,7 @@ import { NewQuizComponent } from './course/modules/new-content/new-quiz/new-quiz
 import { DocumentViewerComponent } from './course/document-viewer/document-viewer.component';
 import { RollcallComponent } from './course/rollcall/rollcall.component';
 import { PagesComponent } from './course/pages/pages.component';
+import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.component';
 
 
 
@@ -74,7 +75,8 @@ import { PagesComponent } from './course/pages/pages.component';
     NewQuizComponent,
     DocumentViewerComponent,
     RollcallComponent,
-    PagesComponent
+    PagesComponent,
+    ConfirmEnrollComponent
   ],
   imports: [
     CommonModule,

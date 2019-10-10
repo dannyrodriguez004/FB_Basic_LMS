@@ -64,5 +64,10 @@ module.exports = (passport) => {
         });
     });
 
+    router.get('/get-student-info', async (req, res, next) => {
+        const resp = await usersServices.getStudentDetail(req.query.student);
+        res.json(resp);
+    });
+
     return router;
 }

@@ -38,6 +38,14 @@ export class NavbarComponent implements OnInit {
     this.userServices.ToggleIsAdmin();
   }
 
+  toggleLogin() {
+    this.userServices.toggleLoggedIn();
+  }
+
+  isLoggedIn() {
+    return this.userServices.fbLoggedIn;
+  }
+
   isAdmin() {
     return this.userServices.getIsAdmin();
   }

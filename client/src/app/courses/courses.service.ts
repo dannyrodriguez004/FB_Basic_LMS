@@ -8,35 +8,36 @@ import { environment } from 'src/environments/environment';
 })
 export class CoursesService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getCourseInfo(course_id) {
-    const params = { params: new HttpParams().set('key', `${course_id}`)};
+    const params = {params: new HttpParams().set('key', `${course_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-info`, params);
   }
 
   // tslint:disable-next-line:variable-name
   getDiscussions(course_id) {
-    const params = { params: new HttpParams().set('course', `${course_id}`)};
+    const params = {params: new HttpParams().set('course', `${course_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-discussions`, params);
   }
 
   // tslint:disable-next-line:variable-name
   getModules(course_id) {
-    const params = { params: new HttpParams().set('course', `${course_id}`)};
+    const params = {params: new HttpParams().set('course', `${course_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/modules`, params);
   }
 
   // tslint:disable-next-line:variable-name
   getDiscussionPosts(course_id, discussion_id, startFrom) {
     // tslint:disable-next-line:max-line-length
-    const params = { params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`).set('start', `${startFrom}`)};
+    const params = {params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`).set('start', `${startFrom}`)};
     return this.http.get(`${environment.apiAddress}/courses/discussion-posts-from`, params);
   }
 
   // tslint:disable-next-line:variable-name
   getDiscussionInfo(course_id, discussion_id) {
-    const params = { params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`)};
+    const params = {params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-discussion-info`, params);
   }
 
@@ -47,13 +48,13 @@ export class CoursesService {
   }
 
   getStudentCourseGrades(course_id, student_id) {
-    const params = { params: new HttpParams().set('course', `${course_id}`).set('student', `${student_id}`)};
+    const params = {params: new HttpParams().set('course', `${course_id}`).set('student', `${student_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/student-grades`, params);
   }
 
   // tslint:disable-next-line:variable-name
   getInstructorInfo(instructor_id) {
-    const params = { params: new HttpParams().set('id', `${instructor_id}`)};
+    const params = {params: new HttpParams().set('id', `${instructor_id}`)};
     return this.http.get(`${environment.apiAddress}/users/instructor-info`, params);
   }
 
@@ -73,7 +74,11 @@ export class CoursesService {
   postDiscussionPost(course_id, discussion_id, post) {
     // tslint:disable-next-line:max-line-length
     // const params = { params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`).set('post', `${post}`)};
-    return this.http.post(`${environment.apiAddress}/courses/add-discussion-post`, {course: course_id, discussion: discussion_id, post});
+    return this.http.post(`${environment.apiAddress}/courses/add-discussion-post`, {
+      course: course_id,
+      discussion: discussion_id,
+      post
+    });
   }
 
   updateCourse(course) {
@@ -92,40 +97,54 @@ export class CoursesService {
 
   // tslint:disable-next-line:variable-name
   newContentPush(course, module_id, content) {
-    return this.http.post(`${environment.apiAddress}/courses/add-module-content`, {course, module: module_id, content });
+    return this.http.post(`${environment.apiAddress}/courses/add-module-content`, {course, module: module_id, content});
   }
 
   newQuizPush(course, module_id, quiz) {
-    return this.http.post(`${environment.apiAddress}/courses/add-module-quiz`, {course: course, module: module_id, content: quiz });
+    return this.http.post(`${environment.apiAddress}/courses/add-module-quiz`, {
+      course,
+      module: module_id,
+      content: quiz
+    });
   }
 
   newModule(course, newModule) {
-    return this.http.post(`${environment.apiAddress}/courses/add-module`, {course: course, module: newModule});
+    return this.http.post(`${environment.apiAddress}/courses/add-module`, {course, module: newModule});
   }
 
   removeContent(course, module_id, content) {
-    return this.http.post(`${environment.apiAddress}/courses/remove-content`, {course: course, module: module_id, content: content});
+    return this.http.post(`${environment.apiAddress}/courses/remove-content`, {
+      course,
+      module: module_id,
+      content
+    });
   }
 
   getCourseModule(course, module_id) {
-    const params = { params: new HttpParams().set('course', `${course}`).set('module', module_id)};
+    const params = {params: new HttpParams().set('course', `${course}`).set('module', module_id)};
     return this.http.get(`${environment.apiAddress}/courses/course-module`, params);
   }
 
   updateDiscussion(course, discussion) {
-    return this.http.post(`${environment.apiAddress}/courses/update-discussion`, {course: course, discussion: discussion});
+    return this.http.post(`${environment.apiAddress}/courses/update-discussion`, {
+      course,
+      discussion
+    });
   }
 
   deleteDiscussion(course, discussion) {
-    return this.http.post(`${environment.apiAddress}/courses/remove-discussion`, {course: course, discussion: discussion});
+    return this.http.post(`${environment.apiAddress}/courses/remove-discussion`, {
+      course,
+      discussion
+    });
   }
 
   getStudents(course_id) {
-    const params = { params: new HttpParams().set('course', `${course_id}`)};
+    const params = {params: new HttpParams().set('course', `${course_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-students`, params);
   }
 
-  getAllCourses(){
+  getAllCourses() {
     return this.http.get(`${environment.apiAddress}/courses`);
   }
 }

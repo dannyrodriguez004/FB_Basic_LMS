@@ -57,7 +57,10 @@ class UsersSerivce {
             var users = await database.ref('/students').orderByKey().equalTo(user.key).once('value');
             if(!users.hasChildren()) {
                 await database.ref('/students').child(user.key).set({
-                    name: user.name,
+                    fname: user.fname.trim(),
+                    lname: user.lname.trim(),
+                    phone: user.phone.trim(),
+                    email: user.email.trim(),
                 });
             }
         } catch (err) {
@@ -176,6 +179,22 @@ class UsersSerivce {
         });
 
         return token;
+    }
+
+    async getStudentDetail(student_id) {
+        let payload = {};
+        try {
+            let students =  await database.ref('/students').orderByKey().equalTo(student_id).once('value');
+            if(!students.hasChildren()) return payload;
+            students.forEach( student  => {
+                payload = student.toJSON()
+            });
+        } catch (err) {
+            console.error(err);
+            return payload;
+        }
+
+        return payload;
     }
 }
 
