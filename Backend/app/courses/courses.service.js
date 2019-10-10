@@ -354,7 +354,7 @@ class CoursesService {
      * 
      * @param {string} key , course key in the database
      * 
-     * @return {id: string, name: string, description: string, instructor: string} course_info
+     * @return {id: string, name: string, description: string, instructor: string, size: number, MAX_SIZE: number} course_info
      */
     async getCourseInfo(key) {
 
@@ -368,6 +368,8 @@ class CoursesService {
                 name: course.name,
                 description: course.description,
                 instructor: course.instructor_id,
+                size: course.size,
+                MAX_SIZE: course.MAX_SIZE,
                 endEnrollDate: course.endEnrollDate,
             };
         });
@@ -821,6 +823,33 @@ class CoursesService {
         try {
             await database.ref('/courses/' + course + '/discussions/' + discussion).remove();
         } catch(err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
+
+    async signUpFor(user, course) {
+        try {
+
+            let courseInfo = this.getCourseInfo(course);
+
+            if(courseInfo.size >= courseInfo.MAX_SIZE) return this.addToWaitingList(user, course);
+
+            await database.ref('/courses/' + course + '/registered').push({student_id: user});
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
+
+    async addToWaitingList(user, course) {
+        try {
+            await database.ref('/courses/' + course + '/waiting-list').push({student_id: user});
+        } catch (err) {
             console.error(err);
             return false;
         }
