@@ -9,10 +9,12 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatTableModule} from "@angular/material/table";
 import {MatExpansionModule} from "@angular/material/expansion";
+import { TOSComponent } from './homepage/tos/tos.component';
+import { PrivacyComponent } from './homepage/privacy/privacy.component';
 
 
 @NgModule({
-  declarations: [HomepageComponent],
+  declarations: [HomepageComponent, TOSComponent, PrivacyComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

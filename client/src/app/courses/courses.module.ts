@@ -49,6 +49,7 @@ import { NewPageComponent } from './course/modules/new-content/new-page/new-page
 import { NewQuizComponent } from './course/modules/new-content/new-quiz/new-quiz.component';
 import { DocumentViewerComponent } from './course/document-viewer/document-viewer.component';
 import { PagesComponent } from './course/pages/pages.component';
+import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.component';
 
 
 
@@ -59,7 +60,7 @@ import { PagesComponent } from './course/pages/pages.component';
     ModulesComponent, 
     GradesComponent, 
     DiscussionsComponent, 
-    InfoComponent, DiscussionComponent, AssessmentComponent, DiscussionEditorComponent, NewDiscussionComponent, CourseDetailEditorComponent, NewContentComponent, ModuleEditorComponent, NewExternalLinkComponent, NewEmbeddedVideoComponent, NewPageComponent, NewQuizComponent, DocumentViewerComponent, PagesComponent
+    InfoComponent, DiscussionComponent, AssessmentComponent, DiscussionEditorComponent, NewDiscussionComponent, CourseDetailEditorComponent, NewContentComponent, ModuleEditorComponent, NewExternalLinkComponent, NewEmbeddedVideoComponent, NewPageComponent, NewQuizComponent, DocumentViewerComponent, PagesComponent, ConfirmEnrollComponent
   ],
   imports: [
     CommonModule,
