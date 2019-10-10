@@ -1,16 +1,16 @@
 <!--  This is the main navigation bar for the app -->
 
 <mat-toolbar color="primary">
-    <mat-toolbar-row>
+  <mat-toolbar-row>
 
       <span>
             <a [routerLink]="['home/']"><img src="https://www.fiu.edu/_assets/images/fiu-white-logo.png"></a>
       </span>
 
-      <span>
+    <span>
             <button [routerLink]="['nav']" mat-button><mat-icon>dashboard</mat-icon>Dashboard</button>
       </span>
-      <span>
+    <span>
             <button mat-button [matMenuTriggerFor]="menu"><mat-icon>list</mat-icon>My Courses</button>
 
             <mat-menu #menu="matMenu">
@@ -19,26 +19,25 @@
                   </button>
             </mat-menu>
       </span>
-      <span>
-            <button [routerLink]="['courses/']" mat-button><mat-icon>list</mat-icon>Library</button>
+    <span>
+            <button [routerLink]="['courses/']" mat-button><mat-icon>list</mat-icon>Courses</button>
       </span>
-      <span>
+    <span>
             <button [routerLink]="['helppage/']" mat-button><mat-icon>help_outline</mat-icon>Help</button>
       </span>
-
-      <span class="fill"></span>
-      <span>
-
+    <span>
+            <button [routerLink]="['home/']" mat-button style="align-content: flex-end"><mat-icon>home</mat-icon>Home</button>
+      </span>
+    <span>
             <button [routerLink]="['security/login/']" mat-button style="align-content: flex-end"><mat-icon>fingerprint</mat-icon>Login</button>
       </span>
 
-
-      <span *ngIf="this.isAdmin()">
-          <button mat-button (click)="openAddCourseDialog()" class="add_button"><mat-icon>add</mat-icon>Add Course</button>
+    <span class="fill"></span>
+    <span *ngIf="this.isAdmin()">
+            <button mat-button><mat-icon>add</mat-icon>New Course</button>
       </span>
-
-      <span>
+    <span>
             <mat-slide-toggle (click)="toggleAdmin()">Admin Toggle</mat-slide-toggle>
       </span>
-    </mat-toolbar-row>
+  </mat-toolbar-row>
 </mat-toolbar>
