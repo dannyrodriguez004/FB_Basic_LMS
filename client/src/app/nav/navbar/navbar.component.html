@@ -34,8 +34,9 @@
 
     <span class="fill"></span>
     <span *ngIf="this.isAdmin()">
-            <button mat-button><mat-icon>add</mat-icon>New Course</button>
+          <button mat-button (click)="openAddCourseDialog()" class="add_button"><mat-icon>add</mat-icon>Add Course</button>
       </span>
+
     <span>
             <mat-slide-toggle (click)="toggleAdmin()">Admin Toggle</mat-slide-toggle>
       </span>

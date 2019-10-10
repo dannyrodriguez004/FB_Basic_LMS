@@ -20,7 +20,7 @@ import { MatInputModule,
   MatSelectModule,
   MatDialogModule} from '@angular/material';
 import { NewDiscussionComponent } from './courses/course/discussions/new-discussion/new-discussion.component';
-// import { NewcourseComponent } from './nav/newcourse/newcourse.component';
+import { NewcourseComponent } from './nav/newcourse/newcourse.component';
 import { YesNoDialogComponent } from './yes-no-dialog/yes-no-dialog.component';
 
 @NgModule({
