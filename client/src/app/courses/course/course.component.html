@@ -8,8 +8,9 @@
     <mat-sidenav-container class=container>
 
         <mat-sidenav class="size-nav" #snav mode="side" opened>
-            <mat-nav-list *ngFor="let nav of navs">
-                <a mat-list-item [routerLink]="" [queryParams]="{course: current_course, select: nav.val}" (click)="setNav(nav.val)"><mat-icon>{{nav.ico}}</mat-icon>{{nav.val}}</a>
+            <mat-nav-list >
+                <a *ngFor="let nav of navs" mat-list-item [routerLink]="" [queryParams]="{course: current_course, select: nav.val}" (click)="setNav(nav.val)"><mat-icon>{{nav.ico}}</mat-icon>{{nav.val}}</a>
+                <a *ngIf="isAdmin()" mat-list-item [routerLink]="nav/courses/confirm-enroll" [queryParams]="{course: current_course}"><mat-icon>check</mat-icon>Enrollment Confirmation</a>
             </mat-nav-list>
         </mat-sidenav>
     

@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConfirmEnrollComponent implements OnInit {
 
-  
+  students: {id: string, fname: string, lname: string, email: string, phone: string}[];
 
   constructor() { }
 
