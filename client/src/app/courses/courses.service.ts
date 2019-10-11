@@ -96,4 +96,9 @@ export class CoursesService {
     return this.http.post(`${environment.apiAddress}/courses/remove-discussion`, {course: course, discussion: discussion});
   }
 
+  getRegistered(course) {
+    const params = { params: new HttpParams().set('course', `${course}`)};
+    return this.http.get(`${environment.apiAddress}/courses/registered-students`, params);
+  }
+
 }
