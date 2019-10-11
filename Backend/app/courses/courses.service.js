@@ -1019,6 +1019,7 @@ class CoursesService {
             var index;
             for(index = 0; index < ids.length; index++) {
                 var temp = await userService.getStudentDetail(ids[index]);
+                temp.id = ids[index];
                 payload.push(temp);
             }
 
