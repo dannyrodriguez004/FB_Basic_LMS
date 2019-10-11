@@ -2,6 +2,9 @@ import { CourseNav } from './../../courses/courses.models';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { UserService } from './../../user.service';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { CourseDetailEditorComponent } from '../../courses/course/info/course-detail-editor/course-detail-editor.component';
+import {NewcourseComponent} from '../newcourse/newcourse.component';
 
 @Component({
   selector: 'app-navbar',
@@ -15,9 +18,12 @@ export class NavbarComponent implements OnInit {
   private student_id = '';
   private subscriptions: Subscription[] = [];
 
-  constructor(private userServices: UserService) {
+  constructor(
+    private userServices: UserService,
+    private dialog: MatDialog,
+  ) {
     this.student_id = this.userServices.user(); // get debug student id
-   }
+  }
 
   // Runs whenever this component is loaded
   ngOnInit() {
@@ -25,6 +31,22 @@ export class NavbarComponent implements OnInit {
     this.loadCourses();
   }
 
+
+  openAddCourseDialog() {
+    const dialogRef = this.dialog.open(NewcourseComponent, {
+      width: '90%',
+      data: {
+        name: 'Insert Course Title Here',
+        description: 'Enter Course description here'
+      }
+    });
+
+    this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
+      if(result) {
+        console.log(result);
+      }
+    }));
+  }
   /**
    * Load courses, id and name, for the current user.
    */

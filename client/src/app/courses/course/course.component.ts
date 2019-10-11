@@ -4,10 +4,6 @@ import { Component, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 
-
-
-
-
 @Component({
   selector: 'app-course',
   templateUrl: './course.component.html',
@@ -16,11 +12,12 @@ import { Subscription } from 'rxjs/internal/Subscription';
 export class CourseComponent implements OnInit, OnChanges {
 
   navs = [
-    {val:'Home', ico: 'home'}, 
-    {val:'Modules', ico:'view_module'}, 
-    {val:'Grades', ico:'assessment'}, 
-    {val:'Discussions', ico: 'forum'}];
-    
+    {val:'Home', ico: 'home'},
+    {val:'Modules', ico:'view_module'},
+    {val:'Grades', ico:'assessment'},
+    {val:'Discussions', ico: 'forum'},
+    {val: 'Roll Call', ico: 'forum'}];
+
   private navItem = 'Home';
 
   private subscriptions: Subscription[] = [];
@@ -38,7 +35,7 @@ export class CourseComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    
+
     this.loadData();
 
     this.subscriptions.push(this.router.events.subscribe((e:any) => {
@@ -46,8 +43,6 @@ export class CourseComponent implements OnInit, OnChanges {
         this.loadData();
       }
     }));
-
-    
   }
 
   loadData() {
@@ -68,7 +63,7 @@ export class CourseComponent implements OnInit, OnChanges {
       if(this.authorized) {
         this.subscriptions.push(this.coursesServices
           .getCourseInfo(this.current_course)
-          .subscribe( (course: {id: string, name:string, description: string, instructor: string}) => {
+          .subscribe( (course: {id: string, name:string, description: string, instructor: string, students: string[]}) => {
           this.course = course;
           //console.log(course);
         }));

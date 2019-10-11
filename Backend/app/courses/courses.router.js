@@ -53,7 +53,7 @@ module.exports = () => {
 
     // get course catergories
     router.get('/categories', async (req, res, next) => {
-        const resp = await coursesServices.getCategories();
+        const resp = await coursesServices.getAllCategories();
         res.json(resp);
     });
 
@@ -105,11 +105,18 @@ module.exports = () => {
         res.json(resp);
     });
 
+    // get all info for all modules in a course
+    // router.get('/course-students', async (req, res, next) => {
+    //     const resp = await coursesServices.getCourseStudents(req.query.course);
+    //     res.json(resp);
+    // });
+
     router.get('/page', async (req, res, next) => {
         //console.log(req.query);
         const resp = await coursesServices.getPage(req.query.course, req.query.module, req.query.page);
         res.json(resp);
     });
+
     // get all the courses that a student is enrolled in
     router.get('/student-courses', async (req, res, next) => {
         const resp = await coursesServices.getMyCourses(req.query.student);
@@ -164,5 +171,15 @@ module.exports = () => {
     });
 
 
+    router.get('/course-student', async(req, res, next) => {
+        const resp = await coursesServices.getStudents(req.query.course, req.query.student);
+        res.json(resp);
+    });
+
+    // get courses
+    router.get('/courses', async (req, res, next) => {
+        const resp = await coursesServices.getAllCourses();
+        res.json(resp);
+    });
     return router;
 }

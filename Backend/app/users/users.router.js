@@ -34,6 +34,11 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    router.get('/all-categories', async (req, res, next) => {
+        const resp = await usersServices.getAllCategories();
+        res.json(resp);
+    });
+
     /**
      * @param id: string, instructor database key
      */

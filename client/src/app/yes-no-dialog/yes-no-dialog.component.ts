@@ -10,11 +10,10 @@ export class YesNoDialogComponent implements OnInit {
 
   dialogData : {title: string, message: string};
 
-
   constructor(
     public dialogRef: MatDialogRef<YesNoDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) data: {title: string, message: string},
-  ) { 
+  ) {
     this.dialogData = data;
   }
 

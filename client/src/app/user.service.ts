@@ -7,16 +7,16 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 })
 export class UserService {
 
-  private student_id = "haslhadsfapsjdfp"; // debugging value
+  private student_id = 'haslhadsfapsjdfp'; // debugging value
   private isAdmin = true;
   private FBLoggedIn = true;
 
   constructor(private http: HttpClient) { }
 
   /**
-   * 
+   *
    * @param student_id facebook id for this app's user
-   * 
+   *
    * @returns {course_id: string, name: string}[]
    */
   getStudentCourses(student_id: string) {
@@ -25,10 +25,10 @@ export class UserService {
   }
 
   /**
-   * 
+   *
    * @param student_id facebook id for this app's user
    * @param course_id course database id
-   * 
+   *
    * @returns boolean, is this student enrolled in this course
    */
   studentHasCourse(student_id, course_id) {

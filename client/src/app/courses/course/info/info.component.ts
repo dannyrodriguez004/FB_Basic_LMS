@@ -30,7 +30,7 @@ export class InfoComponent implements OnInit, OnChanges {
     private dialog: MatDialog,
     ) { }
 
-  
+
   openEditCourse() {
     const dialogRef = this.dialog.open(CourseDetailEditorComponent, {
       width: '90%',
@@ -52,7 +52,7 @@ export class InfoComponent implements OnInit, OnChanges {
 
       this.subscriptions.push(this.courseServices.getInstructorInfo(this.courseData.instructor).subscribe( (resp: {contactEmail: string, name: string}) => {
         this.instructor = resp.name;
-        this.instructorEmail = resp.contactEmail; 
+        this.instructorEmail = resp.contactEmail;
       }));
       this.loading = false;
     }));

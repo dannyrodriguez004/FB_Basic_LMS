@@ -13,15 +13,16 @@
                 <a *ngIf="isAdmin()" mat-list-item [routerLink]="['/nav/courses/confirm-enroll']" [queryParams]="{course: current_course}"><mat-icon>check</mat-icon>Enrollment Confirmation</a>
             </mat-nav-list>
         </mat-sidenav>
-    
+
 
         <mat-sidenav-content class="course_viewer">
-            
+
             <div class="content">
                 <app-info [current_course]="current_course" *ngIf="isEqual('Home')"></app-info>
                 <app-modules [current_course]="current_course" *ngIf="isEqual('Modules')"></app-modules>
                 <app-grades [current_course]="current_course" *ngIf="isEqual('Grades')"></app-grades>
                 <app-discussions [current_course]="current_course" *ngIf="isEqual('Discussions')"></app-discussions>
+                <app-rollcall [current_course]="current_course" *ngIf="isEqual('Roll Call')"></app-rollcall>
                 <app-discussion [current_course]="current_course" *ngIf="isEqual('Discussion')"></app-discussion>
                 <app-document-viewer *ngIf="isEqual('ViewDocument')"></app-document-viewer>
                 <app-pages  [current_course]="current_course" *ngIf="isEqual('Page')"></app-pages>

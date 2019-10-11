@@ -8,8 +8,8 @@ const routes: Routes = [
         {path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module').then(mod => mod.DashboardModule)},
         {path: 'helppage', loadChildren: () => import('../helppage/helppage.module').then(mod => mod.HelppageModule)},
         {path: 'home', loadChildren: () => import('../home/home.module').then(mod => mod.HomeModule)},
-        {path: 'security', loadChildren: () => import('../security/security.module').then(mod => mod.SecurityModule)},
-
+        {path: 'add-course', loadChildren: () => import('./newcourse/newcourse.component').then(mod => mod.NewcourseComponent)},
+        {path: 'security', loadChildren: () => import('../security/security.module').then(mod => mod.SecurityModule)}
       ]}
 ];
 
