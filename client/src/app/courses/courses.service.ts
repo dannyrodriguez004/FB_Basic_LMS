@@ -146,4 +146,9 @@ export class CoursesService {
   getAllCourses() {
     return this.http.get(`${environment.apiAddress}/courses`);
   }
+  getRegistered(course) {
+    const params = { params: new HttpParams().set('course', `${course}`)};
+    return this.http.get(`${environment.apiAddress}/courses/registered-students`, params);
+  }
+
 }

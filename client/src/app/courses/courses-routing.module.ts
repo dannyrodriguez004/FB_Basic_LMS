@@ -1,3 +1,4 @@
+import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.component';
 import { AssessmentComponent } from './assessment/assessment.component';
 import { CoursesComponent } from './courses/courses.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -8,7 +9,8 @@ const routes: Routes = [
     {path:'', component: CoursesComponent},
     {path:'view-course', component: CourseComponent},
     {path:'assessment', component: AssessmentComponent},
-    {path:'**', redirectTo: '' }
+    {path:'confirm-enroll', component: ConfirmEnrollComponent},
+    {path:'**', redirectTo: '' },
 ];
 
 @NgModule({ 

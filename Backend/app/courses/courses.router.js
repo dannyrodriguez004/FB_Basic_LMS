@@ -170,5 +170,16 @@ module.exports = () => {
         const resp = await coursesServices.getAllCourses();
         res.json(resp);
     });
+    router.get('/registered-students', async(req, res, next) => {
+        const resp = await coursesServices.getRegistered(req.query.course);
+        res.json(resp);
+    });
+
+    router.post('/signup', async(req, res, next) => {
+        const resp = await coursesServices.signUpFor(req.body.student, req.body.course);
+        res.json(resp);
+    });
+
+
     return router;
 }

@@ -1,4 +1,5 @@
 const database = require('firebase-admin').database();
+const userService = require('../users/users.service');
 
 const MAX_POSTS = 50;
 
@@ -981,6 +982,10 @@ class CoursesService {
             if(courseInfo.size >= courseInfo.MAX_SIZE) return this.addToWaitingList(user, course);
 
             await database.ref('/courses/' + course + '/registered').push({student_id: user});
+
+            let increment = await database.ref('/courses/' + course).once('value');
+            increment.ref.update({size: (increment.child('size').val() + 1) });
+
         } catch (err) {
             console.error(err);
             return false;
@@ -998,6 +1003,30 @@ class CoursesService {
         }
 
         return true;
+    }
+
+    async getRegistered(course) {
+        let payload = [];
+        let ids = [];
+        try {
+            let registered = await database.ref('/courses/' + course + '/registered').once('value');
+
+            registered.forEach((item) => {
+                
+                ids.push(item.child('student_id').val());
+            });
+
+            var index;
+            for(index = 0; index < ids.length; index++) {
+                var temp = await userService.getStudentDetail(ids[index]);
+                payload.push(temp);
+            }
+
+        } catch (err) {
+            console.error(err);
+        }
+
+        return payload;
     }
 }
 
