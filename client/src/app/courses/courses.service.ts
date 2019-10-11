@@ -138,6 +138,11 @@ export class CoursesService {
     });
   }
 
+  getRegistered(course) {
+    const params = { params: new HttpParams().set('course', `${course}`)};
+    return this.http.get(`${environment.apiAddress}/courses/registered-students`, params);
+  }
+
   getStudents(course_id) {
     const params = {params: new HttpParams().set('course', `${course_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-students`, params);
