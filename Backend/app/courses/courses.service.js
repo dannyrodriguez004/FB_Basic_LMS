@@ -977,11 +977,13 @@ class CoursesService {
     async signUpFor(user, course) {
         try {
 
-            let courseInfo = this.getCourseInfo(course);
+            let courseInfo = await this.getCourseInfo(course);
 
-            if(courseInfo.size >= courseInfo.MAX_SIZE) return this.addToWaitingList(user, course);
+            if(courseInfo.size >= courseInfo.MAX_SIZE) {
+                return this.addToWaitingList(user, course);
+            }
 
-            await database.ref('/courses/' + course + '/registered').push({student_id: user});
+            await database.ref('/courses/' + course + '/registered').child(user).set({student_id: user});
 
             let increment = await database.ref('/courses/' + course).once('value');
             increment.ref.update({size: (increment.child('size').val() + 1) });
@@ -996,7 +998,7 @@ class CoursesService {
 
     async addToWaitingList(user, course) {
         try {
-            await database.ref('/courses/' + course + '/waiting-list').push({student_id: user});
+            await database.ref('/courses/' + course + '/waiting-list').child(user).set({student_id: user});
         } catch (err) {
             console.error(err);
             return false;
@@ -1028,6 +1030,31 @@ class CoursesService {
         }
 
         return payload;
+    }
+
+    async waitingListSize(course) {
+        let size = 0;
+
+        try {
+            var waitigList = await database.ref('/courses/' + course + '/waiting-list').once('value');
+            size = waitigList.numChildren();
+        } catch(err) {
+            console.error(err);
+        }
+
+        return size;
+    }
+
+    async removeRegistree(student, course) {
+        try {
+
+            await database.ref('/courses/' + course + '/registered/' + student).remove();
+
+        } catch(err){
+            return false;
+        }
+
+        return true;
     }
 }
 

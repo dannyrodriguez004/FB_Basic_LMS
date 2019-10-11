@@ -181,5 +181,16 @@ module.exports = () => {
         const resp = await coursesServices.getAllCourses();
         res.json(resp);
     });
+
+    router.get('/waiting-list-size', async(req, res, next) => {
+        const resp = await coursesServices.waitingListSize(req.query.course);
+        res.json(resp);
+    });
+
+    router.post('/remove-registree', async(req, res, next) => {
+        const resp = await coursesServices.removeRegistree(req.body.student, req.body.course);
+        res.json(resp);
+    });
+
     return router;
 }

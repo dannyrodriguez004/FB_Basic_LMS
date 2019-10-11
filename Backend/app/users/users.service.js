@@ -89,7 +89,7 @@ class UsersSerivce {
             }
             users.child(student_key).child('enrolled').ref.push({id: course_key});
 
-            await database.ref('/courses/' + course_key + '/students').push({id: student_key});
+            await database.ref('/courses/' + course_key + '/students').child(student_key).set({id: student_key});
         } catch (err) {
             console.error(err);
             return err;

@@ -151,4 +151,13 @@ export class CoursesService {
   getAllCourses() {
     return this.http.get(`${environment.apiAddress}/courses`);
   }
+
+  getWaitlistSize(course) {
+    const params = {params: new HttpParams().set('course', `${course}`)};
+    return this.http.get(`${environment.apiAddress}/courses/waiting-list-size`, params);
+  }
+
+  removeRegistree(student, course) {
+    return this.http.post(`${environment.apiAddress}/courses/remove-registree`, {student, course});
+  }
 }
