@@ -15,7 +15,7 @@ export class RollcallComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   // private students: Students[] =  [];
   loading = true;
-  private students =  [];
+  students =  [];
   student: {id: string, name: string}[];
   @Input('current_course') current_course: string;
 
