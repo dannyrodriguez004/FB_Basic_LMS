@@ -5,17 +5,18 @@ const MAX_POSTS = 50;
 class CoursesService {
     constructor() {}
 
-
     /**
      * 
      * @param {name: string, description: string, indtructor_id: ,max_size: number, isOpen: boolean} newCourse 
      * 
      * @return true if successfully added
      */
-    async addCourse(newCourse) {
-        try {
 
-            let courseId = await database.ref('/courses').push(
+    async addCourse(newCourse) {
+        console.log(newCourse);
+        try {
+            let course = await database.ref('/courses').once('value');
+            let newRef = course.ref.push(
                 {
                     name: newCourse.name,
                     description: newCourse.description,
@@ -31,7 +32,8 @@ class CoursesService {
             );
 
             let cat = await database.ref('/categories/' + newCourse.category).once('value');
-            cat.ref.push({ courseId: courseId.key })
+            console.log(newRef);
+            cat.ref.push({ courseId: newRef.key })
             
         } catch (err) {
             console.error(err);
@@ -267,7 +269,7 @@ class CoursesService {
      * instructor_id: string, size: number, MAX_SIZE: number}[]
      * } courses
      */
-    async getAllCourses() {
+    async getAllCourses(key) {
         let payload = [];
         let courses = await database.ref('/courses').orderByKey().equalTo(key).once('value');
         courses.forEach( (course) => {
@@ -321,17 +323,18 @@ class CoursesService {
     /**
      * @return {string[]} categories
      */
-    async getCategories() {
-        let payload = {
-            categories : []
-        };
+    async getAllCategories() {
+        let payload = [];
 
-        let categories = await database.ref('/categories').once('value');
-        categories.forEach( (category) => {
-            payload.categories.push(category.key);
+        let categoriesRef = await database.ref('/categories').orderByValue();
+        categoriesRef.forEach( (category) => {
+            payload.push({
+                name: category.val(),
+                id: category.key,
+            })
         })
 
-        return payload.categories;
+        return payload;
     }
 
     /** Debugging, loads all the data in a course
@@ -358,7 +361,7 @@ class CoursesService {
      */
     async getCourseInfo(key) {
 
-        let myCourse;
+        let myCourse = {};
 
         let courses = await database.ref('/courses').orderByKey().equalTo(key).once('value');
         courses.forEach( (member) => {
@@ -424,6 +427,7 @@ class CoursesService {
    
            return payload.modules;
     }
+
 
     /**
      * 
@@ -685,6 +689,7 @@ class CoursesService {
      * @param {string} assessment_id, assesment key in the database
      * 
      * @return {doneOn: string, score: number} record
+
      */
     async getStudentRecord(student_id, course_id, assessment_id) {
         try {
@@ -746,10 +751,84 @@ class CoursesService {
         return false;
     }
 
+    /**
+     *
+     * @param {string} course_id , course key in the database
+     * @param {string} student_id , student key in the database
+     *
+     * @return {{{id: string, title: string, dueDate: string, outOf: number, doneOn: string, score: number}[]}} records
+
+     async getCourseModules(courses_id) {
+
+        let payload = {
+            modules: []
+        };
+
+        let tempModule;
+
+        try {
+
+            var courseModules = await database.ref('/courses/' + courses_id + '/modules').once('value');
+
+            courseModules.forEach( (mod) => {
+
+                tempModule = {id:'', name: '', resources: []};
+
+                tempModule.name = mod.child('name').val();
+                tempModule.id = mod.key;
+
+                mod.child('content').forEach( (item) => {
+                    tempModule.resources.push({
+                    id: item.key,
+                    mod: mod.key,
+                    title: item.child('title').val(),
+                    url: item.child('url').val(),
+                    link: item.child('link').val(),
+                    isTimed: item.child('isTimed').val(),
+                    embedded: item.child('embedded').val()
+                    });
+                });
+
+                   payload.modules.push(tempModule);
+            });
+        } catch (err) {
+               console.error(err);
+        }
+
+           return payload.modules;
+    }
+*/
+    // async getCourseStudents(courses_id) {
+    //
+    //     let payload = {
+    //         students: []
+    //     };
+    //
+    //     let tempStudent;
+    //
+    //     try {
+    //
+    //         var courseStudents = await database.ref('/courses/' + courses_id + '/students').once('value');
+    //
+    //         courseStudents.forEach( (stu) => {
+    //
+    //             tempStudent = {name: ''};
+    //
+    //             tempStudent.name = stu.child('name').val();
+    //             // tempStudent.id = stu.key;
+    //
+    //             payload.students.push(tempStudent);
+    //         });
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    //
+    //     return payload.students;
+    // }
     async updateCourse(course) {
 
         console.log(course.endEnrollDate);
-        
+
         try {
 
             await database.ref('/courses/' + course.id).update({
@@ -830,6 +909,70 @@ class CoursesService {
         return true;
     }
 
+
+    /**  ---------------------- getStudentsForCourse  ----------------------
+     *
+     * @param {string} course_id
+     *
+     * @returns json object with array of student objects
+     */
+    //
+    // async getStudents(course) {
+    //
+    //     let payload = [];
+    //
+    //     let students = await database.ref('/courses').child(course).child('students').once('value');
+    //     students.forEach( (students) => {
+    //         payload.push({
+    //             id: students.key,
+    //             name: students.child('name').val(),
+    //             email: students.child('email').val()
+    //         });
+    //     });
+    //     return payload;
+        // let payload = {id: '', name: '', email: ''};
+        //
+        // try {
+        //
+        //     let current_student = await database.ref('/courses').child(course)
+        //         .child('students').child(student_id).once('value');
+        //
+        //     payload.name = current_student.child('name').val();
+        //     payload.id = current_student.key;
+        //
+        //     // current_module.child('email').forEach( (student) => {
+        //     //     payload.email.push({
+        //     //         id: student.key,
+        //     //         stu: current_student.key,
+        //     //         name: student.child('title').val()
+        //     //     });
+        //     // });
+        //
+        // } catch (err) {
+        //     console.error(err);
+        // }
+        //
+        // return payload;
+    //
+    // }
+    /**
+     * @return {string[]} categories
+     */
+    async getAllCourses() {
+        let payload = [];
+
+        let coursesRef = await database.ref('/courses').orderByValue();
+        coursesRef.forEach( (course) => {
+            payload.push({
+                name: course.name,
+                id: course.key,
+                instructor_name: course.instructor_name
+            })
+        })
+
+        return payload;
+    }
+
     async signUpFor(user, course) {
         try {
 
@@ -857,5 +1000,7 @@ class CoursesService {
         return true;
     }
 }
+
+
 
 module.exports = new CoursesService();

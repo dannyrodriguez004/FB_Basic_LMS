@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Course} from '../../courses/courses.models';
+import {Subscription} from 'rxjs';
+import {UserService} from '../../user.service';
+import {Component, OnInit} from '@angular/core';
+import {CoursesService} from '../../courses/courses.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -8,17 +13,42 @@ import { Component, OnInit } from '@angular/core';
 
 export class DashboardComponent implements OnInit {
 
-  courses = [
-    {title: 'Computer Organization', prof: "Raj Mahal"},
-    {title: 'Theory of Algorithms', prof: "John Doe"},
-    {title: 'Software Engineering I', prof: "Jane Doe"},
-    {title: 'Introduction to Blue Steel', prof: "Jenna Crew"},
-    {title: 'Robot Vision', prof: "Lina Ferrer"},
+  private subscriptions: Subscription[] =  [];
+  myCourses: Course[] = []; // the user's courses names and id
 
-  ]
-  constructor() { }
+  // tslint:disable-next-line:variable-name
+  private student_id = '';
+  constructor(
+    private userServices: UserService,
 
-  ngOnInit() {
+  ) {
+    this.student_id = this.userServices.user(); // get debug student id
   }
 
+  /**
+   * Load courses, id and name, for the current user.
+   */
+  loadCourses() {
+    this.subscriptions.push(this.userServices.getStudentCourses(this.student_id).subscribe( (resp: Course[]) => {
+      this.myCourses = resp;
+    } ));
+
+    // this.subscriptions.push(this.coursesServices.getInstructorInfo(this.myCourses)
+    //     .subscribe( (course: (instructor: string, instructorEmail: string}) => {
+    //       this.course = this.coursesServices.getInstructorInfo()
+
+    }
+
+
+  ngOnInit() {
+    this.loadCourses();
+
+      }
+
+  isAdmin() {
+    return this.userServices.getIsAdmin();
+  }
 }
+
+
+

@@ -1,41 +1,45 @@
 import { Subscription } from 'rxjs/internal/Subscription';
-import { CoursesService } from './../../../courses.service';
+import { CoursesService } from '../../courses/courses.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit, Optional, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
-  selector: 'app-course-detail-editor',
-  templateUrl: './course-detail-editor.component.html',
-  styleUrls: ['./course-detail-editor.component.scss']
+  selector: 'app-newcourse',
+  templateUrl: './newcourse.component.html',
+  styleUrls: ['./newcourse.component.scss']
 })
-export class CourseDetailEditorComponent implements OnInit {
+
+export class NewcourseComponent implements OnInit {
 
   subscriptions: Subscription[] = [];
   courseForm: FormGroup;
   today = new Date();
 
-  data: {id: string, name: string, description: string, instructor: string};
   instructors: {name: string, id: string}[] = [];
+  categories: {name: string}[] = [];
+  MAX_SIZE: {MAX_SIZE: number};
+  isOpen: {isOpen: boolean};
 
   constructor(
-    public dialogRef: MatDialogRef<CourseDetailEditorComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) data: {id: string, name: string, description: string, instructor: string, endEnrollDate: string},
+    public dialogRef: MatDialogRef<NewcourseComponent>,
     private formBuilder: FormBuilder,
-    private courseServices: CoursesService,
+    private courseServices: CoursesService
   ) {
-    this.data = data;
     this.courseForm = this.formBuilder.group({
-      title: [data.name, Validators.required],
-      instructor: [data.instructor, Validators.required],
-      description: [data.description, Validators.required],
-      endEnrollDate: [data.endEnrollDate, Validators.required]
+      title: ['', Validators.required],
+      instructor: ['', Validators.required],
+      description: ['', Validators.required],
+      endEnrollDate: ['', Validators.required],
+      category: ['', Validators.required],
+      MAX_SIZE: ['', Validators.required],
+      isOpen: ['', Validators.required]
     });
-   }
+  }
 
-   config: AngularEditorConfig = {
+
+  config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
     height: '15rem',
@@ -56,21 +60,23 @@ export class CourseDetailEditorComponent implements OnInit {
   };
 
 
-  updateCourse() {
+  addCourse() {
 
     if(this.courseForm.pristine) {
       this.dialogRef.close();
     }  else {
 
       const course = {
-        id: this.data.id,
         name: this.courseForm.value.title,
-        instructor: this.courseForm.value.instructor,
+        instructor_id: this.courseForm.value.instructor,
         description: this.courseForm.value.description,
-        endEnrollDate: this.courseForm.value.endEnrollDate
+        MAX_SIZE: this.courseForm.value.MAX_SIZE,
+        isOpen: true,
+        endEnrollDate: this.courseForm.value.endEnrollDate,
+        category: this.courseForm.value.category
       }
 
-      this.subscriptions.push(this.courseServices.updateCourse(course).subscribe( (resp) => {
+      this.subscriptions.push(this.courseServices.addCourse(course).subscribe( (resp) => {
         if(resp) {
           this.dialogRef.close(resp);
         }
@@ -87,6 +93,9 @@ export class CourseDetailEditorComponent implements OnInit {
   ngOnInit() {
     this.subscriptions.push(this.courseServices.getAllInstructors().subscribe( (resp: {name: string, id: string}[]) => {
       this.instructors = resp;
+    }));
+    this.subscriptions.push(this.courseServices.getAllCategories().subscribe( (resp: {name: string}[]) => {
+      this.categories = resp;
     }));
   }
 

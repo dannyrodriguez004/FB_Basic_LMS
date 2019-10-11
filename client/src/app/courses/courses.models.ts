@@ -11,6 +11,10 @@ export class Course {
     modules: Module[]; // module objs
     discussions: Discussion[]; // discussion objs
 }
+export class Students {
+  id: string;
+  name: string;
+  }
 
 export class Module {
     id: string;

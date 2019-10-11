@@ -1,1 +1,25 @@
-<p>courses works!</p>
+
+<div class="dashboard">
+  <div class="dashboard-header">
+    <mat-label>Library of Courses</mat-label>
+  </div>
+  <div>
+    <div class="card-deck-container">
+      <ng-container *ngFor="let course of courses" fxLayout="row">
+        <div
+          class="card-item">
+          <mat-card  [ngStyle]="{'width':'300' + 'px'}">
+            <h1>{{course.name}}</h1>
+            <p>
+              <strong>Instructor: </strong>{{course.instructor_name}}
+              <br>
+\            </p>
+            <button [routerLink]="['/nav/courses/']" mat-button>Syllabus</button>
+            <hr>
+          </mat-card>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+</div>

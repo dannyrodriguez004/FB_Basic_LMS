@@ -1,9 +1,9 @@
-import { 
-  MatToolbarModule, 
-  MatSidenavModule, 
-  MatIconModule, 
-  MatButtonModule, 
-  MatListModule, 
+import {
+  MatToolbarModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatButtonModule,
+  MatListModule,
   MatExpansionModule,
   MatCardModule,
   MatTableModule,
@@ -48,6 +48,7 @@ import { NewEmbeddedVideoComponent } from './course/modules/new-content/new-embe
 import { NewPageComponent } from './course/modules/new-content/new-page/new-page.component';
 import { NewQuizComponent } from './course/modules/new-content/new-quiz/new-quiz.component';
 import { DocumentViewerComponent } from './course/document-viewer/document-viewer.component';
+import { RollcallComponent } from './course/rollcall/rollcall.component';
 import { PagesComponent } from './course/pages/pages.component';
 import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.component';
 
@@ -55,12 +56,27 @@ import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.c
 
 @NgModule({
   declarations: [
-    CourseComponent, 
-    CoursesComponent, 
-    ModulesComponent, 
-    GradesComponent, 
-    DiscussionsComponent, 
-    InfoComponent, DiscussionComponent, AssessmentComponent, DiscussionEditorComponent, NewDiscussionComponent, CourseDetailEditorComponent, NewContentComponent, ModuleEditorComponent, NewExternalLinkComponent, NewEmbeddedVideoComponent, NewPageComponent, NewQuizComponent, DocumentViewerComponent, PagesComponent, ConfirmEnrollComponent
+    CourseComponent,
+    CoursesComponent,
+    ModulesComponent,
+    GradesComponent,
+    DiscussionsComponent,
+    InfoComponent,
+    DiscussionComponent,
+    AssessmentComponent,
+    DiscussionEditorComponent,
+    NewDiscussionComponent,
+    CourseDetailEditorComponent,
+    NewContentComponent,
+    ModuleEditorComponent,
+    NewExternalLinkComponent,
+    NewEmbeddedVideoComponent,
+    NewPageComponent,
+    NewQuizComponent,
+    DocumentViewerComponent,
+    RollcallComponent,
+    PagesComponent,
+    ConfirmEnrollComponent
   ],
   imports: [
     CommonModule,
