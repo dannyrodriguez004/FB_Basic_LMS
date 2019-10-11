@@ -916,33 +916,45 @@ class CoursesService {
      *
      * @returns json object with array of student objects
      */
-
-    async getStudents(course, student_id) {
-        let payload = {id: '', name: '', email: ''};
-
-        try {
-
-            let current_student = await database.ref('/courses').child(course)
-                .child('students').child(student_id).once('value');
-
-            payload.name = current_student.child('name').val();
-            payload.id = current_student.key;
-
-            // current_module.child('email').forEach( (student) => {
-            //     payload.email.push({
-            //         id: student.key,
-            //         stu: current_student.key,
-            //         name: student.child('title').val()
-            //     });
-            // });
-
-        } catch (err) {
-            console.error(err);
-        }
-
-        return payload;
-
-    }
+    //
+    // async getStudents(course) {
+    //
+    //     let payload = [];
+    //
+    //     let students = await database.ref('/courses').child(course).child('students').once('value');
+    //     students.forEach( (students) => {
+    //         payload.push({
+    //             id: students.key,
+    //             name: students.child('name').val(),
+    //             email: students.child('email').val()
+    //         });
+    //     });
+    //     return payload;
+        // let payload = {id: '', name: '', email: ''};
+        //
+        // try {
+        //
+        //     let current_student = await database.ref('/courses').child(course)
+        //         .child('students').child(student_id).once('value');
+        //
+        //     payload.name = current_student.child('name').val();
+        //     payload.id = current_student.key;
+        //
+        //     // current_module.child('email').forEach( (student) => {
+        //     //     payload.email.push({
+        //     //         id: student.key,
+        //     //         stu: current_student.key,
+        //     //         name: student.child('title').val()
+        //     //     });
+        //     // });
+        //
+        // } catch (err) {
+        //     console.error(err);
+        // }
+        //
+        // return payload;
+    //
+    // }
     /**
      * @return {string[]} categories
      */

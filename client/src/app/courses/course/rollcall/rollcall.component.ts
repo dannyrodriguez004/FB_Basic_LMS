@@ -16,7 +16,7 @@ export class RollcallComponent implements OnInit {
   // private students: Students[] =  [];
   loading = true;
   private students =  [];
-  student: {id: string, name: string}[]
+  student: {id: string, name: string}[];
   @Input('current_course') current_course: string;
 
   constructor(
@@ -24,18 +24,19 @@ export class RollcallComponent implements OnInit {
     private userServices: UserService,
   ) {
   }
+  //
+  // loadData() {
+  //   // const student = this.courseServices.getStudents(this.current_course);
+  //   this.subscriptions.push(this.courseServices.getStudents(this.current_course)
+  //     .subscribe( (resp: []) => {
+  //       this.students = resp;
+  //       this.loading = false;
+  //     }));
+  // }
 
-  loadData() {
-    // const student = this.courseServices.getStudents(this.current_course);
-    this.subscriptions.push(this.courseServices.getStudents(this.current_course)
-      .subscribe( (resp: []) => {
-        this.students = resp;
-        this.loading = false;
-      }));
-  }
   ngOnInit() {
     this.loading = true;
-    this.loadData();
+    // this.loadData();
   }
 
   isAdmin() {
