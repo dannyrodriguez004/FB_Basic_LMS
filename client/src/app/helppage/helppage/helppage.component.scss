@@ -1,75 +1,91 @@
-.header{
-  background-color: aliceblue;
-  text-align: center;
-  padding: 50px;
-  position: relative;
+.mat-app-background{
+  background-color: whitesmoke;
+  height: 100%;
 }
 
-.header-text{
+header{
+  background-color: lightblue;
+  height: 65px;
+  left: 5px;
+  font-size: 50px;
+  top: 15px;
+  font-style: normal;
+}
+
+mat-card {
+  width: 80%;
+  background-color: white;
+  margin: auto;
+  padding: 1rem;
+}
+
+mat-card-content{
+  padding-left: 20px;
+}
+
+mat-card-title{
+  margin: auto;
   font-weight: bold;
   font-size: 30px;
-  color: dodgerblue;
-  padding-bottom: 10px;
-  background-color: aliceblue;
-  width: 100%;
 }
 
-.header-text-2{
-  font-weight: bold;
-  font-size: 30px;
-  color: dodgerblue;
-  padding-bottom: 10px;
-  background-color: aliceblue;
-  width: 100%;
-  padding-left: 100px;
-}
-.header-searchbox{
-  height: 24px;
-  width: 300px;
-}
+//.header{
+//  background-color: aliceblue;
+//  text-align: center;
+//  padding: 50px;
+//  position: relative;
+//}
+//
+//.header-text{
+//  font-weight: bold;
+//  font-size: 30px;
+//  color: dodgerblue;
+//  padding-bottom: 10px;
+//  background-color: aliceblue;
+//  width: 100%;
+//}
+//
+//.header-text-2{
+//
+//  color: dodgerblue;
+//  padding-bottom: 10px;
+//  background-color: aliceblue;
+//  width: 100%;
+//  padding-left: 100px;
+//}
+//.header-searchbox{
+//  height: 24px;
+//  width: 300px;
+//}
+//
+//
+//.matlist{
+//  text-align: center;
+//}
+//
 
-.headerbutton{
-  position: absolute;
-  top: 83px;
-}
-
-.matlist{
-  text-align: center;
-}
-
-.listicon{
-  position: absolute;
-  left: 840px;
-}
-
-.complaintsubmission{
-  background-color: aliceblue;
-  position: absolute;
-  padding-left: 700px;
-  top: 220px;
-  height: 200px;
-  width: 100%
-}
-mat-list{
-  position: absolute;
-  width: 100%;
-  height: 900px;
-  background-color: aliceblue;
-  text-align: center;
-  top: 450px;
-}
+//
+//.complaintsubmission{
+//  background-color: aliceblue;
+//  position: absolute;
+//  padding-left: 700px;
+//  top: 220px;
+//  height: 200px;
+//  width: 100%
+//}
 
 
-.mat-subheader{
-  text-align: center;
-  position: absolute;
-  padding-left: 830px;
-  font-weight: bold;
-  font-size: 30px;
-  color: dodgerblue;
-  top: 370px;
-  background-color: aliceblue;
-  width: 100%;
-
-}
+//
+//.mat-subheader{
+//  text-align: center;
+//  position: absolute;
+//  padding-left: 830px;
+//  font-weight: bold;
+//  font-size: 30px;
+//  color: dodgerblue;
+//  top: 370px;
+//  background-color: aliceblue;
+//  width: 100%;
+//
+//}
 

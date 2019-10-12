@@ -13,15 +13,15 @@ import {Students} from '../../courses.models';
 export class RollcallComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
-  // private students: Students[] =  [];
   loading = true;
   students =  [];
   student: {id: string, name: string}[];
+  // tslint:disable-next-line:variable-name
   @Input('current_course') current_course: string;
 
   constructor(
     private courseServices: CoursesService,
-    private userServices: UserService,
+    private userServices: UserService
   ) {
   }
   //
