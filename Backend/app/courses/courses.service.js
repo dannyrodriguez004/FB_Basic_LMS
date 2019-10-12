@@ -740,16 +740,9 @@ class CoursesService {
      * @returns {boolean} true if this student is enrolled in this course
      */
     async studentHasCourse(student_id, course_id) {
-        let reference = await database.ref('/students/' + student_id + '/enrolled/')
-        .orderByChild('id')
-        .equalTo(course_id)
-        .once('value');
-
-        if(reference.hasChildren()) {
-            return true;
-        }
-
-        return false;
+        console.log('this is a function!');
+        var student = await database.ref('/courses/' + course_id + '/students').once('value');
+        return student.hasChild(student_id);
     }
 
     /**
@@ -977,11 +970,16 @@ class CoursesService {
     async signUpFor(user, course) {
         try {
 
+            console.log('checking if user has this couse');
+            if( await this.studentHasCourse(user, course)) return false;
+            console.log('student doesnt have this course!');
+
             let courseInfo = await this.getCourseInfo(course);
 
             if(courseInfo.size >= courseInfo.MAX_SIZE) {
-                return this.addToWaitingList(user, course);
+                return await this.addToWaitingList(user, course);
             }
+            console.log('Course registration is not full');
 
             await database.ref('/courses/' + course + '/registered').child(user).set({student_id: user});
 
@@ -1048,7 +1046,16 @@ class CoursesService {
     async removeRegistree(student, course) {
         try {
 
-            await database.ref('/courses/' + course + '/registered/' + student).remove();
+            let studentRef = await database.ref('/courses/' + course + '/registered/' + student).once('value');
+            if(studentRef.exists()) {
+
+                studentRef.ref.remove();
+
+                let decriment = await database.ref('/courses/' + course).once('value');
+                decriment.ref.update({size: (decriment.child('size').val() - 1) });
+            } else {
+                return false;
+            }
 
         } catch(err){
             return false;
@@ -1056,8 +1063,28 @@ class CoursesService {
 
         return true;
     }
-}
 
+    async confirmEnrollment(student, course) {
+        
+        try {
+            if(await userService.enrollIn(student, course)) {
+                let studentRef = await database.ref('/courses/' + course + '/registered/' + student).once('value');
+                if(studentRef.exists()) {
+                    studentRef.ref.remove();
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
+}
 
 
 module.exports = new CoursesService();

@@ -80,16 +80,24 @@ class UsersSerivce {
      */
     async enrollIn(student_key, course_key) {
 
-        if(!coursesService.studentHasCourse(student_key, course_key)) return false;
+
+        console.log(coursesService);
+
+        var student = await database.ref('/courses/' + course_key + '/students').once('value');
+         
+
+        //var hasCourse = await coursesService.studentHasCourse(student_key, course_key);
+        if(student.hasChild(student_key)) return false;
+
         try {
 
             let users = await database.ref('/students').orderByKey().equalTo(student_key).once('value');
             if(users.numChildren() != 1) {
                 throw false;
             }
-            users.child(student_key).child('enrolled').ref.push({id: course_key});
+            users.child(student_key).child('enrolled').child(course_key).ref.set({id: course_key});
 
-            await database.ref('/courses/' + course_key + '/students').child(student_key).set({id: student_key});
+            await database.ref('/courses/' + course_key + '/students').child(student_key).ref.set({id: student_key});
         } catch (err) {
             console.error(err);
             return err;

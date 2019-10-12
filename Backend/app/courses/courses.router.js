@@ -192,5 +192,10 @@ module.exports = () => {
         res.json(resp);
     });
 
+    router.post('/confirm-enrollment', async(req, res, next) => {
+        const resp = await coursesServices.confirmEnrollment(req.body.student, req.body.course)
+        res.json(resp);
+    });
+
     return router;
 }

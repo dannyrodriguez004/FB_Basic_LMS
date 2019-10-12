@@ -39,7 +39,11 @@ export class EnrollDialogComponent implements OnInit {
 
     yesNoDialogRef.afterClosed().subscribe( (resp) => {
       if(resp) {
-        //confirm enrollment
+        this.coursesServices.confirmEnrollmet(this.student.id, this.current_course).subscribe( (confirmed) => {
+          if(confirmed) {
+            this.dialogRef.close(confirmed);
+          }
+        })
         console.log("confirm enrollment!");
       }
     })
