@@ -1,4 +1,4 @@
-import { Assessment, Question } from './../courses.models';
+import { Assessment, Question } from '../../models/courses.models';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -36,7 +36,7 @@ export class AssessmentComponent implements OnInit {
   item = this.items[this.select];
   response = '';
 
-  
+
 
   constructor(private routes: ActivatedRoute) { }
 

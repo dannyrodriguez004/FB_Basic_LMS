@@ -1,6 +1,6 @@
 import { MatDialog } from '@angular/material';
-import { UserService } from './../../../user.service';
-import { CoursesService } from './../../courses.service';
+import { UserService } from '../../../services/user.service';
+import { CoursesService } from '../../../services/courses.service';
 import { Subscription } from 'rxjs';
 import { Component, OnInit, Input } from '@angular/core';
 import { NewContentComponent } from './new-content/new-content.component';
@@ -58,7 +58,7 @@ export class ModulesComponent implements OnInit {
       if(result) {
         this.ngOnInit();
       }
-      
+
     }));
   }
 
@@ -70,7 +70,7 @@ export class ModulesComponent implements OnInit {
   isAdmin() {
     return this.userServices.getIsAdmin();
   }
-  
+
   ngOnInit() {
     this.loading = true;
     this.subscriptions.push(this.coursesServices.getModules(this.current_course).subscribe( (resp: []) => {

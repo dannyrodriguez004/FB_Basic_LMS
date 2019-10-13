@@ -1,5 +1,5 @@
 import { ActivatedRoute } from '@angular/router';
-import { CoursesService } from './../../courses.service';
+import { CoursesService } from '../../../services/courses.service';
 import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 
@@ -32,7 +32,7 @@ export class ConfirmEnrollComponent implements OnInit {
       }));
     }));
 
-    
+
   }
 
 

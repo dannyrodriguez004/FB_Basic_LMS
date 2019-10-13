@@ -1,4 +1,4 @@
-import { CoursesService } from 'src/app/courses/courses.service';
+import { CoursesService } from 'src/app/services/courses.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NewContentComponent } from './../new-content.component';
 import { MatDialogRef } from '@angular/material';
@@ -26,9 +26,9 @@ export class NewQuizComponent implements OnInit {
   enteringQuestion = true;
   answerInvalid = false;
   items = [];
-  
+
   constructor(private formBuilder: FormBuilder,
-    private coursesServices: CoursesService) { 
+    private coursesServices: CoursesService) {
       this.newQuizForm = this.formBuilder.group({
         title: ['', Validators.required],
         isTimed: [false, Validators.required],

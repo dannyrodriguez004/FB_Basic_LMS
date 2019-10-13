@@ -1,39 +1,20 @@
 <div class="mat-app-background">
-<div class="dashboard">
-  <div class="dashboard-header">
-    <button mat-button class="dashboardbutton" [matMenuTriggerFor]="menu">Dashboard</button>
-  </div>
+    <header>Dashboard</header>
   <div>
-
-    <mat-menu #menu="matMenu">
-      <button [routerLink]="['courses/']" mat-button>Courses</button>
-      <button mat-menu-item>Modules</button>
-      <button mat-menu-item>Syllabus</button>
-      <button mat-menu-item>Calendar</button>
-      <button mat-menu-item>Announcements</button>
-      <button mat-menu-item>Help</button>
-    </mat-menu>
-
     <div class="card-deck-container">
-<!--      <ng-container *ngFor="let course of myCourses" [routerLink]="['courses/view-course']" [queryParams]="{course:course.id,select:'Home'}" fxLayout="row">-->
       <ng-container *ngFor="let course of myCourses" fxLayout="row">
-        <div
-          class="card-item">
           <mat-card  [ngStyle]="{'width':'300' + 'px'}">
             <h1>{{course.name}}</h1>
             <p>
               <strong>Instructor: </strong>{{course.instructor_name}}
               <br>
-<!--              <strong>Email: </strong>{{instructorEmail}}-->
             </p>
             <button [routerLink]="['/nav/courses/']" mat-button>Syllabus</button>
             <hr>
           </mat-card>
-        </div>
       </ng-container>
     </div>
   </div>
-</div>
 </div>
   <!--  <div>-->
   <!--    <mat-card *ngFor="let course of courses">-->

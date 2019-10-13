@@ -1,4 +1,4 @@
-import { CoursesService } from './../../../courses.service';
+import { CoursesService } from '../../../../services/courses.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, Optional, Inject } from '@angular/core';
@@ -45,7 +45,7 @@ export class DiscussionEditorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private coursesServices: CoursesService,
     private dialog: MatDialog,
-  ) { 
+  ) {
     this.discussionForm = this.formBuilder.group({
       title: [data.title , Validators.required],
       description: [data.description , Validators.required],

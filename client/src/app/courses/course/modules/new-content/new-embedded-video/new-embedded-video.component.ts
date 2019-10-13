@@ -1,4 +1,4 @@
-import { CoursesService } from './../../../../courses.service';
+import { CoursesService } from '../../../../../services/courses.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { Component, OnInit, Input, Output } from '@angular/core';

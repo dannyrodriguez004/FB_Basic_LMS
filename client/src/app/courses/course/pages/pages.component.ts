@@ -1,8 +1,8 @@
-import { CoursesService } from 'src/app/courses/courses.service';
+import { CoursesService } from 'src/app/services/courses.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Component, OnInit, Input } from '@angular/core';
-import { Page } from '../../courses.models';
+import { Page } from '../../../models/courses.models';
 
 @Component({
   selector: 'app-pages',

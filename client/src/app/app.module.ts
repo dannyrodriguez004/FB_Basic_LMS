@@ -17,7 +17,7 @@ import { MatInputModule,
   MatDialogModule} from '@angular/material';
 
 /* Services */
-import { UserService } from './user.service';
+import { UserService } from './services/user.service';
 
 /* Routing */
 import { AppRoutingModule } from './app-routing.module';

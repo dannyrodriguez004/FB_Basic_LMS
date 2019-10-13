@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {CoursesService} from '../courses.service';
-import {UserService} from '../../user.service';
+import {CoursesService} from '../../services/courses.service';
+import {UserService} from '../../services/user.service';
 import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
-import {Course} from '../courses.models';
+import {Course} from '../../models/courses.models';
 
 @Component({
   selector: 'app-courses',

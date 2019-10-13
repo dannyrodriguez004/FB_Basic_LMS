@@ -3,12 +3,12 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { NewContentComponent } from './../new-content.component';
 import { MatDialogRef } from '@angular/material';
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { CoursesService } from 'src/app/courses/courses.service';
+import { CoursesService } from 'src/app/services/courses.service';
 
 function urlValidator(control: FormControl) {
   let link: string = control.value;
   if(link.indexOf("http://") != 0 && link.indexOf("https://") != 0) {
-    
+
     return link;
   }
   return null;
@@ -27,7 +27,7 @@ export class NewExternalLinkComponent implements OnInit {
 
   newLinkForm: FormGroup;
   submitting = false;
-  
+
   constructor(
     private formBuilder: FormBuilder,
     private coursesServices: CoursesService,
@@ -52,10 +52,10 @@ export class NewExternalLinkComponent implements OnInit {
       this.submitting = false;
       this.isSubmitting.emit(false);
     });
-    
+
   }
 
-  
+
 
   ngOnInit() {
   }

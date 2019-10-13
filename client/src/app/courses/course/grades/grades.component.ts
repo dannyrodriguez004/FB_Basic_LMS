@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
-import { CoursesService } from './../../courses.service';
-import { UserService } from './../../../user.service';
+import { CoursesService } from '../../../services/courses.service';
+import { UserService } from '../../../services/user.service';
 import { Component, OnInit, Input } from '@angular/core';
 
 export interface Record {
@@ -32,7 +32,7 @@ export class GradesComponent implements OnInit {
     private coursesServices: CoursesService,
     ) { }
 
-  
+
 
   displayedColumns: string[] = ['title', 'dueDate', 'doneOn', 'score', 'outOf'];
   dataSource: Record[] = [];
@@ -48,7 +48,7 @@ export class GradesComponent implements OnInit {
       this.dataSource = resp;
       this.loading = false;
     }));
-    
+
   }
 
   getPercent() {

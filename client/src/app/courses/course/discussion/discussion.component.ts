@@ -1,8 +1,8 @@
 import { DiscussionEditorComponent } from './discussion-editor/discussion-editor.component';
 import { MatDialog } from '@angular/material';
-import { UserService } from './../../../user.service';
-import { CoursesService } from './../../courses.service';
-import { IPost } from './../../courses.models';
+import { UserService } from '../../../services/user.service';
+import { CoursesService } from '../../../services/courses.service';
+import { IPost } from '../../../models/courses.models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -30,10 +30,10 @@ export class DiscussionComponent implements OnInit {
   isClosed: boolean = false;   // discussion isClosed
   today: Date = new Date();
   endDate: Date = this.today;
-  
+
 
   // pagination variables
-  
+
   totalPosts: number = 0;
   startFrom:number = 0;
 
@@ -51,7 +51,7 @@ export class DiscussionComponent implements OnInit {
     height: '15rem',
     minHeight: '5rem',
     placeholder: 'Enter text here...',
-    translate: 'no',   
+    translate: 'no',
     defaultFontName: 'Arial',
     customClasses: [
       {
@@ -72,9 +72,9 @@ export class DiscussionComponent implements OnInit {
     private dialog: MatDialog
     ) {}
 
-  
 
-  
+
+
 
   openEditDiscussionDialog() {
     const dialogRef = this.dialog.open(DiscussionEditorComponent, {
@@ -121,7 +121,7 @@ export class DiscussionComponent implements OnInit {
       user_name: "John Doe",
       date: new Date().getTime(),
       post:this.htmlContent};
-    
+
     this.subscriptions.push(this.coursesServices.postDiscussionPost(this.current_course, this.id, post).subscribe( (resp) => {
       console.log(resp);
       if(resp) {
@@ -129,7 +129,7 @@ export class DiscussionComponent implements OnInit {
         this.lastPage();
       }
     }));
-    
+
   }
 
   // loads discussion information and the current page of posts
@@ -152,7 +152,7 @@ export class DiscussionComponent implements OnInit {
       }
       this.loading = false;
     }));
-    
+
   }
 
   isLate() {

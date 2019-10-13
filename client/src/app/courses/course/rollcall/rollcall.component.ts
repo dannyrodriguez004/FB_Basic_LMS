@@ -1,8 +1,9 @@
-import { UserService } from './../../../user.service';
+import { UserService } from '../../../services/user.service';
 import { Subscription } from 'rxjs';
-import { CoursesService } from './../../courses.service';
+import { CoursesService } from '../../../services/courses.service';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import {Students} from '../../courses.models';
+import {Students} from '../../../models/courses.models';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-rollcall',
@@ -12,32 +13,30 @@ import {Students} from '../../courses.models';
 
 export class RollcallComponent implements OnInit {
 
-  private subscriptions: Subscription[] = [];
   loading = true;
-  students =  [];
-  student: {id: string, name: string}[];
-  // tslint:disable-next-line:variable-name
   @Input('current_course') current_course: string;
+  students: {id: '', fname: '', lname: '', email: ''}[];
+  subscriptions: Subscription[] = [];
 
   constructor(
     private courseServices: CoursesService,
-    private userServices: UserService
-  ) {
-  }
-  //
-  // loadData() {
-  //   // const student = this.courseServices.getStudents(this.current_course);
-  //   this.subscriptions.push(this.courseServices.getStudents(this.current_course)
-  //     .subscribe( (resp: []) => {
-  //       this.students = resp;
-  //       this.loading = false;
-  //     }));
-  // }
+    private userServices: UserService,
+    private route: ActivatedRoute
+  ) {}
 
+  loadData() {
+    this.subscriptions.push(this.courseServices.getRegistered(this.current_course)
+      .subscribe( (resp: {id: '', fname: '', lname: '', email: ''}[]) => {
+        this.students = resp;
+        console.log(resp);
+      }));
+    this.loading = false;
+  }
   ngOnInit() {
     this.loading = true;
-    // this.loadData();
+    this.loadData();
   }
+
 
   isAdmin() {
     return this.userServices.getIsAdmin();

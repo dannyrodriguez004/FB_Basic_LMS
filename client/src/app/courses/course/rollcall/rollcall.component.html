@@ -1,14 +1,10 @@
-
-  <mat-card *ngIf="1 > students.length">
-    <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
-    <div *ngIf="1 > students.length" class="empty_message">
-      There are no students.
-    </div>
+<div class="mat-app-background">
+<ng-container>
+<!--  <mat-card *ngIf="1 > students">-->
+<!--    <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>-->
+<!--  </mat-card>-->
+  <mat-card  *ngIf="1 > students">
+      <h4>{{students}}</h4>
   </mat-card>
-  <mat-card>
-    <div *ngFor="let student of students">
-      <ul>
-        {{student.name}}
-</ul>
-    </div>
-  </mat-card>
+</ng-container>
+</div>

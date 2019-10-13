@@ -1,5 +1,5 @@
 <div class="mat-app-background">
-  <div>
+  <ng-container>
     <header> Home Page </header>
   <mat-card>
     <mat-card-title>About Us</mat-card-title>
@@ -11,14 +11,11 @@
       the Facebook platform and maximize the internet speed, considering the low download /upload Internet speed in
       developing countries. Rebuilding from scratch using Angular and NodeJs.
     </p>
-  </mat-card-content>
-  <mat-card-actions>
+    <br>
     <button mat-button>Start Learning!</button>
-  </mat-card-actions>
-    <hr>
+  </mat-card-content>
+
 </mat-card>
-</div>
-<div>
 <mat-card>
     <mat-card-title>Contact Support</mat-card-title>
   <mat-card-content>
@@ -34,10 +31,12 @@
 </mat-card>
   <div>
     <mat-card>
+      <mat-card-title>Privacy</mat-card-title>
+    <mat-card-content>
       <button [routerLink]="['privacy/']" mat-button>Privacy Policy</button>
-      <br>
-      <button [routerLink]="['tos/']" mat-button>Terms of Service</button>
+          <button [routerLink]="['tos/']" mat-button>Terms of Service</button>
+    </mat-card-content>
     </mat-card>
   </div>
-</div>
+  </ng-container>
 </div>
