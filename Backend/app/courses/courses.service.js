@@ -34,7 +34,7 @@ class CoursesService {
 
             let cat = await database.ref('/categories/' + newCourse.category).once('value');
             console.log(newRef);
-            cat.ref.push({ courseId: newRef.key })
+            cat.child(newRef.key).ref.set({ courseId: newRef.key })
             
         } catch (err) {
             console.error(err);
@@ -740,8 +740,7 @@ class CoursesService {
      * @returns {boolean} true if this student is enrolled in this course
      */
     async studentHasCourse(student_id, course_id) {
-        console.log('this is a function!');
-        var student = await database.ref('/courses/' + course_id + '/students').once('value');
+        let student = await database.ref('/courses/' + course_id + '/students').once('value');
         return student.hasChild(student_id);
     }
 
@@ -970,16 +969,13 @@ class CoursesService {
     async signUpFor(user, course) {
         try {
 
-            console.log('checking if user has this couse');
             if( await this.studentHasCourse(user, course)) return false;
-            console.log('student doesnt have this course!');
 
             let courseInfo = await this.getCourseInfo(course);
 
             if(courseInfo.size >= courseInfo.MAX_SIZE) {
                 return await this.addToWaitingList(user, course);
             }
-            console.log('Course registration is not full');
 
             await database.ref('/courses/' + course + '/registered').child(user).set({student_id: user});
 
@@ -1057,6 +1053,8 @@ class CoursesService {
                 return false;
             }
 
+            await this.moveFromWaitToRegister(course);
+
         } catch(err){
             return false;
         }
@@ -1077,6 +1075,33 @@ class CoursesService {
             } else {
                 return false;
             }
+
+            await this.moveFromWaitToRegister(course);
+
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
+
+    async moveFromWaitToRegister(course) {
+        
+        if( await this.waitingListSize(course) < 1) return false;
+        
+        try {
+
+            let waitlistRef = await database.ref('/courses/' + course + '/waiting-list').limitToFirst(1).once('value');
+
+            waitlistRef.forEach( (student) => {
+                database.ref('/courses/' + course + '/registered').child(student.key).set({student_id: student.key});
+                student.ref.remove();
+            });
+
+            let increment = await database.ref('/courses/' + course).once('value');
+            increment.ref.update({size: (increment.child('size').val() + 1) });
+
         } catch (err) {
             console.error(err);
             return false;

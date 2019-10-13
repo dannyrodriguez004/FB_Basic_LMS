@@ -71,4 +71,8 @@ export class NavbarComponent implements OnInit {
   isAdmin() {
     return this.userServices.getIsAdmin();
   }
+
+  logout() {
+    this.userServices.logOutUser();
+  }
 }

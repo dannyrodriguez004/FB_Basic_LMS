@@ -3,10 +3,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
+
+  private CATEGORIES: {name: string}[] = [
+    {name:'Languages'}, {name:'Mathematics'}, {name:'English'}, {name:'History'}, {name:'Science'},
+    {name:'Philosophy'}, {name:'Nursing'}, {name:'Computer Science'}, {name:'American Studies'},
+    {name:'Art & Design'}, {name:'Chemistry'}, {name:'Civil Engineering'}, {name:'Economics'},
+    {name:'Education'}, {name:'Film Making'}, {name:'Geology'}, {name:'Marketing'}, {name:'Music'}, {name:'Sociology'},
+  ];
 
   constructor(private http: HttpClient) {
   }
@@ -63,7 +71,7 @@ export class CoursesService {
   }
 
   getAllCategories() {
-    return this.http.get(`${environment.apiAddress}/users/all-categories`);
+    return this.CATEGORIES;
   }
 
   getAllStudents() {
