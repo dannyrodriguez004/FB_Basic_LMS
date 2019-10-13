@@ -51,6 +51,7 @@ import { DocumentViewerComponent } from './course/document-viewer/document-viewe
 import { RollcallComponent } from './course/rollcall/rollcall.component';
 import { PagesComponent } from './course/pages/pages.component';
 import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.component';
+import { EnrollDialogComponent } from './course/confirm-enroll/enroll-dialog/enroll-dialog.component';
 
 
 
@@ -76,7 +77,8 @@ import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.c
     DocumentViewerComponent,
     RollcallComponent,
     PagesComponent,
-    ConfirmEnrollComponent
+    ConfirmEnrollComponent,
+    EnrollDialogComponent
   ],
   imports: [
     CommonModule,
@@ -112,6 +114,7 @@ import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.c
     CourseDetailEditorComponent,
     ModuleEditorComponent,
     NewContentComponent,
+    EnrollDialogComponent
   ]
 })
 export class CoursesModule { }

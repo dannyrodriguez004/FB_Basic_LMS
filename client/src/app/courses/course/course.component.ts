@@ -67,6 +67,8 @@ export class CourseComponent implements OnInit, OnChanges {
           this.course = course;
           //console.log(course);
         }));
+      } else {
+        //console.log("not authorized!");
       }
 
     }));

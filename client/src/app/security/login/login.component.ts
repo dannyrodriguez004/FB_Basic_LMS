@@ -1,7 +1,7 @@
+import { UserService } from './../../user.service';
 import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from '../authentication.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
@@ -16,8 +16,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authentication: AuthenticationService,
     private router: Router,
+    private userServices: UserService
   ) { }
 
   async ngOnInit() {
@@ -33,18 +33,18 @@ export class LoginComponent implements OnInit, OnDestroy {
       username: this.loginForm.value.email,
       password: this.loginForm.value.password
     };
-    // this.subscription.push(
-    //   this.authentication.authenticateUser(authUser)
-    //     .subscribe(
-    //       (payload) => {
-    //         this.router.navigateByUrl('');
-    //       },
-    //       (err) => {
-    //         if (err.status === 401) {
-    //           this.invalidCredentials = true;
-    //         }
-    //       })
-    // );
+     this.subscription.push(
+       this.userServices.Adminlogin(authUser)
+         .subscribe(
+           (payload) => {
+             this.router.navigateByUrl('');
+           },
+           (err) => {
+             if (err.status === 401) {
+               this.invalidCredentials = true;
+             }
+           })
+     );
   }
 
   ngOnDestroy() {

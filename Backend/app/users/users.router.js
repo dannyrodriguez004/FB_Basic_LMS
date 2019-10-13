@@ -57,7 +57,7 @@ module.exports = (passport) => {
      * @param user: {key: string, email: string, concatEmail: string, name: string, auth: number}
      * 
      */
-    router.post('/login', passport.authenticate('local', {}), async (req, res, next) => {
+    router.post('/admin-login', passport.authenticate('local', {}), async (req, res, next) => {
         const token = await usersServices.login(req.user);
         res.status(200).json({
             payload: token

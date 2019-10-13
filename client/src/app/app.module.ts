@@ -1,9 +1,5 @@
-import { NewContentComponent } from './courses/course/modules/new-content/new-content.component';
-import { ModuleEditorComponent } from './courses/course/modules/module-editor/module-editor.component';
-import { CourseDetailEditorComponent } from './courses/course/info/course-detail-editor/course-detail-editor.component';
-import { DiscussionEditorComponent } from './courses/course/discussion/discussion-editor/discussion-editor.component';
 import { UserService } from './user.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,10 +15,10 @@ import { MatInputModule,
   MatSortModule,
   MatSelectModule,
   MatDialogModule} from '@angular/material';
-import { NewDiscussionComponent } from './courses/course/discussions/new-discussion/new-discussion.component';
-import { NewcourseComponent } from './nav/newcourse/newcourse.component';
-import { YesNoDialogComponent } from './yes-no-dialog/yes-no-dialog.component';
 
+import { YesNoDialogComponent } from './yes-no-dialog/yes-no-dialog.component';
+import { CookieService } from 'ngx-cookie-service';
+import { JwtTokenInterceptorService } from './jwt-token.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +40,11 @@ import { YesNoDialogComponent } from './yes-no-dialog/yes-no-dialog.component';
     MatSelectModule,
     MatDialogModule
   ],
-  providers: [UserService],
+  providers: [
+    UserService, 
+    CookieService, 
+    {provide: HTTP_INTERCEPTORS, useClass: JwtTokenInterceptorService, multi: true}
+  ],
   bootstrap: [AppComponent],
   entryComponents: [YesNoDialogComponent],
 })
