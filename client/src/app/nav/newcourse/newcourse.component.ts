@@ -94,9 +94,10 @@ export class NewcourseComponent implements OnInit {
     this.subscriptions.push(this.courseServices.getAllInstructors().subscribe( (resp: {name: string, id: string}[]) => {
       this.instructors = resp;
     }));
-    this.subscriptions.push(this.courseServices.getAllCategories().subscribe( (resp: {name: string}[]) => {
+    /*this.subscriptions.push(this.courseServices.getAllCategories().subscribe( (resp: {name: string}[]) => {
       this.categories = resp;
-    }));
+    }));*/
+    this.categories = this.courseServices.getAllCategories();
   }
 
   onNoClick() {

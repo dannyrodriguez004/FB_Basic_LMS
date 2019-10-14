@@ -1,10 +1,11 @@
+import { MatCardModule } from '@angular/material/card';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SecurityRoutingModule } from './security-routing.module';
 import { SecurityComponent } from './security/security.component';
 import { LoginComponent } from './login/login.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import {ReactiveFormsModule} from "@angular/forms";
   imports: [
     CommonModule,
     SecurityRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCardModule
   ]
 })
 export class SecurityModule { }

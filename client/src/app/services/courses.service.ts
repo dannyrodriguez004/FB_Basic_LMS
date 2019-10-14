@@ -8,6 +8,13 @@ import { environment } from 'src/environments/environment';
 })
 export class CoursesService {
 
+  private CATEGORIES: {name: string}[] = [
+    {name:'Languages'}, {name:'Mathematics'}, {name:'English'}, {name:'History'}, {name:'Science'},
+    {name:'Philosophy'}, {name:'Nursing'}, {name:'Computer Science'}, {name:'American Studies'},
+    {name:'Art & Design'}, {name:'Chemistry'}, {name:'Civil Engineering'}, {name:'Economics'},
+    {name:'Education'}, {name:'Film Making'}, {name:'Geology'}, {name:'Marketing'}, {name:'Music'}, {name:'Sociology'},
+  ];
+
   constructor(private http: HttpClient) {
   }
 
@@ -63,7 +70,7 @@ export class CoursesService {
   }
 
   getAllCategories() {
-    return this.http.get(`${environment.apiAddress}/users/all-categories`);
+    return this.CATEGORIES;
   }
 
   getAllStudents() {
@@ -150,5 +157,18 @@ export class CoursesService {
 
   getAllCourses() {
     return this.http.get(`${environment.apiAddress}/courses`);
+  }
+
+  getWaitlistSize(course) {
+    const params = {params: new HttpParams().set('course', `${course}`)};
+    return this.http.get(`${environment.apiAddress}/courses/waiting-list-size`, params);
+  }
+
+  removeRegistree(student, course) {
+    return this.http.post(`${environment.apiAddress}/courses/remove-registree`, {student, course});
+  }
+
+  confirmEnrollmet(student, course) {
+    return this.http.post(`${environment.apiAddress}/courses/confirm-enrollment`, {student, course});
   }
 }

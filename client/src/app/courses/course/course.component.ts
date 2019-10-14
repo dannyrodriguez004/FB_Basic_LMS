@@ -63,10 +63,13 @@ export class CourseComponent implements OnInit, OnChanges {
       if(this.authorized) {
         this.subscriptions.push(this.coursesServices
           .getCourseInfo(this.current_course)
-          .subscribe( (course: {id: string, name:string, description: string, instructor: string, students: string[]}) => {
+          .subscribe( (course: {id: string, name: string,
+            description: string, instructor: string, students: string[]}) => {
           this.course = course;
-          //console.log(course);
+          console.log(course);
         }));
+      } else {
+        console.log('not authorized!');
       }
 
     }));

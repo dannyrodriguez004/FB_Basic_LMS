@@ -7,6 +7,10 @@ bin-release/
 # Other files and folders
 .settings/
 learnfiu_db.json
+
+server.key
+server.crt
+
 /node_modules
 # Executables
 *.swf

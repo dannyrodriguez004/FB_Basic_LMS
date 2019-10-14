@@ -1,6 +1,6 @@
 /* Angular */
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
 /* Styling */
@@ -34,6 +34,10 @@ import { DiscussionEditorComponent } from './courses/course/discussion/discussio
 import { NewDiscussionComponent } from './courses/course/discussions/new-discussion/new-discussion.component';
 import { NewcourseComponent } from './nav/newcourse/newcourse.component';
 
+
+import { CookieService } from 'ngx-cookie-service';
+import { JwtTokenInterceptorService } from './jwt-token.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +59,11 @@ import { NewcourseComponent } from './nav/newcourse/newcourse.component';
     MatSelectModule,
     MatDialogModule
   ],
-  providers: [UserService],
+  providers: [
+    UserService,
+    CookieService,
+    {provide: HTTP_INTERCEPTORS, useClass: JwtTokenInterceptorService, multi: true}
+  ],
   bootstrap: [AppComponent],
   entryComponents: [YesNoDialogComponent],
 })

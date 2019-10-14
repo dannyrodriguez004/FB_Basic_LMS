@@ -1,7 +1,8 @@
 import { Assessment, Question } from '../../models/courses.models';
+import { CountdownComponent, CountdownConfig } from 'ngx-countdown';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-assessment',
@@ -12,31 +13,40 @@ export class AssessmentComponent implements OnInit {
 
 
   private items: Question[] = [
-    {id: 0, title: "Quiz 1", val: 10, question: "Which bear is best1?", answer: "Black Bear", options: [
+    {id: 0, title: 'Quiz 1', val: 10, question: 'Which bear is best1?', answer: 'Black Bear', options: [
       'Black Bear', 'Polar Bear', 'Cave Bear', 'Brown Bear'
-    ], response: ""} as Question,
-    {id: 1, title: "Quiz 1", val: 10, question: "Which bear is best2?", answer: "Black Bear", options: [
+    ], response: ''} as Question,
+    {id: 1, title: 'Quiz 1', val: 10, question: 'Which bear is best2?', answer: 'Black Bear', options: [
       'Black Bear', 'Polar Bear', 'Cave Bear', 'Brown Bear'
-    ], response: ""} as Question,
-    {id: 2, title: "Quiz 1", val: 10, question: "Which bear is best3?", answer: "Black Bear", options: [
+    ], response: ''} as Question,
+    {id: 2, title: 'Quiz 1', val: 10, question: 'Which bear is best3?', answer: 'Black Bear', options: [
       'Black Bear', 'Polar Bear', 'Cave Bear', 'Brown Bear'
-    ], response: ""} as Question,
-    {id: 3, title: "Quiz 1", val: 10, question: "Which bear is best4?", answer: "Black Bear", options: [
+    ], response: ''} as Question,
+    {id: 3, title: 'Quiz 1', val: 10, question: 'Which bear is best4?', answer: 'Black Bear', options: [
       'Black Bear', 'Polar Bear', 'Cave Bear', 'Brown Bear'
-    ], response: ""} as Question,
-    {id: 4, title: "Quiz 1", val: 10, question: "Which bear is best5?", answer: "Black Bear", options: [
+    ], response: ''} as Question,
+    {id: 4, title: 'Quiz 1', val: 10, question: 'Which bear is best5?', answer: 'Black Bear', options: [
       'Black Bear', 'Polar Bear', 'Cave Bear', 'Brown Bear'
-    ], response: ""} as Question,
+    ], response: ''} as Question,
   ];
 
   private subscriptions: Subscription[] = [];
+  // tslint:disable-next-line:variable-name
   assessment_id = '';
+  // tslint:disable-next-line:variable-name
   current_course = '';
   select = 0;
   item = this.items[this.select];
   response = '';
+  time = 10;
 
+  config: CountdownConfig = {
+    demand: false,
+    leftTime: (this.time * .5),
+    format: 'HH:mm:ss'
+  };
 
+  @ViewChild('countDown', {static: false}) private countdown: CountdownComponent;
 
   constructor(private routes: ActivatedRoute) { }
 
@@ -65,13 +75,18 @@ export class AssessmentComponent implements OnInit {
 
   ngOnInit() {
     this.subscriptions.push(this.routes.queryParams.subscribe( (params) => {
-      if(params.course) {
+      if (params.course) {
         this.current_course = params.course;
       }
-      if(params.id) {
+      if (params.id) {
         this.assessment_id = params.id;
       }
     }));
   }
 
+  ring(x) {
+    if (x.action === 'done') {
+    console.log('Timer ran out', x);
+    }
+  }
 }

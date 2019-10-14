@@ -34,7 +34,7 @@ class CoursesService {
 
             let cat = await database.ref('/categories/' + newCourse.category).once('value');
             console.log(newRef);
-            cat.ref.push({ courseId: newRef.key })
+            cat.child(newRef.key).ref.set({ courseId: newRef.key })
             
         } catch (err) {
             console.error(err);
@@ -740,16 +740,8 @@ class CoursesService {
      * @returns {boolean} true if this student is enrolled in this course
      */
     async studentHasCourse(student_id, course_id) {
-        let reference = await database.ref('/students/' + student_id + '/enrolled/')
-        .orderByChild('id')
-        .equalTo(course_id)
-        .once('value');
-
-        if(reference.hasChildren()) {
-            return true;
-        }
-
-        return false;
+        let student = await database.ref('/courses/' + course_id + '/students').once('value');
+        return student.hasChild(student_id);
     }
 
     /**
@@ -977,11 +969,15 @@ class CoursesService {
     async signUpFor(user, course) {
         try {
 
-            let courseInfo = this.getCourseInfo(course);
+            if( await this.studentHasCourse(user, course)) return false;
 
-            if(courseInfo.size >= courseInfo.MAX_SIZE) return this.addToWaitingList(user, course);
+            let courseInfo = await this.getCourseInfo(course);
 
-            await database.ref('/courses/' + course + '/registered').push({student_id: user});
+            if(courseInfo.size >= courseInfo.MAX_SIZE) {
+                return await this.addToWaitingList(user, course);
+            }
+
+            await database.ref('/courses/' + course + '/registered').child(user).set({student_id: user});
 
             let increment = await database.ref('/courses/' + course).once('value');
             increment.ref.update({size: (increment.child('size').val() + 1) });
@@ -996,7 +992,7 @@ class CoursesService {
 
     async addToWaitingList(user, course) {
         try {
-            await database.ref('/courses/' + course + '/waiting-list').push({student_id: user});
+            await database.ref('/courses/' + course + '/waiting-list').child(user).set({student_id: user});
         } catch (err) {
             console.error(err);
             return false;
@@ -1029,8 +1025,91 @@ class CoursesService {
 
         return payload;
     }
-}
 
+    async waitingListSize(course) {
+        let size = 0;
+
+        try {
+            var waitigList = await database.ref('/courses/' + course + '/waiting-list').once('value');
+            size = waitigList.numChildren();
+        } catch(err) {
+            console.error(err);
+        }
+
+        return size;
+    }
+
+    async removeRegistree(student, course) {
+        try {
+
+            let studentRef = await database.ref('/courses/' + course + '/registered/' + student).once('value');
+            if(studentRef.exists()) {
+
+                studentRef.ref.remove();
+
+                let decriment = await database.ref('/courses/' + course).once('value');
+                decriment.ref.update({size: (decriment.child('size').val() - 1) });
+            } else {
+                return false;
+            }
+
+            await this.moveFromWaitToRegister(course);
+
+        } catch(err){
+            return false;
+        }
+
+        return true;
+    }
+
+    async confirmEnrollment(student, course) {
+        
+        try {
+            if(await userService.enrollIn(student, course)) {
+                let studentRef = await database.ref('/courses/' + course + '/registered/' + student).once('value');
+                if(studentRef.exists()) {
+                    studentRef.ref.remove();
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+
+            await this.moveFromWaitToRegister(course);
+
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
+
+    async moveFromWaitToRegister(course) {
+        
+        if( await this.waitingListSize(course) < 1) return false;
+        
+        try {
+
+            let waitlistRef = await database.ref('/courses/' + course + '/waiting-list').limitToFirst(1).once('value');
+
+            waitlistRef.forEach( (student) => {
+                database.ref('/courses/' + course + '/registered').child(student.key).set({student_id: student.key});
+                student.ref.remove();
+            });
+
+            let increment = await database.ref('/courses/' + course).once('value');
+            increment.ref.update({size: (increment.child('size').val() + 1) });
+
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
+}
 
 
 module.exports = new CoursesService();

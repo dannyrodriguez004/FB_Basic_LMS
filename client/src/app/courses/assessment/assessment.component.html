@@ -1,5 +1,11 @@
 <mat-toolbar>
+
+    <span style="margin-left: auto; margin-right: auto;">
+        <countdown #countDown [config]="config" (event)="ring($event)"></countdown>
+    </span>
+
     <span class="fill"></span>
+    
     <span>
         <button class="submit_right" mat-flat-button color="primary">Submit</button>
     </span>

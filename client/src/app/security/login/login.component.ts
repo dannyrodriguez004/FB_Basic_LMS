@@ -1,3 +1,4 @@
+import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -19,10 +20,13 @@ export class LoginComponent implements OnInit {
   loading: any;
   username: string;
   password: string;
+  invalidCredentials = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private authentication: AuthenticationService,
     private router: Router,
+    private userServices: UserService
   ) { }
 
 
@@ -34,32 +38,49 @@ export class LoginComponent implements OnInit {
   }
 
 
-  onSubmit() {
-    this.submitted = true;
-
-    if (this.loginForm.invalid) {
-      return;
-    }
-
-    this.authentication.login(this.loginForm.controls.username.value, this.loginForm.controls.password.value)
-      .subscribe(
-        () => {
-          this.router.navigate(['/']);
-        },
-        error => {
-          this.error = error;
-        });
+  // onSubmit() {
+  //   this.submitted = true;
+  //
+  //   if (this.loginForm.invalid) {
+  //     return;
+  //   }
+  //
+  //   this.authentication.login(this.loginForm.controls.username.value, this.loginForm.controls.password.value)
+  //     .subscribe(
+  //       () => {
+  //         this.router.navigate(['/']);
+  //       },
+  //       error => {
+  //         this.error = error;
+  //       });
+  // }
+  //
+  // toggleShow() {
+  //   this.show = !this.show;
+  //   if (this.show) {
+  //     this.type = 'text';
+  //   } else {
+  //     this.type = 'password';
+  //   }
+  // }
+  authenticateUser() {
+    const authUser = {
+      username: this.loginForm.value.email,
+      password: this.loginForm.value.password
+    };
+    this.subscription.push(
+      this.userServices.Adminlogin(authUser)
+        .subscribe(
+          (payload) => {
+            this.router.navigateByUrl('');
+          },
+          (err) => {
+            if (err.status === 401) {
+              this.invalidCredentials = true;
+            }
+          })
+    );
   }
-
-  toggleShow() {
-    this.show = !this.show;
-    if (this.show) {
-      this.type = 'text';
-    } else {
-      this.type = 'password';
-    }
-  }
-
   // authenticateUser() {
   //   const authUser = {
   //     username: this.loginForm.value.email,
@@ -78,6 +99,7 @@ export class LoginComponent implements OnInit {
     //       })
     // );
    }
+
 
    // ngOnDestroy() {
    //   if (this.subscription) {
