@@ -1,7 +1,8 @@
+import { CountdownComponent, CountdownConfig } from 'ngx-countdown';
 import { Assessment, Question } from './../courses.models';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-assessment',
@@ -35,8 +36,16 @@ export class AssessmentComponent implements OnInit {
   select = 0;
   item = this.items[this.select];
   response = '';
-
   
+  time = 10;
+
+  config: CountdownConfig = {
+    demand: false,
+    leftTime: (this.time * .5),
+    format: 'HH:mm:ss'
+  }
+
+  @ViewChild('countDown', {static: false}) private countdown: CountdownComponent;
 
   constructor(private routes: ActivatedRoute) { }
 
@@ -74,4 +83,8 @@ export class AssessmentComponent implements OnInit {
     }));
   }
 
+  ring(x) {
+    if(x.action === 'done')
+    console.log("Timer ran out", x);
+  }
 }

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const app = require('./app/app');
-const http = require('http');
+const https = require('https');
+const fileStream = require('fs');
 
 const portNorm = val => {
     var port = parseInt(val, 10);
@@ -46,7 +47,10 @@ const onListening = () => {
 const port = portNorm(process.env.PORT || '3001');
 app.set('port', port);
 
-const server = http.createServer(app);
+const server = https.createServer({
+	key: fileStream.readFileSync('server.key'),
+	cert: fileStream.readFileSync('server.crt'),
+},app);
 server.on('error', onError);
 server.on('listening', onListening);
 server.listen(port);
