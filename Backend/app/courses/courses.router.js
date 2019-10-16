@@ -171,7 +171,7 @@ module.exports = () => {
     });
 
 
-    router.get('/course-student', async(req, res, next) => {
+    router.get('/course-students', async(req, res, next) => {
         const resp = await coursesServices.getStudents(req.query.course, req.query.student);
         res.json(resp);
     });
