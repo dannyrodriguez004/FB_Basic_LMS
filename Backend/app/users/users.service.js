@@ -2,11 +2,9 @@ const database = require('firebase-admin').database();
 const jwt = require('jsonwebtoken');
 const crypto = require('bcrypt');
 const coursesService = require('../courses/courses.service');
-
+//JIQc0dIMic9Cv5kk
 class UsersSerivce {
     constructor() {}
-
-
     /**
      * 
      * @param {email: string, contactEmail: string, f_name: string, l_name: string, password: string} user 

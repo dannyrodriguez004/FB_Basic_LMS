@@ -32,11 +32,11 @@ export class RollcallComponent implements OnInit {
       }));
     this.loading = false;
   }
+
   ngOnInit() {
     this.loading = true;
     this.loadData();
   }
-
 
   isAdmin() {
     return this.userServices.getIsAdmin();

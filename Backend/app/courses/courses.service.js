@@ -1008,7 +1008,6 @@ class CoursesService {
             let registered = await database.ref('/courses/' + course + '/registered').once('value');
 
             registered.forEach((item) => {
-                
                 ids.push(item.child('student_id').val());
             });
 
@@ -1022,7 +1021,29 @@ class CoursesService {
         } catch (err) {
             console.error(err);
         }
+        return payload;
+    }
 
+    async getStudents(course) {
+        let payload = [];
+        let ids = [];
+        try {
+            let registered = await database.ref('/courses/' + course + '/students').once('value');
+
+            registered.forEach((item) => {
+                ids.push(item.child('id').val());
+            });
+
+            var index;
+            for(index = 0; index < ids.length; index++) {
+                var temp = await userService.getStudentDetail(ids[index]);
+                temp.id = ids[index];
+                payload.push(temp);
+            }
+
+        } catch (err) {
+            console.error(err);
+        }
         return payload;
     }
 

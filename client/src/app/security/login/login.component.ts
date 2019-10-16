@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   private subscription: Subscription[];
   submitted = false;
@@ -30,12 +30,19 @@ export class LoginComponent implements OnInit {
   ) { }
 
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.subscription = [];
     this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
+      email: ['', [Validators.email, Validators.required]],
       password: ['', Validators.required]
     });
   }
+  // ngOnInit() {
+  //   this.loginForm = this.formBuilder.group({
+  //     username: ['', Validators.required],
+  //     password: ['', Validators.required]
+  //   });
+  // }
 
 
   // onSubmit() {
@@ -81,6 +88,15 @@ export class LoginComponent implements OnInit {
           })
     );
   }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.forEach((item) => {
+        item.unsubscribe();
+      });
+    }
+  }
+
   // authenticateUser() {
   //   const authUser = {
   //     username: this.loginForm.value.email,
@@ -101,10 +117,3 @@ export class LoginComponent implements OnInit {
    }
 
 
-   // ngOnDestroy() {
-   //   if (this.subscription) {
-   //     this.subscription.forEach((item) => {
-   //       item.unsubscribe();
-   //     });
-   //   }
-   // }
