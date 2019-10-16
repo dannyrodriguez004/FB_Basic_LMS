@@ -25,7 +25,7 @@ export class RollcallComponent implements OnInit {
   ) {}
 
   loadData() {
-    this.subscriptions.push(this.courseServices.getRegistered(this.current_course)
+    this.subscriptions.push(this.courseServices.getStudents(this.current_course)
       .subscribe( (resp: {id: '', fname: '', lname: '', email: ''}[]) => {
         this.students = resp;
         console.log(resp);

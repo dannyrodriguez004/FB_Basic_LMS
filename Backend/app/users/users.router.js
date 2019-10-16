@@ -52,7 +52,7 @@ module.exports = (passport) => {
      * @param req.body.username: string
      * @param req.body.password: string
      * 
-     * ----> after passport authenricate ---->
+     * ----> after passport authenticate ---->
      * 
      * @param user: {key: string, email: string, concatEmail: string, name: string, auth: number}
      * 
