@@ -29,7 +29,7 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
-    router.get('/all-instructors', passport.authenticate('local', {}), async (req, res, next) => {
+    router.get('/all-instructors', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.getAllInstructors();
         res.json(resp);
     });

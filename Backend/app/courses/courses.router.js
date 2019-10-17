@@ -5,13 +5,13 @@ const router = express.Router();
 module.exports = (passport) => {
 
     // add course to app
-    router.post('/add-course', passport.authenticate('local', {}), async (req, res, next) => {
+    router.post('/add-course', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addCourse(req.body.course);
         res.json(resp);
     });
 
     // add course discussion to course
-    router.post('/add-course-discussion', passport.authenticate('local', {}), async (req, res, next) => {
+    router.post('/add-course-discussion', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addDiscussion(req.body.course, req.body.discussion);
         res.json(resp);
     });
@@ -23,30 +23,30 @@ module.exports = (passport) => {
     });
 
     // add module to a course
-    router.post('/add-module', passport.authenticate('local', {}), async (req, res, next) => {
+    router.post('/add-module', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addCourseModule(req.body.course, req.body.module);
         res.json({success: resp});
     });
 
     // add link content to module
-    router.post('/add-module-link', passport.authenticate('local', {}), async (req, res, next) => {
+    router.post('/add-module-link', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleLink(req.body.course, req.body.module, req.body.content);
         res.json({success: resp});
     });
 
     // add quiz content to module
-    router.post('/add-module-quiz', passport.authenticate('local', {}), async (req, res, next) => {
+    router.post('/add-module-quiz', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleQuiz(req.body.course, req.body.module, req.body.content);
         res.json({success: resp});
     });
 
     // add external link to module
-    router.post('/add-module-url', passport.authenticate('local', {}), async (req, res, next) => {
+    router.post('/add-module-url', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleUrl(req.body.course, req.body.module, req.body.content);
         res.json({success: resp});
     });
 
-    router.post('/add-module-content', passport.authenticate('local', {}), async (req, res, next) => {
+    router.post('/add-module-content', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleContent(req.body.course, req.body.module, req.body.content);
         res.json(resp);
     });
@@ -58,7 +58,7 @@ module.exports = (passport) => {
     });
 
     // debug get all data associated with a course
-    router.get('/course', passport.authenticate('local', {}), async (req, res, next) => {
+    router.get('/course', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.getCourse(req.query.key);
         res.json(resp);
     });
@@ -135,12 +135,12 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
-    router.post('/update-course', passport.authenticate('local', {}), async(req, res, next) => {
+    router.post('/update-course', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.updateCourse(req.body.course);
         res.json(resp);
     });
 
-    router.post('/remove-content', passport.authenticate('local', {}), async(req, res, next) => {
+    router.post('/remove-content', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeContent(req.body.course, req.body.module, req.body.content);
         res.json(resp);
     });
@@ -150,17 +150,17 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
-    router.post('/update-discussion', passport.authenticate('local', {}), async(req, res, next) => {
+    router.post('/update-discussion', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.updateDiscussion(req.body.course, req.body.discussion);
         res.json(resp);
     });
 
-    router.post('/remove-discussion', passport.authenticate('local', {}), async(req, res, next) => {
+    router.post('/remove-discussion', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeDiscussion(req.body.course, req.body.discussion);
         res.json(resp);
     });
 
-    router.get('/registered-students', passport.authenticate('local', {}), async(req, res, next) => {
+    router.get('/registered-students', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.getRegistered(req.query.course);
         res.json(resp);
     });
@@ -187,12 +187,12 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
-    router.post('/remove-registree', passport.authenticate('local', {}), async(req, res, next) => {
+    router.post('/remove-registree', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeRegistree(req.body.student, req.body.course);
         res.json(resp);
     });
 
-    router.post('/confirm-enrollment', passport.authenticate('local', {}), async(req, res, next) => {
+    router.post('/confirm-enrollment', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.confirmEnrollment(req.body.student, req.body.course);
         res.json(resp);
     });
