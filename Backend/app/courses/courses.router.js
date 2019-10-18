@@ -197,6 +197,11 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    router.get('/course-students', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
+        const resp = await coursesServices.getCourseStudent(req.query.course);
+        res.json(resp);
+    })
+
 
     return router;
 }

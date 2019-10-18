@@ -47,9 +47,16 @@ export class GradeReportsComponent implements OnInit {
   dataSource: Record[] = [];
 
   ngOnInit() {
+    this.loadStudents();
     this.loadGrades();
   }
 
+  loadStudents() {
+    this.subscriptions.push(this.coursesServices.getCourseStudents(this.current_course).subscribe( (resp: {id: string, fname: string, lname: string}[]) => {
+      this.students = resp;
+      console.log(resp);
+    }));
+  }
 
   loadGrades() {
     this.loading = true;

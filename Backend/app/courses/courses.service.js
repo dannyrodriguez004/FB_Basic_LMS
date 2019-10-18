@@ -672,6 +672,7 @@ class CoursesService {
                 var record = this.getStudentRecord(student_id, course_id, item.id);
                 item.doneOn = record.doneOn || null;
                 item.score = record.score || null;
+                item.startTime = record.startTime || null;
             });
             
         } catch(err) {
@@ -1108,6 +1109,32 @@ class CoursesService {
         }
 
         return true;
+    }
+
+    async getCourseStudent(course) {
+        let payload = [];
+        let list = [];
+
+        let students = await database.ref('/courses/' + course + '/students').once('value');
+        
+        students.forEach( (item) => {
+            list.push(item.key);
+        })
+
+        var student;
+        for(let i = 0; i < list.length; i++) {
+
+            student = await userService.getStudentDetail(list[i]);
+
+            console.log(student);
+            payload.push({
+                id: student.id,
+                fname: student.fname,
+                lname: student.lname
+            });
+        }
+
+        return payload;
     }
 }
 
