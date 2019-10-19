@@ -85,6 +85,10 @@ export class AssessmentComponent implements OnInit {
 
   ring(x) {
     if(x.action === 'done')
-    console.log("Timer ran out", x);
+    this.submitQuiz();
+  }
+
+  submitQuiz() {
+    console.log("QUIZ SUBMITTED!");
   }
 }

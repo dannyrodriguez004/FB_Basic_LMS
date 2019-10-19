@@ -19,7 +19,7 @@ export class UserService {
     private cookies: CookieService
     ) {
       this.isAdmin = this.cookies.check('admin-session');
-      console.log(this.cookies.getAll());
+      //console.log(this.cookies.getAll());
     }
 
   Adminlogin(loginData) {
@@ -83,10 +83,6 @@ export class UserService {
 
   toggleLoggedIn() {
     this.FBLoggedIn = !this.FBLoggedIn;
-  }
-
-  ToggleIsAdmin() {
-    this.isAdmin = !this.isAdmin;
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

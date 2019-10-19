@@ -7,7 +7,7 @@ module.exports = (passport) => {
     /**
      * @param user: {email: string, contactEmail: string, f_name: string, l_name: string, password: string}
      */
-    router.post('/add-instructor', async (req, res, next) => {
+    router.post('/add-instructor', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.addInstructor(req.body.user);
         res.json(resp);
     })
@@ -24,12 +24,12 @@ module.exports = (passport) => {
      * @param student: string, student databasse key
      * @param course: string, course database key
      */
-    router.post('/enroll-student', async (req, res, next) => {
+    router.post('/enroll-student', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.enrollIn(req.body.student, req.body.course);
         res.json(resp);
     });
 
-    router.get('/all-instructors', async (req, res, next) => {
+    router.get('/all-instructors', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.getAllInstructors();
         res.json(resp);
     });
