@@ -10,7 +10,7 @@
       <span>
             <button [routerLink]="['nav']" mat-button><mat-icon>dashboard</mat-icon>Dashboard</button>
       </span>
-      <span>
+      <span *ngIf="myCourses.length > 0">
             <button mat-button [matMenuTriggerFor]="menu"><mat-icon>list</mat-icon>My Courses</button>
 
             <mat-menu #menu="matMenu">

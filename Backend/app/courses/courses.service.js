@@ -14,7 +14,7 @@ class CoursesService {
      */
 
     async addCourse(newCourse) {
-        console.log(newCourse);
+        //console.log(newCourse);
         try {
             let course = await database.ref('/courses').once('value');
             let newRef = course.ref.push(
@@ -33,7 +33,7 @@ class CoursesService {
             );
 
             let cat = await database.ref('/categories/' + newCourse.category).once('value');
-            console.log(newRef);
+            //console.log(newRef);
             cat.child(newRef.key).ref.set({ courseId: newRef.key })
             
         } catch (err) {
@@ -695,6 +695,7 @@ class CoursesService {
      */
     async getStudentRecord(student_id, course_id, assessment_id) {
         try {
+            //console.log(student_id);
             let records = await database.ref('/students/' + student_id + '/enrolled')
             .orderByChild('id')
             .equalTo(course_id)
@@ -821,7 +822,7 @@ class CoursesService {
     // }
     async updateCourse(course) {
 
-        console.log(course.endEnrollDate);
+        //console.log(course.endEnrollDate);
 
         try {
 
@@ -1126,7 +1127,7 @@ class CoursesService {
 
             student = await userService.getStudentDetail(list[i]);
 
-            console.log(student);
+            //console.log(student);
             payload.push({
                 id: student.id,
                 fname: student.fname,
