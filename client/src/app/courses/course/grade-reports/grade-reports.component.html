@@ -7,7 +7,7 @@
     <mat-form-field>
         <mat-label>Select Student</mat-label>
         <mat-select [(ngModel)]="student">
-            <mat-option>None</mat-option>
+            
             <mat-option (click)="loadGrades()" *ngFor="let stud of students" value="{{stud.id}}">{{stud.lname + ", " + stud.fname}}</mat-option>
             <mat-hint>Select student to view grades.</mat-hint>
         </mat-select>

@@ -11,7 +11,7 @@
         <mat-nav-list *ngFor="let content of module.resources">
                 <a *ngIf="content.url != null" mat-list-item (click)="openInNewTab(content.url)"><mat-icon>link</mat-icon>{{content.title}}</a>
                 <a *ngIf="content.page != null" mat-list-item mat-list-item [routerLink]="['/nav/courses/view-course']" [queryParams]="{course: this.current_course, module: module.id, page_id: content.id, select: 'Page'}"><mat-icon>insert_drive_file</mat-icon>{{content.title}}</a>
-                <a *ngIf="content.outOf != null" mat-list-item [routerLink]="['/nav/courses/assessment']" [queryParams]="{id: this.content.id, course: this.current_course}"><mat-icon>assessment</mat-icon>{{content.title}}</a>
+                <a *ngIf="content.outOf != null" mat-list-item [routerLink]="['/nav/courses/assessment']" [queryParams]="{id: this.content.id, course: this.current_course, module: module.id}"><mat-icon>assessment</mat-icon>{{content.title}}</a>
                 <a *ngIf="content.embedded != null" mat-list-item><mat-icon>play_circle_filled</mat-icon>{{content.title}}</a>
         </mat-nav-list>
 

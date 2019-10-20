@@ -1,28 +1,38 @@
-<mat-toolbar>
-
-    <span style="margin-left: auto; margin-right: auto;">
-        <countdown #countDown [config]="config" (event)="ring($event)"></countdown>
-    </span>
-
-    <span class="fill"></span>
+<mat-card class="timer">
     
-    <span>
-        <button (click)="submitQuiz() " class="submit_right" mat-flat-button color="primary">Submit</button>
+    <span><h3 style="text-align: center;">Timer:</h3></span>
+    <span style="margin-left: auto; margin-right: auto; text-align: center;">
+        <h4 id="counter"><countdown #countDown [config]="config" (event)="ring($event)"></countdown></h4>
     </span>
-</mat-toolbar>
-
-<mat-card class="question">
-    <mat-card-header>
-        <mat-card-title>{{item.question}}</mat-card-title>
-        <mat-card-subtitle>{{item.val}} pts</mat-card-subtitle>
-    </mat-card-header>
-<mat-button-toggle-group [(ngModel)]="item.response" vertical>
-  <mat-button-toggle *ngFor="let option of item.options" value="{{option}}" aria-label="Text align left">
-    {{option}}
-  </mat-button-toggle>
-</mat-button-toggle-group>
-    <mat-card-actions class="controls">
-        <button (click)="prevQuestion()" [disabled]="1 > select" class="prev" mat-stroked-button color="primary"><mat-icon>navigate_before</mat-icon>Previous</button>
-        <button [disabled]="!canNext()" (click)="nextQuestion()"  class="next" mat-stroked-button color="primary">Next <mat-icon>navigate_next</mat-icon></button>
-    </mat-card-actions>
+    <span>
+            <button (click)="submitQuiz() " class="width: 100%;" mat-flat-button color="primary">Submit</button>
+        </span>
 </mat-card>
+
+<div>
+    <mat-card *ngFor="let item of quiz.items" class="question">
+        <mat-card-header>
+            <mat-card-title>{{item.question}}</mat-card-title>
+            <mat-card-subtitle>{{item.value}} pts</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-button-toggle-group [(ngModel)]="item.response" vertical>
+            <mat-button-toggle (click)="submit()" value="{{1}}" aria-label="Text align left">
+                A.{{" " + item.options[0]}}
+            </mat-button-toggle>
+
+            <mat-button-toggle (click)="submit()" value="{{2}}" aria-label="Text align left">
+                B.{{" " + item.options[1]}}
+            </mat-button-toggle>
+
+            <mat-button-toggle (click)="submit()" *ngIf="item.options.length > 2" value="{{3}}" aria-label="Text align left">
+                C.{{" " + item.options[2]}}
+            </mat-button-toggle>
+
+            <mat-button-toggle (click)="submit()" *ngIf="item.options.length > 3" value="{{4}}" aria-label="Text align left">
+                D.{{" " + item.options[3]}}
+            </mat-button-toggle>
+            
+        </mat-button-toggle-group>
+    </mat-card>
+</div>
