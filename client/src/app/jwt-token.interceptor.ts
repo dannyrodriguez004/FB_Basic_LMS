@@ -11,8 +11,8 @@ export class JwtTokenInterceptorService implements HttpInterceptor {
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    if (this.cookies.check('geek-text-session')) {
-      const jwt = this.cookies.get('geek-text-session');
+    if (this.cookies.check('admin-session')) {
+      const jwt = this.cookies.get('admin-session');
       const modifiedRequest = req.clone({
         setHeaders: {
             Authorization: `Bearer ${jwt}`

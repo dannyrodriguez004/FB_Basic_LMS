@@ -193,7 +193,8 @@ class UsersSerivce {
             let students =  await database.ref('/students').orderByKey().equalTo(student_id).once('value');
             if(!students.hasChildren()) return payload;
             students.forEach( student  => {
-                payload = student.toJSON()
+                payload = student.toJSON();
+                payload.id = student.key;
             });
         } catch (err) {
             console.error(err);

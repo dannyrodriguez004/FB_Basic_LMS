@@ -54,11 +54,7 @@ export class NavbarComponent implements OnInit {
     this.subscriptions.push(this.userServices.getStudentCourses(this.student_id).subscribe( (resp: CourseNav[]) => {
       this.myCourses = resp;
     } ));
-  }
-
-  toggleAdmin() {
-    this.userServices.ToggleIsAdmin();
-  }
+  }S
 
   toggleLogin() {
     this.userServices.toggleLoggedIn();

@@ -171,4 +171,9 @@ export class CoursesService {
   confirmEnrollmet(student, course) {
     return this.http.post(`${environment.apiAddress}/courses/confirm-enrollment`, {student, course});
   }
+
+  getCourseStudents(course: string){
+    const params = {params: new HttpParams().set('course', `${course}`)};
+    return this.http.get(`${environment.apiAddress}/courses/course-students`, params);
+  }
 }
