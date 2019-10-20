@@ -1,5 +1,5 @@
-import { CoursesService } from 'src/app/courses/courses.service';
-import { UserService } from './../../../user.service';
+import { CoursesService } from '../../../services/courses.service';
+import { UserService } from '../../../services/user.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Component, OnInit, Input } from '@angular/core';
 
@@ -41,7 +41,7 @@ export class GradeReportsComponent implements OnInit {
     private coursesServices: CoursesService,
     ) { }
 
-  
+
 
   displayedColumns: string[] = ['title', 'dueDate', 'doneOn', 'score', 'outOf'];
   dataSource: Record[] = [];
@@ -65,7 +65,7 @@ export class GradeReportsComponent implements OnInit {
       console.log(resp);
       this.loading = false;
     }));
-    
+
   }
 
   getPercent() {
