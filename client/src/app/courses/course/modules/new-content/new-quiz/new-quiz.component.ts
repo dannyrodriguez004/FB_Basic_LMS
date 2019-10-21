@@ -81,7 +81,7 @@ export class NewQuizComponent implements OnInit {
       question: this.newQuestionForm.value.question,
       value: this.newQuestionForm.value.value,
       answer: this.newQuestionForm.value.answer,
-      options: [this.newQuestionForm.value.A, this.newQuestionForm.value.B]
+      options: [this.newQuestionForm.value.A, this.newQuestionForm.value.B],
     }
 
 
@@ -106,10 +106,11 @@ export class NewQuizComponent implements OnInit {
   pushQuiz() {
     const newQuiz = {
       title: this.newQuizForm.value.title,
-      time: this.newQuizForm.value.isTimed ? this.newQuizForm.value.time : null,
+      time: this.newQuizForm.value.isTimed ? this.newQuizForm.value.time : -1,
       dueDate: !this.newQuizForm.value.noDueDate ? null : this.newQuizForm.value.dueDate,
-      attempts: !this.newQuizForm.value.isUnlimited ? null : this.newQuizForm.value.attempts,
-      items: this.items
+      attempts: !this.newQuizForm.value.isUnlimited ? -1 : this.newQuizForm.value.attempts,
+      items: this.items,
+     
     };
 
     this.submitting = true;
