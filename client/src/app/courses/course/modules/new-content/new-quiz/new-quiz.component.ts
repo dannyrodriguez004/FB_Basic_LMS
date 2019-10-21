@@ -108,7 +108,7 @@ export class NewQuizComponent implements OnInit {
       title: this.newQuizForm.value.title,
       time: this.newQuizForm.value.isTimed ? this.newQuizForm.value.time : -1,
       dueDate: !this.newQuizForm.value.noDueDate ? null : this.newQuizForm.value.dueDate,
-      attempts: !this.newQuizForm.value.isUnlimited ? -1 : this.newQuizForm.value.attempts,
+      attempts: !this.newQuizForm.value.isUnlimited ? 'unlimited' : this.newQuizForm.value.attempts,
       items: this.items,
      
     };

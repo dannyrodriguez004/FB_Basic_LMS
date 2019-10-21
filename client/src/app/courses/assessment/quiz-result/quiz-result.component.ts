@@ -25,13 +25,14 @@ export class QuizResultComponent implements OnInit {
   course: string;
   quizId: string;
   barColor = 'primary'
+  barMode = 'indeterminate';
   record: Record = {
     title: '',
     attempted: 0,
     doneOn: null,
     dueDate: null,
-    outOf: -1,
-    score: 0,
+    outOf: 100,
+    score: 100,
     startTime: null,
     items: []
   };
@@ -53,6 +54,8 @@ export class QuizResultComponent implements OnInit {
       }
       this.courseServices.getStudentQuizRecord(this.userServices.user(), this.course, this.quizId).subscribe( (resp: Record) => {
         this.record = resp;
+        if(this.getPercent() < 60) this.barColor = 'warn';
+        this.barMode = 'determinate';
         console.log(resp);
       });
     });
@@ -62,11 +65,6 @@ export class QuizResultComponent implements OnInit {
     var percent = 0;
     if(this.record.outOf == 0) percent = 0;
     percent = this.record.score / this.record.outOf * 100;
-    if(percent < 60){
-      this.barColor = 'warn';
-    } else {
-      this.barColor = 'primary';
-    }
     return percent;
   }
 

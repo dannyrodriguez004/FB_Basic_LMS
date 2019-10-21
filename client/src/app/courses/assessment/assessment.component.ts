@@ -79,6 +79,7 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
           this.quiz.attempted = resp.attempted;
           this.quiz.doneOn = new Date(resp.doneOn);
           this.quiz.startTime = new Date(resp.startTime);
+          this.quiz.dueDate = new Date(resp.dueDate);
           
           for(let i = 0; i < this.quiz.items.length; i++) {
             this.quiz.items[i].response = resp.items[i].response;
@@ -89,6 +90,10 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
       console.log(resp as Quiz);
       this.subscriptions.push(this.courseServices.getServerTime().subscribe( (resp: Date) => {
         this.serverTime = new Date(resp);
+
+        if(this.quiz.dueDate.getTime() < this.serverTime.getTime()) {
+          this.router.navigate(['/nav/courses/view-course'], { queryParams: {course:this.current_course, select:'Home'} });
+        }
 
         this.timeLeft = this.quiz.startTime.getTime == null ? 0 : Math.max(0, 10 - (( this.serverTime.getTime() -  new Date(this.quiz.startTime).getTime()) / 1000));
         if(this.timeLeft < 1) {

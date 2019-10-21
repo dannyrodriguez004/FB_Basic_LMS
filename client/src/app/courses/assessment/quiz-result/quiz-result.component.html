@@ -13,6 +13,6 @@
         <mat-progress-bar [color]="barColor" [value]="getPercent()"></mat-progress-bar>
     </mat-card-content>
     <mat-card-actions>
-        <button [routerLink]="['/nav/courses/view-course']" [queryParams]="{course:course,select:'Home'}">Back to Course</button>
+        <button mat-raised-button color="primary" mat-raised [routerLink]="['/nav/courses/view-course']" [queryParams]="{course:course,select:'Home'}">Back to Course</button>
     </mat-card-actions>
 </mat-card>

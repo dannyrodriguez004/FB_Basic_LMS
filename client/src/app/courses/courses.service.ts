@@ -199,4 +199,9 @@ export class CoursesService {
     const params = {params: new HttpParams().set('student', `${student}`).set('course', `${course}`).set('quiz', `${quiz}`)};
     return this.http.get(`${environment.apiAddress}/courses/student-record`, params);
   }
+
+  getQuizInfo(course, moduleID, quiz) {
+    const params = {params: new HttpParams().set('course', `${course}`).set('module', `${moduleID}`).set('quiz', `${quiz}`)};
+    return this.http.get(`${environment.apiAddress}/courses/quiz-info`, params);
+  }
 }

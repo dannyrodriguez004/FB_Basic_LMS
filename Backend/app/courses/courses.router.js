@@ -220,6 +220,11 @@ module.exports = (passport) => {
     router.get('/student-record', async(req, res, next) => {
         const resp = await coursesServices.getStudentRecord(req.query.student, req.query.course, req.query.quiz);
         res.json(resp);
+    });
+
+    router.get('/quiz-info', async(req, res, next) => {
+        const resp = await coursesServices.getQuizInfo(req.query.course, req.query.module, req.query.quiz);
+        res.json(resp);
     })
 
     return router;

@@ -55,6 +55,7 @@ import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.c
 import { EnrollDialogComponent } from './course/confirm-enroll/enroll-dialog/enroll-dialog.component';
 import { GradeReportsComponent } from './course/grade-reports/grade-reports.component';
 import { QuizResultComponent } from './assessment/quiz-result/quiz-result.component';
+import { QuizDialogComponent } from './course/modules/quiz-dialog/quiz-dialog.component';
 
 
 
@@ -83,7 +84,8 @@ import { QuizResultComponent } from './assessment/quiz-result/quiz-result.compon
     ConfirmEnrollComponent,
     EnrollDialogComponent,
     GradeReportsComponent,
-    QuizResultComponent
+    QuizResultComponent,
+    QuizDialogComponent
   ],
   imports: [
     CommonModule,
@@ -120,7 +122,8 @@ import { QuizResultComponent } from './assessment/quiz-result/quiz-result.compon
     CourseDetailEditorComponent,
     ModuleEditorComponent,
     NewContentComponent,
-    EnrollDialogComponent
+    EnrollDialogComponent,
+    QuizDialogComponent
   ]
 })
 export class CoursesModule { }

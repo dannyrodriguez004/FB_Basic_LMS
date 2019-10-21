@@ -1,0 +1,18 @@
+<h3 mat-dialog-title>Quiz</h3>
+<mat-list>
+    <mat-list-item>
+        Due Date:{{record.dueDate | date: 'medium'}}
+    </mat-list-item>
+    <mat-list-item>
+        Allowed Attempts:{{' ' + record.attempts}}
+    </mat-list-item>
+    <mat-list-item>
+        Attempts: {{record.attempted}}
+    </mat-list-item>
+</mat-list>
+<mat-dialog-actions>
+    <span class="fill"></span>
+    <button (click)="goToResult()" mat-raised-button>Result</button>
+    <button (click)="onNoClick()" mat-raised-button color="warn">Cancel</button>
+    <button [disabled]="!isOpen" (click)="goToQuiz()" mat-raised-button color="primary">Go to Quiz</button>
+</mat-dialog-actions>
