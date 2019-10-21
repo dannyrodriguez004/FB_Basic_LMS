@@ -44,8 +44,8 @@ app.use('/courses', coursesRoutes);
 const usersRoutes = require('./users/users.router')(passport);
 app.use('/users', usersRoutes);
 
-//const securityRoutes = require('./security/security.router')(passport);
-//app.use('/oauth', securityRoutes);
+// const securityRoutes = require('./security/security.router')(passport);
+// app.use('/security', securityRoutes);
 
 //------- End --------//
 

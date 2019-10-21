@@ -8,10 +8,13 @@ import {
   MatInputModule,
   MatButtonModule
 } from '@angular/material';
+import {SignupComponent} from './signup/signup.component';
 
 const routes: Routes = [
   {path: '', component: SecurityComponent},
-  { path: 'login', component: LoginComponent}
+  { path: 'login', component: LoginComponent},
+  { path: 'signup', component: SignupComponent},
+
 ];
 
 @NgModule({

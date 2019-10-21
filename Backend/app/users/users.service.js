@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const crypto = require('bcrypt');
 const coursesService = require('../courses/courses.service');
 //JIQc0dIMic9Cv5kk
-class UsersSerivce {
+
+class UsersService {
     constructor() {}
     /**
      * 
@@ -205,4 +206,4 @@ class UsersSerivce {
     }
 }
 
-module.exports = new UsersSerivce();
+module.exports = new UsersService();
