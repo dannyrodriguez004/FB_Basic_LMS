@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 const app = require('./app/app');
 const https = require('https');
+const http = require('http');
+
 const fileStream = require('fs');
 
 const portNorm = val => {
@@ -47,10 +49,20 @@ const onListening = () => {
 const port = portNorm(process.env.PORT || '3001');
 app.set('port', port);
 
-const server = https.createServer({
-	key: fileStream.readFileSync('server.key'),
-	cert: fileStream.readFileSync('server.crt'),
-},app);
+
+let tempServer;
+if(process.env.NODE_ENV == 'production') {
+	tempServer = https.createServer({
+		key: fileStream.readFileSync('server.key'),
+		cert: fileStream.readFileSync('server.crt'),
+	},app);
+	console.log('we are running production enviroment');
+} else {
+	tempServer = http.createServer(app);
+	console.log('we are running dev enviroment');
+}
+const server = tempServer;
+
 server.on('error', onError);
 server.on('listening', onListening);
 server.listen(port);

@@ -194,4 +194,9 @@ export class CoursesService {
   submitQuiz(student, course, module, quiz, responses) {
     return this.http.post(`${environment.apiAddress}/courses/submit-quiz`, {student, course, module, quiz, responses});
   }
+
+  getStudentQuizRecord(student, course, quiz) {
+    const params = {params: new HttpParams().set('student', `${student}`).set('course', `${course}`).set('quiz', `${quiz}`)};
+    return this.http.get(`${environment.apiAddress}/courses/student-record`, params);
+  }
 }

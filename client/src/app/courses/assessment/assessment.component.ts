@@ -1,6 +1,6 @@
 import { CoursesService } from 'src/app/courses/courses.service';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { UserService } from 'src/app/user.service';
 
@@ -65,19 +65,38 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
   constructor(
     private routes: ActivatedRoute,
     private courseServices: CoursesService,
-    private userServices: UserService
+    private userServices: UserService,
+    private router: Router
     ) {
     }
 
   getQuiz() {
     this.subscriptions.push(this.courseServices.getQuiz(this.current_course, this.current_module, this.assessment_id).subscribe( (resp:Quiz) => {
       this.quiz = resp as Quiz;
+      this.courseServices.getStudentQuizRecord(this.userServices.user(), this.current_course, this.assessment_id).subscribe( (resp: 
+        {title: string, attempted: number, doneOn: Date, dueDate: Date, outOf: number, startTime: Date, items: Item[]}) => {
+
+          this.quiz.attempted = resp.attempted;
+          this.quiz.doneOn = new Date(resp.doneOn);
+          this.quiz.startTime = new Date(resp.startTime);
+          
+          for(let i = 0; i < this.quiz.items.length; i++) {
+            this.quiz.items[i].response = resp.items[i].response;
+          }
+        
+      });
       
       console.log(resp as Quiz);
       this.subscriptions.push(this.courseServices.getServerTime().subscribe( (resp: Date) => {
         this.serverTime = new Date(resp);
 
         this.timeLeft = this.quiz.startTime.getTime == null ? 0 : Math.max(0, 10 - (( this.serverTime.getTime() -  new Date(this.quiz.startTime).getTime()) / 1000));
+        if(this.timeLeft < 1) {
+
+          if(this.quiz.attempts > 0) {
+            this.submitQuiz();
+          }  
+        } 
         //console.log(this.timeLeft);
         this.setStartTime();
       }));
@@ -128,6 +147,8 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
 
     this.courseServices.submitQuiz(this.userServices.user(), this.current_course, this.current_module, this.assessment_id, answers).subscribe( (resp) => {
       if(resp)console.log('Quiz graded!');
+
+      this.router.navigate(['/nav/courses/result'], { queryParams: {course: this.current_course, quiz: this.assessment_id } });
     });
     
   }

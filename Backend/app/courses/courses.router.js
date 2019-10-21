@@ -217,5 +217,10 @@ module.exports = (passport) => {
         res.json(resp);
     })
 
+    router.get('/student-record', async(req, res, next) => {
+        const resp = await coursesServices.getStudentRecord(req.query.student, req.query.course, req.query.quiz);
+        res.json(resp);
+    })
+
     return router;
 }

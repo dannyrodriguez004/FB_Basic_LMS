@@ -710,7 +710,7 @@ class CoursesService {
     async getStudentRecord(student_id, course_id, assessment_id) {
         let payload = {};
         try {
-            //console.log(student_id);
+            console.log(student_id, course_id, assessment_id);
             let records = await database.ref('/students/' + student_id + '/enrolled/' + course_id)
             .once('value');
 
@@ -719,12 +719,14 @@ class CoursesService {
 
             if(record != null) {
                 payload = {
+                    title: record.title,
                     attempted: record.attempted,
                     doneOn: record.doneOn,
                     dueDate: record.doneDate,
                     outOf: record.outOf,
                     score: record.score,
                     startTime: record.startTime,
+                    items: record.items
                 }
 
                 //console.log(record);
@@ -1169,6 +1171,7 @@ class CoursesService {
         let quiz = await this.getQuizFull(course, module_id, assesment);
         let oldRecord = await this.getStudentRecord(student, course, assesment);
         let record = {
+            title: quiz.title,
             outOf: quiz.outOf,
             score: 0,
             dueDate: quiz.dueDate,

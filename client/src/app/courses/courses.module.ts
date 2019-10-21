@@ -18,7 +18,8 @@ import {
   MatStepperModule,
   MatCheckboxModule,
   MatProgressSpinnerModule,
-  MatDividerModule
+  MatDividerModule,
+  MatProgressBarModule
 } from '@angular/material';
 
 import { CoursesRoutingModule } from './courses-routing.module';
@@ -53,6 +54,7 @@ import { PagesComponent } from './course/pages/pages.component';
 import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.component';
 import { EnrollDialogComponent } from './course/confirm-enroll/enroll-dialog/enroll-dialog.component';
 import { GradeReportsComponent } from './course/grade-reports/grade-reports.component';
+import { QuizResultComponent } from './assessment/quiz-result/quiz-result.component';
 
 
 
@@ -80,7 +82,8 @@ import { GradeReportsComponent } from './course/grade-reports/grade-reports.comp
     PagesComponent,
     ConfirmEnrollComponent,
     EnrollDialogComponent,
-    GradeReportsComponent
+    GradeReportsComponent,
+    QuizResultComponent
   ],
   imports: [
     CommonModule,
@@ -109,6 +112,7 @@ import { GradeReportsComponent } from './course/grade-reports/grade-reports.comp
     MatCheckboxModule,
     MatProgressSpinnerModule,
     MatDividerModule,
+    MatProgressBarModule
   ],
   entryComponents: [
     DiscussionEditorComponent,
