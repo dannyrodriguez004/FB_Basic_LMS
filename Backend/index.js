@@ -51,15 +51,15 @@ app.set('port', port);
 
 
 let tempServer;
-if(process.env.NODE_ENV == 'production') {
+if(process.env.NODE_ENV == 'dev') {
+	console.log('we are running dev enviroment');
+	tempServer = http.createServer(app);
+} else {
 	tempServer = https.createServer({
 		key: fileStream.readFileSync('server.key'),
 		cert: fileStream.readFileSync('server.crt'),
 	},app);
 	console.log('we are running production enviroment');
-} else {
-	tempServer = http.createServer(app);
-	console.log('we are running dev enviroment');
 }
 const server = tempServer;
 
