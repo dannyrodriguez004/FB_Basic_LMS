@@ -1,76 +1,104 @@
 import { Assessment, Question } from '../../models/courses.models';
-import { CountdownComponent, CountdownConfig } from 'ngx-countdown';
+// import { CountdownComponent, CountdownConfig } from 'ngx-countdown';
+import { CoursesService } from '../../services/courses.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
+
+export class Quiz {
+  title: string;
+  outOf: number;
+  attempts: number;
+  items: Item[];
+  attempted: number;
+  dueDate: Date;
+  doneOn: Date;
+  time: number;
+  startTime: Date;
+  score: number;
+}
+
+export class Item {
+  question: string;
+  options: string[];
+  value: number;
+  response: string;
+}
+
 
 @Component({
   selector: 'app-assessment',
   templateUrl: './assessment.component.html',
   styleUrls: ['./assessment.component.scss']
 })
-export class AssessmentComponent implements OnInit {
 
+export class AssessmentComponent implements OnInit, AfterViewInit {
 
-  private items: Question[] = [
-    {id: 0, title: 'Quiz 1', val: 10, question: 'Which bear is best1?', answer: 'Black Bear', options: [
-      'Black Bear', 'Polar Bear', 'Cave Bear', 'Brown Bear'
-    ], response: ''} as Question,
-    {id: 1, title: 'Quiz 1', val: 10, question: 'Which bear is best2?', answer: 'Black Bear', options: [
-      'Black Bear', 'Polar Bear', 'Cave Bear', 'Brown Bear'
-    ], response: ''} as Question,
-    {id: 2, title: 'Quiz 1', val: 10, question: 'Which bear is best3?', answer: 'Black Bear', options: [
-      'Black Bear', 'Polar Bear', 'Cave Bear', 'Brown Bear'
-    ], response: ''} as Question,
-    {id: 3, title: 'Quiz 1', val: 10, question: 'Which bear is best4?', answer: 'Black Bear', options: [
-      'Black Bear', 'Polar Bear', 'Cave Bear', 'Brown Bear'
-    ], response: ''} as Question,
-    {id: 4, title: 'Quiz 1', val: 10, question: 'Which bear is best5?', answer: 'Black Bear', options: [
-      'Black Bear', 'Polar Bear', 'Cave Bear', 'Brown Bear'
-    ], response: ''} as Question,
-  ];
+  public quiz: Quiz = {
+    title: '',
+    outOf: 0,
+    attempts: -1,
+    items: [{question: '', options: [], value: 0, response: ''}],
+    attempted: 0,
+    dueDate: null,
+    doneOn: null,
+    time: 0,
+    startTime: null,
+    score: 0,
+  };
+
+  loading = true;
+
+  serverTime: Date;
 
   private subscriptions: Subscription[] = [];
   // tslint:disable-next-line:variable-name
   assessment_id = '';
   // tslint:disable-next-line:variable-name
   current_course = '';
+  // tslint:disable-next-line:variable-name
+  current_module = '';
   select = 0;
-  item = this.items[this.select];
+  item: Item;
   response = '';
   time = 10;
 
-  config: CountdownConfig = {
-    demand: false,
-    leftTime: (this.time * .5),
-    format: 'HH:mm:ss'
-  };
+  // config: CountdownConfig = {
+  //   demand: false,
+  //   leftTime: (this.time * .5),
+  //   format: 'HH:mm:ss'
+  // };
+  //
+  // @ViewChild('countDown', {static: false}) private countdown: CountdownComponent;
 
-  @ViewChild('countDown', {static: false}) private countdown: CountdownComponent;
+  timeLeft;
 
-  constructor(private routes: ActivatedRoute) { }
+  constructor(
+    private routes: ActivatedRoute,
+    private courseServices: CoursesService
+    ) {
+    }
 
-  nextQuestion() {
-    this.select = this.select + 1;
-    this.loadItem();
-  }
+  getQuiz() {
+    // tslint:disable-next-line:max-line-length
+    this.subscriptions.push(this.courseServices.getQuiz(this.current_course, this.current_module, this.assessment_id)
+      .subscribe( (resp: Quiz) => {
+      this.quiz = resp;
 
-  canNext() {
-    return this.select < this.items.length - 1;
-  }
+      // console.log(resp as Quiz);
+        // tslint:disable-next-line:no-shadowed-variable
+      this.subscriptions.push(this.courseServices.getServerTime().subscribe( (resp: Date) => {
+        this.serverTime = new Date(resp);
 
-  prevQuestion() {
-    this.select = this.select - 1;
-    this.loadItem();
-  }
-
-  loadItem() {
-    this.item = this.items[this.select];
-    this.response = this.items[this.select].response;
+        this.timeLeft = this.quiz.startTime.getTime == null ? 0 : Math.max(0, 10 - (
+          ( this.serverTime.getTime() -  new Date(this.quiz.startTime).getTime()) / 1000));
+        // console.log(this.timeLeft);
+      }));
+    }));
   }
 
   submit() {
-    this.items[this.select].response = this.response.toString();
+    console.log(this.quiz.items);
   }
 
   ngOnInit() {
@@ -79,18 +107,33 @@ export class AssessmentComponent implements OnInit {
         this.current_course = params.course;
       }
       if (params.id) {
-        this.assessment_id = params.id;
-      }
-    }));
+        if (params.module) {
+          this.current_module = params.module;
+        }
+        if (params.id) {
+          this.assessment_id = params.id;
+        }
+        this.getQuiz();
+        this.loading = false;
+      }}));
+  }
+
+  ngAfterViewInit() {
+
   }
 
   ring(x) {
     if (x.action === 'done') {
     this.submitQuiz();
     }
+
+    if (x.action === 'done') { this.submitQuiz(); }
+    if (x.action === 'notify' && x.left <= 60000 && this.quiz.time > 0) { document.getElementById('counter').style.color = 'red'; }
+
   }
 
   submitQuiz() {
     console.log('QUIZ SUBMITTED!');
   }
+
 }

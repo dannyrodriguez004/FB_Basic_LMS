@@ -52,7 +52,6 @@ import { RollcallComponent } from './course/rollcall/rollcall.component';
 import { PagesComponent } from './course/pages/pages.component';
 import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.component';
 import { EnrollDialogComponent } from './course/confirm-enroll/enroll-dialog/enroll-dialog.component';
-import { CountdownModule } from 'ngx-countdown';
 import { GradeReportsComponent } from './course/grade-reports/grade-reports.component';
 
 
@@ -110,7 +109,6 @@ import { GradeReportsComponent } from './course/grade-reports/grade-reports.comp
     MatCheckboxModule,
     MatProgressSpinnerModule,
     MatDividerModule,
-    CountdownModule
   ],
   entryComponents: [
     DiscussionEditorComponent,

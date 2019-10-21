@@ -200,8 +200,12 @@ module.exports = (passport) => {
     router.get('/course-students', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.getCourseStudent(req.query.course);
         res.json(resp);
-    })
+    });
 
+    router.get('/module-quiz', async(req, res, next) => {
+        const resp = await coursesServices.getQuiz(req.query.course, req.query.module, req.query.quiz);
+        res.json(resp);
+    });
 
     return router;
 }

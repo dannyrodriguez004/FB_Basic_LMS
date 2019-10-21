@@ -10,5 +10,9 @@ module.exports = () => {
         });
     });
 
+    router.get('/date', async (req, res, next) => {
+        res.json(new Date());
+    })
+
     return router;
 }

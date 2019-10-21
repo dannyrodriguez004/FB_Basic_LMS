@@ -11,6 +11,7 @@ export interface Record {
   doneOn: string;
   score: number;
   outOf: number;
+  startTime: Date;
 }
 
 @Component({
@@ -54,7 +55,7 @@ export class GradeReportsComponent implements OnInit {
   loadStudents() {
     this.subscriptions.push(this.coursesServices.getCourseStudents(this.current_course).subscribe( (resp: {id: string, fname: string, lname: string}[]) => {
       this.students = resp;
-      console.log(resp);
+      //console.log(resp);
     }));
   }
 

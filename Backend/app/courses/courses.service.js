@@ -158,6 +158,10 @@ class CoursesService {
                     time: content.time,
                     dueDate: content.dueDate,
                     attempts: content.attempts,
+                    attempted: 0,
+                    outOf: 0,
+                    startTime: "null",
+                    score: 0,
                 });
 
                 let total = 0;
@@ -168,7 +172,8 @@ class CoursesService {
                         value: Number(item.value),
                         question: item.question,
                         answer: item.answer,
-                        options: item.options
+                        options: item.options,
+                        response: "null",
                     });
                 });
 
@@ -673,6 +678,7 @@ class CoursesService {
                 item.doneOn = record.doneOn || null;
                 item.score = record.score || null;
                 item.startTime = record.startTime || null;
+                item.attempted = record.attempted || null;
             });
             
         } catch(err) {
@@ -682,7 +688,6 @@ class CoursesService {
         return assessments;
 
     }
-
     
     /**
      * 
@@ -723,6 +728,54 @@ class CoursesService {
 
     }
 
+    async getQuiz(course, module_key, quiz) {
+        let payload = {attempted: 0,
+            attempsts: -1,
+            dueDate: 'null',
+            items: [],
+            outOf: 0,
+            score: 0,
+            startTime: 'null',
+            time: -1,
+            title: 'null',};
+
+        //console.log(course, module_key, quiz);
+        try {
+
+            let quizes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
+            var record = await quizes.toJSON();
+            payload = await {
+                attempted: record.attempted,
+                attempsts: record.attempsts || -1,
+                dueDate: record.dueDate,
+                items: [],
+                outOf: record.outOf,
+                score: record.score,
+                startTime: record.startTime,
+                time: record.time || -1,
+                title: record.title || null,
+            };
+
+            quizes = await quizes.ref.child('items').once('value');
+            quizes.forEach( (item) => {
+                record = item.toJSON();
+                payload.items.push({
+                    options: record.options || null,
+                    question: record.question || null,
+                    response: record.response || null,
+                    value: record.value || null,
+                });
+            });
+
+        } catch (err) {
+            console.error(err);
+        }
+
+        return payload;
+
+    }
+    
+
     async removeContent(course, module_id, content) {
         try {
             await database.ref('/courses/' + course + '/modules/' + module_id + '/content/' + content).remove();
@@ -746,80 +799,8 @@ class CoursesService {
         return student.hasChild(student_id);
     }
 
-    /**
-     *
-     * @param {string} course_id , course key in the database
-     * @param {string} student_id , student key in the database
-     *
-     * @return {{{id: string, title: string, dueDate: string, outOf: number, doneOn: string, score: number}[]}} records
-
-     async getCourseModules(courses_id) {
-
-        let payload = {
-            modules: []
-        };
-
-        let tempModule;
-
-        try {
-
-            var courseModules = await database.ref('/courses/' + courses_id + '/modules').once('value');
-
-            courseModules.forEach( (mod) => {
-
-                tempModule = {id:'', name: '', resources: []};
-
-                tempModule.name = mod.child('name').val();
-                tempModule.id = mod.key;
-
-                mod.child('content').forEach( (item) => {
-                    tempModule.resources.push({
-                    id: item.key,
-                    mod: mod.key,
-                    title: item.child('title').val(),
-                    url: item.child('url').val(),
-                    link: item.child('link').val(),
-                    isTimed: item.child('isTimed').val(),
-                    embedded: item.child('embedded').val()
-                    });
-                });
-
-                   payload.modules.push(tempModule);
-            });
-        } catch (err) {
-               console.error(err);
-        }
-
-           return payload.modules;
-    }
-*/
-    // async getCourseStudents(courses_id) {
-    //
-    //     let payload = {
-    //         students: []
-    //     };
-    //
-    //     let tempStudent;
-    //
-    //     try {
-    //
-    //         var courseStudents = await database.ref('/courses/' + courses_id + '/students').once('value');
-    //
-    //         courseStudents.forEach( (stu) => {
-    //
-    //             tempStudent = {name: ''};
-    //
-    //             tempStudent.name = stu.child('name').val();
-    //             // tempStudent.id = stu.key;
-    //
-    //             payload.students.push(tempStudent);
-    //         });
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    //
-    //     return payload.students;
-    // }
+    
+    
     async updateCourse(course) {
 
         //console.log(course.endEnrollDate);
@@ -904,52 +885,6 @@ class CoursesService {
         return true;
     }
 
-
-    /**  ---------------------- getStudentsForCourse  ----------------------
-     *
-     * @param {string} course_id
-     *
-     * @returns json object with array of student objects
-     */
-    //
-    // async getStudents(course) {
-    //
-    //     let payload = [];
-    //
-    //     let students = await database.ref('/courses').child(course).child('students').once('value');
-    //     students.forEach( (students) => {
-    //         payload.push({
-    //             id: students.key,
-    //             name: students.child('name').val(),
-    //             email: students.child('email').val()
-    //         });
-    //     });
-    //     return payload;
-        // let payload = {id: '', name: '', email: ''};
-        //
-        // try {
-        //
-        //     let current_student = await database.ref('/courses').child(course)
-        //         .child('students').child(student_id).once('value');
-        //
-        //     payload.name = current_student.child('name').val();
-        //     payload.id = current_student.key;
-        //
-        //     // current_module.child('email').forEach( (student) => {
-        //     //     payload.email.push({
-        //     //         id: student.key,
-        //     //         stu: current_student.key,
-        //     //         name: student.child('title').val()
-        //     //     });
-        //     // });
-        //
-        // } catch (err) {
-        //     console.error(err);
-        // }
-        //
-        // return payload;
-    //
-    // }
     /**
      * @return {string[]} categories
      */

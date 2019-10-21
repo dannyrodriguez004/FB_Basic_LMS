@@ -176,4 +176,13 @@ export class CoursesService {
     const params = {params: new HttpParams().set('course', `${course}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-students`, params);
   }
+
+  getQuiz(course, moduleID, quiz) {
+    const params = {params: new HttpParams().set('course', `${course}`).set('module', `${moduleID}`).set('quiz', `${quiz}`)};
+    return this.http.get(`${environment.apiAddress}/courses/module-quiz`, params);
+  }
+
+  getServerTime() {
+    return this.http.get(`${environment.apiAddress}/utils/date`);
+  }
 }
