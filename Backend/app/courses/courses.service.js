@@ -174,7 +174,7 @@ class CoursesService {
                         question: item.question,
                         answer: item.answer,
                         options: item.options,
-                        response: "null",
+                        response: '-1',
                     });
                 });
 
@@ -670,23 +670,31 @@ class CoursesService {
 
         let assessments = await this.getAssessmentsList(course_id);
 
+        let records = [];
+
         if(assessments.length < 1) return assessments;
 
         try {
 
-            assessments.forEach((item) => {
-                var record = this.getStudentRecord(student_id, course_id, item.id);
-                item.doneOn = record.doneOn || null;
-                item.score = record.score || null;
-                item.startTime = record.startTime || null;
-                item.attempted = record.attempted || null;
-            });
+            for(let i = 0; i < assessments.length; i++) {
+                var rec = await this.getStudentRecord(student_id, course_id, assessments[i].id);
+                records.push({
+                    id: assessments[i].id,
+                    title: assessments[i].title,
+                    dueDate: assessments[i].dueDate,
+                    outOf: assessments[i].outOf,
+                    doneOn: rec.doneOn,
+                    score: rec.score,
+                    startTime: rec.startTime,
+                });
+            }
             
         } catch(err) {
             console.error(err);
         }
 
-        return assessments;
+        console.log(records);
+        return records;
 
     }
     
@@ -700,28 +708,33 @@ class CoursesService {
 
      */
     async getStudentRecord(student_id, course_id, assessment_id) {
+        let payload = {};
         try {
             //console.log(student_id);
-            let records = await database.ref('/students/' + student_id + '/enrolled')
-            .orderByChild('id')
-            .equalTo(course_id)
+            let records = await database.ref('/students/' + student_id + '/enrolled/' + course_id)
             .once('value');
 
-            records.child('records').child(assessment_id).forEach( (record) => {
-                return {
-                    doneOn: record.child('doneOn').val(),
-                     score: record.child('score').val()
-                    };
-            });
+            var record = records.child('records').child(assessment_id).toJSON();
+
+
+            if(record != null) {
+                payload = {
+                    attempted: record.attempted,
+                    doneOn: record.doneOn,
+                    dueDate: record.doneDate,
+                    outOf: record.outOf,
+                    score: record.score,
+                    startTime: record.startTime,
+                }
+
+                //console.log(record);
+            }
 
         } catch(err) {
             console.error(err);
         }
 
-        return {
-            doneOn: null,
-             score: null
-            };
+        return payload;
     }
 
 
@@ -760,13 +773,72 @@ class CoursesService {
             quizes = await quizes.ref.child('items').once('value');
             quizes.forEach( (item) => {
                 record = item.toJSON();
+                var _item = {
+                    options: Object.keys(record.options).map( function(key) {
+                        return record.options[key];
+                    }),
+                    question: record.question,
+                    response: record.response,
+                    value: record.value,
+                }
+
+                console.log(Object.keys(record.options).map( function(key) {
+                    return record.options[key];
+                }));
+
+                payload.items.push(_item);
+            });
+
+        } catch (err) {
+            console.error(err);
+        }
+
+        return payload;
+
+    }
+
+
+    async getQuizFull(course, module_key, quiz) {
+        let payload = {attempted: 0,
+            attempsts: -1,
+            dueDate: 'null',
+            items: [],
+            outOf: 0,
+            score: 0,
+            startTime: 'null',
+            time: -1,
+            title: 'null',};
+
+        //console.log(course, module_key, quiz);
+        try {
+
+            let quizes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
+            var record = await quizes.toJSON();
+            payload = await {
+                attempted: record.attempted,
+                attempsts: record.attempsts || -1,
+                dueDate: record.dueDate,
+                items: [],
+                outOf: record.outOf,
+                score: record.score,
+                startTime: record.startTime,
+                time: record.time || -1,
+                title: record.title || null,
+            };
+
+            quizes = await quizes.ref.child('items').once('value');
+            quizes.forEach( (item) => {
+                record = item.toJSON();
                 payload.items.push({
+                    answer: record.answer,
                     options: record.options || null,
                     question: record.question || null,
                     response: record.response || null,
                     value: record.value || null,
                 });
             });
+
+            
 
         } catch (err) {
             console.error(err);
@@ -1073,6 +1145,51 @@ class CoursesService {
 
         return payload;
     }
+
+
+    async setQuizStartTime(student, course, assessment) {
+        try {
+
+            await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assessment)
+            .update({
+                startTime: new Date(),
+                attempted: 1,
+            });
+
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
+
+
+    async submitQuizForGrade(student, course, module_id, assesment, responses) {
+        let quiz = await this.getQuizFull(course, module_id, assesment);
+        let oldRecord = await this.getStudentRecord(student, course, assesment);
+        let record = {
+            outOf: quiz.outOf,
+            score: 0,
+            dueDate: quiz.dueDate,
+            doneOn: new Date(),
+            items: responses
+        };
+
+        for(let i = 0; i < quiz.items.length; i++) {
+            if(quiz.items[i].answer == record.items[i].response) record.score += quiz.items[i].value;
+            console.log(record.score);
+        }
+
+        try {
+            await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assesment)
+            .update(record);
+        } catch(err) {
+            console.error(err);
+        }
+
+        return true;
+    } 
 }
 
 

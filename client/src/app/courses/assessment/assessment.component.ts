@@ -2,6 +2,7 @@ import { CoursesService } from 'src/app/courses/courses.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { UserService } from 'src/app/user.service';
 
 export class Quiz {
   title: string;
@@ -18,7 +19,7 @@ export class Quiz {
 
 export class Item {
   question: string;
-  options: string[];
+  options: any[];
   value: number; 
   response: string;
 }
@@ -44,6 +45,10 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
     score: 0,
   };
 
+  getOptions(item) {
+    return this.quiz.items.find(item).options;
+  }
+
   loading = true;
 
   serverTime: Date;
@@ -53,27 +58,28 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
   current_course = '';
   current_module = '';
   select = 0;
-  item: Item;
   response = '';
   
   timeLeft;
 
   constructor(
     private routes: ActivatedRoute,
-    private courseServices: CoursesService
+    private courseServices: CoursesService,
+    private userServices: UserService
     ) {
     }
 
   getQuiz() {
     this.subscriptions.push(this.courseServices.getQuiz(this.current_course, this.current_module, this.assessment_id).subscribe( (resp:Quiz) => {
-      this.quiz = resp;
+      this.quiz = resp as Quiz;
       
-      //console.log(resp as Quiz);
+      console.log(resp as Quiz);
       this.subscriptions.push(this.courseServices.getServerTime().subscribe( (resp: Date) => {
         this.serverTime = new Date(resp);
 
         this.timeLeft = this.quiz.startTime.getTime == null ? 0 : Math.max(0, 10 - (( this.serverTime.getTime() -  new Date(this.quiz.startTime).getTime()) / 1000));
         //console.log(this.timeLeft);
+        this.setStartTime();
       }));
     }));
   }
@@ -95,6 +101,7 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
       }
       this.getQuiz();
       this.loading = false;
+      
     }));
   }
 
@@ -110,7 +117,29 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
   }
 
   submitQuiz() {
-    console.log("QUIZ SUBMITTED!");
+    const answers = [];
+
+    this.quiz.items.forEach( (item: Item) => {
+      answers.push({
+        question: item.question,
+        response: item.response,
+      });
+    });
+
+    this.courseServices.submitQuiz(this.userServices.user(), this.current_course, this.current_module, this.assessment_id, answers).subscribe( (resp) => {
+      if(resp)console.log('Quiz graded!');
+    });
+    
+  }
+
+  setStartTime() {
+    this.courseServices.setQuizStartTime(this.userServices.user(), this.current_course, this.assessment_id).subscribe( (resp) => {
+      console.log(resp);
+    })
+  }
+
+  getQuestionSize(item) {
+    return this.quiz.items.find(item).options.length;
   }
 
 }

@@ -186,4 +186,12 @@ export class CoursesService {
   getServerTime() {
     return this.http.get(`${environment.apiAddress}/utils/date`);
   }
+
+  setQuizStartTime(student, course, quiz)  {
+    return this.http.post(`${environment.apiAddress}/courses/set-start-time`, {student, course, quiz});
+  }
+
+  submitQuiz(student, course, module, quiz, responses) {
+    return this.http.post(`${environment.apiAddress}/courses/submit-quiz`, {student, course, module, quiz, responses});
+  }
 }

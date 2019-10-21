@@ -207,5 +207,15 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    router.post('/set-start-time', async(req, res, next) => {
+        const resp = await coursesServices.setQuizStartTime(req.body.student, req.body.course, req.body.quiz);
+        res.json(resp);
+    })
+
+    router.post('/submit-quiz', async(req, res, next) => {
+        const resp = await coursesServices.submitQuizForGrade(req.body.student, req.body.course, req.body.module, req.body.quiz, req.body.responses);
+        res.json(resp);
+    })
+
     return router;
 }

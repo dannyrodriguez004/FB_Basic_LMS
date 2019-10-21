@@ -25,7 +25,7 @@ export class NewQuizComponent implements OnInit {
   questionsForm: FormGroup;
   enteringQuestion = true;
   answerInvalid = false;
-  items = [];
+  items: {question: string, value: number, options: string[], answer: number}[] = [];
   
   constructor(private formBuilder: FormBuilder,
     private coursesServices: CoursesService) { 
