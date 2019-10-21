@@ -1,12 +1,7 @@
 <mat-card class="timer">
-    
-    <span><h3 style="text-align: center;">Timer:</h3></span>
-    <span style="margin-left: auto; margin-right: auto; text-align: center;">
-        <h4 id="counter"><countdown #countDown [config]="config" (event)="ring($event)"></countdown></h4>
-    </span>
     <span>
-            <button (click)="submitQuiz() " class="width: 100%;" mat-flat-button color="primary">Submit</button>
-        </span>
+        <button (click)="submitQuiz() " class="width: 100%;" mat-flat-button color="primary">Submit</button>
+    </span>
 </mat-card>
 
 <div>
