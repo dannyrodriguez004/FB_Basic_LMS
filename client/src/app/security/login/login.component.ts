@@ -11,6 +11,7 @@ import { NgForm } from "@angular/forms";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
+
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   private subscription: Subscription[];
@@ -45,7 +46,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
-    this.authentication.login(form.value.email, form.value.password);
+    // this.authentication.login(form.value.email, form.value.password);
+    this.userServices.Adminlogin({email: form.value.email, password: form.value.password}).subscribe((login) => { console.log(login); });
+
   }
   // onSubmit() {
   //   this.submitted = true;

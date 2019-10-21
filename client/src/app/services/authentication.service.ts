@@ -33,15 +33,15 @@ export class AuthenticationService {
 
   createUser(email: string, password: string) {
     const authData: AuthData = { email, password };
-    this.http.post<any>(`${environment.apiAddress}/auth/signin`, authData)
+    this.http.post<any>(`${environment.apiAddress}/users/admin-login`, authData)
       .subscribe(response => {
         console.log(response);
       });
   }
 
   login(email: string, password: string) {
-    const authData: AuthData = { email, password};
-    return this.http.post<any>(`${environment.apiAddress}/auth/signin`, authData)
+    // const authData: AuthData = { email, password};
+    return this.http.post<any>(`${environment.apiAddress}/users/admin-login`, { email, password})
       .subscribe(response => {
         const token = response.token;
         this.token = token;
