@@ -207,5 +207,30 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    router.post('/set-start-time', async(req, res, next) => {
+        const resp = await coursesServices.setQuizStartTime(req.body.student, req.body.course, req.body.quiz);
+        res.json(resp);
+    });
+
+    router.post('/submit-quiz', async(req, res, next) => {
+        const resp = await coursesServices.submitQuizForGrade(req.body.student, req.body.course, req.body.module, req.body.quiz, req.body.responses);
+        res.json(resp);
+    });
+
+    router.get('/student-record', async(req, res, next) => {
+        const resp = await coursesServices.getStudentRecord(req.query.student, req.query.course, req.query.quiz);
+        res.json(resp);
+    });
+
+    router.get('/quiz-info', async(req, res, next) => {
+        const resp = await coursesServices.getQuizInfo(req.query.course, req.query.module, req.query.quiz);
+        res.json(resp);
+    });
+
+    router.post('/save-responses', async(req, res, next) => {
+        const resp = await coursesServices.saveResponses(req.body.student, req.body.course, req.body.quiz, req.body.responses);
+        res.json(resp);
+    })
+
     return router;
 }

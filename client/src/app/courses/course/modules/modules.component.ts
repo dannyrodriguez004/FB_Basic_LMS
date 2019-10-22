@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Component, OnInit, Input } from '@angular/core';
 import { NewContentComponent } from './new-content/new-content.component';
 import { ModuleEditorComponent } from './module-editor/module-editor.component';
+import { QuizDialogComponent } from './quiz-dialog/quiz-dialog.component';
 
 
 @Component({
@@ -59,6 +60,22 @@ export class ModulesComponent implements OnInit {
         this.ngOnInit();
       }
       
+    }));
+  }
+
+  openQuizDialog(course_module, quiz) {
+
+    const dialogRef = this.dialog.open(QuizDialogComponent, {
+      //width: '90%',
+      data: {
+        module: course_module, 
+        course: this.current_course,
+        quiz: quiz
+      },
+    });
+
+    this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
+
     }));
   }
 

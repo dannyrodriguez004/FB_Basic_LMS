@@ -14,7 +14,7 @@ class CoursesService {
      */
 
     async addCourse(newCourse) {
-        //console.log(newCourse);
+
         try {
             let course = await database.ref('/courses').once('value');
             let newRef = course.ref.push(
@@ -33,7 +33,6 @@ class CoursesService {
             );
 
             let cat = await database.ref('/categories/' + newCourse.category).once('value');
-            //console.log(newRef);
             cat.child(newRef.key).ref.set({ courseId: newRef.key })
             
         } catch (err) {
@@ -149,7 +148,6 @@ class CoursesService {
      */
     async addModuleQuiz(course_key, module_key, content) {
 
-        //console.log('courseKey', course_key, 'moduleKey', module_key ,content);
         try {
             var courses = await database.ref('/courses/' +  course_key).once('value');
             if(courses.hasChildren) {
@@ -174,7 +172,7 @@ class CoursesService {
                         question: item.question,
                         answer: item.answer,
                         options: item.options,
-                        response: "null",
+                        response: '-1',
                     });
                 });
 
@@ -248,7 +246,7 @@ class CoursesService {
     }
 
     async addModuleContent(course_key, module_key, content) {
-        //console.log("course", course_key, "module", module_key, "content", content);
+
         try {
             var courses = await database.ref('/courses').orderByKey().equalTo(course_key).once('value');
             if(courses.hasChildren) {
@@ -307,7 +305,7 @@ class CoursesService {
             courseModules.forEach( (mod) => {
                 mod.child("content").forEach( (cont) => {
                     if(cont.hasChild('outOf')) {
-                        //console.log(cont.child('title').val());
+
                         const assessment = cont.toJSON();
                         assessments.push({
                             id: cont.key,
@@ -645,7 +643,7 @@ class CoursesService {
     }
 
     async getPage(course_id, module_id, page_id){
-        //console.log('course',course_id,'module', module_id,'page', page_id);
+
         let payload = {};
         try {
 
@@ -670,23 +668,30 @@ class CoursesService {
 
         let assessments = await this.getAssessmentsList(course_id);
 
+        let records = [];
+
         if(assessments.length < 1) return assessments;
 
         try {
 
-            assessments.forEach((item) => {
-                var record = this.getStudentRecord(student_id, course_id, item.id);
-                item.doneOn = record.doneOn || null;
-                item.score = record.score || null;
-                item.startTime = record.startTime || null;
-                item.attempted = record.attempted || null;
-            });
+            for(let i = 0; i < assessments.length; i++) {
+                var rec = await this.getStudentRecord(student_id, course_id, assessments[i].id);
+                records.push({
+                    id: assessments[i].id,
+                    title: assessments[i].title,
+                    dueDate: assessments[i].dueDate,
+                    outOf: assessments[i].outOf,
+                    doneOn: rec.doneOn,
+                    score: rec.score,
+                    startTime: rec.startTime,
+                });
+            }
             
         } catch(err) {
             console.error(err);
         }
 
-        return assessments;
+        return records;
 
     }
     
@@ -700,28 +705,43 @@ class CoursesService {
 
      */
     async getStudentRecord(student_id, course_id, assessment_id) {
+        let payload = {
+            title: '',
+            attempted: 0,
+            doneOn: null,
+            dueDate: null,
+            outOf: 100,
+            score: 0,
+            startTime: null,
+            items: []
+        };
         try {
-            //console.log(student_id);
-            let records = await database.ref('/students/' + student_id + '/enrolled')
-            .orderByChild('id')
-            .equalTo(course_id)
+
+            let records = await database.ref('/students/' + student_id + '/enrolled/' + course_id)
             .once('value');
 
-            records.child('records').child(assessment_id).forEach( (record) => {
-                return {
-                    doneOn: record.child('doneOn').val(),
-                     score: record.child('score').val()
-                    };
-            });
+            var record = records.child('records').child(assessment_id).toJSON();
+
+
+            if(record != null) {
+                payload = {
+                    title: record.title,
+                    attempted: record.attempted || 0,
+                    doneOn: record.doneOn,
+                    dueDate: record.doneDate,
+                    outOf: record.outOf,
+                    score: record.score,
+                    startTime: record.startTime,
+                    items: record.items
+                }
+            }
 
         } catch(err) {
             console.error(err);
         }
 
-        return {
-            doneOn: null,
-             score: null
-            };
+        console.log(payload);
+        return payload;
     }
 
 
@@ -731,7 +751,7 @@ class CoursesService {
 
     async getQuiz(course, module_key, quiz) {
         let payload = {attempted: 0,
-            attempsts: -1,
+            attempts: 'unlimited',
             dueDate: 'null',
             items: [],
             outOf: 0,
@@ -740,14 +760,106 @@ class CoursesService {
             time: -1,
             title: 'null',};
 
-        //console.log(course, module_key, quiz);
+
         try {
 
             let quizes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
             var record = await quizes.toJSON();
             payload = await {
+                attempted: record.attempted || 0,
+                attempts: record.attempts || 'unlimited',
+                dueDate: record.dueDate,
+                items: [],
+                outOf: record.outOf,
+                score: record.score,
+                startTime: record.startTime,
+                time: record.time || -1,
+                title: record.title || null,
+            };
+
+            quizes = await quizes.ref.child('items').once('value');
+            quizes.forEach( (item) => {
+                record = item.toJSON();
+                var _item = {
+                    options: Object.keys(record.options).map( function(key) {
+                        return record.options[key];
+                    }),
+                    question: record.question,
+                    response: record.response,
+                    value: record.value,
+                }
+
+
+
+                payload.items.push(_item);
+            });
+
+        } catch (err) {
+            console.error(err);
+        }
+
+        return payload;
+
+    }
+
+    async getQuizInfo(course, module_key, quiz) {
+        let payload = {attempted: 0,
+            attempts: 'unlimited',
+            dueDate: 'null',
+            items: [],
+            outOf: 0,
+            score: 0,
+            startTime: 'null',
+            time: -1,
+            title: 'null',};
+
+
+            try {
+
+                let quizes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
+                var record = await quizes.toJSON();
+
+                console.log(record);
+
+                payload = {
+                    attempted: record.attempted || 0,
+                    attempts: record.attempts || -1,
+                    dueDate: record.dueDate,
+                    items: [],
+                    outOf: record.outOf,
+                    score: record.score,
+                    startTime: record.startTime,
+                    time: record.time || -1,
+                    title: record.title || null,
+                };
+    
+            } catch (err) {
+                console.error(err);
+            }
+    
+
+            return payload;
+    }
+
+
+    async getQuizFull(course, module_key, quiz) {
+        let payload = {attempted: 0,
+            attempts: 'unlimited',
+            dueDate: 'null',
+            items: [],
+            outOf: 0,
+            score: 0,
+            startTime: 'null',
+            time: -1,
+            title: 'null',};
+
+        try {
+
+            let quizes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
+            var record = await quizes.toJSON();
+            payload = {
                 attempted: record.attempted,
-                attempsts: record.attempsts || -1,
+                attempts: record.attempts || -1,
                 dueDate: record.dueDate,
                 items: [],
                 outOf: record.outOf,
@@ -761,12 +873,15 @@ class CoursesService {
             quizes.forEach( (item) => {
                 record = item.toJSON();
                 payload.items.push({
+                    answer: record.answer,
                     options: record.options || null,
                     question: record.question || null,
                     response: record.response || null,
                     value: record.value || null,
                 });
             });
+
+            
 
         } catch (err) {
             console.error(err);
@@ -804,7 +919,6 @@ class CoursesService {
     
     async updateCourse(course) {
 
-        //console.log(course.endEnrollDate);
 
         try {
 
@@ -1063,7 +1177,6 @@ class CoursesService {
 
             student = await userService.getStudentDetail(list[i]);
 
-            //console.log(student);
             payload.push({
                 id: student.id,
                 fname: student.fname,
@@ -1072,6 +1185,63 @@ class CoursesService {
         }
 
         return payload;
+    }
+
+
+    async setQuizStartTime(student, course, assessment) {
+        try {
+
+            await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assessment)
+            .update({
+                startTime: new Date(),
+            });
+
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
+
+
+    async submitQuizForGrade(student, course, module_id, assesment, responses) {
+        let quiz = await this.getQuizFull(course, module_id, assesment);
+        let oldRecord = await this.getStudentRecord(student, course, assesment);
+        let record = {
+            title: quiz.title,
+            outOf: quiz.outOf,
+            score: 0,
+            dueDate: quiz.dueDate,
+            doneOn: new Date(),
+            items: responses,
+            attempted: oldRecord.attempted + 1,
+        };
+
+        for(let i = 0; i < quiz.items.length; i++) {
+            if(quiz.items[i].answer == record.items[i].response) record.score += quiz.items[i].value;
+        }
+
+        try {
+            await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assesment)
+            .update(record);
+        } catch(err) {
+            console.error(err);
+        }
+
+        return true;
+    }
+
+    async saveResponses(student, course, assesment, responses) {
+        console.log(student, course, assesment, responses);
+        try {
+            await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assesment)
+            .update({items: responses});
+        } catch(err) {
+            console.error(err);
+            return false;
+        }
+        return true;
     }
 }
 

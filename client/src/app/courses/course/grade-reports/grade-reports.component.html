@@ -25,9 +25,7 @@
             <ng-container matColumnDef="title">
                 <th mat-header-cell *matHeaderCellDef> Name </th>
                 <td mat-cell *matCellDef="let element">
-                    <a [routerLink]="['/nav/courses/assessment']" [queryParams]="{course: this.current_course,id: element.id}">
                         {{element.title}}
-                    </a>
                 </td>
                 <td mat-footer-cell *matFooterCellDef> Grade </td>
             </ng-container>
