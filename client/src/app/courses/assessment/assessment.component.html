@@ -14,22 +14,24 @@
         
 
         <mat-button-toggle-group [(ngModel)]="item.response" vertical>
-            <mat-button-toggle (click)="submit()" value="{{1}}" aria-label="Text align left">
+            <mat-button-toggle (click)="save()" value="{{1}}" aria-label="Text align left">
                 A.{{" " + item.options[0]}}
             </mat-button-toggle>
 
-            <mat-button-toggle (click)="submit()" value="{{2}}" aria-label="Text align left">
+            <mat-button-toggle (click)="save()" value="{{2}}" aria-label="Text align left">
                 B.{{" " + item.options[1]}}
             </mat-button-toggle>
 
-            <mat-button-toggle *ngIf="quiz.items[i].options.length > 2" (click)="submit()" value="{{3}}" aria-label="Text align left">
+            <mat-button-toggle (click)="save()" *ngIf="quiz.items[i].options.length > 2"  value="{{3}}" aria-label="Text align left">
                 C.{{" " + item.options[2]}}
             </mat-button-toggle>
 
-            <mat-button-toggle *ngIf="quiz.items[i].options.length > 3" (click)="submit()" value="{{4}}" aria-label="Text align left">
+            <mat-button-toggle (click)="save()" *ngIf="quiz.items[i].options.length > 3"  value="{{4}}" aria-label="Text align left">
                 D.{{" " + item.options[3]}}
             </mat-button-toggle>
             
         </mat-button-toggle-group>
+
+        <mat-progress-bar *ngIf="saving" mode="indeterminate"></mat-progress-bar>
     </mat-card>
 </div>

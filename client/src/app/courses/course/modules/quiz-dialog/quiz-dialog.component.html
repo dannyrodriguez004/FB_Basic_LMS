@@ -12,7 +12,7 @@
 </mat-list>
 <mat-dialog-actions>
     <span class="fill"></span>
-    <button (click)="goToResult()" mat-raised-button>Result</button>
+    <button [disabled]="!hasTaken" (click)="goToResult()" mat-raised-button>Result</button>
     <button (click)="onNoClick()" mat-raised-button color="warn">Cancel</button>
-    <button [disabled]="!isOpen" (click)="goToQuiz()" mat-raised-button color="primary">Go to Quiz</button>
+    <button [disabled]="!isOpen || !canTake" (click)="goToQuiz()" mat-raised-button color="primary">Go to Quiz</button>
 </mat-dialog-actions>

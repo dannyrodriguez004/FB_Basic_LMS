@@ -50,7 +50,7 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
   }
 
   loading = true;
-
+  saving = false;
   serverTime: Date;
 
   private subscriptions: Subscription[] = [];
@@ -73,25 +73,23 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
   getQuiz() {
     this.subscriptions.push(this.courseServices.getQuiz(this.current_course, this.current_module, this.assessment_id).subscribe( (resp:Quiz) => {
       this.quiz = resp as Quiz;
+      console.log(this.quiz);
       this.courseServices.getStudentQuizRecord(this.userServices.user(), this.current_course, this.assessment_id).subscribe( (resp: 
         {title: string, attempted: number, doneOn: Date, dueDate: Date, outOf: number, startTime: Date, items: Item[]}) => {
 
           this.quiz.attempted = resp.attempted;
           this.quiz.doneOn = new Date(resp.doneOn);
           this.quiz.startTime = new Date(resp.startTime);
-          this.quiz.dueDate = new Date(resp.dueDate);
           
           for(let i = 0; i < this.quiz.items.length; i++) {
             this.quiz.items[i].response = resp.items[i].response;
           }
-        
-      });
-      
-      console.log(resp as Quiz);
-      this.subscriptions.push(this.courseServices.getServerTime().subscribe( (resp: Date) => {
+
+          console.log(resp as Quiz);
+        this.subscriptions.push(this.courseServices.getServerTime().subscribe( (resp: Date) => {
         this.serverTime = new Date(resp);
 
-        if(this.quiz.dueDate.getTime() < this.serverTime.getTime()) {
+        if((new Date(this.quiz.dueDate)).getTime() < this.serverTime.getTime()) {
           this.router.navigate(['/nav/courses/view-course'], { queryParams: {course:this.current_course, select:'Home'} });
         }
 
@@ -105,11 +103,25 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
         //console.log(this.timeLeft);
         this.setStartTime();
       }));
+        
+      });
     }));
   }
 
-  submit() {
-    console.log(this.quiz.items);
+  save() {
+    this.saving = true;
+    const answers = [];
+
+    this.quiz.items.forEach( (item: Item) => {
+      answers.push({
+        question: item.question,
+        response: item.response,
+      });
+    });
+
+    this.courseServices.saveResponses(this.userServices.user(), this.current_course, this.assessment_id, answers).subscribe( (resp) => {
+      this.saving = false;
+    });
   }
 
   ngOnInit() {

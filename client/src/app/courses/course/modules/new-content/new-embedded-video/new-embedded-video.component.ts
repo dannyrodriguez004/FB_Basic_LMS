@@ -1,9 +1,20 @@
 import { CoursesService } from './../../../../courses.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { Component, OnInit, Input, Output } from '@angular/core';
 import { NewContentComponent } from '../new-content.component';
 import { EventEmitter } from '@angular/core';
+
+
+function urlValidator(control: FormControl) {
+  let link: string = control.value;
+  if(link.indexOf("http://") != 0 && link.indexOf("https://") != 0) {
+    
+    return link;
+  }
+  return null;
+}
+
 
 @Component({
   selector: 'app-new-embedded-video',
@@ -26,7 +37,7 @@ export class NewEmbeddedVideoComponent implements OnInit {
     ) {
       this.newEmbedForm = this.formBuilder.group({
         title: ['', Validators.required],
-        code: ['', Validators.required]
+        code: ['https://', [Validators.required, urlValidator]]
       });
      }
 

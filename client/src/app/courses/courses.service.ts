@@ -204,4 +204,8 @@ export class CoursesService {
     const params = {params: new HttpParams().set('course', `${course}`).set('module', `${moduleID}`).set('quiz', `${quiz}`)};
     return this.http.get(`${environment.apiAddress}/courses/quiz-info`, params);
   }
+
+  saveResponses(student, course, quiz, responses) {
+    return this.http.post(`${environment.apiAddress}/courses/save-responses`, {student, course, quiz, responses});
+  }
 }

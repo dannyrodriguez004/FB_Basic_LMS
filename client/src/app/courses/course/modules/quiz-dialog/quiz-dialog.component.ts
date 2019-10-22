@@ -37,6 +37,8 @@ export class QuizDialogComponent implements OnInit {
   data: { module: string ,course: string, quiz: string} = {module: '', course: '', quiz: ''};
 
   isOpen: boolean = false;
+  hasTaken: boolean = false;
+  canTake: boolean = false;
 
   private serverTime: Date = null;
 
@@ -54,7 +56,7 @@ export class QuizDialogComponent implements OnInit {
   ngOnInit() {
     this.courseServices.getStudentQuizRecord(this.userServices.user(), this.data.course, this.data.quiz).subscribe( (resp: Record) => {
       this.record = resp;
-      //console.log(resp);
+      console.log(resp);
 
       this.courseServices.getQuizInfo(this.data.course, this.data.module, this.data.quiz).subscribe( (resp2: Record) => {
         this.record.attempts = resp2.attempts;
@@ -65,6 +67,9 @@ export class QuizDialogComponent implements OnInit {
           this.serverTime = new Date(resp);
           
           this.isOpen = this.serverTime.getTime() < this.record.dueDate.getTime();
+          this.hasTaken = Number(this.record.attempted) > 0;
+          this.canTake = Number(this.record.attempted) < Number(this.record.attempts);
+          console.log(this.record.attempted);
         });
       });
       
@@ -84,5 +89,7 @@ export class QuizDialogComponent implements OnInit {
     this.router.navigate(['/nav/courses/result'], { queryParams: {course: this.data.course, quiz: this.data.quiz } });
     this.dialogRed.close();
   }
+
+
 
 }

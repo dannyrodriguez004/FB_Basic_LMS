@@ -726,7 +726,7 @@ class CoursesService {
             if(record != null) {
                 payload = {
                     title: record.title,
-                    attempted: record.attempted,
+                    attempted: record.attempted || 0,
                     doneOn: record.doneOn,
                     dueDate: record.doneDate,
                     outOf: record.outOf,
@@ -818,6 +818,8 @@ class CoursesService {
 
                 let quizes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
                 var record = await quizes.toJSON();
+
+                console.log(record);
 
                 payload = {
                     attempted: record.attempted || 0,
@@ -1192,7 +1194,6 @@ class CoursesService {
             await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assessment)
             .update({
                 startTime: new Date(),
-                attempted: 1,
             });
 
         } catch (err) {
@@ -1213,7 +1214,8 @@ class CoursesService {
             score: 0,
             dueDate: quiz.dueDate,
             doneOn: new Date(),
-            items: responses
+            items: responses,
+            attempted: oldRecord.attempted + 1,
         };
 
         for(let i = 0; i < quiz.items.length; i++) {
@@ -1228,7 +1230,19 @@ class CoursesService {
         }
 
         return true;
-    } 
+    }
+
+    async saveResponses(student, course, assesment, responses) {
+        console.log(student, course, assesment, responses);
+        try {
+            await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assesment)
+            .update({items: responses});
+        } catch(err) {
+            console.error(err);
+            return false;
+        }
+        return true;
+    }
 }
 
 
