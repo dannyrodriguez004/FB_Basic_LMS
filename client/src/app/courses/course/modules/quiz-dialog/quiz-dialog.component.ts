@@ -68,7 +68,7 @@ export class QuizDialogComponent implements OnInit {
           
           this.isOpen = this.serverTime.getTime() < this.record.dueDate.getTime();
           this.hasTaken = Number(this.record.attempted) > 0;
-          this.canTake = Number(this.record.attempted) < Number(this.record.attempts);
+          this.canTake = Number(this.record.attempted) < Number(this.record.attempts) || this.record.attempts == 'unlimited';
           console.log(this.record.attempted);
         });
       });
