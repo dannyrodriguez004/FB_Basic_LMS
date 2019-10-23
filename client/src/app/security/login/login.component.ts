@@ -4,7 +4,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { NgForm } from "@angular/forms";
+import { NgForm } from '@angular/forms';
+declare var FB: any;
 
 @Component({
   selector: 'app-login',
@@ -34,13 +35,46 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   async ngOnInit() {
+    (window as any).fbAsyncInit = function() {
+      FB.init({
+        appId      : '398974807682335',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v4.0'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_US/sdk.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
     this.subscription = [];
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.email, Validators.required]],
-      password: ['', Validators.required]
-    });
+    // this.loginForm = this.formBuilder.group({
+    //   email: ['', [Validators.email, Validators.required]],
+    //   password: ['', Validators.required]
+    // });
   }
 
+  submitLogin() {
+    console.log('submit login to facebook');
+    // FB.login();
+    FB.login((response) => {
+      console.log('submitLogin', response);
+      if (response.authResponse) {
+        // login success
+        // login success code here
+        // redirect to home page
+      } else {
+        console.log('User login failed');
+      }
+    });
+
+  }
   onLogin(form: NgForm) {
     if (form.invalid) {
       return;
@@ -94,6 +128,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           })
     );
   }
+
 
   ngOnDestroy() {
     if (this.subscription) {

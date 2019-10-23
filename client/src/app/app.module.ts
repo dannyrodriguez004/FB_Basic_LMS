@@ -37,6 +37,9 @@ import { NewcourseComponent } from './nav/newcourse/newcourse.component';
 
 import { CookieService } from 'ngx-cookie-service';
 import { JwtTokenInterceptorService } from './jwt-token.interceptor';
+// import {EnsureHttpsInterceptor} from './http-interceptors/ensure-https-interceptor';
+import {EnsureHttpsInterceptorModule} from 'angular-interceptors';
+
 
 @NgModule({
   declarations: [
@@ -57,7 +60,8 @@ import { JwtTokenInterceptorService } from './jwt-token.interceptor';
     MatExpansionModule,
     MatSortModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    EnsureHttpsInterceptorModule.forRoot()
   ],
   providers: [
     UserService,
