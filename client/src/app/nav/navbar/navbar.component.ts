@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { CourseDetailEditorComponent } from '../../courses/course/info/course-detail-editor/course-detail-editor.component';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
+import {AdminService} from '../../services/admin.service';
 
 @Component({
   selector: 'app-navbar',
@@ -21,16 +22,19 @@ export class NavbarComponent implements OnInit {
   constructor(
     private userServices: UserService,
     private dialog: MatDialog,
+    private adminServices: AdminService
   ) {
     this.student_id = this.userServices.user(); // get debug student id
   }
 
   // Runs whenever this component is loaded
   ngOnInit() {
-
     this.loadCourses();
   }
 
+  submitLogin() {
+    return this.userServices.submitLogin();
+  }
 
   openAddCourseDialog() {
     const dialogRef = this.dialog.open(NewcourseComponent, {
@@ -42,7 +46,7 @@ export class NavbarComponent implements OnInit {
     });
 
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
-      if(result) {
+      if (result) {
         console.log(result);
       }
     }));
@@ -69,6 +73,6 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    this.userServices.logOutUser();
+    this.adminServices.logOutUser();
   }
 }

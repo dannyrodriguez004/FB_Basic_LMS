@@ -1,9 +1,13 @@
-import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { distinctUntilChanged, catchError, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+// import 'rxjs/add/operator/toPromise';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {catchError, distinctUntilChanged, tap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 import { CookieService} from 'ngx-cookie-service';
+import {stringify} from 'querystring';
+
+declare const FB: any;
 
 @Injectable({
   providedIn: 'root'
@@ -12,46 +16,65 @@ export class UserService {
 
   // tslint:disable-next-line:variable-name
   private student_id = '0'; // debugging value
-  private isAdmin = false;
+  private isAdmin = true;
   private FBLoggedIn = true;
 
-  constructor(
-    private http: HttpClient,
-    private cookies: CookieService
-    ) {
-      this.isAdmin = this.cookies.check('admin-session');
-      //console.log(this.cookies.getAll());
-    }
+  constructor(private http: HttpClient) {
+    // tslint:disable-next-line:only-arrow-functions
+    (window as any).fbAsyncInit = function() {
+      FB.init({
+        appId      : '398974807682335',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v4.0'
+      });
+      FB.AppEvents.logPageView();
+    };
 
-  Adminlogin(loginData) {
-    let options = new HttpParams();
-    options = options.append('username', loginData.username);
-    options = options.append('password', loginData.password);
-    return this.http.post(`${environment.apiAddress}/users/admin-login`, loginData).pipe(
-      distinctUntilChanged(),
-      tap((jwt: any) => {
-        this.cookies.set('admin-session', jwt.payload, 2, '/');
-        this.isAdmin = true;
-      }),
-      catchError(this.handleError('adminLogin'))
-    );
+    // tslint:disable-next-line:only-arrow-functions
+    (function(d, s, id) {
+      // tslint:disable-next-line:one-variable-per-declaration prefer-const
+      let js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return; }
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_US/sdk.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   }
 
-  logOutUser() {
-    // tslint:disable-next-line:triple-equals
-    if (this.cookies.getAll() != {}) {
-      this.cookies.deleteAll('/');
-    }
-    this.isAdmin = false;
+  submitLogin() {
+    console.log('submit login to facebook');
+    // FB.login();
+    FB.login((response) => {
+      console.log('submitLogin', response.authResponse);
+      if (response.authResponse) {
+        console.log("HERE I AM AUTHRESPONSE");
+          this.http.post<any>(`${environment.apiAddress}/security/auth/facebook`, {access_token: response.authResponse.accessToken})
+        // const token = this.http.post(`${environment.apiAddress}/security/auth/facebook`, {access_token: response.authResponse.accessToken});
+        // console.log('Token is', stringify(token));
+        var token = ' ';
+        if (token) {
+          localStorage.setItem('id_token', stringify(token));
+        } else {
+          console.log('User login failed');
+        }
+      }
+    });
   }
-  /**
-   *
-   * @param student_id facebook id for this app's user
-   *
-   * @returns {course_id: string, name: string}[]
-   */
-  // tslint:disable-next-line:variable-name
-  getStudentCourses(student_id: string) {
+
+logout() {
+    localStorage.removeItem('id_token');
+  }
+
+isLoggedIn() {
+      this.getCurrentUser();
+  }
+
+getCurrentUser() {
+      return this.http.get(`${environment.apiAddress}/security/auth/me`);
+  }
+
+getStudentCourses(student_id: string) {
     const params = { params: new HttpParams().set('student', `${student_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/student-courses`, params);
   }
@@ -64,7 +87,7 @@ export class UserService {
    * @returns boolean, is this student enrolled in this course
    */
   // tslint:disable-next-line:variable-name
-  studentHasCourse(student_id, course_id) {
+studentHasCourse(student_id, course_id) {
     const params = { params: new HttpParams().set('student', `${student_id}`).set('course', `${course_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/student-has-course`, params);
   }
@@ -72,24 +95,24 @@ export class UserService {
   /**
    * DEBUGGING GETTER FOR DEBUG STUDENT
    */
-  user() {
+user() {
     return this.student_id;
   }
 
 
-  getIsAdmin() {
+getIsAdmin() {
     return this.isAdmin;
   }
 
-  fbLoggedIn() {
+fbLoggedIn() {
     return this.FBLoggedIn;
   }
 
-  toggleLoggedIn() {
+toggleLoggedIn() {
     this.FBLoggedIn = !this.FBLoggedIn;
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
+  private handleError<T>(operation = 'operation', result ? : T) {
     return (err: any): Observable<T> => {
       throw err;
     };

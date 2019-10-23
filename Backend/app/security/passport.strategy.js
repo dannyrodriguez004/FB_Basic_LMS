@@ -3,7 +3,9 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const JwtExtract = require('passport-jwt').ExtractJwt;
 const firebaseDB = require('firebase-admin').database();
 const crypto = require('bcrypt');
-const FacebookStrategy = require('passport-facebook').Strategy;
+const FacebookTokenStrategy = require('passport-facebook-token');
+
+var passport = require('passport');
 
 module.exports = (passport) => {
 
@@ -15,10 +17,22 @@ module.exports = (passport) => {
         callback(null, user);
     });
 
+
+    passport.use(new FacebookTokenStrategy({
+            clientID: '398974807682335',
+            clientSecret: '69945f3bf613bc74837419d8713eff9e',
+        },
+        function (accessToken, refreshToken, profile, done) {
+            console.log(profile);
+        // User.upsertFbUser(accessToken, refreshToken, profile, function(err, user) {
+            //     return done(err, user);
+            // });
+        }));
+    //
     // passport.use(new FacebookStrategy({
-    //         clientID: FACEBOOK_APP_ID,
-    //         clientSecret: FACEBOOK_APP_SECRET,
-    //         callbackURL: "http://localhost:3001/auth/facebook/callback"
+    //         clientID: '398974807682335',
+    //         clientSecret: '69945f3bf613bc74837419d8713eff9e',
+    //         callbackURL: "https://locallhost:3001/security/facebook/auth"
     //     },
     //     function(accessToken, refreshToken, profile, cb) {
     //         User.findOrCreate({ facebookId: profile.id }, function (err, user) {
@@ -26,6 +40,7 @@ module.exports = (passport) => {
     //         });
     //     }
     // ));
+
     passport.use( new LocalStrategy(
         async function(username, password, callback) {
             if(!username) {
