@@ -2,7 +2,7 @@ import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from '../../services/authentication.service';
+// import { AuthenticationService } from '../../services/authentication.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { NgForm } from '@angular/forms';
 import {AdminService} from '../../services/admin.service';
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authentication: AuthenticationService,
+    // private authentication: AuthenticationService,
     private router: Router,
     private userServices: UserService,
     private adminServices: AdminService

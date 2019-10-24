@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material';
 import { CourseDetailEditorComponent } from '../../courses/course/info/course-detail-editor/course-detail-editor.component';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
 import {AdminService} from '../../services/admin.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -22,9 +23,9 @@ export class NavbarComponent implements OnInit {
   constructor(
     private userServices: UserService,
     private dialog: MatDialog,
-    private adminServices: AdminService
-  ) {
-    this.student_id = this.userServices.user(); // get debug student id
+    private adminServices: AdminService,
+    private router: Router
+  ) {// get debug student id
   }
 
   // Runs whenever this component is loaded

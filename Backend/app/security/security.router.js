@@ -2,9 +2,13 @@ const express = require('express');
 const router = express.Router();
 const expressJwt = require('express-jwt');
 var passport = require('passport');
-
+const securityServices = require('./security.service');
 module.exports = (passport) => {
 
+    router.get('/foo', async (req, res, next) => {
+        res.json('foo');
+    })
+    //
     // router.get('/security/facebook',
     //     passport.authenticate('facebook'));
     //
@@ -33,13 +37,25 @@ module.exports = (passport) => {
         res.setHeader('x-auth-token', req.token);
         res.status(200).send(req.auth);
     };
-    // passport.authenticate('facebook-token', {session: false})
-    router.post('/auth/facebook', function(req, res, next) {
+
+    // router.post('/auth/facebook', async (req, res, next) => {
+    //     const resp = console.log("HERE I AM AUTH FACEBOOK");
+    //     if (!req.user) {
+    //         return res.send(401, 'User Not Authenticated');
+    //     }
+    //     // prepare token for API
+    //     req.auth = {
+    //         id: req.user.id
+    //     };
+    //
+    //     next();
+    // }, securityServices.generateToken, securityServices.sendToken);
+    // passport.authenticate('facebook-token', {session: true})
+    router.post('/auth/facebook', async (req, res, next) => {
             console.log("HERE I AM AUTH FACEBOOK");
-            if (!req.user) {
+            if (!req.accessToken) {
                 return res.send(401, 'User Not Authenticated');
             }
-
             // prepare token for API
             req.auth = {
                 id: req.user.id
@@ -48,9 +64,9 @@ module.exports = (passport) => {
             next();
         }, generateToken, sendToken);
 
-//token handling middleware
+// token handling middleware
     var authenticate = expressJwt({
-        secret: 'my-secret',
+        secret: '398974807682335',
         requestProperty: 'auth',
         getToken: function(req) {
             if (req.headers['x-auth-token']) {
@@ -79,9 +95,17 @@ module.exports = (passport) => {
 
         res.json(user);
     };
-    //
-    router.get('/auth/me', authenticate, getCurrentUser, getOne);
 
+
+
+    router.route('/auth/me')
+        .get(authenticate, getCurrentUser, getOne);
+//
+//     router.get('/auth/me', async (req, res, next) => {
+//         securityServices.authenticate;
+//         securityServices.getCurrentUser;
+//         securityServices.getOne;
+// }
     // app.use('/security', router);
     return router;
 }

@@ -38,26 +38,26 @@ export class AuthenticationService {
         console.log(response);
       });
   }
-
-  login(email: string, password: string) {
-    // const authData: AuthData = { email, password};
-    return this.http.post<any>(`${environment.apiAddress}/users/admin-login`, { email, password})
-      .subscribe(response => {
-        const token = response.token;
-        this.token = token;
-        if (token) {
-          const expiresInDuration = response.expiresIn;
-          this.setAuthTimer(expiresInDuration);
-          this.isAuthenticated = true;
-          this.authStatusListener.next(true);
-          const now = new Date();
-          const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
-          console.log(expirationDate);
-          this.saveAuthData(token, expirationDate);
-          this.router.navigate(['/']);
-        }
-      });
-  }
+  //
+  // login(email: string, password: string) {
+  //   // const authData: AuthData = { email, password};
+  //   return this.http.post<any>(`${environment.apiAddress}/users/admin-login`, { email, password})
+  //     .subscribe(response => {
+  //       const token = response.token;
+  //       this.token = token;
+  //       if (token) {
+  //         const expiresInDuration = response.expiresIn;
+  //         this.setAuthTimer(expiresInDuration);
+  //         this.isAuthenticated = true;
+  //         this.authStatusListener.next(true);
+  //         const now = new Date();
+  //         const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
+  //         console.log(expirationDate);
+  //         this.saveAuthData(token, expirationDate);
+  //         this.router.navigate(['/']);
+  //       }
+  //     });
+  // }
 
   autoAuthUser() {
     const authInformation = this.getAuthData();
