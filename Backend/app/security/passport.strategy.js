@@ -5,7 +5,7 @@ const firebaseDB = require('firebase-admin').database();
 const crypto = require('bcrypt');
 const FacebookTokenStrategy = require('passport-facebook-token');
 
-var passport = require('passport');
+// var passport = require('passport');
 
 module.exports = (passport) => {
 
@@ -20,9 +20,11 @@ module.exports = (passport) => {
 
     passport.use(new FacebookTokenStrategy({
             clientID: '398974807682335',
-            clientSecret: '69945f3bf613bc74837419d8713eff9e',
+            clientSecret: '69945f3bf613bc74837419d8713eff9e'
+            // callbackURL: "https://locallhost:3001/security/facebook/auth"
         },
         function (accessToken, refreshToken, profile, done) {
+            console.log("I AM in FacebookTokenStrategy");
             console.log(profile);
         // User.upsertFbUser(accessToken, refreshToken, profile, function(err, user) {
             //     return done(err, user);

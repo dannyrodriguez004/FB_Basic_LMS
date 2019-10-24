@@ -7,6 +7,7 @@ import { CourseDetailEditorComponent } from '../../courses/course/info/course-de
 import {NewcourseComponent} from '../newcourse/newcourse.component';
 import {AdminService} from '../../services/admin.service';
 import {Router} from '@angular/router';
+import {User} from '../../models/users.models';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +17,7 @@ import {Router} from '@angular/router';
 export class NavbarComponent implements OnInit {
 
   myCourses: CourseNav[] = []; // the user's courses names and id
-
+  user: User;
   private student_id = '';
   private subscriptions: Subscription[] = [];
 
@@ -34,7 +35,7 @@ export class NavbarComponent implements OnInit {
   }
 
   submitLogin() {
-    return this.userServices.submitLogin();
+     return this.userServices.submitLogin();
   }
 
   openAddCourseDialog() {

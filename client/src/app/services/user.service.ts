@@ -22,45 +22,95 @@ export class UserService {
 
   constructor(private http: HttpClient) {
     // tslint:disable-next-line:only-arrow-functions
-    (window as any).fbAsyncInit = function() {
+    (window as any).fbAsyncInit = function () {
       FB.init({
-        appId      : '398974807682335',
-        cookie     : true,
-        xfbml      : true,
-        version    : 'v4.0'
+        appId: '398974807682335',
+        cookie: true,
+        xfbml: true,
+        version: 'v4.0'
       });
       FB.AppEvents.logPageView();
     };
 
     // tslint:disable-next-line:only-arrow-functions
-    (function(d, s, id) {
+    (function (d, s, id) {
       // tslint:disable-next-line:one-variable-per-declaration prefer-const
       let js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return; }
-      js = d.createElement(s); js.id = id;
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
       js.src = 'https://connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
   }
 
+  // submitLogin() {
+  //   // console.log('submit login to facebook');
+  //   // tslint:disable-next-line:only-arrow-functions
+  //   FB.login(function(response) {
+  //     if (response.authResponse) {
+  //       console.log('Welcome!  Fetching your information.... ');
+  //       // tslint:disable-next-line:no-shadowed-variable only-arrow-functions
+  //       FB.api('/me', function(response) {
+  //         console.log('Good to see you, ' + response.name + '.');
+  //       });
+  //     } else {
+  //       console.log('User cancelled login or did not fully authorize.');
+  //     }
+  // }, {
+  //     scope: 'email',
+  //     return_scopes: true
+  //   });
+  //   FB.Event.subscribe(function(response) {
+  //     const accessToken = this.response.authResponse.accessToken;
+  //     return this.http.post(`${environment.apiAddress}/security/auth/facebook`, {accessToken});
+  //   }
+  //
+  //   );
+  // }
+  // submitLogin() {
+  //   FB.login(result => {
+  //     console.log('ACCESS TOKEN IS ', `${result.authResponse.accessToken}`);
+  //
+  //     // tslint:disable-next-line:max-line-length
+  //     this.http.post(`${environment.apiAddress}/security/auth/facebook`, {params: new HttpParams().set('accessToken', `${result.authResponse.accessToken}`)})
+  //       .subscribe(resp => {
+  //         console.log('POST RESPONSE', resp);
+  //       });
+  //     }
+  //   );
+  // }
+
   submitLogin() {
     // console.log('submit login to facebook');
     // FB.login();
     FB.login(result => {
-        this.http.post(`${environment.apiAddress}/security/auth/facebook`, {access_token: result.authResponse.accessToken});
-        // console.log('BEFORE IF', result.authResponse);
-        // if (result.authResponse) {
-        //   console.log('submitLogin', result.authResponse);
-        //   const params = {params: new HttpParams().set('accessToken', `${result.authResponse.accessToken}`)};
-        //   console.log('Params', params);
-        //   return this.http.post(`${environment.apiAddress}/security/auth/facebook`, stringify(result.authResponse.accessToken));
-        //   console.log('params');
-        // if (params) {
-        //         //   localStorage.setItem('id_token', stringify(params));
-        //         // }
-      }
-    )};
 
+      const params = {params: new HttpParams().set('accessToken', result.authResponse.accessToken)};
+
+      console.log('BEFORE IF', result.authResponse);
+
+      if (result.authResponse) {
+        this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
+          .subscribe(resp => {
+            console.log('POST RESPONSE', resp);
+            // var token = resp.headers.get('x-auth-token');
+            // if (token) {
+            //   localStorage.setItem('id_token', token);
+            // }
+          });
+        console.log('submitLogin', result.authResponse);
+        console.log('params', params);
+        if (params) {
+          localStorage.setItem('id_token', stringify(params));
+        }
+      } else {
+        console.log('NO RESPONSE');
+      }
+    });
+  }
     // FB.login((response) => {
     //   console.log('submitLogin', response.authResponse);
     //   this.http.post(`${environment.apiAddress}/security/auth/facebook`, {access_token: response.authResponse.accessToken});

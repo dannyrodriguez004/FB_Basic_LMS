@@ -11,6 +11,7 @@ module.exports = (err, req, res, next) => {
             res.status(commDictionary.httpStatusCode.errorOnRequest).json(errorRequest.output.payload);
             break;
         default:
+            console.log(err);
             var errorInternal = boom.internal('Internal Server Error');
             res.status(commDictionary.httpStatusCode.executionException).json(errorInternal.output.payload);
             break;
