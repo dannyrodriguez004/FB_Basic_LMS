@@ -1,7 +1,7 @@
 import { CourseNav } from '../../models/courses.models';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { UserService } from '../../services/user.service';
-import { Component, OnInit } from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { CourseDetailEditorComponent } from '../../courses/course/info/course-detail-editor/course-detail-editor.component';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
@@ -14,7 +14,7 @@ import {User} from '../../models/users.models';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnChanges {
 
   myCourses: CourseNav[] = []; // the user's courses names and id
   user: User;
@@ -32,12 +32,24 @@ export class NavbarComponent implements OnInit {
   // Runs whenever this component is loaded
   ngOnInit() {
     this.loadCourses();
+    // this.userServices.getCurrentUser();
+    console.log('BEFORE GET CURR USER');
+    this.getCurrentUser().subscribe(resp => {
+      console.log('CURR USER RESPONSE', resp);
+    });
+  }
+
+  ngOnChanges() {
+    this.ngOnInit();
   }
 
   submitLogin() {
      return this.userServices.submitLogin();
   }
 
+  getCurrentUser() {
+     return this.userServices.getCurrentUser();
+  }
   openAddCourseDialog() {
     const dialogRef = this.dialog.open(NewcourseComponent, {
       width: '90%',
@@ -73,6 +85,7 @@ export class NavbarComponent implements OnInit {
   isAdmin() {
     return this.userServices.getIsAdmin();
   }
+
 
   logout() {
     this.adminServices.logOutUser();

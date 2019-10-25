@@ -28,7 +28,12 @@
       </span>
 
       <span class="fill"></span>
-
+      <span>
+            <button mat-raised-button [mat-menu-trigger-for]="fbMenu"> Get Current User FB </button>
+        <mat-menu #fbMenu="matMenu">
+          <a mat-menu-item value="getCurrentUser">{{getCurrentUser()}}</a>
+        </mat-menu>
+      </span>
       <span>
                   <mat-slide-toggle (click)="toggleLogin()">FB_login</mat-slide-toggle>
             </span>

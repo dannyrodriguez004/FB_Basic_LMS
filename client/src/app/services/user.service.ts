@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
-// import 'rxjs/add/operator/toPromise';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {catchError, distinctUntilChanged, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import { CookieService} from 'ngx-cookie-service';
 import {stringify} from 'querystring';
-import {placeholdersToParams} from '@angular/compiler/src/render3/view/i18n/util';
 
 declare const FB: any;
 
@@ -22,7 +18,7 @@ export class UserService {
 
   constructor(private http: HttpClient) {
     // tslint:disable-next-line:only-arrow-functions
-    (window as any).fbAsyncInit = function () {
+    (window as any).fbAsyncInit = function() {
       FB.init({
         appId: '398974807682335',
         cookie: true,
@@ -33,7 +29,7 @@ export class UserService {
     };
 
     // tslint:disable-next-line:only-arrow-functions
-    (function (d, s, id) {
+    (function(d, s, id) {
       // tslint:disable-next-line:one-variable-per-declaration prefer-const
       let js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) {
@@ -46,86 +42,34 @@ export class UserService {
     }(document, 'script', 'facebook-jssdk'));
   }
 
-  // submitLogin() {
-  //   // console.log('submit login to facebook');
-  //   // tslint:disable-next-line:only-arrow-functions
-  //   FB.login(function(response) {
-  //     if (response.authResponse) {
-  //       console.log('Welcome!  Fetching your information.... ');
-  //       // tslint:disable-next-line:no-shadowed-variable only-arrow-functions
-  //       FB.api('/me', function(response) {
-  //         console.log('Good to see you, ' + response.name + '.');
-  //       });
-  //     } else {
-  //       console.log('User cancelled login or did not fully authorize.');
-  //     }
-  // }, {
-  //     scope: 'email',
-  //     return_scopes: true
-  //   });
-  //   FB.Event.subscribe(function(response) {
-  //     const accessToken = this.response.authResponse.accessToken;
-  //     return this.http.post(`${environment.apiAddress}/security/auth/facebook`, {accessToken});
-  //   }
-  //
-  //   );
-  // }
-  // submitLogin() {
-  //   FB.login(result => {
-  //     console.log('ACCESS TOKEN IS ', `${result.authResponse.accessToken}`);
-  //
-  //     // tslint:disable-next-line:max-line-length
-  //     this.http.post(`${environment.apiAddress}/security/auth/facebook`, {params: new HttpParams().set('accessToken', `${result.authResponse.accessToken}`)})
-  //       .subscribe(resp => {
-  //         console.log('POST RESPONSE', resp);
-  //       });
-  //     }
-  //   );
-  // }
-
   submitLogin() {
-    // console.log('submit login to facebook');
-    // FB.login();
     FB.login(result => {
-
-      const params = {params: new HttpParams().set('accessToken', result.authResponse.accessToken)};
+      // const params = {params: new HttpParams().set('accessToken', result.authResponse.accessToken)};
+      const params = {params: new HttpParams().set('userID', result.authResponse.userID)};
 
       console.log('BEFORE IF', result.authResponse);
 
       if (result.authResponse) {
         this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
-          .subscribe(resp => {
+          .subscribe((resp: HttpResponse<null>) => {
             console.log('POST RESPONSE', resp);
-            // var token = resp.headers.get('x-auth-token');
-            // if (token) {
-            //   localStorage.setItem('id_token', token);
-            // }
+            //   const token = resp.headers.get('x-auth-token');
+            //   if (token) {
+            //     localStorage.setItem('id_token', token);
+            //   }
+            // });
+            console.log('submitLogin', result.authResponse);
+            console.log('params', params);
+            if (params) {
+              localStorage.setItem('id_token', stringify(params));
+            } else {
+              console.log('NO RESPONSE');
+            }
           });
-        console.log('submitLogin', result.authResponse);
-        console.log('params', params);
-        if (params) {
-          localStorage.setItem('id_token', stringify(params));
-        }
-      } else {
-        console.log('NO RESPONSE');
       }
     });
   }
-    // FB.login((response) => {
-    //   console.log('submitLogin', response.authResponse);
-    //   this.http.post(`${environment.apiAddress}/security/auth/facebook`, {access_token: response.authResponse.accessToken});
-    //   if (response.authResponse != null) {
-    //     // console.log('HERE I AM AUTHRESPONSE');
-    //     // const token = this.http.post(`${environment.apiAddress}/security/auth/facebook`, {access_token: response.authResponse.accessToken});
-    //     // console.log('Token is', stringify(token));
-    //     const token = ' ';
-    //     if (token) {
-    //       localStorage.setItem('id_token', stringify(token));
-    //     } else {
-    //       console.log('User login failed');
-    //     }
-    //   }
-    // });
+
 
 logout() {
     localStorage.removeItem('id_token');
@@ -137,8 +81,7 @@ isLoggedIn() {
 
 getCurrentUser() {
       return this.http.get(`${environment.apiAddress}/security/auth/me`);
-  }
-
+}
 // tslint:disable-next-line:variable-name
 getStudentCourses(student_id: string) {
     const params = { params: new HttpParams().set('student', `${student_id}`)};
