@@ -45,6 +45,10 @@
                         <mat-icon>person_add</mat-icon>Register
                   </button>
 
+                  <button [routerLink]="['security/admin-register/']" mat-menu-item>
+                        <mat-icon>verified_user</mat-icon>Admin Register
+                  </button>
+
                   <button *ngIf="this.isAdmin()" (click)="logout()" mat-menu-item>
                         <mat-icon style="color: red;">power_settings_new</mat-icon>Log out
                   </button>

@@ -1,1 +1,41 @@
 <p>admin-register works!</p>
+<mat-card>
+    <mat-card-title>
+        Admin/Istructor Registration
+    </mat-card-title>
+    <form [formGroup]="registerForm">
+            <mat-form-field appearance="outline">
+                <mat-label>First Name</mat-label>
+                <input formControlName="fname" type="text" matInput required>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>last Name</mat-label>
+                <input formControlName="lname" type="text" matInput required>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Username (Primary Email)</mat-label>
+                <input formControlName="primary" type="email" matInput required>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Student Contact Email</mat-label>
+                <input formControlName="contact" type="email" matInput required>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input formControlName="pass" type="password" matInput required>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+              <mat-label>Re-Enter Password</mat-label>
+              <input formControlName="check" type="password" matInput required>
+              <mat-error>Password does not match!</mat-error>
+            </mat-form-field>
+        </form>
+    <div>
+            <button mat-raised-button color="primary">Register</button>
+    </div>
+</mat-card>
