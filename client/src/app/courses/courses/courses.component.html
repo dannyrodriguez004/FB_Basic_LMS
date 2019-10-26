@@ -1,42 +1,53 @@
 <mat-toolbar>Library of Courses</mat-toolbar>
-<div class="content">
+
+<mat-card *ngIf="loading">
+  <mat-spinner style="margin-left: auto; margin-top: 1rem; margin-right: auto;"></mat-spinner>
+</mat-card>
+
+<div *ngIf="!loading" class="content">
   <div class="course" *ngFor="let course of courses">
-    <mat-card>
+    <mat-card style="height: 150px;">
       <mat-card-header>
-        <mat-card-title>Course Name</mat-card-title>
+        <mat-card-title>{{course.title}}</mat-card-title>
         <mat-card-subtitle>
           <mat-list>
-            <mat-list-item><h5>Deadline: Oct 21, 2019</h5></mat-list-item>
-            <mat-list-item><h5>Instructor: Joao G</h5></mat-list-item>
-            <mat-list-item><h5>Open Spots: 10</h5></mat-list-item>
+            <mat-list-item><h5>Deadline: {{course.endEnrollDate | date: 'dd/MM/yyyy'}}</h5></mat-list-item>
+            <mat-list-item><h5>Instructor: {{course.instructor}}</h5></mat-list-item>
+            <mat-list-item><h5>Open Spots: {{course.MAX_SIZE - course.size}}</h5></mat-list-item>
           </mat-list>
         </mat-card-subtitle>
         
       </mat-card-header>
-      <mat-card-content>
-        <p>
-          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting. The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting. The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting. The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting. The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.
+      <mat-card-content style="width: 100%;">
+        <p [innerHTML]="course.description">
         </p>
       </mat-card-content>
       <mat-card-actions>
-          <button (click)="openFullDialog()" mat-raised-button mat-button color="primary">Enroll</button>
+          <button (click)="openFullDialog()" mat-raised-button mat-button color="primary">Register</button>
       </mat-card-actions>
     </mat-card>
   </div>
 </div>
+
+<!-- Container for pagination navigation -->
+<mat-card style="margin-bottom: 2rem;">
+    <mat-toolbar>
+        <span>
+            <button mat-stroked-button color="primary"><mat-icon>first_page</mat-icon></button>
+        </span>
+
+        <span><button mat-stroked-button color="primary">
+            <mat-icon>navigate_before</mat-icon>Back
+        </button></span>
+
+        <span class="fill"></span>
+
+        <span><button mat-stroked-button color="primary">
+            Next<mat-icon>navigate_next</mat-icon>
+        </button></span>
+
+        <span>
+            <button mat-stroked-button color="primary"><mat-icon>last_page</mat-icon></button>
+        </span>
+    </mat-toolbar>
+</mat-card>

@@ -30,7 +30,7 @@ class UsersSerivce {
                     f_name: user.f_name,
                     l_name: user.l_name,
                     password: hashedPass,
-                    auth: 1
+                    auth: user.auth
 
                 })
 

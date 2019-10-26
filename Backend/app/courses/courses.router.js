@@ -230,7 +230,17 @@ module.exports = (passport) => {
     router.post('/save-responses', async(req, res, next) => {
         const resp = await coursesServices.saveResponses(req.body.student, req.body.course, req.body.quiz, req.body.responses);
         res.json(resp);
-    })
+    });
+
+    router.get('/courses-by', async(req, res, next) => {
+        const resp = await coursesServices.getCoursesPage(req.query.sort, Number(req.query.start));
+        res.json(resp);
+    });
+
+    router.get('/admin-courses', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
+        const resp = await coursesServices.getAdminCourses(req.user);
+        res.json(resp);
+    });
 
     return router;
 }

@@ -16,6 +16,10 @@ export class CoursesComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
   courses = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]; // the user's courses names and id
+  private start: number = 0;
+  private sort: string = 'name';
+  private size: number = 0;
+  loading = false;
 
 
   constructor(
@@ -32,10 +36,16 @@ export class CoursesComponent implements OnInit {
 
 
   fetchPage(){
+    this.loading = true;
+    this.coursesServices.getCoursesSortBy(this.sort, this.start).subscribe( (resp:{ courses: [], size: number}) => {
+      this.size = resp.size;
+      this.courses = resp.courses;
+      this.loading = false;
+    });
   }
 
-  enroll() {
-
+  register() {
+    
   }
 
   openFullDialog() {

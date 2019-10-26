@@ -30,14 +30,10 @@
       <span class="fill"></span>
 
       <span>
-                  <mat-slide-toggle (click)="toggleLogin()">FB_login</mat-slide-toggle>
-            </span>
-
-      <span>
             <button mat-raised-button [matMenuTriggerFor]="userMenu"><mat-icon>account_circle</mat-icon>Account</button>
 
             <mat-menu #userMenu="matMenu">
-                  <button [routerLink]="['security/login/']" mat-menu-item>
+                  <button *ngIf="!this.isAdmin()" [routerLink]="['security/login/']" mat-menu-item>
                         <mat-icon>fingerprint</mat-icon>Login
                   </button>
 
@@ -45,7 +41,11 @@
                         <mat-icon>add</mat-icon>Add Course
                   </button>
 
-                  <button (click)="logout()" mat-menu-item>
+                  <button [routerLink]="['security/register/']" mat-menu-item>
+                        <mat-icon>person_add</mat-icon>Register
+                  </button>
+
+                  <button *ngIf="this.isAdmin()" (click)="logout()" mat-menu-item>
                         <mat-icon style="color: red;">power_settings_new</mat-icon>Log out
                   </button>
             </mat-menu>
