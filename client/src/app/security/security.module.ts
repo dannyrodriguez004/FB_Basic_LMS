@@ -6,15 +6,20 @@ import { SecurityRoutingModule } from './security-routing.module';
 import { SecurityComponent } from './security/security.component';
 import { LoginComponent } from './login/login.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import { RegisterComponent } from './register/register.component';
+import { AdminRegisterComponent } from './admin-register/admin-register.component';
+import { MatSelectModule, MatProgressSpinnerModule } from '@angular/material';
 
 
 @NgModule({
-  declarations: [SecurityComponent, LoginComponent],
+  declarations: [SecurityComponent, LoginComponent, RegisterComponent, AdminRegisterComponent],
   imports: [
     CommonModule,
     SecurityRoutingModule,
     ReactiveFormsModule,
-    MatCardModule
+    MatCardModule,
+    MatSelectModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SecurityModule { }

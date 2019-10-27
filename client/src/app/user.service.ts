@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { distinctUntilChanged, catchError, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CookieService} from 'ngx-cookie-service';
+import * as jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +13,30 @@ export class UserService {
 
   private student_id = '0'; // debugging value
   private isAdmin = false;
+  private auth = 0;
   private FBLoggedIn = true;
 
   constructor(
     private http: HttpClient,
     private cookies: CookieService
     ) {
-      this.isAdmin = this.cookies.check('admin-session');
-      //console.log(this.cookies.getAll());
+      this.isAdmin = this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session'));
+    }
+
+    isTokenFresh(token: string): any {
+      try {
+          const decoded = jwt_decode(token);
+          if (!decoded.exp) { throw false; }
+          this.auth = decoded.auth;
+          if (decoded.exp < Date.now().valueOf() / 1000) {
+            throw false;
+          } else {
+            return true;
+          }
+  
+      } catch (err) {
+          return err;
+      }
     }
 
   Adminlogin(loginData) {
@@ -31,6 +48,9 @@ export class UserService {
       tap((jwt: any) => {
         this.cookies.set('admin-session', jwt.payload, 2, '/');
         this.isAdmin = true;
+        const decoded = jwt_decode(jwt.payload);
+        this.auth = decoded.auth;
+
       }),
       catchError(this.handleError('adminLogin'))
     );
@@ -41,6 +61,7 @@ export class UserService {
       this.cookies.deleteAll('/');
     }
     this.isAdmin = false;
+    this.auth = -1;
   }
   /**
    *
@@ -65,6 +86,14 @@ export class UserService {
     return this.http.get(`${environment.apiAddress}/courses/student-has-course`, params);
   }
 
+  isUsernameAvailable(username) {
+    return this.http.post(`${environment.apiAddress}/users/available-username`, {username})
+  }
+
+  addInstructor(user) {
+    return this.http.post(`${environment.apiAddress}/users/add-instructor`, {user})
+  }
+
   /**
    * DEBUGGING GETTER FOR DEBUG STUDENT
    */
@@ -83,6 +112,10 @@ export class UserService {
 
   toggleLoggedIn() {
     this.FBLoggedIn = !this.FBLoggedIn;
+  }
+
+  getAuth() {
+    return this.auth;
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

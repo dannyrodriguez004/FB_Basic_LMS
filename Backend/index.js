@@ -56,8 +56,8 @@ if(process.env.NODE_ENV == 'dev') {
 	tempServer = http.createServer(app);
 } else {
 	tempServer = https.createServer({
-		key: fileStream.readFileSync('server.key'),
-		cert: fileStream.readFileSync('server.crt'),
+		key: fileStream.readFileSync('home/master/myagent/fb_backend/server.key'),
+		cert: fileStream.readFileSync('home/master/myagent/fb_backend/server.crt'),
 	},app);
 	console.log('we are running production enviroment');
 }

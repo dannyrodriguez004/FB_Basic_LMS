@@ -740,7 +740,7 @@ class CoursesService {
             console.error(err);
         }
 
-        console.log(payload);
+        //console.log(payload);
         return payload;
     }
 
@@ -819,7 +819,7 @@ class CoursesService {
                 let quizes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
                 var record = await quizes.toJSON();
 
-                console.log(record);
+                //console.log(record);
 
                 payload = {
                     attempted: record.attempted || 0,
@@ -1233,7 +1233,7 @@ class CoursesService {
     }
 
     async saveResponses(student, course, assesment, responses) {
-        console.log(student, course, assesment, responses);
+        
         try {
             await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assesment)
             .update({items: responses});
@@ -1242,6 +1242,87 @@ class CoursesService {
             return false;
         }
         return true;
+    }
+
+
+    async getCoursesPage(sortby, start) {
+
+        let page = [];
+        let counter = 0;
+        let size = 0;
+
+        try {
+            let coursesRef = await database.ref('/courses').once('value');
+            size = coursesRef.numChildren();
+
+            coursesRef =  await database.ref('/courses').orderByChild(sortby).limitToLast(size - start).once('value');
+
+            coursesRef.forEach( (member) => {
+                if(counter >= 10) throw 'payload full';
+                var course = member.toJSON();
+                page.push({
+                    id: member.key,
+                    title: course.name,
+                    description: course.description,
+                    instructor: course.instructor_id,
+                    size: course.size,
+                    MAX_SIZE: course.MAX_SIZE,
+                    endEnrollDate: course.endEnrollDate,
+                });
+                counter++;
+            });
+
+        } catch(err) {
+            console.error(err);
+        }
+
+        for(let i = 0; i < page.length; i++) {
+            page[i].instructor = (await userService.getInstructor(page[i].instructor)).name;
+        }
+
+        return {
+            courses: page,
+            size: size,
+        };
+    }
+
+    async getAdminCourses(user) {
+
+        let payload = [];
+
+        try {
+
+            let courses;
+
+            console.log(user);
+
+            if(user.auth > 0) {
+
+                courses = await database.ref('/courses')
+                .once('value');
+                console.log('admin');
+
+            } else {
+
+                console.log('instructor');
+                courses = await database.ref('/courses')
+                .orderByChild('instructor_name')
+                .equalTo(user.id)
+                .once('value');
+            }
+
+            courses.forEach( (member) => {
+                payload.push({
+                    id: member.key,
+                    name: member.child('name').val(),
+                });
+            });
+
+        } catch(err) {
+            console.error(err);
+        }
+
+        return payload;
     }
 }
 

@@ -42,7 +42,7 @@ export class NewQuizComponent implements OnInit {
       this.newQuestionForm = this.formBuilder.group({
         question: ['', Validators.required],
         value: [1, [Validators.min(0), Validators.required]],
-        answer: [1, [Validators.required, Validators.min(1), Validators.max(4)]],
+        answer: [null, [Validators.required, Validators.min(1), Validators.max(4)]],
         A: ['', Validators.required],
         B: ['', Validators.required],
         C: [''],
@@ -138,6 +138,11 @@ export class NewQuizComponent implements OnInit {
 
   onNoClick() {
     this.current_dialog.close();
+  }
+
+  getLetter(index) {
+    console.log(index);
+    return String.fromCharCode(65 + Number(index));
   }
 
 }

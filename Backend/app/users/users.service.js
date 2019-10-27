@@ -30,7 +30,7 @@ class UsersSerivce {
                     f_name: user.f_name,
                     l_name: user.l_name,
                     password: hashedPass,
-                    auth: 1
+                    auth: user.auth
 
                 })
 
@@ -204,6 +204,18 @@ class UsersSerivce {
         }
 
         return payload;
+    }
+
+    async isAvailable(username) {
+        try {
+
+            let reference = await database.ref('/instructors').orderByChild('email').equalTo(username).once('value');
+            if(!reference.hasChildren()) return true;
+        } catch(err) {
+            console.error(err);
+        }
+
+        return false;
     }
 }
 

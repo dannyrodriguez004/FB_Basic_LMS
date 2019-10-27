@@ -208,4 +208,13 @@ export class CoursesService {
   saveResponses(student, course, quiz, responses) {
     return this.http.post(`${environment.apiAddress}/courses/save-responses`, {student, course, quiz, responses});
   }
+
+  getCoursesSortBy(sort, start) {
+    const params = {params: new HttpParams().set('sort', sort).set('start', start)};
+    return this.http.get(`${environment.apiAddress}/courses/courses-by`, params);
+  }
+
+  getAdminCourses() {
+    return this.http.get(`${environment.apiAddress}/courses/courses-by`);
+  }
 }
