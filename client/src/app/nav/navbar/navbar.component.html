@@ -45,7 +45,7 @@
                         <mat-icon>person_add</mat-icon>Register
                   </button>
 
-                  <button [routerLink]="['security/admin-register/']" mat-menu-item>
+                  <button *ngIf="this.isAdmin && auth() > 0" [routerLink]="['security/admin-register/']" mat-menu-item>
                         <mat-icon>verified_user</mat-icon>Admin Register
                   </button>
 

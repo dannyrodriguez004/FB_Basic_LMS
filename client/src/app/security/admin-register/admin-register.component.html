@@ -1,9 +1,10 @@
-<p>admin-register works!</p>
+
 <mat-card>
     <mat-card-title>
         Admin/Istructor Registration
     </mat-card-title>
-    <form [formGroup]="registerForm">
+    <mat-spinner *ngIf="loading" style="margin-left: auto; margin-top: 1rem; margin-right: auto;"></mat-spinner>
+    <form *ngIf="!loading" [formGroup]="registerForm">
             <mat-form-field appearance="outline">
                 <mat-label>First Name</mat-label>
                 <input formControlName="fname" type="text" matInput required>
@@ -32,10 +33,22 @@
             <mat-form-field appearance="outline">
               <mat-label>Re-Enter Password</mat-label>
               <input formControlName="check" type="password" matInput required>
-              <mat-error>Password does not match!</mat-error>
+              <mat-error *ngIf="true">Password does not match!</mat-error>
             </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Select Authorization Level</mat-label>
+                <mat-select formControlName="auth">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngIf="auth > 0" value="0">Instructor</mat-option>
+                    <mat-option *ngIf="auth > 1" value="1">Admin</mat-option>
+                    <mat-option *ngIf="auth > 1" value="2">Master</mat-option>
+                </mat-select>
+            </mat-form-field>
+            
+            <div>
+                    <button (click)="register()" [disabled]="registerForm.invalid" type="submit" mat-raised-button color="primary">Register</button>
+            </div>
         </form>
-    <div>
-            <button mat-raised-button color="primary">Register</button>
-    </div>
+    
 </mat-card>

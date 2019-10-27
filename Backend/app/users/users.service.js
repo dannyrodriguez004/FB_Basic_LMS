@@ -205,6 +205,18 @@ class UsersSerivce {
 
         return payload;
     }
+
+    async isAvailable(username) {
+        try {
+
+            let reference = await database.ref('/instructors').orderByChild('email').equalTo(username).once('value');
+            if(!reference.hasChildren()) return true;
+        } catch(err) {
+            console.error(err);
+        }
+
+        return false;
+    }
 }
 
 module.exports = new UsersSerivce();

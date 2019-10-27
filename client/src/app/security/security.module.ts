@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { RegisterComponent } from './register/register.component';
 import { AdminRegisterComponent } from './admin-register/admin-register.component';
+import { MatSelectModule, MatProgressSpinnerModule } from '@angular/material';
 
 
 @NgModule({
@@ -16,7 +17,9 @@ import { AdminRegisterComponent } from './admin-register/admin-register.componen
     CommonModule,
     SecurityRoutingModule,
     ReactiveFormsModule,
-    MatCardModule
+    MatCardModule,
+    MatSelectModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SecurityModule { }
