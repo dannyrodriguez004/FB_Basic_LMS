@@ -217,4 +217,8 @@ export class CoursesService {
   getAdminCourses() {
     return this.http.get(`${environment.apiAddress}/courses/courses-by`);
   }
+
+  tryEnroll(student, course) {
+    return this.http.post(`${environment.apiAddress}/courses/signup`, {student, course});
+  }
 }

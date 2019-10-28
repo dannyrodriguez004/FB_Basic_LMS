@@ -48,7 +48,8 @@ export class CoursesComponent implements OnInit {
     
   }
 
-  openFullDialog() {
+  openFullDialog(course) {
+    console.log(course);
     const dialogRef = this.dialog.open(YesNoDialogComponent, {
       width: "50%",
       data: {
@@ -60,6 +61,11 @@ export class CoursesComponent implements OnInit {
     dialogRef.afterClosed().subscribe( (resp) => {
       if(resp) {
         console.log("trying to insert into class");
+        this.coursesServices.tryEnroll(this.userServices.user(), course).subscribe(resp => {
+          if(resp) {
+            console.log("enrolled");
+          }
+        });
       }
     })
   }

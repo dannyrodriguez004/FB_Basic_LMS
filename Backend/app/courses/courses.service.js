@@ -911,8 +911,9 @@ class CoursesService {
      * @returns {boolean} true if this student is enrolled in this course
      */
     async studentHasCourse(student_id, course_id) {
+        console.log(student_id, course_id);
         let student = await database.ref('/courses/' + course_id + '/students').once('value');
-        return student.hasChild(student_id);
+        return student.numChildren() > 0 && student.hasChild(student_id);
     }
 
     
