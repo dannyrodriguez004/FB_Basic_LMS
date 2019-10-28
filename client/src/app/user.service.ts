@@ -94,6 +94,14 @@ export class UserService {
     return this.http.post(`${environment.apiAddress}/users/add-instructor`, {user})
   }
 
+  addStudent(user) {
+    return this.http.post(`${environment.apiAddress}/users/add-student`, {user});
+  }
+
+  isStudent(student) {
+    return true;
+  }
+
   /**
    * DEBUGGING GETTER FOR DEBUG STUDENT
    */
