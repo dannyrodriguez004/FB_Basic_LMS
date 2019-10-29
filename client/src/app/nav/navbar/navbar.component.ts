@@ -9,6 +9,7 @@ import {AdminService} from '../../services/admin.service';
 import {Router} from '@angular/router';
 import {User} from '../../models/users.models';
 import {AuthService} from '../../services/auth.service';
+import {CoursesService} from '../../services/courses.service';
 
 @Component({
   selector: 'app-navbar',
@@ -29,6 +30,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   password = '1234';
   constructor(
     private userServices: UserService,
+    private coursesServices: CoursesService,
     private dialog: MatDialog,
     private adminServices: AdminService,
     private router: Router,
@@ -88,7 +90,7 @@ export class NavbarComponent implements OnInit, OnChanges {
    * Load courses, id and name, for the current user.
    */
   loadCourses() {
-    this.subscriptions.push(this.userServices.getStudentCourses(this.student_id).subscribe( (resp: CourseNav[]) => {
+    this.subscriptions.push(this.coursesServices.getStudentCourses(this.student_id).subscribe( (resp: CourseNav[]) => {
       this.myCourses = resp;
     } ));
   }

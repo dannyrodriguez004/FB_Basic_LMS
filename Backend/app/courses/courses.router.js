@@ -148,8 +148,9 @@ module.exports = (passport) => {
     })
 
     // get whether a student is enrolled in a particullar course
-    router.get('/student-has-course', async (req, res, next) => {
-        const resp = await coursesServices.studentHasCourse(req.query.student, req.query.course);
+    router.get('/student-has-course', jwtMiddleware, async (req, res, next) => {
+        const resp = await coursesServices.studentHasCourse(req.decoded, req.query.course);
+        console.log(resp);
         res.json(resp);
     });
 
@@ -195,8 +196,8 @@ module.exports = (passport) => {
     });
 
 
-    router.get('/course-students', async(req, res, next) => {
-        const resp = await coursesServices.getStudents(req.query.course, req.query.student);
+    router.get('/course-students', jwtMiddleware, async (req, res, next) => {
+        const resp = await coursesServices.getStudents(req.query.course, req.decoded);
         res.json(resp);
     });
 

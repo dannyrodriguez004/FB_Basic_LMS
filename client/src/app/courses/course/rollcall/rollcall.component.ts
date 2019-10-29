@@ -24,6 +24,7 @@ export class RollcallComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
+
   loadData() {
     this.subscriptions.push(this.courseServices.getStudents(this.current_course)
       .subscribe( (resp: {id: '', fname: '', lname: '', email: ''}[]) => {

@@ -910,17 +910,15 @@ class CoursesService {
      * @returns {boolean} true if this student is enrolled in this course
      */
     async studentHasCourse(student_id, course_id) {
+        console.log('StudentID' + student_id);
+        console.log('CourseID' + course_id);
         let student = await database.ref('/courses/' + course_id + '/students').once('value');
         return student.hasChild(student_id);
     }
 
-    
-    
     async updateCourse(course) {
 
-
         try {
-
             await database.ref('/courses/' + course.id).update({
                 name: course.name,
                 instructor_id: course.instructor,
@@ -931,10 +929,8 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
     }
-
 
     async getModule(course, module_id) {
         let payload = {id: '', title: '', resources: []};

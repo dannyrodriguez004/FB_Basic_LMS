@@ -1,6 +1,6 @@
 /* tslint:disable:variable-name */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -16,6 +16,23 @@ export class CoursesService {
   ];
 
   constructor(private http: HttpClient) {
+  }
+
+  getToken(): string {
+    return window.localStorage.jwtToken;
+  }
+
+  buildHeaders(): HttpHeaders {
+    const headersConfig = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+
+    if (this.getToken()) {
+      headersConfig['Authorization'] = `Token ${this.getToken()}`;
+    }
+
+    return new HttpHeaders(headersConfig);
   }
 
   getCourseInfo(course_id) {
@@ -150,9 +167,20 @@ export class CoursesService {
     return this.http.get(`${environment.apiAddress}/courses/registered-students`, params);
   }
 
+  studentHasCourse(course) {
+    const opts = {
+      params: new HttpParams().set('course', `${course}`),
+      headers: this.buildHeaders()
+    }
+    return this.http.get(`${environment.apiAddress}/courses/student-has-course`, opts);
+  }
+
   getStudents(course) {
-    const params = {params: new HttpParams().set('course', `${course}`)};
-    return this.http.get(`${environment.apiAddress}/courses/course-students`, params);
+    const opts = {
+      params: new HttpParams().set('course', `${course}`),
+      headers: this.buildHeaders()
+    }
+    return this.http.get(`${environment.apiAddress}/courses/course-students`, opts);
   }
 
   getAllCourses() {
@@ -173,8 +201,19 @@ export class CoursesService {
   }
 
   getCourseStudents(course: string){
+    const opts = {
+      headers: this.buildHeaders()
+    }
     const params = {params: new HttpParams().set('course', `${course}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-students`, params);
+  }
+
+  getStudentCourses(student_id: string) {
+    const opts = {
+      headers: this.buildHeaders()
+    };
+    return this.http.get(`${environment.apiAddress}/courses/student-courses`,
+      opts);
   }
 
   getQuiz(course, moduleID, quiz) {

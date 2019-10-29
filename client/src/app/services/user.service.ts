@@ -130,9 +130,12 @@ getStudentCourses(student_id: string) {
    * @returns boolean, is this student enrolled in this course
    */
   // tslint:disable-next-line:variable-name
-studentHasCourse(student_id, course_id) {
-    const params = { params: new HttpParams().set('student', `${student_id}`).set('course', `${course_id}`)};
-    return this.http.get(`${environment.apiAddress}/courses/student-has-course`, params);
+studentHasCourse(student_id, course) {
+    const opts = {
+      params: new HttpParams().set('course', `${course}`),
+      headers: this.buildHeaders()
+    }
+    return this.http.get(`${environment.apiAddress}/courses/student-has-course`, opts);
   }
 
   /**

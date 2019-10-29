@@ -55,12 +55,11 @@ export class CourseComponent implements OnInit, OnChanges {
       }
     }));
 
-    this.user_id = this.userServices.user();
-
-    this.subscriptions.push(this.userServices.studentHasCourse(this.user_id, this.current_course).subscribe( (resp:boolean) => {
+    this.subscriptions.push(this.coursesServices.studentHasCourse(this.current_course).subscribe( (resp: boolean) => {
       this.authorized = resp;
+      console.log('STUDENTHASCOURSE:' + resp);
 
-      if(this.authorized) {
+      if (this.authorized) {
         this.subscriptions.push(this.coursesServices
           .getCourseInfo(this.current_course)
           .subscribe( (course: {id: string, name: string,
