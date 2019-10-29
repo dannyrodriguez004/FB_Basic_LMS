@@ -63,6 +63,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
+            "host" : "myhost.local",
             "browserTarget": "client:build",
             "sslKey": "server.key",
             "sslCert": "server.crt",

@@ -20,7 +20,7 @@
     "body-parser": "^1.19.0",
     "boom": "^7.3.0",
     "express": "^4.17.1",
-    "firebase": "^7.2.1",
+    "firebase": "^7.2.2",
     "firebase-admin": "^8.6.1",
     "helmet": "^3.21.2",
     "http": "0.0.0",
@@ -31,7 +31,5 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
   },
-  "devDependencies": {
-    "express-jwt": "^5.3.1"
-  }
+  "devDependencies": {}
 }

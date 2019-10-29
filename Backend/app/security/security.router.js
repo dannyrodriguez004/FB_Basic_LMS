@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const expressJwt = require('express-jwt');
+// const expressJwt = require('express-jwt');
 const jwt = require('jsonwebtoken');
 var passport = require('passport');
 const d = require('./passport.strategy');
 
-// const securityServices = require('./security.service');
+const securityServices = require('./security.service');
 module.exports = (passport) => {
 
     router.get('/foo', async (req, res, next) => {
@@ -21,6 +21,7 @@ module.exports = (passport) => {
     //         // Successful authentication, redirect home.
     //         res.redirect('/');
     //     });
+
 
     var createToken = function(auth) {
         console.log("AUTH : ");
@@ -53,56 +54,58 @@ module.exports = (passport) => {
             // console.log(JSON.stringify(req.body.params.updates));  JSON.parse(JSON.stringify
             var userID = req.body.params.updates[0].value;
             console.log(userID);
+            const token = jwt.sign(userID, '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx');
+            console.log('TOKEN = ' + token);
         if (!userID) {
                 return res.send(401, 'User Not Authenticated');
             }
             // prepare token for API
-            req.auth = {
-                id: userID
-            };
-
-            next();
-        }, generateToken, sendToken);
-
-// token handling middleware
-    var authenticate = expressJwt({
-        secret: '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx',
-        requestProperty: 'auth',
-        getToken: function(req) {
-            if (req.headers['x-auth-token']) {
-                console.log("REQHEADERS:");
-                console.log(req.headers['x-auth-token']);
-                return req.headers['x-auth-token'];
-            }else{
-            return null;
-            }
-        }
+        res.status(200).send({
+            // user: userID,
+            token: token
+        });
     });
 
-    var getCurrentUser = function(req, res, next) {
-        console.log('GETCURR USER');
-        User.findById(req.auth.id, function(err, user) {
-            if (err) {
-                next(err);
-            } else {
-                req.user = user;
-                next();
-            }
-        });
-    };
+// token handling middleware
+//     var authenticate = expressJwt({
+//         secret: '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx',
+//         requestProperty: 'auth',
+//         getToken: function(req) {
+//             if (req.headers['x-auth-token']) {
+//                 console.log("REQHEADERS:");
+//                 console.log(req.headers['x-auth-token']);
+//                 return req.headers['x-auth-token'];
+//             }else{
+//             return null;
+//             }
+//         }
+//     });
 
-    var getOne = function (req, res) {
-        var user = req.user.toObject();
 
-        delete user['facebookProvider'];
-        delete user['__v'];
-
-        res.json(user);
-    };
+    // var getCurrentUser = function(req, res, next) {
+    //     console.log('GETCURR USER');
+    //     User.findById(req.auth.id, function(err, user) {
+    //         if (err) {
+    //             next(err);
+    //         } else {
+    //             req.user = user;
+    //             next();
+    //         }
+    //     });
+    // };
+    //
+    // var getOne = function (req, res) {
+    //     var user = req.user.toObject();
+    //
+    //     delete user['facebookProvider'];
+    //     delete user['__v'];
+    //
+    //     res.json(user);
+    // };
 
     router.get('/auth/me', function (req,res) {
         console.log('IN AUTHME');
-    }, authenticate, getCurrentUser, getOne);
+    });
 
     return router;
 }

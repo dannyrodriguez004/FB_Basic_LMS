@@ -18,7 +18,7 @@ const portNorm = val => {
     }
 
     return false;
-}
+};
 
 const onError = error => {
 	console.log('ERROR HERE');
