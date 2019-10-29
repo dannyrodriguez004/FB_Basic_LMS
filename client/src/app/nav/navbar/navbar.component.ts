@@ -105,7 +105,7 @@ export class NavbarComponent implements OnInit, OnChanges {
 
 
   logout() {
-    this.adminServices.logOutUser();
+    this.userServices.logout();
   }
 
 

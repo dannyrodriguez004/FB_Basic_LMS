@@ -96,6 +96,7 @@ export class UserService {
 
 logout() {
     localStorage.removeItem('id_token');
+    this.destroyToken();
   }
 
 isLoggedIn() {
