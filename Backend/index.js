@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const app = require('./app/app');
-const http = require('http')
+// const http = require('http');
 const https = require('https');
 const fileStream = require('fs');
 

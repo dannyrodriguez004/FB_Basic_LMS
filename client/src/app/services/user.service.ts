@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpResponse, HttpHeaders} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {stringify} from 'querystring';
+import {map} from 'rxjs/operators';
+import {ToastrService} from "ngx-toastr";
+import {BehaviorSubject} from 'rxjs';
 
 declare const FB: any;
 
@@ -14,9 +17,12 @@ export class UserService {
   // tslint:disable-next-line:variable-name
   private student_id = '0'; // debugging value
   private isAdmin = true;
-  private FBLoggedIn = true;
+  private FBLoggedIn;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private toastr: ToastrService) {
+    const jwtToken = this.getToken();
+    this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
     // tslint:disable-next-line:only-arrow-functions
     (window as any).fbAsyncInit = function() {
       FB.init({
@@ -42,6 +48,30 @@ export class UserService {
     }(document, 'script', 'facebook-jssdk'));
   }
 
+  getToken(): string {
+    return window.localStorage.jwtToken;
+  }
+
+  saveToken(token: string) {
+    window.localStorage.jwtToken = token;
+  }
+
+  destroyToken() {
+    window.localStorage.removeItem('jwtToken');
+  }
+
+  buildHeaders(): HttpHeaders {
+    const headersConfig = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    };
+
+    if (this.getToken()) {
+      headersConfig['Authorization'] = `Token ${this.getToken()}`;
+    }
+    return new HttpHeaders(headersConfig);
+  }
+
   submitLogin() {
     FB.login(result => {
       // const params = {params: new HttpParams().set('accessToken', result.authResponse.accessToken)};
@@ -50,9 +80,20 @@ export class UserService {
       console.log('BEFORE IF', result.authResponse);
 
       if (result.authResponse) {
-        this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
-          .subscribe((resp: HttpResponse<null>) => {
-            console.log('POST RESPONSE', resp);
+        this.http.post(`${environment.apiAddress}/security/auth/facebook`, params, {
+          headers: this.buildHeaders(),
+          // responseType: 'json',
+          // observe: 'response' as 'body'
+        })
+          .subscribe(response  => {
+            this.FBLoggedIn = true;
+            console.log('POST RESPONSE', response);
+            console.log(response);
+            console.log(this.buildHeaders().keys());
+            // this.saveToken(response.);
+            // const keys = JSON.parse(response.headers);
+            // console.log('POST RESPONSE headers', response.headers.keys);
+            // response.headers.get('x-auth-token');
             //   const token = resp.headers.get('x-auth-token');
             //   if (token) {
             //     localStorage.setItem('id_token', token);

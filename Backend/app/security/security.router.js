@@ -40,7 +40,10 @@ module.exports = (passport) => {
 
     var sendToken = function (req, res) {
         res.setHeader('x-auth-token', req.token);
+        console.log(JSON.stringify(req.body));
+        console.log('TOKEN:' + req.token);
         res.status(200).send(req.auth);
+        console.log('REQ.AUTH' + req.auth);
     };
 
     // passport.authenticate('facebook-token', {session: true})

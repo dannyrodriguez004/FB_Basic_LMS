@@ -8,6 +8,7 @@ import {NewcourseComponent} from '../newcourse/newcourse.component';
 import {AdminService} from '../../services/admin.service';
 import {Router} from '@angular/router';
 import {User} from '../../models/users.models';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -20,13 +21,28 @@ export class NavbarComponent implements OnInit, OnChanges {
   user: User;
   private student_id = '';
   private subscriptions: Subscription[] = [];
-
+  loggedIn;
+  balance;
+  email = 'foo@mail';
+  password = '1234';
   constructor(
     private userServices: UserService,
     private dialog: MatDialog,
     private adminServices: AdminService,
-    private router: Router
-  ) {// get debug student id
+    private router: Router,
+    private authService: AuthService
+  ) {
+    this.authService.loggedIn.subscribe(loggedIn => {
+      this.loggedIn = loggedIn;
+    // get debug student id
+  }); }
+
+  doLogin() {
+    this.authService.login(this.email, this.password);
+  }
+
+  doLogout() {
+    this.authService.logout();
   }
 
   // Runs whenever this component is loaded
