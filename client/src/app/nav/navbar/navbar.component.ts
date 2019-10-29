@@ -8,7 +8,6 @@ import {NewcourseComponent} from '../newcourse/newcourse.component';
 import {AdminService} from '../../services/admin.service';
 import {Router} from '@angular/router';
 import {User} from '../../models/users.models';
-import {AuthService} from '../../services/auth.service';
 import {CoursesService} from '../../services/courses.service';
 
 @Component({
@@ -25,16 +24,14 @@ export class NavbarComponent implements OnInit, OnChanges {
   private student_id = '';
   private subscriptions: Subscription[] = [];
   loggedIn;
-  balance;
-  email = 'foo@mail';
-  password = '1234';
+  loading = false;
+
   constructor(
     private userServices: UserService,
     private coursesServices: CoursesService,
     private dialog: MatDialog,
     private adminServices: AdminService,
     private router: Router,
-    private authService: AuthService
   ) {
     this.userServices.isLoggedIn().subscribe(loggedIn => {
       this.loggedIn = loggedIn;
@@ -42,17 +39,17 @@ export class NavbarComponent implements OnInit, OnChanges {
   }); }
 
   doLogin() {
-    this.authService.login(this.email, this.password);
+    this.submitLogin();
+    this.router.navigate(['/nav/dashboard']);
   }
 
   doLogout() {
-    this.authService.logout();
+    this.logout();
+    this.router.navigate(['/']);
   }
-
   // Runs whenever this component is loaded
   ngOnInit() {
     this.loadCourses();
-    // this.userServices.getCurrentUser();
     console.log('BEFORE GET CURR USER');
     this.getCurrentUser();
   }
@@ -62,7 +59,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   }
 
   submitLogin() {
-     return this.userServices.submitLogin();
+    return this.userServices.submitLogin();
   }
 
   getCurrentUser() {

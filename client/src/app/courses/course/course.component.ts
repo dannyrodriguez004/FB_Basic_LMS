@@ -12,16 +12,15 @@ import { Subscription } from 'rxjs/internal/Subscription';
 export class CourseComponent implements OnInit, OnChanges {
 
   navs = [
-    {val:'Home', ico: 'home'},
-    {val:'Modules', ico:'view_module'},
-    {val:'Grades', ico:'assessment'},
-    {val:'Discussions', ico: 'forum'},
+    {val: 'Home', ico: 'home'},
+    {val: 'Modules', ico: 'view_module'},
+    {val: 'Grades', ico: 'assessment'},
+    {val: 'Discussions', ico: 'forum'},
     {val: 'Roll Call', ico: 'forum'}];
 
   private navItem = 'Home';
 
   private subscriptions: Subscription[] = [];
-  private user_id: string;
   private authorized = false;
   current_course = '';
   course = {name: '', id: this.current_course, description: '', instructor: ''};
@@ -47,7 +46,7 @@ export class CourseComponent implements OnInit, OnChanges {
 
   loadData() {
     this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
-      if(params.select) {
+      if (params.select) {
         this.navItem = params.select;
       }
       if(params.course) {
@@ -57,8 +56,6 @@ export class CourseComponent implements OnInit, OnChanges {
 
     this.subscriptions.push(this.coursesServices.studentHasCourse(this.current_course).subscribe( (resp: boolean) => {
       this.authorized = resp;
-      console.log('STUDENTHASCOURSE:' + resp);
-
       if (this.authorized) {
         this.subscriptions.push(this.coursesServices
           .getCourseInfo(this.current_course)

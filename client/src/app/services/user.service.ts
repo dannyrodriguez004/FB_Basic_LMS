@@ -5,9 +5,10 @@ import {Observable} from 'rxjs';
 import {stringify} from 'querystring';
 import {map} from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs';
+import {RouterModule} from '@angular/router';
 
-declare const FB: any;
-
+declare var FB: any;
+declare var window: any;
 @Injectable({
   providedIn: 'root'
 })
@@ -21,8 +22,7 @@ export class UserService {
   constructor(private http: HttpClient) {
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
-    // tslint:disable-next-line:only-arrow-functions
-    (window as any).fbAsyncInit = function() {
+    window.fbAsyncInit = () => {
       FB.init({
         appId: '398974807682335',
         cookie: true,
@@ -31,9 +31,8 @@ export class UserService {
       });
       FB.AppEvents.logPageView();
     };
-
     // tslint:disable-next-line:only-arrow-functions
-    (function(d, s, id) {
+    ( function(d, s, id) {
       // tslint:disable-next-line:one-variable-per-declaration prefer-const
       let js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) {
@@ -44,6 +43,8 @@ export class UserService {
       js.src = 'https://connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
+    // tslint:disable-next-line:only-arrow-functions
+
   }
 
   getToken(): string {
@@ -61,8 +62,8 @@ export class UserService {
   buildHeaders(): HttpHeaders {
     const headersConfig = {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    }
+      Accept: 'application/json'
+    };
 
     if (this.getToken()) {
       headersConfig['Authorization'] = `Token ${this.getToken()}`;
@@ -82,8 +83,8 @@ export class UserService {
             this.FBLoggedIn = true;
             console.log('POST RESPONSE', response);
             this.saveToken(response.token);
-            console.log('submitLogin', result.authResponse);
-            console.log('params', params);
+            // console.log('submitLogin', result.authResponse);
+            // console.log('params', params);
             if (params) {
               localStorage.setItem('id_token', stringify(params));
             } else {
@@ -122,25 +123,6 @@ getStudentCourses(student_id: string) {
       opts);
   }
 
-  /**
-   *
-   * @param student_id facebook id for this app's user
-   * @param course_id course database id
-   *
-   * @returns boolean, is this student enrolled in this course
-   */
-  // tslint:disable-next-line:variable-name
-studentHasCourse(student_id, course) {
-    const opts = {
-      params: new HttpParams().set('course', `${course}`),
-      headers: this.buildHeaders()
-    }
-    return this.http.get(`${environment.apiAddress}/courses/student-has-course`, opts);
-  }
-
-  /**
-   * DEBUGGING GETTER FOR DEBUG STUDENT
-   */
 user() {
     return this.student_id;
   }

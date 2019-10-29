@@ -25,8 +25,6 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MainComponent } from './main/main.component';
 import { NewcourseComponent } from './newcourse/newcourse.component';
-import {AuthService} from '../services/auth.service';
-import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [NavbarComponent, MainComponent, NewcourseComponent],
@@ -57,10 +55,6 @@ import {ToastrModule} from 'ngx-toastr';
     MatDatepickerModule,
     MatNativeDateModule,
     MatTabsModule,
-    ToastrModule.forRoot()
-],
-providers: [
-  AuthService
 ],
   entryComponents: [
     NewcourseComponent

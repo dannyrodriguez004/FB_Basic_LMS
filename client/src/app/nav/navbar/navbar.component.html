@@ -48,11 +48,11 @@
                         <mat-icon>add</mat-icon>Add Course
                   </button>
 
-                  <button mat-menu-item (click)="submitLogin()">
+                  <button mat-menu-item (click)="doLogin()">
                     Login with facebook
                   </button>
 
-                  <button (click)="logout()" mat-menu-item> </button>
+                  <button (click)="doLogout()" mat-menu-item> </button>
 
                   <button [routerLink]="['security/register/']" mat-menu-item>
                         <mat-icon>person_add</mat-icon>Register
@@ -62,7 +62,7 @@
                         <mat-icon>verified_user</mat-icon>Admin Register
                   </button>
 
-                  <button *ngIf="this.isAdmin()" (click)="logout()" mat-menu-item>
+                  <button *ngIf="this.isAdmin()" (click)="doLogout()" mat-menu-item>
                         <mat-icon style="color: red;">power_settings_new</mat-icon>Log out
                   </button>
             </mat-menu>
