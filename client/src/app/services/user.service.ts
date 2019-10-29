@@ -73,6 +73,7 @@ export class UserService {
 
   submitLogin() {
     FB.login(result => {
+      console.log(result);
       const params = {params: new HttpParams().set('userID', result.authResponse.userID)};
       console.log('BEFORE IF', result.authResponse);
       if (result.authResponse) {
@@ -100,19 +101,23 @@ logout() {
   }
 
 isLoggedIn() {
-      this.getCurrentUser();
+      return this.getCurrentUser();
   }
 
 getCurrentUser() {
-      return this.http.get(`${environment.apiAddress}/security/auth/me`);
+  const opts = {
+    headers: this.buildHeaders()
+  };
+  return this.http.get(`${environment.apiAddress}/security/auth/me`, opts);
 }
 // tslint:disable-next-line:variable-name
 getStudentCourses(student_id: string) {
-    console.log('StudentID: ' + student_id);
+    // console.log('StudentID: ' + student_id);
     const opts = {
-      params: new HttpParams().set('student', `${student_id}`),
+      // params: new HttpParams().set('student', `${student_id}`),
       headers: this.buildHeaders()
     };
+    console.log('StudentID: ' + student_id);
     return this.http.get(`${environment.apiAddress}/courses/student-courses`,
       opts);
   }

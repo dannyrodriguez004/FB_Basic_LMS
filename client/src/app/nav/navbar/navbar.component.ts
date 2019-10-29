@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   myCourses: CourseNav[] = []; // the user's courses names and id
   user: User;
+  FBuserID: string;
   // tslint:disable-next-line:variable-name
   private student_id = '';
   private subscriptions: Subscription[] = [];
@@ -33,7 +34,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     private router: Router,
     private authService: AuthService
   ) {
-    this.authService.loggedIn.subscribe(loggedIn => {
+    this.userServices.isLoggedIn().subscribe(loggedIn => {
       this.loggedIn = loggedIn;
     // get debug student id
   }); }
@@ -51,9 +52,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.loadCourses();
     // this.userServices.getCurrentUser();
     console.log('BEFORE GET CURR USER');
-    this.getCurrentUser().subscribe(resp => {
-      console.log('CURR USER RESPONSE', resp);
-    });
+    this.getCurrentUser();
   }
 
   ngOnChanges() {
@@ -65,8 +64,11 @@ export class NavbarComponent implements OnInit, OnChanges {
   }
 
   getCurrentUser() {
-     return this.userServices.getCurrentUser();
+    this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
+      this.FBuserID = resp.userID;
+    }));
   }
+
   openAddCourseDialog() {
     const dialogRef = this.dialog.open(NewcourseComponent, {
       width: '90%',
@@ -103,11 +105,9 @@ export class NavbarComponent implements OnInit, OnChanges {
     return this.userServices.getIsAdmin();
   }
 
-
   logout() {
     this.userServices.logout();
   }
-
 
   auth() {
     return this.adminServices.getAuth();

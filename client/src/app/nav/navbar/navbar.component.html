@@ -18,11 +18,13 @@
                         <mat-icon>class</mat-icon>{{course.name}}
                   </button>
             </mat-menu>
+
       </span>
 
       <span>
             <button [routerLink]="['/nav/courses/']" mat-button><mat-icon>list</mat-icon>Courses</button>
       </span>
+
       <span>
             <button [routerLink]="['helppage/']" mat-button><mat-icon>help_outline</mat-icon>Help</button>
       </span>
@@ -30,8 +32,8 @@
       <span class="fill"></span>
       <span>
             <button mat-raised-button [mat-menu-trigger-for]="fbMenu"> Get Current User FB </button>
-        <mat-menu #fbMenu="matMenu">
-          <a mat-menu-item value="getCurrentUser">{{getCurrentUser()}}</a>
+        <mat-menu #fbMenu="matMenu">{{FBuserID}}
+          <p mat-menu-item *ngIf="this.isLoggedIn()" value=""></p>
         </mat-menu>
       </span>
       <span>

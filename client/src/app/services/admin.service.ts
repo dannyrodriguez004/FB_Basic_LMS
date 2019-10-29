@@ -34,7 +34,7 @@ export class AdminService {
           } else {
             return true;
           }
-  
+
       } catch (err) {
           return err;
       }
@@ -91,11 +91,11 @@ export class AdminService {
   }
 
   isUsernameAvailable(username) {
-    return this.http.post(`${environment.apiAddress}/users/available-username`, {username})
+    return this.http.post(`${environment.apiAddress}/users/available-username`, {username});
   }
 
   addInstructor(user) {
-    return this.http.post(`${environment.apiAddress}/users/add-instructor`, {user})
+    return this.http.post(`${environment.apiAddress}/users/add-instructor`, {user});
   }
 
   /**
