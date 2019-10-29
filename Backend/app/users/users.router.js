@@ -69,5 +69,10 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    router.post('/available-username', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
+        const resp = await usersServices.isAvailable(req.body.username);
+        res.json(resp);
+    });
+
     return router;
 }

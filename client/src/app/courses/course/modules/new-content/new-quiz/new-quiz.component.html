@@ -66,29 +66,36 @@
 
                 <mat-form-field style="width:100%;" appearance="outline">
                     <mat-label>Answer</mat-label>
-                    <input matInput formControlName="answer" type="number" step="1" max="4" min="1" required>
+                    <!--<input matInput formControlName="answer" type="number" step="1" max="4" min="1" required>-->
+                    <mat-select formControlName="answer">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngIf="newQuestionForm.value.A != ''" value="1">{{newQuestionForm.value.A}}</mat-option>
+                        <mat-option *ngIf="newQuestionForm.value.B != ''" value="2">{{newQuestionForm.value.B}}</mat-option>
+                        <mat-option *ngIf="newQuestionForm.value.C != ''" value="3">{{newQuestionForm.value.C}}</mat-option>
+                        <mat-option *ngIf="newQuestionForm.value.D != ''" value="4">{{newQuestionForm.value.D}}</mat-option>
+                    </mat-select>
                     <mat-hint>Required, Select Correct Option</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field style="width:100%;" appearance="outline">
-                    <mat-label>Option 1</mat-label>
+                    <mat-label>Option A</mat-label>
                     <input matInput formControlName="A" type="text" required>
                     <mat-hint>Required Option</mat-hint>
                 </mat-form-field>
                     
                 <mat-form-field style="width:100%;" appearance="outline">
-                    <mat-label>Option 2</mat-label>
+                    <mat-label>Option B</mat-label>
                     <input matInput formControlName="B" type="text" required>
                     <mat-hint>Required Option</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field style="width:100%;" appearance="outline">
-                    <mat-label>Option 3</mat-label>
+                    <mat-label>Option C</mat-label>
                     <input matInput formControlName="C" type="text">
                 </mat-form-field>
 
                 <mat-form-field style="width:100%;" appearance="outline">
-                    <mat-label>Option 4</mat-label>
+                    <mat-label>Option D</mat-label>
                     <input matInput formControlName="D" type="text">
                     </mat-form-field>
                 <mat-error *ngIf="answerInvalid">Bad answer, select a valid answer!</mat-error>
@@ -104,10 +111,10 @@
                 </mat-card-title>
 
                 <mat-list>
-                    <mat-list-item><strong>Answer:</strong> {{item.answer}}</mat-list-item>
+                    <mat-list-item><strong>Answer:</strong> {{ ' ' + getLetter(item.answer)}}</mat-list-item>
                     <mat-list-item><strong>Options:</strong></mat-list-item>
                     <mat-list-item *ngFor="let option of item.options">
-                        ({{item.options.indexOf(option) + 1}}){{option}}
+                        ({{getLetter( item.options.indexOf(option) )}}){{' ' + option}}
                     </mat-list-item>
                 </mat-list>
                     

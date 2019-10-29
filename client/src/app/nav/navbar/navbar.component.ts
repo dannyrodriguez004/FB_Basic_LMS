@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   myCourses: CourseNav[] = []; // the user's courses names and id
   user: User;
+  // tslint:disable-next-line:variable-name
   private student_id = '';
   private subscriptions: Subscription[] = [];
   loggedIn;
@@ -106,4 +107,10 @@ export class NavbarComponent implements OnInit, OnChanges {
   logout() {
     this.adminServices.logOutUser();
   }
+
+
+  auth() {
+    return this.adminServices.getAuth();
+  }
+
 }

@@ -185,4 +185,35 @@ export class CoursesService {
   getServerTime() {
     return this.http.get(`${environment.apiAddress}/utils/date`);
   }
+
+  setQuizStartTime(student, course, quiz)  {
+    return this.http.post(`${environment.apiAddress}/courses/set-start-time`, {student, course, quiz});
+  }
+
+  submitQuiz(student, course, module, quiz, responses) {
+    return this.http.post(`${environment.apiAddress}/courses/submit-quiz`, {student, course, module, quiz, responses});
+  }
+
+  getStudentQuizRecord(student, course, quiz) {
+    const params = {params: new HttpParams().set('student', `${student}`).set('course', `${course}`).set('quiz', `${quiz}`)};
+    return this.http.get(`${environment.apiAddress}/courses/student-record`, params);
+  }
+
+  getQuizInfo(course, moduleID, quiz) {
+    const params = {params: new HttpParams().set('course', `${course}`).set('module', `${moduleID}`).set('quiz', `${quiz}`)};
+    return this.http.get(`${environment.apiAddress}/courses/quiz-info`, params);
+  }
+
+  saveResponses(student, course, quiz, responses) {
+    return this.http.post(`${environment.apiAddress}/courses/save-responses`, {student, course, quiz, responses});
+  }
+
+  getCoursesSortBy(sort, start) {
+    const params = {params: new HttpParams().set('sort', sort).set('start', start)};
+    return this.http.get(`${environment.apiAddress}/courses/courses-by`, params);
+  }
+
+  getAdminCourses() {
+    return this.http.get(`${environment.apiAddress}/courses/courses-by`);
+  }
 }

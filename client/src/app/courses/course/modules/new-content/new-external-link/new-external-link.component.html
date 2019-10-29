@@ -14,7 +14,7 @@
         <mat-hint>Input link URL here, must start with http:// or https://.</mat-hint>
     </mat-form-field>
 
-    <mat-dialog-actions>
+    <mat-dialog-actions> 
         <span class="fill"></span>
         <button type="button" (click)="onNoClick()" mat-raised-button color="warn">Cancel</button>
         <button type="button" [disabled]="newLinkForm.invalid || submitting" (click)="pushLink()" mat-raised-button color="primary">Create</button>

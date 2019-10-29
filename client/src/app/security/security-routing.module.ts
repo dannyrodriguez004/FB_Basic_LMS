@@ -1,3 +1,4 @@
+import { AdminRegisterComponent } from './admin-register/admin-register.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {SecurityComponent} from './security/security.component';
@@ -8,13 +9,13 @@ import {
   MatInputModule,
   MatButtonModule
 } from '@angular/material';
-import {SignupComponent} from './signup/signup.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   {path: '', component: SecurityComponent},
-  { path: 'login', component: LoginComponent},
-  { path: 'signup', component: SignupComponent},
-
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
+  {path: 'admin-register', component: AdminRegisterComponent}
 ];
 
 @NgModule({

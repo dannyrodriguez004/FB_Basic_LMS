@@ -8,17 +8,24 @@ import { LoginComponent } from './login/login.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { SignupComponent } from './signup/signup.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSelectModule} from '@angular/material/select';
+import {AdminRegisterComponent} from './admin-register/admin-register.component';
+import {RegisterComponent} from './register/register.component';
+
+
 
 
 @NgModule({
-  declarations: [SecurityComponent, LoginComponent, SignupComponent],
+  declarations: [SecurityComponent, LoginComponent, RegisterComponent, AdminRegisterComponent],
   imports: [
     CommonModule,
     SecurityRoutingModule,
     ReactiveFormsModule,
     MatCardModule,
     MatProgressSpinnerModule,
-    FormsModule
+    FormsModule,
+    MatSelectModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SecurityModule { }
