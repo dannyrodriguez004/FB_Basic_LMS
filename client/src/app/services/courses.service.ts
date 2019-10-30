@@ -26,12 +26,10 @@ export class CoursesService {
     const headersConfig = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
-    }
-
+    };
     if (this.getToken()) {
       headersConfig['Authorization'] = `Token ${this.getToken()}`;
     }
-
     return new HttpHeaders(headersConfig);
   }
 

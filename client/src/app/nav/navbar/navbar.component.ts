@@ -40,12 +40,12 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   doLogin() {
     this.submitLogin();
-    this.router.navigate(['/nav/dashboard']);
+    this.ngOnInit();
   }
 
   doLogout() {
     this.logout();
-    this.router.navigate(['/']);
+    this.ngOnInit();
   }
   // Runs whenever this component is loaded
   ngOnInit() {

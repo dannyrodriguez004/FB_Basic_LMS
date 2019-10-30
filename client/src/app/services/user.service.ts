@@ -111,11 +111,10 @@ getCurrentUser() {
   };
   return this.http.get(`${environment.apiAddress}/security/auth/me`, opts);
 }
+
 // tslint:disable-next-line:variable-name
 getStudentCourses(student_id: string) {
-    // console.log('StudentID: ' + student_id);
     const opts = {
-      // params: new HttpParams().set('student', `${student_id}`),
       headers: this.buildHeaders()
     };
     console.log('StudentID: ' + student_id);
