@@ -51,7 +51,6 @@ export class AdminService {
         this.isAdmin = true;
         const decoded = jwt_decode(jwt.payload);
         this.auth = decoded.auth;
-
       }),
       catchError(this.handleError('adminLogin'))
     );

@@ -68,7 +68,6 @@ export class UserService {
     if (this.getToken()) {
       headersConfig['Authorization'] = `Token ${this.getToken()}`;
     }
-
     return new HttpHeaders(headersConfig);
   }
 
@@ -77,14 +76,17 @@ export class UserService {
       console.log(result);
       const params = {params: new HttpParams().set('userID', result.authResponse.userID)};
       console.log('BEFORE IF', result.authResponse);
+      FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
+            console.log(response);
+        // console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
+        // console.log('ADDRESS: ' + response.user_location);
+      });
       if (result.authResponse) {
         this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
           .subscribe((response: any) => {
             this.FBLoggedIn = true;
             console.log('POST RESPONSE', response);
             this.saveToken(response.token);
-            // console.log('submitLogin', result.authResponse);
-            // console.log('params', params);
             if (params) {
               localStorage.setItem('id_token', stringify(params));
             } else {
@@ -92,7 +94,13 @@ export class UserService {
             }
           });
       }
-    });
+    }, {scope: 'email', return_scopes: true});
+    // this.getCurrentUser().subscribe((resp: any) => {
+    //   this.user = resp.userID;
+    //   if(!resp.user_info){
+    //
+    //   }
+    // });
   }
 
 

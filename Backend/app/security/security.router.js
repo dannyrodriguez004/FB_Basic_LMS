@@ -4,6 +4,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 var passport = require('passport');
 const d = require('./passport.strategy');
+const database = require('firebase-admin').database();
 
 const securityServices = require('./security.service');
 const jwtMiddleware = (req, res, next) => {
@@ -126,13 +127,19 @@ module.exports = (passport) => {
     //     res.json(user);
     // };
 
-    router.get('/auth/me', jwtMiddleware, function (req,res) {
+    router.get('/auth/me', jwtMiddleware, async (req, res, next) => {
         console.log('IN AUTHME');
         console.log(req.decoded);
-        res.json({userID: req.decoded});
-
+        var users = await database.ref('/users').orderByKey().equalTo(req.decoded).once('value');
+        if(users) {
+            res.json({
+                userID: req.decoded,
+                user_info: users
+            });
+        } else {
+            res.json({userID: req.decoded});
+        }
     });
-
     return router;
 }
 

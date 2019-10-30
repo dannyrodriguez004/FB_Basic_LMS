@@ -1,1 +1,39 @@
-<p>register works!</p>
+
+<mat-card>
+  <mat-card-title>
+    Student Registration
+  </mat-card-title>
+  <mat-spinner *ngIf="loading" style="margin-left: auto; margin-top: 1rem; margin-right: auto;"></mat-spinner>
+  <form *ngIf="!loading" [formGroup]="registerForm">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input formControlName="first_name" type="text" matInput required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>last Name</mat-label>
+      <input formControlName="last_name" type="text" matInput required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Student Contact Email</mat-label>
+      <input formControlName="email" type="email" matInput required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Student Contact Email</mat-label>
+      <input formControlName="address" type="text" matInput required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Student Contact Email</mat-label>
+      <input formControlName="phone" type="text" matInput required>
+    </mat-form-field>
+
+
+    <div>
+      <button (click)="register()" [disabled]="registerForm.invalid" type="submit" mat-raised-button color="primary">Register</button>
+    </div>
+  </form>
+
+</mat-card>

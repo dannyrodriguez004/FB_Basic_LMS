@@ -60,6 +60,7 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   submitLogin() {
     return this.userServices.submitLogin();
+    this.ngOnInit();
   }
 
   getCurrentUser() {
