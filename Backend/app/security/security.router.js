@@ -85,7 +85,7 @@ module.exports = (passport) => {
             }
             // prepare token for API
         res.status(200).send({
-            // user: userID,
+             user: userID,
             token: token
         });
     });
@@ -137,6 +137,7 @@ module.exports = (passport) => {
                 user_info: users
             });
         } else {
+            console.log('AUTH/ME CANNOT GET USERS');
             res.json({userID: req.decoded});
         }
     });

@@ -32,11 +32,10 @@ export class NavbarComponent implements OnInit, OnChanges {
     private coursesServices: CoursesService,
     private dialog: MatDialog,
     private adminServices: AdminService,
-    private router: Router,
+    private router: Router
   ) {
     this.userServices.isLoggedIn().subscribe(loggedIn => {
       this.loggedIn = loggedIn;
-    // get debug student id
   }); }
 
   doLogin() {
@@ -50,14 +49,13 @@ export class NavbarComponent implements OnInit, OnChanges {
     const dialogRef = this.dialog.open(RegisterComponent, {
       width: '90%',
       data: {
-        first_name: 'Insert Course Title Here',
-        last_name: 'Enter Course description here',
-        email: 'Insert email here',
-        phone: 'Insert Phone number here',
-        country: 'Insert Country here'
+        first_name: 'First Name',
+        last_name: 'Last Name',
+        email: 'Email',
+        phone: 'Primary Phone Number',
+        country: 'Country'
       }
     });
-
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
       if (result) {
         console.log(result);

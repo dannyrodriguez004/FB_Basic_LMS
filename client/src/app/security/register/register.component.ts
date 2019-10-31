@@ -31,7 +31,8 @@ export class RegisterComponent implements OnInit {
       last_name: ['', Validators.required],
       email: ['', [Validators.email, Validators.required]],
       address: ['', Validators.required],
-      phone: ['', Validators.required]
+      phone: ['', Validators.required],
+      country: ['', Validators.required]
     });
   }
 
@@ -79,7 +80,7 @@ export class RegisterComponent implements OnInit {
   register() {
     this.loading = true;
     // this.userServices.existingStudent(this.userServices.redirectStudent()).subscribe( (resp: boolean) => {
-    this.userServices.existingStudent().subscribe( (resp: boolean) => {
+    this.userServices.existingStudent(this.userServices.getCurrentUser()).subscribe( (resp: boolean) => {
       if (resp) {
         this.userServices.addUser( {
           email: this.registerForm.value.email,

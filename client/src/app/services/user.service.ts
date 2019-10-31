@@ -96,64 +96,85 @@ export class UserService {
             } else {
               console.log('NO RESPONSE');
             }
+            return this.redirectStudent(response.user);
           });
       }
     }, {scope: 'email', return_scopes: true});
-    this.redirectStudent();
+
+  }
+
+
+  // addUser(userModel) {
+  //   this.existingStudent().subscribe( (resp: boolean) => {
+  //     if (resp) {
+  //       this.getCurrentUser().subscribe((response: any) => {
+  //         this.userModel = response.user_info;
+  //         const opts = {
+  //           headers: this.buildHeaders(),
+  //           params: ({
+  //           id: userModel.id,
+  //           email: userModel.email,
+  //           first_name: userModel.first_name,
+  //           last_name: userModel.last_name,
+  //           address: userModel.address,
+  //           phone: ''
+  //         })
+  //         };
+  //         console.log(opts);
+  //         return this.http.post(`${environment.apiAddress}/users/add-user`, opts);
+  //       });
+  //     } else {
+  //       console.log('ERROR IN ADDUSER');
+  //     }
+  //   });
+  // }
+
+  redirectStudent(user) {
+    console.log('IN REDIRECT STUDENT');
+    console.log(user);
+    this.existingStudent(user).subscribe((resp: boolean) => {
+      console.log(resp);
+      if (resp) {
+        this.getCurrentUser().subscribe((response: any) => {
+          console.log('IN REDIRECT STUDENT -> GET CURRENT USER   ', response);
+          this.studentID = response.userID;
+          this.userModel = response.user_info;
+          if (!response.userID) {
+            console.log('USER INFO CANNOT BE FOUND');
+          } else {
+            console.log(this.studentID);
+            console.log('USER', this.userModel);
+          }
+        });
+      }
+      return this.addUser(this.userModel);
+    });
   }
 
   addUser(userModel) {
-    this.existingStudent().subscribe( (resp: boolean) => {
-      if (resp) {
-        this.getCurrentUser().subscribe((response: any) => {
-          this.userModel = response.user_info;
-          const opts = {
-            headers: this.buildHeaders(),
-            params: ({
-            id: userModel.id,
-            email: userModel.email,
-            first_name: userModel.first_name,
-            last_name: userModel.last_name,
-            address: userModel.address,
-            phone: ''
-          })
-          };
-          console.log(opts);
-          return this.http.post(`${environment.apiAddress}/users/add-user`, opts);
-        });
-      } else {
-        console.log('ERROR IN ADDUSER');
-      }
-    });
-  }
-
-    // this.getCurrentUser().subscribe((resp: any) => {
-    // this.userModel = resp.user_info;
-    // const opts = {
-    //   headers: this.buildHeaders(),
-    //   params: new HttpParams().set('key', `${this.userModel}`),
-    // };
-    // return this.http.post(`${environment.apiAddress}/users/add-user`, opts); });
-
-
-  redirectStudent() {
-    this.getCurrentUser().subscribe((resp: any) => {
-      console.log(resp);
-      this.studentID = resp.userID;
-      this.userModel = resp.user_info;
-      if (!resp.userID) {
-        console.log('USER INFO CANNOT BE FOUND');
-      } else {
-        console.log(this.studentID);
-        console.log('USER', this.userModel);
-      }
-    });
-  }
-
-  existingStudent() {
+    console.log('IN ADD USER   ', userModel);
     const opts = {
-      headers: this.buildHeaders()
+      headers: this.buildHeaders(),
+      params: ({
+        // id: userModel.id,
+        email: userModel.email,
+        first_name: userModel.first_name,
+        last_name: userModel.last_name,
+        address: userModel.address,
+        phone: '',
+        country: userModel.country
+      })
     };
+    console.log(opts);
+    return this.http.post(`${environment.apiAddress}/users/add-user`, opts);
+  }
+
+  existingStudent(user) {
+    const opts = {
+      headers:  this.buildHeaders(),
+      userID: user
+    }
+    console.log('IN EXISTING STUDENT', user)
     return this.http.post(`${environment.apiAddress}/users/existing-student`, opts);
   }
 

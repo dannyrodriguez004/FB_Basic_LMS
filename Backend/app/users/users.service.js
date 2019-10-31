@@ -238,17 +238,21 @@ class UsersService {
         return false;
     }
 
-    async studentInDatabase(username) {
-        try {
+    async studentInDatabase(userID) {
 
-            let reference = await database.ref('/students').orderByKey.equalTo(username).once('value');
-            if(!reference) {
+        try {
+            console.log('STUDENT IN DATABASE: USERID SENT IN FOR CHECKING');
+            console.log(userID);
+            let reference = await database.ref('/users' + userID)
+                // .orderByValue().equalTo(userID).once('value');
+            if(reference) {
                 return true;
+            } else {
+                return false;
             }
         } catch(err) {
             console.error(err);
         }
-
         return false;
     }
 }

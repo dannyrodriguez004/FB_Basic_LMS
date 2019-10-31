@@ -34,12 +34,10 @@ import { DiscussionEditorComponent } from './courses/course/discussion/discussio
 import { NewDiscussionComponent } from './courses/course/discussions/new-discussion/new-discussion.component';
 import { NewcourseComponent } from './nav/newcourse/newcourse.component';
 
-
 import { CookieService } from 'ngx-cookie-service';
 import { JwtTokenInterceptorService } from './jwt-token.interceptor';
 import {EnsureHttpsInterceptorModule} from 'angular-interceptors';
 import {ToastrModule} from 'ngx-toastr';
-
 
 @NgModule({
   declarations: [
@@ -61,7 +59,6 @@ import {ToastrModule} from 'ngx-toastr';
     MatSortModule,
     MatSelectModule,
     MatDialogModule,
-    // ToastrModule.forRoot(),
     EnsureHttpsInterceptorModule.forRoot()
   ],
   providers: [

@@ -105,8 +105,10 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
-    router.post('/existing-student', jwtMiddleware, async (req, res, next) => {
-        const resp = await usersServices.isAvailable(req.decoded);
+    router.post('/existing-student', async (req, res, next) => {
+        var userID = req.body.userID;
+        console.log(userID);
+        const resp = await usersServices.studentInDatabase(req.body.userID);
         res.json(resp);
     });
     return router;
