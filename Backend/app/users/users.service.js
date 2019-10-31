@@ -245,6 +245,8 @@ class UsersService {
             console.log(userID);
             let reference = await database.ref('/users' + userID)
                 // .orderByValue().equalTo(userID).once('value');
+
+                //make !reference below to check for non-occurrences of userID in database
             if(reference) {
                 return true;
             } else {
