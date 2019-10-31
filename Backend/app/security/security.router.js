@@ -5,8 +5,6 @@ const jwt = require('jsonwebtoken');
 var passport = require('passport');
 const d = require('./passport.strategy');
 const database = require('firebase-admin').database();
-
-const securityServices = require('./security.service');
 const jwtMiddleware = (req, res, next) => {
     const authString = req.headers['authorization'];
     if(typeof authString === 'string' && authString.indexOf(' ') > -1) {
@@ -30,6 +28,8 @@ const jwtMiddleware = (req, res, next) => {
 
     }
 };
+// const securityServices = require('./security.service');
+
 module.exports = (passport) => {
 
     router.get('/foo', async (req, res, next) => {

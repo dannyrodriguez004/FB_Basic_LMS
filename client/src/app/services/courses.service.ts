@@ -30,7 +30,9 @@ export class CoursesService {
     if (this.getToken()) {
       headersConfig['Authorization'] = `Token ${this.getToken()}`;
     }
-    return new HttpHeaders(headersConfig);
+    let headers = new HttpHeaders(headersConfig);
+    console.log(headers);
+    return headers;
   }
 
   getCourseInfo(course) {

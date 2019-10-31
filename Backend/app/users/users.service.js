@@ -72,16 +72,18 @@ class UsersService {
         console.log('IN ADDSTUDENT USERSERVICE');
         console.log(user_info);
         try {
-            var users = await database.ref('/users').orderByKey().equalTo(user_info.userID).once('value');
-            if(!users.hasChildren()) {
-                await database.ref('/users').child(user_info).set({
-                    first_name: user.first_name.trim(),
-                    last_name: user_info.last_name.trim(),
-                    phone: user_info.phone.trim(),
-                    email: user_info.email.trim(),
-                    type: user_info.type.trim(),
-                    country: user_info.country.trim()
+            var users = await database.ref('/users').orderByKey().equalTo(user_info.body.userID).once('value');
+            if(!users || !users.hasChildren()) {
+                await database.ref('/users').child(user_info.body.userID).set({
+                    first_name: user_info.body.first_name.trim(),
+                    last_name: user_info.body.last_name.trim(),
+                    phone: user_info.body.phone.trim(),
+                    email: user_info.body.email.trim(),
+                    type: 'student',
+                    country: user_info.body.country.trim()
                 });
+            } else {
+                console.log('USER ALREADY EXISTS');
             }
         } catch (err) {
             console.error(err);
@@ -245,7 +247,7 @@ class UsersService {
             console.log(userID);
             let reference = await database.ref('/users' + userID)
                 // .orderByValue().equalTo(userID).once('value');
-
+                console.log(reference);
                 //make !reference below to check for non-occurrences of userID in database
             if(reference) {
                 return true;

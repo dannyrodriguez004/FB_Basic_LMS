@@ -9,7 +9,7 @@ import {
   MatInputModule,
   MatButtonModule
 } from '@angular/material';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from '../nav/register/register.component';
 
 const routes: Routes = [
   {path: '', component: SecurityComponent},

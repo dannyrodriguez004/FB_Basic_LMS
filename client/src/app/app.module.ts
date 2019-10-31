@@ -64,7 +64,7 @@ import {ToastrModule} from 'ngx-toastr';
   providers: [
     UserService,
     CookieService,
-    {provide: HTTP_INTERCEPTORS, useClass: JwtTokenInterceptorService, multi: true}
+    // {provide: HTTP_INTERCEPTORS, useClass: JwtTokenInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent],
   entryComponents: [YesNoDialogComponent],

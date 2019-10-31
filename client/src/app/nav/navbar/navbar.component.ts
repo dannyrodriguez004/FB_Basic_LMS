@@ -9,7 +9,7 @@ import {AdminService} from '../../services/admin.service';
 import {Router} from '@angular/router';
 import {UserModel} from '../../models/usermodel.models';
 import {CoursesService} from '../../services/courses.service';
-import { RegisterComponent } from '../../security/register/register.component';
+import { RegisterComponent } from '../register/register.component';
 
 @Component({
   selector: 'app-navbar',
@@ -26,6 +26,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   private subscriptions: Subscription[] = [];
   loggedIn;
   loading = false;
+  private isRegistered: boolean;
 
   constructor(
     private userServices: UserService,
@@ -36,28 +37,35 @@ export class NavbarComponent implements OnInit, OnChanges {
   ) {
     this.userServices.isLoggedIn().subscribe(loggedIn => {
       this.loggedIn = loggedIn;
+      // this.isRegistered = true;
   }); }
 
   doLogin() {
-    this.submitLogin();
-    // if (this.loggedIn === false) {
-    this.openRegisterStudentDialog();
-    // }
+    this.userServices.submitLogin();
+    this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
+      console.log(resp);
+      if (!resp.user_info) {
+        this.isRegistered = false;
+        this.openRegisterStudentDialog();
+      } else {
+        this.isRegistered = true;
+      }
+    }));
   }
 
   openRegisterStudentDialog() {
     const dialogRef = this.dialog.open(RegisterComponent, {
       width: '90%',
       data: {
-        first_name: 'First Name',
-        last_name: 'Last Name',
-        email: 'Email',
-        phone: 'Primary Phone Number',
-        country: 'Country'
+        id: this.userServices.user().id,
+        first_name: this.userServices.user().first_name,
+        last_name: this.userServices.user().last_name,
+        email: this.userServices.user().email
       }
     });
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
       if (result) {
+        this.isRegistered = true;
         console.log(result);
       }
     }));

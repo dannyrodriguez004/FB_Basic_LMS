@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const usersServices = require('./users.service');
 const express = require('express');
 const router = express.Router();
+// const jwtMiddleware = require('../courses/courses.router');
 const jwtMiddleware = (req, res, next) => {
     const authString = req.headers['authorization'];
     if(typeof authString === 'string' && authString.indexOf(' ') > -1) {
@@ -36,10 +37,11 @@ module.exports = (passport) => {
         res.json(resp);
     })
 
-    router.post('/add-user', jwtMiddleware, async (req, res, next) => {
-        console.log(req);
-        console.log(res);
-        const resp = await usersServices.addUser(req.body.user_info);
+
+    router.post('/add-user', async (req, res, next) => {
+        console.log('HERE I AM IN ADD USER');
+        console.log(req.body);
+        const resp = await usersServices.addUser(req.body);
         res.json(resp);
     })
 

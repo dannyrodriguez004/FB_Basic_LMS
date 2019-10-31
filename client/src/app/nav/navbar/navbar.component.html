@@ -52,6 +52,10 @@
                     Login with facebook
                   </button>
 
+                  <button *ngIf="!this.isRegistered" (click)="openRegisterStudentDialog()" mat-menu-item>
+                        <mat-icon>person_add</mat-icon>IS REGISTERED
+                  </button>
+
                   <button (click)="doLogout()" mat-menu-item> </button>
 
                   <button [routerLink]="['security/register/']" mat-menu-item>

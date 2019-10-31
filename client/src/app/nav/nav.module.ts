@@ -25,9 +25,9 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MainComponent } from './main/main.component';
 import { NewcourseComponent } from './newcourse/newcourse.component';
-import { RegisterComponent} from '../security/register/register.component';
+import { RegisterComponent} from './register/register.component';
 import { SecurityModule } from '../security/security.module';
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [NavbarComponent, MainComponent, NewcourseComponent, RegisterComponent],

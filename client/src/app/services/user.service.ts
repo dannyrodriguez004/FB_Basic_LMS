@@ -8,7 +8,7 @@ import {UserModel} from '../models/usermodel.models';
 import {EnrollDialogComponent} from '../courses/course/confirm-enroll/enroll-dialog/enroll-dialog.component';
 
 declare var FB: any;
-declare var window: any;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,11 +20,15 @@ export class UserService {
   private isAdmin = false;
   private FBLoggedIn;
   private userModel: UserModel;
-
+  // private headers = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+  private headersConfig = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
+  };
   constructor(private http: HttpClient) {
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
-    window.fbAsyncInit = () => {
+    (window as any).fbAsyncInit = () => {
       FB.init({
         appId: '398974807682335',
         cookie: true,
@@ -64,15 +68,31 @@ export class UserService {
   buildHeaders(): HttpHeaders {
     const headersConfig = {
       'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: 'application/json'
+      'Accept': 'application/json'
     };
-
-    if (this.getToken()) {
-      headersConfig.Authorization = `Token ${this.getToken()}`;
-    }
-    return new HttpHeaders(headersConfig);
+    // if (this.getToken()) {
+      headersConfig['Authorization'] = `Token eyJhbGciOiJIUzI1NiJ9.MTAyMjA2NjEzMTU5MDQxMzI.FnCy7VLl_L5zw-i1m4gQBedtTgML0ZDf5G6r5s0UJMo`;
+      // headersConfig['Authorization'] = `Token ${this.getToken()}`;
+    // }
+    let headers = new HttpHeaders(headersConfig);
+    console.log(headers);
+    return headers;
   }
+  //
+  // buildHeaders(): HttpHeaders {
+  //   const headersConfig = {
+  //     'Content-Type': 'application/json',
+  //     Accept: 'application/json',
+  //     Authorization: 'application/json'
+  //   };
+  //   console.log('HERE I AM GET TOKEN BEFORE');
+  //   if (this.getToken()) {
+  //     console.log('HERE I AM GET TOKEN AFTER' + this.getToken());
+  //     headersConfig.Authorization = `Token ${this.getToken()}`;
+  //
+  //   }
+  //   return new HttpHeaders(headersConfig);
+  // }
 
   submitLogin() {
     FB.login(result => {
@@ -80,8 +100,15 @@ export class UserService {
       const params = {params: new HttpParams().set('userID', result.authResponse.userID)};
       console.log('BEFORE IF', result.authResponse);
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
-            console.log(response);
-        // console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
+        console.log(response);
+        this.userModel = {
+          id: response.id,
+          first_name: response.first_name,
+          last_name: response.last_name,
+          email: response.email
+        };
+        console.log(this.userModel);
+        console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
         // console.log('ADDRESS: ' + response.user_location);
       });
       if (result.authResponse) {
@@ -96,13 +123,12 @@ export class UserService {
             } else {
               console.log('NO RESPONSE');
             }
-            return this.redirectStudent(response.user);
+            // return this.redirectStudent(response.user);
           });
       }
     }, {scope: 'email', return_scopes: true});
-
+    // return this.redirectStudent;
   }
-
 
   // addUser(userModel) {
   //   this.existingStudent().subscribe( (resp: boolean) => {
@@ -129,52 +155,49 @@ export class UserService {
   //   });
   // }
 
-  redirectStudent(user) {
-    console.log('IN REDIRECT STUDENT');
-    console.log(user);
-    this.existingStudent(user).subscribe((resp: boolean) => {
-      console.log(resp);
-      if (resp) {
-        this.getCurrentUser().subscribe((response: any) => {
-          console.log('IN REDIRECT STUDENT -> GET CURRENT USER   ', response);
-          this.studentID = response.userID;
-          this.userModel = response.user_info;
-          if (!response.userID) {
-            console.log('USER INFO CANNOT BE FOUND');
-          } else {
-            console.log(this.studentID);
-            console.log('USER', this.userModel);
-          }
-        });
-      }
-      return this.addUser(this.userModel);
-    });
-  }
+  // redirectStudent(user) {
+  //   console.log('IN REDIRECT STUDENT');
+  //   console.log(user);
+  //   this.existingStudent(user).subscribe((resp: boolean) => {
+  //     console.log(resp);
+  //     if (resp) {
+  //       this.getCurrentUser().subscribe((response: any) => {
+  //         console.log('IN REDIRECT STUDENT -> GET CURRENT USER   ', response);
+  //         this.studentID = response.userID;
+  //         this.userModel = response.user_info;
+  //         if (!response.userID) {
+  //           console.log('USER INFO CANNOT BE FOUND');
+  //         } else {
+  //           console.log(this.studentID);
+  //           console.log('USER', this.userModel);
+  //         }
+  //       });
+  //       return this.userModel;
+  //     } else {
+  //     // this.addUser(this.userModel);
+  //     }
+  //   });
+  // }
 
   addUser(userModel) {
-    console.log('IN ADD USER   ', userModel);
-    const opts = {
-      headers: this.buildHeaders(),
-      params: ({
-        // id: userModel.id,
-        email: userModel.email,
-        first_name: userModel.first_name,
-        last_name: userModel.last_name,
-        address: userModel.address,
-        phone: '',
-        country: userModel.country
-      })
-    };
-    console.log(opts);
-    return this.http.post(`${environment.apiAddress}/users/add-user`, opts);
+          const opts = {
+            body: userModel
+          };
+          console.log(opts);
+          // return this.http.post(`${environment.apiAddress}/users/add-user`, opts);
+          this.http.post(`${environment.apiAddress}/users/add-user`, opts).subscribe((result: any) => {
+      console.log(result);
+    });
+  // });
+  //     }});
   }
 
   existingStudent(user) {
     const opts = {
       headers:  this.buildHeaders(),
       userID: user
-    }
-    console.log('IN EXISTING STUDENT', user)
+    };
+    console.log('IN EXISTING STUDENT', opts);
     return this.http.post(`${environment.apiAddress}/users/existing-student`, opts);
   }
 
@@ -206,7 +229,7 @@ export class UserService {
   }
 
   user() {
-    return this.studentID;
+    return this.userModel;
   }
 
 

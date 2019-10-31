@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../services/user.service';
 import {UserModel} from '../../models/usermodel.models';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -17,20 +18,22 @@ export class RegisterComponent implements OnInit {
   user: UserModel;
   loading = false;
   subscriptions: Subscription[] = [];
-  private id = new FormControl('', [Validators.required]);
 
   constructor(
     private formBuilder: FormBuilder,
     private userServices: UserService,
+    private router: Router,
     public dialogRef: MatDialogRef<RegisterComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) data: {id: string, first_name: string, last_name: string, email: string},
+
 
   ) {
+    console.log(data.id);
     this.registerForm = this.formBuilder.group({
-      id: this.id,
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
-      email: ['', [Validators.email, Validators.required]],
-      address: ['', Validators.required],
+      id: data.id,
+      first_name: [data.first_name, Validators.required],
+      last_name: [data.last_name, Validators.required],
+      email: [data.email, [Validators.email, Validators.required]],
       phone: ['', Validators.required],
       country: ['', Validators.required]
     });
@@ -80,19 +83,26 @@ export class RegisterComponent implements OnInit {
   register() {
     this.loading = true;
     // this.userServices.existingStudent(this.userServices.redirectStudent()).subscribe( (resp: boolean) => {
-    this.userServices.existingStudent(this.userServices.getCurrentUser()).subscribe( (resp: boolean) => {
-      if (resp) {
-        this.userServices.addUser( {
+    // this.userServices.existingStudent(this.userServices.getCurrentUser()).subscribe( (resp: boolean) => {
+    //
+    //   if (resp) {
+    this.userServices.addUser( {
+          userID: this.registerForm.value.id,
           email: this.registerForm.value.email,
           first_name: this.registerForm.value.first_name,
           last_name: this.registerForm.value.last_name,
-          address: this.registerForm.value.address,
           phone: this.registerForm.value.phone,
           country: this.registerForm.value.country
         });
-        this.loading = false;
-      }
-    });
+      //     .subscribe((response) => {
+    //     if (response) {
+    //       this.router.navigateByUrl('/nav/dashboard');
+    //     }
+    this.loading = false;
+    this.dialogRef.close();
+    //   });
+    //   }
+    // });
   }
 
   ngOnInit() {

@@ -17,12 +17,12 @@ export class DashboardComponent implements OnInit {
   myCourses: Course[] = []; // the user's courses names and id
 
   // tslint:disable-next-line:variable-name
-  private student_id = '';
+  private student_id: string;
   constructor(
     private userServices: UserService,
 
   ) {
-    this.student_id = this.userServices.user(); // get debug student id
+    this.student_id = this.userServices.user().id; // get debug student id
   }
 
   /**

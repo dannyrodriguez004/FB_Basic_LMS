@@ -9,6 +9,7 @@ const routes: Routes = [
         {path: 'helppage', loadChildren: () => import('../helppage/helppage.module').then(mod => mod.HelppageModule)},
         {path: 'home', loadChildren: () => import('../home/home.module').then(mod => mod.HomeModule)},
         {path: 'add-course', loadChildren: () => import('./newcourse/newcourse.component').then(mod => mod.NewcourseComponent)},
+        {path: 'add-user', loadChildren: () => import('./register/register.component').then(mod => mod.RegisterComponent)},
         {path: 'security', loadChildren: () => import('../security/security.module').then(mod => mod.SecurityModule)}
       ]}
 ];
