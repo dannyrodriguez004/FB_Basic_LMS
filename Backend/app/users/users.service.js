@@ -54,14 +54,16 @@ class UsersSerivce {
         
         try {
             var users = await database.ref('/students').orderByKey().equalTo(user.key).once('value');
-            if(!users.hasChildren()) {
-                await database.ref('/students').child(user.key).set({
+            //if(!users.hasChildren()) {
+                await database.ref('/students').child(user.key).update({
                     token: user.token,
                     fname: user.fname.trim(),
                     lname: user.lname.trim(),
                     email: user.email.trim(),
+                    country: user.country,
+                    phone: user.phone,
                 });
-            }
+            //}
         } catch (err) {
             console.error(err);
             return false;
