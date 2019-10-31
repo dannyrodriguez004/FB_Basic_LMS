@@ -12,6 +12,7 @@ const routes: Routes = [
   {path: 'nav', loadChildren: () => import('./nav/nav.module').then (mod => mod.NavModule), runGuardsAndResolvers: 'always'},
   {path: 'home', loadChildren: () => import('./home/home.module').then(mod => mod.HomeModule)},
   {path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(mod => mod.DashboardModule)},
+  {path: 'student-enroll', loadChildren: () => import('./courses/courses.module').then(mod => mod.CoursesModule)},
   {path: '**', redirectTo: 'nav/dashboard'}
 ];
 

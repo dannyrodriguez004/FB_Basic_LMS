@@ -43,15 +43,8 @@ class UsersService {
         return false;
     }
 
-
-    /**
-     * 
-     * @param {key: string, name: string} user 
-     * 
-     * @return true if successfully added new user
-     */
     async addStudent(user) {
-        
+
         try {
             var users = await database.ref('/students').orderByKey().equalTo(user.key).once('value');
             if(!users.hasChildren()) {
@@ -60,6 +53,34 @@ class UsersService {
                     lname: user.lname.trim(),
                     phone: user.phone.trim(),
                     email: user.email.trim(),
+                });
+            }
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
+    /**
+     * 
+     * @param {key: string, name: string} user 
+     * 
+     * @return true if successfully added new user
+     */
+    async addUser (user_info) {
+        console.log('IN ADDSTUDENT USERSERVICE');
+        console.log(user_info);
+        try {
+            var users = await database.ref('/users').orderByKey().equalTo(user_info.userID).once('value');
+            if(!users.hasChildren()) {
+                await database.ref('/users').child(user_info).set({
+                    first_name: user.first_name.trim(),
+                    last_name: user_info.last_name.trim(),
+                    phone: user_info.phone.trim(),
+                    email: user_info.email.trim(),
+                    type: user_info.type.trim(),
+                    country: user_info.country.trim()
                 });
             }
         } catch (err) {
@@ -210,6 +231,20 @@ class UsersService {
 
             let reference = await database.ref('/instructors').orderByChild('email').equalTo(username).once('value');
             if(!reference.hasChildren()) return true;
+        } catch(err) {
+            console.error(err);
+        }
+
+        return false;
+    }
+
+    async studentInDatabase(username) {
+        try {
+
+            let reference = await database.ref('/students').orderByKey.equalTo(username).once('value');
+            if(!reference) {
+                return true;
+            }
         } catch(err) {
             console.error(err);
         }

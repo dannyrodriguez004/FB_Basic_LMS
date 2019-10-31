@@ -62,7 +62,7 @@ export class CourseComponent implements OnInit, OnChanges {
           .subscribe( (course: {id: string, name: string,
             description: string, instructor: string, students: string[]}) => {
           this.course = course;
-          console.log(course);
+          // console.log(course);
         }));
       } else {
         console.log('not authorized!');
@@ -86,6 +86,4 @@ export class CourseComponent implements OnInit, OnChanges {
   isAdmin() {
     return this.userServices.getIsAdmin();
   }
-
-
 }

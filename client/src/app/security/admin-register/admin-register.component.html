@@ -1,7 +1,7 @@
 
 <mat-card>
     <mat-card-title>
-        Admin/Istructor Registration
+        Admin/Instructor Registration
     </mat-card-title>
     <mat-spinner *ngIf="loading" style="margin-left: auto; margin-top: 1rem; margin-right: auto;"></mat-spinner>
     <form *ngIf="!loading" [formGroup]="registerForm">
@@ -9,27 +9,27 @@
                 <mat-label>First Name</mat-label>
                 <input formControlName="fname" type="text" matInput required>
             </mat-form-field>
-    
+
             <mat-form-field appearance="outline">
                 <mat-label>last Name</mat-label>
                 <input formControlName="lname" type="text" matInput required>
             </mat-form-field>
-    
+
             <mat-form-field appearance="outline">
                 <mat-label>Username (Primary Email)</mat-label>
                 <input formControlName="primary" type="email" matInput required>
             </mat-form-field>
-    
+
             <mat-form-field appearance="outline">
                 <mat-label>Student Contact Email</mat-label>
                 <input formControlName="contact" type="email" matInput required>
             </mat-form-field>
-    
+
             <mat-form-field appearance="outline">
               <mat-label>Password</mat-label>
               <input formControlName="pass" type="password" matInput required>
             </mat-form-field>
-    
+
             <mat-form-field appearance="outline">
               <mat-label>Re-Enter Password</mat-label>
               <input formControlName="check" type="password" matInput required>
@@ -45,10 +45,10 @@
                     <mat-option *ngIf="auth > 1" value="2">Master</mat-option>
                 </mat-select>
             </mat-form-field>
-            
+
             <div>
                     <button (click)="register()" [disabled]="registerForm.invalid" type="submit" mat-raised-button color="primary">Register</button>
             </div>
         </form>
-    
+
 </mat-card>

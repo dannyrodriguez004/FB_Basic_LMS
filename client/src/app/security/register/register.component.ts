@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../services/user.service';
-import {Router} from '@angular/router';
-import {AdminService} from '../../services/admin.service';
-import {User} from '../../models/users.models';
+import {UserModel} from '../../models/usermodel.models';
+import {AngularEditorConfig} from '@kolkov/angular-editor';
+import {MatDialogRef} from '@angular/material/dialog';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -13,16 +14,19 @@ import {User} from '../../models/users.models';
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
-  user: User;
+  user: UserModel;
   loading = false;
+  subscriptions: Subscription[] = [];
+  private id = new FormControl('', [Validators.required]);
 
   constructor(
     private formBuilder: FormBuilder,
     private userServices: UserService,
-    private router: Router,
-    private adminServices: AdminService
+    public dialogRef: MatDialogRef<RegisterComponent>,
+
   ) {
     this.registerForm = this.formBuilder.group({
+      id: this.id,
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       email: ['', [Validators.email, Validators.required]],
@@ -31,22 +35,61 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  config: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '15rem',
+    minHeight: '5rem',
+    maxHeight: '15rem',
+    placeholder: 'Enter text here...',
+    translate: 'no',
+    outline: true,
+    sanitize: false,
+    defaultFontName: 'Arial',
+    customClasses: [
+      {
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
+      },
+    ]
+  };
+
+  // addUser(userModel: any) {
+  //   this.loading = true;
+  //
+  //   if (this.registerForm.pristine) {
+  //     this.dialogRef.close();
+  //   }  else {
+  //     const user = {
+  //       first_name:  this.registerForm.value.first_name,
+  //       last_name: this.registerForm.value.last_name,
+  //       address: this.registerForm.value.address,
+  //       phone: this.registerForm.value.phone
+  //     };
+  //
+  //     this.subscriptions.push(this.userServices.addUser({
+  //       if (resp) {
+  //         this.dialogRef.close(resp);
+  //       }
+  //     }));
+  //   }
+  //
+  // }
   register() {
     this.loading = true;
-    this.adminServices.isUsernameAvailable(this.registerForm.value.primary).subscribe( (resp: boolean) => {
+    // this.userServices.existingStudent(this.userServices.redirectStudent()).subscribe( (resp: boolean) => {
+    this.userServices.existingStudent().subscribe( (resp: boolean) => {
       if (resp) {
-        this.adminServices.addInstructor({
+        this.userServices.addUser( {
           email: this.registerForm.value.email,
           first_name: this.registerForm.value.first_name,
           last_name: this.registerForm.value.last_name,
           address: this.registerForm.value.address,
-          phone: this.registerForm.value.phone
-        }).subscribe((result) => {
-          if (result) {
-            this.router.navigateByUrl('/');
-          }
-          this.loading = false;
+          phone: this.registerForm.value.phone,
+          country: this.registerForm.value.country
         });
+        this.loading = false;
       }
     });
   }

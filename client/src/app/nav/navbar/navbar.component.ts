@@ -7,8 +7,9 @@ import { CourseDetailEditorComponent } from '../../courses/course/info/course-de
 import {NewcourseComponent} from '../newcourse/newcourse.component';
 import {AdminService} from '../../services/admin.service';
 import {Router} from '@angular/router';
-import {User} from '../../models/users.models';
+import {UserModel} from '../../models/usermodel.models';
 import {CoursesService} from '../../services/courses.service';
+import { RegisterComponent } from '../../security/register/register.component';
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +19,7 @@ import {CoursesService} from '../../services/courses.service';
 export class NavbarComponent implements OnInit, OnChanges {
 
   myCourses: CourseNav[] = []; // the user's courses names and id
-  user: User;
+  user: UserModel;
   FBuserID: string;
   // tslint:disable-next-line:variable-name
   private student_id = '';
@@ -40,7 +41,28 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   doLogin() {
     this.submitLogin();
-    this.ngOnInit();
+    // if (this.loggedIn === false) {
+    this.openRegisterStudentDialog();
+    // }
+  }
+
+  openRegisterStudentDialog() {
+    const dialogRef = this.dialog.open(RegisterComponent, {
+      width: '90%',
+      data: {
+        first_name: 'Insert Course Title Here',
+        last_name: 'Enter Course description here',
+        email: 'Insert email here',
+        phone: 'Insert Phone number here',
+        country: 'Insert Country here'
+      }
+    });
+
+    this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
+      if (result) {
+        console.log(result);
+      }
+    }));
   }
 
   doLogout() {
@@ -60,7 +82,6 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   submitLogin() {
     return this.userServices.submitLogin();
-    this.ngOnInit();
   }
 
   getCurrentUser() {

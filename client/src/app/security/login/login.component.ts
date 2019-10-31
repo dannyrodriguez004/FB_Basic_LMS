@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   //       // login success code here
   //       // redirect to home page
   //     } else {
-  //       console.log('User login failed');
+  //       console.log('UserModel login failed');
   //     }
   //   });
   //

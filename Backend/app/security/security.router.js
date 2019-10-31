@@ -81,7 +81,7 @@ module.exports = (passport) => {
             const token = jwt.sign(userID, '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx');
             console.log('TOKEN = ' + token);
         if (!userID) {
-                return res.send(401, 'User Not Authenticated');
+                return res.send(401, 'UserModel Not Authenticated');
             }
             // prepare token for API
         res.status(200).send({
@@ -108,7 +108,7 @@ module.exports = (passport) => {
 
     // var getCurrentUser = function(req, res, next) {
     //     console.log('GETCURR USER');
-    //     User.findById(req.auth.id, function(err, user) {
+    //     UserModel.findById(req.auth.id, function(err, user) {
     //         if (err) {
     //             next(err);
     //         } else {

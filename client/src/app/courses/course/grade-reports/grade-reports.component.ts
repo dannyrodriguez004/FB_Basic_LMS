@@ -59,6 +59,10 @@ export class GradeReportsComponent implements OnInit {
     }));
   }
 
+  isAdmin() {
+    return this.userServices.getIsAdmin();
+  }
+
   loadGrades() {
     this.loading = true;
     this.subscriptions.push(this.coursesServices.getStudentCourseGrades(this.current_course, this.student).subscribe( (resp: Record[]) => {

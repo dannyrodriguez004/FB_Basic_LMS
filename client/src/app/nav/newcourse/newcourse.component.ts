@@ -62,7 +62,7 @@ export class NewcourseComponent implements OnInit {
 
   addCourse() {
 
-    if(this.courseForm.pristine) {
+    if (this.courseForm.pristine) {
       this.dialogRef.close();
     }  else {
 
@@ -77,7 +77,7 @@ export class NewcourseComponent implements OnInit {
       }
 
       this.subscriptions.push(this.courseServices.addCourse(course).subscribe( (resp) => {
-        if(resp) {
+        if (resp) {
           this.dialogRef.close(resp);
         }
       }));

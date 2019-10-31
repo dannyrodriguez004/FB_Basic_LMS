@@ -54,17 +54,14 @@ export class AdminRegisterComponent implements OnInit {
       if (resp) {
         this.adminServices.addInstructor({
           email: this.registerForm.value.primary,
-          // tslint:disable-next-line:indent
 		      contactEmail: this.registerForm.value,
-          // tslint:disable-next-line:indent
 		      f_name: this.registerForm.value.fname,
-          // tslint:disable-next-line:indent
 		      l_name: this.registerForm.value.lname,
           password: this.registerForm.value.pass,
           auth: this.registerForm.value.auth
           // tslint:disable-next-line:no-shadowed-variable
-        }).subscribe((resp) => {
-          if (resp) {
+        }).subscribe((response) => {
+          if (response) {
             this.router.navigateByUrl('/');
           }
           this.loading = false;

@@ -31,7 +31,7 @@
 
       <span class="fill"></span>
       <span>
-            <button mat-raised-button [mat-menu-trigger-for]="fbMenu"> Get Current User FB </button>
+            <button mat-raised-button [mat-menu-trigger-for]="fbMenu"> Get Current UserModel FB </button>
         <mat-menu #fbMenu="matMenu">{{FBuserID}}
           <p mat-menu-item *ngIf="this.isLoggedIn()" value=""></p>
         </mat-menu>
@@ -62,9 +62,14 @@
                         <mat-icon>verified_user</mat-icon>Admin Register
                   </button>
 
-                  <button *ngIf="this.isAdmin()" (click)="doLogout()" mat-menu-item>
+<!--                  <button *ngIf="this.isAdmin()" (click)="doLogout()" mat-menu-item>-->
+<!--                        <mat-icon style="color: red;">power_settings_new</mat-icon>Log out-->
+<!--                  </button>-->
+
+                  <button (click)="doLogout()" mat-menu-item>
                         <mat-icon style="color: red;">power_settings_new</mat-icon>Log out
                   </button>
+
             </mat-menu>
       </span>
   </mat-toolbar-row>

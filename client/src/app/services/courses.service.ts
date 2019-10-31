@@ -33,8 +33,13 @@ export class CoursesService {
     return new HttpHeaders(headersConfig);
   }
 
-  getCourseInfo(course_id) {
-    const params = {params: new HttpParams().set('key', `${course_id}`)};
+  getCourseInfo(course) {
+    // const opts = {
+    //   params: new HttpParams().set('key', `${course}`),
+    //   headers: this.buildHeaders()
+    // }
+    // console.log(opts);
+    const params = {params: new HttpParams().set('key', `${course}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-info`, params);
   }
 
@@ -198,12 +203,9 @@ export class CoursesService {
     return this.http.post(`${environment.apiAddress}/courses/confirm-enrollment`, {student, course});
   }
 
-  getCourseStudents(course: string){
-    const opts = {
-      headers: this.buildHeaders()
-    }
+  getCourseStudents(course: string) {
     const params = {params: new HttpParams().set('course', `${course}`)};
-    return this.http.get(`${environment.apiAddress}/courses/course-students`, params);
+    return this.http.get(`${environment.apiAddress}/courses/course-students-2`, params);
   }
 
   getStudentCourses(student_id: string) {

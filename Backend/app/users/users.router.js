@@ -1,6 +1,30 @@
+const jwt = require('jsonwebtoken');
 const usersServices = require('./users.service');
 const express = require('express');
 const router = express.Router();
+const jwtMiddleware = (req, res, next) => {
+    const authString = req.headers['authorization'];
+    if(typeof authString === 'string' && authString.indexOf(' ') > -1) {
+        const authArray = authString.split(' ');
+        const token = authArray[1];
+        jwt.verify(token, '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx', (err, decoded) =>
+        {
+            if(err) {
+                res.status(403).send({
+                    errorMessage: 'Permission denied'
+                });
+            } else {
+                req.decoded = decoded;
+                next();
+            }
+        });
+    } else {
+        res.status(403).send({
+            errorMessage: 'Permission denied'
+        });
+
+    }
+};
 
 module.exports = (passport) => {
 
@@ -9,6 +33,13 @@ module.exports = (passport) => {
      */
     router.post('/add-instructor', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.addInstructor(req.body.user);
+        res.json(resp);
+    })
+
+    router.post('/add-user', jwtMiddleware, async (req, res, next) => {
+        console.log(req);
+        console.log(res);
+        const resp = await usersServices.addUser(req.body.user_info);
         res.json(resp);
     })
 
@@ -74,5 +105,9 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    router.post('/existing-student', jwtMiddleware, async (req, res, next) => {
+        const resp = await usersServices.isAvailable(req.decoded);
+        res.json(resp);
+    });
     return router;
 }

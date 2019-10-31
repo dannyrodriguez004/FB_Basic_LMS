@@ -55,7 +55,7 @@
     //
     // async getCurrentUser() {
     //
-    //     User.findById(req.auth.id, function (err, user) {
+    //     UserModel.findById(req.auth.id, function (err, user) {
     //         if (err) {
     //             next(err);
     //         } else {

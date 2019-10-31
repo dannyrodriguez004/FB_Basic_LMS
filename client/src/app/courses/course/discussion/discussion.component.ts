@@ -10,7 +10,6 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 const POST_PER_PAGE: number = 50;
 
-
 @Component({
   selector: 'app-discussion',
   templateUrl: './discussion.component.html',
@@ -18,7 +17,6 @@ const POST_PER_PAGE: number = 50;
   encapsulation: ViewEncapsulation.None,
 })
 export class DiscussionComponent implements OnInit {
-
 
   private subscriptions: Subscription[] = [];
 
@@ -31,19 +29,15 @@ export class DiscussionComponent implements OnInit {
   today: Date = new Date();
   endDate: Date = this.today;
 
-
   // pagination variables
-
   totalPosts: number = 0;
   startFrom:number = 0;
-
 
   // rich text editor input
   replying = false;
   htmlContent = '';
 
   loading = true;
-
 
   config: AngularEditorConfig = {
     editable: true,
@@ -72,28 +66,26 @@ export class DiscussionComponent implements OnInit {
     private dialog: MatDialog
     ) {}
 
-
-
-
-
   openEditDiscussionDialog() {
     const dialogRef = this.dialog.open(DiscussionEditorComponent, {
       width: '90%',
-      data: {course: this.current_course, id: this.id, title: this.title, description: this.description, isClosed: this.isClosed, endDate: this.endDate},
+      data: {course: this.current_course, id: this.id, title: this.title,
+        description: this.description, isClosed: this.isClosed, endDate: this.endDate},
     });
 
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
-      if(result) {
-        this.subscriptions.push(this.coursesServices.getDiscussionInfo(this.current_course, this.id).subscribe( (resp: {title: any, description:any, isClosed:any, endDate: string}) => {
+      if (result) {
+        // this.loadDiscussion();
+        this.subscriptions.push(this.coursesServices.getDiscussionInfo(this.current_course, this.id)
+        .subscribe( (resp: {title: any, description:any, isClosed:any, endDate: string}) => {
           this.description = resp.description;
           this.title = resp.title;
           this.isClosed = resp.isClosed;
           this.endDate = new Date(resp.endDate);
         }));
       }
-    }))
+    }));
   }
-
 
   // runs when this component is loaded, gets parameters from url
   ngOnInit() {
@@ -101,11 +93,11 @@ export class DiscussionComponent implements OnInit {
     this.loading = true;
 
     this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
-      if(params.discussion) {
+      if (params.discussion) {
         this.id = params.discussion;
       }
 
-      if(params.start) {
+      if (params.start) {
         this.startFrom = Number(params.start);
       }
     }));
@@ -113,23 +105,21 @@ export class DiscussionComponent implements OnInit {
     this.loadDiscussion();
   }
 
-
   // adds post to discussion and reloads posts
   pushPost() {
     const post = {
-      user_id: this.userServices.user(),
+      user_id: this.userServices.getCurrentUser(),
       user_name: "John Doe",
       date: new Date().getTime(),
-      post:this.htmlContent};
+      post: this.htmlContent};
 
     this.subscriptions.push(this.coursesServices.postDiscussionPost(this.current_course, this.id, post).subscribe( (resp) => {
       console.log(resp);
-      if(resp) {
+      if (resp) {
         this.totalPosts++;
         this.lastPage();
       }
     }));
-
   }
 
   // loads discussion information and the current page of posts
@@ -138,15 +128,18 @@ export class DiscussionComponent implements OnInit {
     this.replying = false;
     this.htmlContent = '';
 
-    this.subscriptions.push(this.coursesServices.getDiscussionInfo(this.current_course, this.id).subscribe( (resp: {title: any, description:any, isClosed:any, endDate: string}) => {
+    this.subscriptions.push(this.coursesServices.getDiscussionInfo(this.current_course, this.id)
+      .subscribe( (resp: {title: any, description: any, isClosed: any, endDate: string}) => {
       this.description = resp.description;
       this.title = resp.title;
       this.isClosed = resp.isClosed;
       this.endDate = new Date(resp.endDate);
     }))
 
-    this.subscriptions.push(this.coursesServices.getDiscussionPosts(this.current_course, this.id, this.startFrom).subscribe( (resp:{posts: IPost[], total: number}) => {
-      if(resp.posts.length > 0) {
+    // tslint:disable-next-line:max-line-length
+    this.subscriptions.push(this.coursesServices.getDiscussionPosts(this.current_course, this.id, this.startFrom)
+      .subscribe( (resp: {posts: IPost[], total: number}) => {
+      if (resp.posts.length > 0) {
         this.posts = resp.posts;
         this.totalPosts = resp.total;
       }

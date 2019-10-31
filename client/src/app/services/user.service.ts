@@ -3,9 +3,9 @@ import {HttpClient, HttpParams, HttpResponse, HttpHeaders} from '@angular/common
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {stringify} from 'querystring';
-import {map} from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs';
-import {RouterModule} from '@angular/router';
+import {UserModel} from '../models/usermodel.models';
+import {EnrollDialogComponent} from '../courses/course/confirm-enroll/enroll-dialog/enroll-dialog.component';
 
 declare var FB: any;
 declare var window: any;
@@ -15,9 +15,11 @@ declare var window: any;
 export class UserService {
 
   // tslint:disable-next-line:variable-name
-  private student_id = '0'; // debugging value
-  private isAdmin = true;
+  // private student_id = '0'; // debugging value
+  private studentID: string;
+  private isAdmin = false;
   private FBLoggedIn;
+  private userModel: UserModel;
 
   constructor(private http: HttpClient) {
     const jwtToken = this.getToken();
@@ -62,11 +64,12 @@ export class UserService {
   buildHeaders(): HttpHeaders {
     const headersConfig = {
       'Content-Type': 'application/json',
-      Accept: 'application/json'
+      Accept: 'application/json',
+      Authorization: 'application/json'
     };
 
     if (this.getToken()) {
-      headersConfig['Authorization'] = `Token ${this.getToken()}`;
+      headersConfig.Authorization = `Token ${this.getToken()}`;
     }
     return new HttpHeaders(headersConfig);
   }
@@ -89,39 +92,90 @@ export class UserService {
             this.saveToken(response.token);
             if (params) {
               localStorage.setItem('id_token', stringify(params));
+              console.log(params);
             } else {
               console.log('NO RESPONSE');
             }
           });
       }
     }, {scope: 'email', return_scopes: true});
-    // this.getCurrentUser().subscribe((resp: any) => {
-    //   this.user = resp.userID;
-    //   if(!resp.user_info){
-    //
-    //   }
-    // });
+    this.redirectStudent();
   }
 
+  addUser(userModel) {
+    this.existingStudent().subscribe( (resp: boolean) => {
+      if (resp) {
+        this.getCurrentUser().subscribe((response: any) => {
+          this.userModel = response.user_info;
+          const opts = {
+            headers: this.buildHeaders(),
+            params: ({
+            id: userModel.id,
+            email: userModel.email,
+            first_name: userModel.first_name,
+            last_name: userModel.last_name,
+            address: userModel.address,
+            phone: ''
+          })
+          };
+          console.log(opts);
+          return this.http.post(`${environment.apiAddress}/users/add-user`, opts);
+        });
+      } else {
+        console.log('ERROR IN ADDUSER');
+      }
+    });
+  }
 
-logout() {
+    // this.getCurrentUser().subscribe((resp: any) => {
+    // this.userModel = resp.user_info;
+    // const opts = {
+    //   headers: this.buildHeaders(),
+    //   params: new HttpParams().set('key', `${this.userModel}`),
+    // };
+    // return this.http.post(`${environment.apiAddress}/users/add-user`, opts); });
+
+
+  redirectStudent() {
+    this.getCurrentUser().subscribe((resp: any) => {
+      console.log(resp);
+      this.studentID = resp.userID;
+      this.userModel = resp.user_info;
+      if (!resp.userID) {
+        console.log('USER INFO CANNOT BE FOUND');
+      } else {
+        console.log(this.studentID);
+        console.log('USER', this.userModel);
+      }
+    });
+  }
+
+  existingStudent() {
+    const opts = {
+      headers: this.buildHeaders()
+    };
+    return this.http.post(`${environment.apiAddress}/users/existing-student`, opts);
+  }
+
+  logout() {
     localStorage.removeItem('id_token');
     this.destroyToken();
   }
 
-isLoggedIn() {
+  isLoggedIn() {
       return this.getCurrentUser();
   }
 
-getCurrentUser() {
+  getCurrentUser() {
   const opts = {
     headers: this.buildHeaders()
   };
+  console.log(opts);
   return this.http.get(`${environment.apiAddress}/security/auth/me`, opts);
 }
 
 // tslint:disable-next-line:variable-name
-getStudentCourses(student_id: string) {
+  getStudentCourses(student_id: string) {
     const opts = {
       headers: this.buildHeaders()
     };
@@ -130,20 +184,20 @@ getStudentCourses(student_id: string) {
       opts);
   }
 
-user() {
-    return this.student_id;
+  user() {
+    return this.studentID;
   }
 
 
-getIsAdmin() {
+  getIsAdmin() {
     return this.isAdmin;
   }
 
-fbLoggedIn() {
+  fbLoggedIn() {
     return this.FBLoggedIn;
   }
 
-toggleLoggedIn() {
+  toggleLoggedIn() {
     this.FBLoggedIn = !this.FBLoggedIn;
   }
 

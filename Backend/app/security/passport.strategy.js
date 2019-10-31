@@ -26,7 +26,7 @@ module.exports = (passport) => {
         function (accessToken, refreshToken, profile, done) {
             console.log("I AM in FacebookTokenStrategy");
             console.log(profile);
-        // User.upsertFbUser(accessToken, refreshToken, profile, function(err, user) {
+        // UserModel.upsertFbUser(accessToken, refreshToken, profile, function(err, user) {
             //     return done(err, user);
             // });
         }));
@@ -37,7 +37,7 @@ module.exports = (passport) => {
     //         callbackURL: "https://locallhost:3001/security/facebook/auth"
     //     },
     //     function(accessToken, refreshToken, profile, cb) {
-    //         User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+    //         UserModel.findOrCreate({ facebookId: profile.id }, function (err, user) {
     //             return cb(err, user);
     //         });
     //     }
@@ -81,7 +81,7 @@ module.exports = (passport) => {
     //         callbackURL: "https://locallhost:3001/security/facebook/auth"
     //     },
     //     function(accessToken, refreshToken, profile, cb) {
-    //         User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+    //         UserModel.findOrCreate({ facebookId: profile.id }, function (err, user) {
     //             return cb(err, user);
     //         });
     //     }

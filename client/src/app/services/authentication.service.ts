@@ -4,8 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { User } from '../models/users.models';
-import { AuthData} from '../models/auth-data.model';
+
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -32,11 +31,11 @@ export class AuthenticationService {
   }
 
   createUser(email: string, password: string) {
-    const authData: AuthData = { email, password };
-    this.http.post<any>(`${environment.apiAddress}/users/admin-login`, authData)
-      .subscribe(response => {
-        console.log(response);
-      });
+    // const authData: AuthData = { email, password };
+    // this.http.post<any>(`${environment.apiAddress}/users/admin-login`, authData)
+    //   .subscribe(response => {
+    //     console.log(response);
+    //   });
   }
   //
   // login(email: string, password: string) {
@@ -114,15 +113,15 @@ export class AuthenticationService {
 }
 
 
-//   private currentUserSubject: BehaviorSubject<User>;
-//   public currentUser: Observable<User>;
+//   private currentUserSubject: BehaviorSubject<UserModel>;
+//   public currentUser: Observable<UserModel>;
 //
 //   constructor(private http: HttpClient) {
-//     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+//     this.currentUserSubject = new BehaviorSubject<UserModel>(JSON.parse(localStorage.getItem('currentUser')));
 //     this.currentUser = this.currentUserSubject.asObservable();
 //   }
 //
-//   public get currentUserValue(): User {
+//   public get currentUserValue(): UserModel {
 //     return this.currentUserSubject.value;
 //   }
 //

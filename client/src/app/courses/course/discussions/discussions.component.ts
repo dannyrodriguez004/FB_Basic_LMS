@@ -31,7 +31,7 @@ export class DiscussionsComponent implements OnInit, OnChanges {
     });
 
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
-      if(result) {
+      if (result) {
         this.loadDiscussions();
         console.log(result);
       }
@@ -47,7 +47,7 @@ export class DiscussionsComponent implements OnInit, OnChanges {
   loadDiscussions() {
     this.subscriptions.push(this.coursesServices.getDiscussions(this.current_course).subscribe( (resp: DIscussions[]) => {
       this.discussions = resp;
-    }))
+    }));
   }
 
   isAdmin() {
