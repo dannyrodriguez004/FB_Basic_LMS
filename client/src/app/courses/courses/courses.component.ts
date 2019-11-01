@@ -57,33 +57,47 @@ export class CoursesComponent implements OnInit {
   }
 
   register(course) {
-    this.coursesServices.tryEnroll(this.userServices.user(), course).subscribe(resp => {
-      if(resp) {
-        console.log("enrolled");
-      }
-    });
-  }
-
-  openFullDialog(course) {
-    console.log(course);
-    const dialogRef = this.dialog.open(YesNoDialogComponent, {
-      width: "50%",
-      data: {
-        title: "Course is Full!",
-        message: "Would you like to be placed in the waiting list?\n\nYou will be notified if you a spot becomes available!"
-      }
-    });
-
-    dialogRef.afterClosed().subscribe( (resp) => {
-      if(resp) {
-        console.log("trying to insert into class");
-        this.coursesServices.tryEnroll(this.userServices.user(), course).subscribe(resp => {
+    this.coursesServices.canRegister(this.userServices.user(), course).subscribe((resp:{stat: Boolean, message: string}) => {
+      if(resp.stat) {
+        this.coursesServices.tryEnroll(this.userServices.user(), course).subscribe((resp) => {
           if(resp) {
             console.log("enrolled");
           }
         });
+      } else {
+        console.log(resp.message);
       }
     });
+    
+  }
+
+  openFullDialog(course) {
+    console.log(course);
+    this.coursesServices.canRegister(this.userServices.user(), course).subscribe((resp:{stat: Boolean, message: string}) => {
+      if(resp.stat) {
+        const dialogRef = this.dialog.open(YesNoDialogComponent, {
+          width: "50%",
+          data: {
+            title: "Course is Full!",
+            message: "Would you like to be placed in the waiting list?\n\nYou will be notified if you a spot becomes available!"
+          }
+        });
+    
+        dialogRef.afterClosed().subscribe( (resp) => {
+          if(resp) {
+            console.log("trying to insert into class");
+            this.coursesServices.tryEnroll(this.userServices.user(), course).subscribe((resp) => {
+              if(resp) {
+                console.log("enrolled");
+              } 
+            });
+          }
+        });
+      } else {
+        console.log(resp.message);
+      }
+    });
+    
   }
 
   // can only go to a previous page if current start position is not in the first page.

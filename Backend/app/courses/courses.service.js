@@ -1265,7 +1265,7 @@ class CoursesService {
                     size: course.size,
                     MAX_SIZE: course.MAX_SIZE,
                     endEnrollDate: course.endEnrollDate,
-                    category: course.category
+                    category: course.category,
                 });
             });
 
@@ -1375,16 +1375,17 @@ class CoursesService {
     async canRegister(student, course) {
         try {
             let ref = await database.ref('/students/' + student + '/enrolled').child(course).once('value');
-            if(ref.exists()) return false;
+            if(ref.exists()) return {stat: false, message: 'Already in class!'};
             ref = await database.ref('/courses/' + course).once('value');
 
-            if(ref.child('/registered').hasChild(student) || ref.child('/waiting-list').hasChild(student)) return false;
+            if(ref.child('/registered').hasChild(student)) return {stat: false, message: 'Already registered!'};
+            if(ref.child('/waiting-list').hasChild(student)) return {stat: false, message: 'Already in waiting-list!'};
         } catch(err) {
             console.error(err);
-            return false;
+            return {stat: false, message: 'Error!'};
         }
 
-        return true;
+        return {stat: true, message: ''};
     }
 }
 
