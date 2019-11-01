@@ -1248,6 +1248,7 @@ class CoursesService {
 
     async getCoursesPageByCategory(category, sortby, start) {
         
+        sortby = sortby == 'name' ? 'title' : sortby;
         let whole_category = [];
         let page = [];
         let counter = 0;
@@ -1271,7 +1272,7 @@ class CoursesService {
             whole_category.sort((x, y) => ((x[sortby] === y[sortby]) ? 0 : ((x[sortby] > y[sortby]) ? 1 : -1)));
 
             let index = 0;
-            for(index = start; index < (10 && whole_category.length); index++) {
+            for(index = start;  (index < 10 && index < whole_category.length); index++) {
                 page.push(whole_category[index]);
                 counter++;
             }
@@ -1370,7 +1371,21 @@ class CoursesService {
 
         return payload;
     }
-}
 
+    async canRegister(student, course) {
+        try {
+            let ref = await database.ref('/students/' + student + '/enrolled').child(course).once('value');
+            if(ref.exists()) return false;
+            ref = await database.ref('/courses/' + course).once('value');
+
+            if(ref.child('/registered').hasChild(student) || ref.child('/waiting-list').hasChild(student)) return false;
+        } catch(err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
+}
 
 module.exports = new CoursesService();

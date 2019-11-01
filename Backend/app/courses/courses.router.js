@@ -247,5 +247,10 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    router.get('/can-register', async (req, res, next) => {
+        const resp = await coursesServices.canRegister(req.query.student, req.query.course);
+        res.json(resp);
+    });
+
     return router;
 }

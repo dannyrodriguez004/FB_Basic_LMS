@@ -19,7 +19,8 @@ import {
   MatCheckboxModule,
   MatProgressSpinnerModule,
   MatDividerModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatMenuModule
 } from '@angular/material';
 
 import { CoursesRoutingModule } from './courses-routing.module';
@@ -114,7 +115,8 @@ import { QuizDialogComponent } from './course/modules/quiz-dialog/quiz-dialog.co
     MatCheckboxModule,
     MatProgressSpinnerModule,
     MatDividerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatMenuModule
   ],
   entryComponents: [
     DiscussionEditorComponent,

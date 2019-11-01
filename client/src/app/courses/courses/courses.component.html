@@ -1,4 +1,10 @@
-<mat-toolbar>Library of Courses</mat-toolbar>
+<mat-toolbar>
+  Library of Courses 
+  <button mat-button [matMenuTriggerFor]="menu">Select Category</button>
+  <mat-menu #menu="matMenu">
+    <button (click)="setCategories(cats.name)" *ngFor="let cats of getCategories()" mat-menu-item>{{cats.name}}</button>
+  </mat-menu>
+</mat-toolbar>
 
 <mat-card *ngIf="loading">
   <mat-spinner style="margin-left: auto; margin-top: 1rem; margin-right: auto;"></mat-spinner>
@@ -23,7 +29,7 @@
         </p>
       </mat-card-content>
       <mat-card-actions>
-          <button (click)="openFullDialog(course.id)" mat-raised-button mat-button color="primary">Register</button>
+          <button [disabled]="false" (click)="course.MAX_SIZE - course.size > 0 ?  register(course.id) : openFullDialog(course.id)" mat-raised-button mat-button color="primary">Register</button>
       </mat-card-actions>
     </mat-card>
   </div>
@@ -33,21 +39,21 @@
 <mat-card style="margin-bottom: 2rem;">
     <mat-toolbar>
         <span>
-            <button mat-stroked-button color="primary"><mat-icon>first_page</mat-icon></button>
+            <button (click)="firstPage()" mat-stroked-button color="primary"><mat-icon>first_page</mat-icon></button>
         </span>
 
-        <span><button mat-stroked-button color="primary">
+        <span><button [disabled]="!canBack()" (click)="back()" mat-stroked-button color="primary">
             <mat-icon>navigate_before</mat-icon>Back
         </button></span>
 
         <span class="fill"></span>
 
-        <span><button mat-stroked-button color="primary">
+        <span><button [disabled]="!canNext()" (click)="next()" mat-stroked-button color="primary">
             Next<mat-icon>navigate_next</mat-icon>
         </button></span>
 
         <span>
-            <button mat-stroked-button color="primary"><mat-icon>last_page</mat-icon></button>
+            <button (click)="lastPage()" mat-stroked-button color="primary"><mat-icon>last_page</mat-icon></button>
         </span>
     </mat-toolbar>
 </mat-card>
