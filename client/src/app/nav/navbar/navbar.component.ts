@@ -80,6 +80,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.loadCourses();
     console.log('BEFORE GET CURR USER');
     this.getCurrentUser();
+    this.getUserInfo();
   }
 
   ngOnChanges() {
@@ -90,10 +91,19 @@ export class NavbarComponent implements OnInit, OnChanges {
     return this.userServices.submitLogin();
   }
 
+  getUserInfo() {
+    this.subscriptions.push(this.userServices.getUserInfo(this.getCurrentUser()).subscribe((resp: any) => {
+      console.log(resp);
+      this.user = resp.user_info;
+  }));
+    return this.user;
+  }
+
   getCurrentUser() {
-    this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
+    this.userServices.getCurrentUser().subscribe((resp: any) => {
+      console.log(resp.userID);
       this.FBuserID = resp.userID;
-    }));
+    });
   }
 
   openAddCourseDialog() {
@@ -111,6 +121,7 @@ export class NavbarComponent implements OnInit, OnChanges {
       }
     }));
   }
+
   /**
    * Load courses, id and name, for the current user.
    */

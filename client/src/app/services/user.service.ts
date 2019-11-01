@@ -5,7 +5,6 @@ import {Observable} from 'rxjs';
 import {stringify} from 'querystring';
 import {BehaviorSubject} from 'rxjs';
 import {UserModel} from '../models/usermodel.models';
-import {EnrollDialogComponent} from '../courses/course/confirm-enroll/enroll-dialog/enroll-dialog.component';
 
 declare var FB: any;
 
@@ -14,17 +13,10 @@ declare var FB: any;
 })
 export class UserService {
 
-  // tslint:disable-next-line:variable-name
-  // private student_id = '0'; // debugging value
-  private studentID: string;
   private isAdmin = false;
   private FBLoggedIn;
   private userModel: UserModel;
-  // private headers = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-  private headersConfig = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json'
-  };
+
   constructor(private http: HttpClient) {
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
@@ -49,8 +41,6 @@ export class UserService {
       js.src = 'https://connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-    // tslint:disable-next-line:only-arrow-functions
-
   }
 
   getToken(): string {
@@ -70,29 +60,13 @@ export class UserService {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     };
-    // if (this.getToken()) {
-      headersConfig['Authorization'] = `Token eyJhbGciOiJIUzI1NiJ9.MTAyMjA2NjEzMTU5MDQxMzI.FnCy7VLl_L5zw-i1m4gQBedtTgML0ZDf5G6r5s0UJMo`;
-      // headersConfig['Authorization'] = `Token ${this.getToken()}`;
-    // }
+    if (this.getToken()) {
+      headersConfig['Authorization'] = `Token ${this.getToken()}`;
+    }
     let headers = new HttpHeaders(headersConfig);
     console.log(headers);
     return headers;
   }
-  //
-  // buildHeaders(): HttpHeaders {
-  //   const headersConfig = {
-  //     'Content-Type': 'application/json',
-  //     Accept: 'application/json',
-  //     Authorization: 'application/json'
-  //   };
-  //   console.log('HERE I AM GET TOKEN BEFORE');
-  //   if (this.getToken()) {
-  //     console.log('HERE I AM GET TOKEN AFTER' + this.getToken());
-  //     headersConfig.Authorization = `Token ${this.getToken()}`;
-  //
-  //   }
-  //   return new HttpHeaders(headersConfig);
-  // }
 
   submitLogin() {
     FB.login(result => {
@@ -109,7 +83,6 @@ export class UserService {
         };
         console.log(this.userModel);
         console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
-        // console.log('ADDRESS: ' + response.user_location);
       });
       if (result.authResponse) {
         this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
@@ -123,37 +96,15 @@ export class UserService {
             } else {
               console.log('NO RESPONSE');
             }
-            // return this.redirectStudent(response.user);
           });
       }
     }, {scope: 'email', return_scopes: true});
-    // return this.redirectStudent;
   }
 
-  // addUser(userModel) {
-  //   this.existingStudent().subscribe( (resp: boolean) => {
-  //     if (resp) {
-  //       this.getCurrentUser().subscribe((response: any) => {
-  //         this.userModel = response.user_info;
-  //         const opts = {
-  //           headers: this.buildHeaders(),
-  //           params: ({
-  //           id: userModel.id,
-  //           email: userModel.email,
-  //           first_name: userModel.first_name,
-  //           last_name: userModel.last_name,
-  //           address: userModel.address,
-  //           phone: ''
-  //         })
-  //         };
-  //         console.log(opts);
-  //         return this.http.post(`${environment.apiAddress}/users/add-user`, opts);
-  //       });
-  //     } else {
-  //       console.log('ERROR IN ADDUSER');
-  //     }
-  //   });
-  // }
+  getUserInfo(key) {
+    const params = {params: new HttpParams().set('key', `${key}`)};
+    return this.http.get(`${environment.apiAddress}/users/get-user-info`, params);
+  }
 
   // redirectStudent(user) {
   //   console.log('IN REDIRECT STUDENT');

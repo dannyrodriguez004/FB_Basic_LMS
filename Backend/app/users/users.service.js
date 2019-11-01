@@ -240,7 +240,27 @@ class UsersService {
         return false;
     }
 
-    async studentInDatabase(userID) {
+    async getUserInfo(key) {
+
+        let userInfo = {};
+
+        let user = await database.ref('/users').orderByKey().equalTo(key).once('value');
+        user.forEach( (member) => {
+            var user = member.toJSON();
+            userInfo = {
+                id: member.key,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                phone: user.phone,
+                country: user.country
+            };
+        });
+
+        return userInfo;
+    }
+
+        async studentInDatabase(userID) {
 
         try {
             console.log('STUDENT IN DATABASE: USERID SENT IN FOR CHECKING');

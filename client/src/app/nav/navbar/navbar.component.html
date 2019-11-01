@@ -31,7 +31,7 @@
 
       <span class="fill"></span>
       <span>
-            <button mat-raised-button [mat-menu-trigger-for]="fbMenu"> Get Current UserModel FB </button>
+            <button mat-raised-button [mat-menu-trigger-for]="fbMenu"> Profile </button>
         <mat-menu #fbMenu="matMenu">{{FBuserID}}
           <p mat-menu-item *ngIf="this.isLoggedIn()" value=""></p>
         </mat-menu>
@@ -53,7 +53,7 @@
                   </button>
 
                   <button *ngIf="!this.isRegistered" (click)="openRegisterStudentDialog()" mat-menu-item>
-                        <mat-icon>person_add</mat-icon>IS REGISTERED
+                        <mat-icon>person_add</mat-icon>REGISTER FROM FACEBOOK
                   </button>
 
                   <button (click)="doLogout()" mat-menu-item> </button>

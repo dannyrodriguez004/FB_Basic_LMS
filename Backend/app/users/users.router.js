@@ -102,6 +102,12 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    router.get('/get-user-info', async (req, res, next) => {
+        console.log(req.query);
+        const resp = await usersServices.getUserInfo(req.query.key);
+        res.json(resp);
+    });
+
     router.post('/available-username', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.isAvailable(req.body.username);
         res.json(resp);
