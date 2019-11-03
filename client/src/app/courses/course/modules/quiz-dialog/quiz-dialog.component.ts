@@ -16,12 +16,17 @@ export interface Record {
   attempts: string,
 };
 
+
+
 @Component({
   selector: 'app-quiz-dialog',
   templateUrl: './quiz-dialog.component.html',
   styleUrls: ['./quiz-dialog.component.scss']
 })
 export class QuizDialogComponent implements OnInit {
+
+  noDueDate = false;
+  loading = false;
 
   record: Record = {
     title: '',
@@ -54,13 +59,15 @@ export class QuizDialogComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.loading = true;
     this.courseServices.getStudentQuizRecord(this.userServices.user(), this.data.course, this.data.quiz).subscribe( (resp: Record) => {
       this.record = resp;
-      console.log(resp);
+      //console.log(resp);
 
       this.courseServices.getQuizInfo(this.data.course, this.data.module, this.data.quiz).subscribe( (resp2: Record) => {
         this.record.attempts = resp2.attempts;
-        this.record.dueDate = new Date(resp2.dueDate);
+        if(resp2.dueDate == undefined) this.noDueDate = true;
+        this.record.dueDate = resp2.dueDate ? new Date(resp2.dueDate) : new Date('01/31/9999');
         
 
         this.courseServices.getServerTime().subscribe( (resp:Date) => {
@@ -69,7 +76,8 @@ export class QuizDialogComponent implements OnInit {
           this.isOpen = this.serverTime.getTime() < this.record.dueDate.getTime();
           this.hasTaken = Number(this.record.attempted) > 0;
           this.canTake = Number(this.record.attempted) < Number(this.record.attempts) || this.record.attempts == 'unlimited';
-          console.log(this.record.attempted);
+          //console.log(this.record.attempted);
+          this.loading = false;
         });
       });
       
@@ -90,6 +98,9 @@ export class QuizDialogComponent implements OnInit {
     this.dialogRed.close();
   }
 
+  getDueDate() {
+    return !this.noDueDate ? new Date(this.record.dueDate).toLocaleString() : 'No due Date'
+  }
 
 
 }
