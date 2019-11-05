@@ -1,6 +1,6 @@
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/user.service';
+import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import * as Countries from '../../models/countries';
 

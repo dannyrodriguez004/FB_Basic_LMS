@@ -1,8 +1,8 @@
-import { CoursesService } from 'src/app/courses/courses.service';
+import { CoursesService } from 'src/app/services/courses.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { UserService } from 'src/app/user.service';
+import { UserService } from 'src/app/services/user.service';
 
 export class Quiz {
   title: string;

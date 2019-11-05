@@ -1,4 +1,4 @@
-import { CoursesService } from './../../../courses.service';
+import { CoursesService } from '../../../../services/courses.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, Optional, Inject } from '@angular/core';
