@@ -60,7 +60,7 @@ export class CourseComponent implements OnInit, OnChanges {
     this.subscriptions.push(this.userServices.studentHasCourse(this.user_id, this.current_course).subscribe( (resp:boolean) => {
       this.authorized = resp;
 
-      if(this.authorized) {
+      if(this.authorized || this.userServices.getIsAdmin()) {
         this.subscriptions.push(this.coursesServices
           .getCourseInfo(this.current_course)
           .subscribe( (course: {id: string, name:string, description: string, instructor: string, students: string[]}) => {
@@ -68,6 +68,7 @@ export class CourseComponent implements OnInit, OnChanges {
           //console.log(course);
         }));
       } else {
+        this.router.navigateByUrl('/');
         //console.log("not authorized!");
       }
 

@@ -237,8 +237,18 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    router.get('/courses-cat-by', async(req, res, next) => {
+        const resp = await coursesServices.getCoursesPageByCategory(req.query.category, req.query.sort, Number(req.query.start));
+        res.json(resp);
+    });
+
     router.get('/admin-courses', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.getAdminCourses(req.user);
+        res.json(resp);
+    });
+
+    router.get('/can-register', async (req, res, next) => {
+        const resp = await coursesServices.canRegister(req.query.student, req.query.course);
         res.json(resp);
     });
 

@@ -1,3 +1,4 @@
+import { CoursesService } from 'src/app/courses/courses.service';
 import { CourseNav } from './../../courses/courses.models';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { UserService } from './../../user.service';
@@ -14,6 +15,7 @@ import {NewcourseComponent} from '../newcourse/newcourse.component';
 export class NavbarComponent implements OnInit {
 
   myCourses: CourseNav[] = []; // the user's courses names and id
+  adminCoureses: CourseNav[] = [];
 
   private student_id = '';
   private subscriptions: Subscription[] = [];
@@ -21,6 +23,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private userServices: UserService,
     private dialog: MatDialog,
+    private coursesServices: CoursesService,
   ) {
     this.student_id = this.userServices.user(); // get debug student id
   }
@@ -53,8 +56,14 @@ export class NavbarComponent implements OnInit {
   loadCourses() {
     this.subscriptions.push(this.userServices.getStudentCourses(this.student_id).subscribe( (resp: CourseNav[]) => {
       this.myCourses = resp;
-    } ));
-  }S
+    }));
+
+    if( this.userServices.getIsAdmin()){
+      this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe( (resp: CourseNav[]) => {
+        this.adminCoureses = resp;
+      }))
+    } 
+  }
 
   toggleLogin() {
     this.userServices.toggleLoggedIn();

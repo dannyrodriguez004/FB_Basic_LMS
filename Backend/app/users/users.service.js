@@ -25,14 +25,13 @@ class UsersSerivce {
                 const salt = await crypto.genSalt();
                 const hashedPass = await crypto.hash(user.password, salt);
                 await database.ref('/instructors').push({
-                    email: user.email,
-                    contactEmail: user.contactEmail,
-                    f_name: user.f_name,
-                    l_name: user.l_name,
+                    email: user.email.trim(),
+                    contactEmail: user.contactEmail.trim(),
+                    f_name: user.f_name.trim(),
+                    l_name: user.l_name.trim(),
                     password: hashedPass,
                     auth: user.auth
-
-                })
+                });
 
                 return true;
             }
@@ -55,14 +54,16 @@ class UsersSerivce {
         
         try {
             var users = await database.ref('/students').orderByKey().equalTo(user.key).once('value');
-            if(!users.hasChildren()) {
-                await database.ref('/students').child(user.key).set({
+            //if(!users.hasChildren()) {
+                await database.ref('/students').child(user.key).update({
+                    token: user.token,
                     fname: user.fname.trim(),
                     lname: user.lname.trim(),
-                    phone: user.phone.trim(),
                     email: user.email.trim(),
+                    country: user.country,
+                    phone: user.phone,
                 });
-            }
+            //}
         } catch (err) {
             console.error(err);
             return false;
