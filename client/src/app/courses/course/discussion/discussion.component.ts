@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material';
 import { UserService } from './../../../user.service';
 import { CoursesService } from './../../courses.service';
 import { IPost } from './../../courses.models';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
@@ -111,14 +111,36 @@ export class DiscussionComponent implements OnInit {
     }));
 
     this.loadDiscussion();
+    
+    this.subscriptions.push(this.router.events.subscribe((e:any) => {
+      if(e instanceof NavigationEnd) {
+        this.loading = true;
+
+        this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
+          if(params.discussion) {
+            this.id = params.discussion;
+          }
+
+          if(params.start) {
+            this.startFrom = Number(params.start);
+          } else {
+            this.startFrom = 0;
+          }
+        }));
+
+        this.loadDiscussion();
+      }
+    }));
+
+    
   }
 
 
   // adds post to discussion and reloads posts
   pushPost() {
     const post = {
-      user_id: this.userServices.user(),
-      user_name: "John Doe",
+      user_id: this.userServices.getIsAdmin() ? this.userServices.getAdmin().id : this.userServices.user(),
+      user_name: this.userServices.getIsAdmin() ? this.userServices.getAdmin().name : "John Doe",
       date: new Date().getTime(),
       post:this.htmlContent};
     

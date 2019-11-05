@@ -20,14 +20,15 @@ import {
   MatProgressSpinnerModule,
   MatDividerModule,
   MatProgressBarModule,
-  MatMenuModule
+  MatMenuModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 import { CoursesRoutingModule } from './courses-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CourseComponent } from './course/course.component';
-import { CoursesComponent } from './courses/courses.component';
+import { CoursesComponent, NotifyEnrolledComponent, NotifyInClassComponent, NotifyInWaitingComponent } from './courses/courses.component';
 import { ModulesComponent } from './course/modules/modules.component';
 import { GradesComponent } from './course/grades/grades.component';
 import { DiscussionsComponent } from './course/discussions/discussions.component';
@@ -86,7 +87,10 @@ import { QuizDialogComponent } from './course/modules/quiz-dialog/quiz-dialog.co
     EnrollDialogComponent,
     GradeReportsComponent,
     QuizResultComponent,
-    QuizDialogComponent
+    QuizDialogComponent,
+    NotifyEnrolledComponent,
+    NotifyInClassComponent,
+    NotifyInWaitingComponent,
   ],
   imports: [
     CommonModule,
@@ -116,7 +120,8 @@ import { QuizDialogComponent } from './course/modules/quiz-dialog/quiz-dialog.co
     MatProgressSpinnerModule,
     MatDividerModule,
     MatProgressBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule
   ],
   entryComponents: [
     DiscussionEditorComponent,
@@ -125,7 +130,10 @@ import { QuizDialogComponent } from './course/modules/quiz-dialog/quiz-dialog.co
     ModuleEditorComponent,
     NewContentComponent,
     EnrollDialogComponent,
-    QuizDialogComponent
+    QuizDialogComponent,
+    NotifyEnrolledComponent,
+    NotifyInClassComponent,
+    NotifyInWaitingComponent
   ]
 })
 export class CoursesModule { }

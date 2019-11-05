@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { environment } from './../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -13,13 +14,15 @@ import * as jwt_decode from 'jwt-decode';
 export class UserService {
 
   private student_id = '0'; // debugging value
+  private admin: {id:string, name: string};
   private isAdmin = false;
   private auth = 0;
   private FBLoggedIn = true;
 
   constructor(
     private http: HttpClient,
-    private cookies: CookieService
+    private cookies: CookieService,
+    private router: Router
     ) {
       this.isAdmin = this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session'));
     }
@@ -27,8 +30,10 @@ export class UserService {
     isTokenFresh(token: string): any {
       try {
           const decoded = jwt_decode(token);
+          console.log(decoded);
           if (!decoded.exp) { throw false; }
           this.auth = decoded.auth;
+          this.admin = {id: decoded.id, name: decoded.name};
           if (decoded.exp < Date.now().valueOf() / 1000) {
             throw false;
           } else {
@@ -38,7 +43,11 @@ export class UserService {
       } catch (err) {
           return err;
       }
-    }
+  }
+
+  getAdmin() {
+    return this.admin;
+  }
 
   Adminlogin(loginData) {
     let options = new HttpParams();
@@ -63,6 +72,7 @@ export class UserService {
     }
     this.isAdmin = false;
     this.auth = -1;
+    this.router.navigate(['/nav/home']);
   }
   /**
    *

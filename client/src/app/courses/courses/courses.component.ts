@@ -1,9 +1,9 @@
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
 import {CoursesService} from '../courses.service';
 import {UserService} from '../../user.service';
 import {Subscription} from 'rxjs';
-import {Router} from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import {Course} from '../courses.models';
 import { YesNoDialogComponent } from 'src/app/yes-no-dialog/yes-no-dialog.component';
 
@@ -21,7 +21,7 @@ export class CoursesComponent implements OnInit {
   private startFrom: number = 0;
   private sort: string = 'name';
   private size: number = 0;
-  currentCategory: string = 'Mathematics';
+  currentCategory: string = 'null';
   loading = false;
 
 
@@ -29,12 +29,51 @@ export class CoursesComponent implements OnInit {
     private userServices: UserService,
     private coursesServices: CoursesService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private routing: ActivatedRoute,
+    public snackbar: MatSnackBar
   ) {
   }
 
   ngOnInit() {
+
+    
+
+    this.routing.queryParams.subscribe( params => {
+      if(params.start) {
+        this.startFrom = params.start;
+      }
+      if(params.category) {
+        this.currentCategory = params.category;
+      }
+      if(params.sort) {
+        this.sort = params.sort;
+      }
+    })
     this.fetchPage();
+
+    this.subscriptions.push(this.router.events.subscribe((e:any) => {
+      if(e instanceof NavigationEnd) {
+        this.routing.queryParams.subscribe( params => {
+          if(params.start) {
+            this.startFrom = params.start;
+          } else {
+            this.startFrom = 0;
+          }
+          if(params.category) {
+            this.currentCategory = params.category;
+          } else {
+            this.currentCategory = 'null';
+          }
+          if(params.sort) {
+            this.sort = params.sort;
+          } else {
+            this.sort = 'name';
+          }
+        })
+        this.fetchPage();
+      }
+    }));
   }
 
 
@@ -61,11 +100,22 @@ export class CoursesComponent implements OnInit {
       if(resp.stat) {
         this.coursesServices.tryEnroll(this.userServices.user(), course).subscribe((resp) => {
           if(resp) {
-            console.log("enrolled");
+            this.snackbar.openFromComponent(NotifyEnrolledComponent, {
+              duration: 3 * 1000,
+            });
           }
         });
       } else {
         console.log(resp.message);
+        if(resp.message == 'Already in class!' || resp.message == 'Already registered!') {
+          this.snackbar.openFromComponent(NotifyInClassComponent, {
+            duration: 3 * 1000,
+          });
+        } else if(resp.message == 'Already in waiting-list!') {
+          this.snackbar.openFromComponent(NotifyInWaitingComponent, {
+            duration: 3 * 1000,
+          });
+        }
       }
     });
     
@@ -85,12 +135,7 @@ export class CoursesComponent implements OnInit {
     
         dialogRef.afterClosed().subscribe( (resp) => {
           if(resp) {
-            console.log("trying to insert into class");
-            this.coursesServices.tryEnroll(this.userServices.user(), course).subscribe((resp) => {
-              if(resp) {
-                console.log("enrolled");
-              } 
-            });
+            this.register(course);
           }
         });
       } else {
@@ -155,5 +200,43 @@ export class CoursesComponent implements OnInit {
     this.setParams();
   }
 
+  userLoggedIn() {
+    return this.userServices.fbLoggedIn();
+  }
+
   
 }
+
+
+@Component({
+  selector: 'notify-enrolled',
+  template: '<p>Successfully registered!</p>',
+  styles: [`
+    p {
+      color: light-gray;
+    }
+  `],
+})
+export class NotifyEnrolledComponent {}
+
+@Component({
+  selector: 'notify-enrolled',
+  template: '<p>Already Registered!</p>',
+  styles: [`
+    p {
+      color: light-gray;
+    }
+  `],
+})
+export class NotifyInClassComponent {}
+
+@Component({
+  selector: 'notify-enrolled',
+  template: '<p>Already in waiting-list!</p>',
+  styles: [`
+    p {
+      color: light-gray;
+    }
+  `],
+})
+export class NotifyInWaitingComponent {}

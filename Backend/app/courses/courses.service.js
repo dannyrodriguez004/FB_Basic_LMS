@@ -1214,7 +1214,7 @@ class CoursesService {
             title: quiz.title,
             outOf: quiz.outOf,
             score: 0,
-            dueDate: quiz.dueDate,
+            dueDate: quiz.dueDate || null,
             doneOn: new Date(),
             items: responses,
             attempted: oldRecord.attempted + 1,
