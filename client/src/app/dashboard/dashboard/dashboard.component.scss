@@ -1,10 +1,10 @@
 .mat-app-background{
-  background-color: #262626;
+  background-color: lightgrey;
   height: 100%;
 }
 
 header{
-  background-color: lightblue;
+  //background-color: lightblue;
   height: 65px;
   left: 5px;
   font-size: 50px;
@@ -21,7 +21,7 @@ header{
 mat-card {
   width: 80%;
   padding: 1rem;
-  background-color: darkkhaki;
+  //background-color: lightskyblue;
   padding: 1rem;
   margin-top: 20px;
   margin-left: 20px;
@@ -59,7 +59,7 @@ input{
 }
 
 button{
-  background:#568cca;
+  background: white;
   border-radius:5px;
   font-weight: 500;
   color:#181818;

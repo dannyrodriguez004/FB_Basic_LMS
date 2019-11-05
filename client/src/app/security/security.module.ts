@@ -9,11 +9,12 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSelectModule} from '@angular/material/select';
 import {AdminRegisterComponent} from './admin-register/admin-register.component';
+import {RegisterComponent} from './register/register.component';
 
 
 
 @NgModule({
-  declarations: [SecurityComponent, LoginComponent, AdminRegisterComponent],
+  declarations: [SecurityComponent, LoginComponent, RegisterComponent, AdminRegisterComponent],
   imports: [
     CommonModule,
     SecurityRoutingModule,

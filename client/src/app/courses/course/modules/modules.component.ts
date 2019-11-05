@@ -1,6 +1,6 @@
 import { MatDialog } from '@angular/material';
-import { UserService } from '../../../services/user.service';
-import { CoursesService } from '../../../services/courses.service';
+import { UserService } from '../../../user.service';
+import { CoursesService } from '../../courses.service';
 import { Subscription } from 'rxjs';
 import { Component, OnInit, Input } from '@angular/core';
 import { NewContentComponent } from './new-content/new-content.component';
@@ -68,7 +68,7 @@ export class ModulesComponent implements OnInit {
     const dialogRef = this.dialog.open(QuizDialogComponent, {
       //width: '90%',
       data: {
-        module: course_module, 
+        module: course_module,
         course: this.current_course,
         quiz: quiz
       },

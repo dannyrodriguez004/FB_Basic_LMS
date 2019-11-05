@@ -1,7 +1,7 @@
 import { MatDialog } from '@angular/material';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../user.service';
 import { Subscription } from 'rxjs';
-import { CoursesService } from '../../../services/courses.service';
+import { CoursesService } from '../../courses.service';
 
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { CourseDetailEditorComponent } from './course-detail-editor/course-detail-editor.component';

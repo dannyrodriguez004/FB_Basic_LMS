@@ -1,8 +1,8 @@
 import {Course} from '../../models/courses.models';
 import {Subscription} from 'rxjs';
-import {UserService} from '../../services/user.service';
+import {UserService} from '../../user.service';
 import {Component, OnInit} from '@angular/core';
-import {CoursesService} from '../../services/courses.service';
+import {CoursesService} from '../../courses/courses.service';
 
 
 @Component({
@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   private student_id: string;
   constructor(
     private userServices: UserService,
+    private coursesServices: CoursesService,
 
   ) {
     this.student_id = this.userServices.user().id; // get debug student id
@@ -29,10 +30,15 @@ export class DashboardComponent implements OnInit {
    * Load courses, id and name, for the current user.
    */
   loadCourses() {
-    this.subscriptions.push(this.userServices.getStudentCourses(this.student_id).subscribe( (resp: Course[]) => {
-      this.myCourses = resp;
-    } ));
-
+    if(this.userServices.getIsAdmin()) {
+      this.coursesServices.getAdminCourses().subscribe(( resp: Course[]) => {
+        this.myCourses = resp;
+      })
+    } else {
+      this.subscriptions.push(this.userServices.getStudentCourses(this.student_id).subscribe( (resp: Course[]) => {
+        this.myCourses = resp;
+      } ));
+    }
     // this.subscriptions.push(this.coursesServices.getInstructorInfo(this.myCourses)
     //     .subscribe( (course: (instructor: string, instructorEmail: string}) => {
     //       this.course = this.coursesServices.getInstructorInfo()

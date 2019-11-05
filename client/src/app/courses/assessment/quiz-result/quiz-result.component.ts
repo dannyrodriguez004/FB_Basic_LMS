@@ -1,8 +1,8 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Item } from '../assessment.component';
-import { CoursesService } from '../../../services/courses.service';
-import { UserService } from '../../../services/user.service';
+import { CoursesService } from '../../courses.service';
+import { UserService } from '../../../user.service';
 
 export class Record {
   title: string;
@@ -62,8 +62,8 @@ export class QuizResultComponent implements OnInit {
   }
 
   getPercent() {
-    let percent = 0;
-    if (this.record.outOf == 0) { percent = 0; }
+    var percent = 0;
+    if(this.record.outOf == 0) percent = 0;
     percent = this.record.score / this.record.outOf * 100;
     return percent;
   }

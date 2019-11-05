@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { NewContentComponent } from './../new-content.component';
 import { MatDialogRef } from '@angular/material';
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { CoursesService } from 'src/app/services/courses.service';
+import { CoursesService } from 'src/app/courses/courses.service';
 
 function urlValidator(control: FormControl) {
   let link: string = control.value;

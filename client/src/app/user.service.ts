@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams, HttpResponse, HttpHeaders} from '@angular/common/http';
-import {environment} from '../../environments/environment';
+import {environment} from '../environments/environment';
 import {Observable} from 'rxjs';
 import {stringify} from 'querystring';
 import {BehaviorSubject} from 'rxjs';
-import {UserModel} from '../models/usermodel.models';
+import {UserModel} from './models/usermodel.models';
 
 declare var FB: any;
 

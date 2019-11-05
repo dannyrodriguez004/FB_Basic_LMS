@@ -1,10 +1,12 @@
-import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
+import { environment } from '../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { distinctUntilChanged, catchError, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CookieService} from 'ngx-cookie-service';
 import * as jwt_decode from 'jwt-decode';
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +15,15 @@ export class AdminService {
 
   // tslint:disable-next-line:variable-name
   private student_id = '0'; // debugging value
+  private admin: {id: string, name: string};
   private isAdmin = false;
   private auth = 0;
   private FBLoggedIn = true;
 
   constructor(
     private http: HttpClient,
-    private cookies: CookieService
+    private cookies: CookieService,
+    private router: Router
     ) {
       this.isAdmin = this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session'));
     }
@@ -27,18 +31,23 @@ export class AdminService {
     isTokenFresh(token: string): any {
       try {
           const decoded = jwt_decode(token);
+          console.log(decoded);
           if (!decoded.exp) { throw false; }
           this.auth = decoded.auth;
+          this.admin = {id: decoded.id, name: decoded.name};
           if (decoded.exp < Date.now().valueOf() / 1000) {
             throw false;
           } else {
             return true;
           }
-
       } catch (err) {
           return err;
       }
-    }
+  }
+
+  getAdmin() {
+    return this.admin;
+  }
 
   Adminlogin(loginData) {
     let options = new HttpParams();
@@ -63,12 +72,12 @@ export class AdminService {
     }
     this.isAdmin = false;
     this.auth = -1;
+    this.router.navigate(['/nav/home']);
   }
   /**
    *
    * @param student_id facebook id for this app's user
    *
-   * @returns {course_id: string, name: string}[]
    */
   // tslint:disable-next-line:variable-name
   getStudentCourses(student_id: string) {
@@ -95,6 +104,14 @@ export class AdminService {
 
   addInstructor(user) {
     return this.http.post(`${environment.apiAddress}/users/add-instructor`, {user});
+  }
+
+  addStudent(user) {
+    return this.http.post(`${environment.apiAddress}/users/add-student`, {user});
+  }
+
+  isStudent(student) {
+    return true;
   }
 
   /**

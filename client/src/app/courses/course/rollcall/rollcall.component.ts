@@ -1,6 +1,6 @@
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../user.service';
 import { Subscription } from 'rxjs';
-import { CoursesService } from '../../../services/courses.service';
+import { CoursesService } from '../../courses.service';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import {Students} from '../../../models/courses.models';
 import {ActivatedRoute} from '@angular/router';

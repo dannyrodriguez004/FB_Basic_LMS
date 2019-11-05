@@ -11,7 +11,7 @@
             <button [routerLink]="['nav']" mat-button><mat-icon>dashboard</mat-icon>Dashboard</button>
       </span>
       <span *ngIf="myCourses.length > 0">
-            <button mat-button [matMenuTriggerFor]="menu"><mat-icon>list</mat-icon>My Courses</button>
+            <button (click)="loadCourses()" mat-button [matMenuTriggerFor]="menu"><mat-icon>list</mat-icon>My Courses</button>
 
             <mat-menu #menu="matMenu">
                   <button *ngFor="let course of myCourses" [routerLink]="['courses/view-course']" [queryParams]="{course:course.id,select:'Home'}" mat-menu-item>
@@ -37,7 +37,7 @@
         </mat-menu>
       </span>
       <span>
-            <button mat-raised-button [matMenuTriggerFor]="userMenu"><mat-icon>account_circle</mat-icon>Account</button>
+            <button (click)="loadCourses()" mat-raised-button [matMenuTriggerFor]="userMenu"><mat-icon>account_circle</mat-icon>Account</button>
 
             <mat-menu #userMenu="matMenu">
                   <button *ngIf="!this.isAdmin()" [routerLink]="['security/login/']" mat-menu-item>
@@ -61,6 +61,13 @@
                   <button [routerLink]="['security/register/']" mat-menu-item>
                         <mat-icon>person_add</mat-icon>Register
                   </button>
+
+                  <button *ngIf="this.isAdmin()" mat-menu-item [matMenuTriggerFor]="menu"><mat-icon>list</mat-icon>Manage Courses</button>
+                  <mat-menu #menu="matMenu">
+                        <button *ngFor="let course of adminCoureses" [routerLink]="['courses/view-course']" [queryParams]="{course:course.id,select:'Home'}" mat-menu-item>
+                              <mat-icon>class</mat-icon>{{course.name}}
+                        </button>
+                  </mat-menu>
 
                   <button *ngIf="this.isAdmin && auth() > 0" [routerLink]="['security/admin-register/']" mat-menu-item>
                         <mat-icon>verified_user</mat-icon>Admin Register

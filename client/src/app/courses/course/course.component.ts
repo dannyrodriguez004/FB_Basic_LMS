@@ -1,5 +1,5 @@
-import { CoursesService } from '../../services/courses.service';
-import { UserService } from '../../services/user.service';
+import { CoursesService } from '../courses.service';
+import { UserService } from '../../user.service';
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -22,6 +22,7 @@ export class CourseComponent implements OnInit, OnChanges {
 
   private subscriptions: Subscription[] = [];
   private authorized = false;
+  // tslint:disable-next-line:variable-name
   current_course = '';
   course = {name: '', id: this.current_course, description: '', instructor: ''};
 
@@ -37,8 +38,8 @@ export class CourseComponent implements OnInit, OnChanges {
 
     this.loadData();
 
-    this.subscriptions.push(this.router.events.subscribe((e:any) => {
-      if(e instanceof NavigationEnd) {
+    this.subscriptions.push(this.router.events.subscribe((e: any) => {
+      if (e instanceof NavigationEnd) {
         this.loadData();
       }
     }));
@@ -49,14 +50,14 @@ export class CourseComponent implements OnInit, OnChanges {
       if (params.select) {
         this.navItem = params.select;
       }
-      if(params.course) {
+      if (params.course) {
         this.current_course = params.course;
       }
     }));
 
     this.subscriptions.push(this.coursesServices.studentHasCourse(this.current_course).subscribe( (resp: boolean) => {
       this.authorized = resp;
-      if (this.authorized) {
+      if (this.authorized || this.userServices.getIsAdmin()) {
         this.subscriptions.push(this.coursesServices
           .getCourseInfo(this.current_course)
           .subscribe( (course: {id: string, name: string,
@@ -66,8 +67,8 @@ export class CourseComponent implements OnInit, OnChanges {
         }));
       } else {
         console.log('not authorized!');
+        this.router.navigateByUrl('/');
       }
-
     }));
   }
 

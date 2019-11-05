@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../../services/user.service';
+import {UserService} from '../../user.service';
 import {UserModel} from '../../models/usermodel.models';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -8,11 +8,11 @@ import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  selector: 'app-fbregister',
+  templateUrl: './fbregister.component.html',
+  styleUrls: ['./fbregister.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class FBRegisterComponent implements OnInit {
 
   registerForm: FormGroup;
   user: UserModel;
@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private userServices: UserService,
     private router: Router,
-    public dialogRef: MatDialogRef<RegisterComponent>,
+    public dialogRef: MatDialogRef<FBRegisterComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) data: {id: string, first_name: string, last_name: string, email: string},
 
 

@@ -1,4 +1,4 @@
-import { CoursesService } from 'src/app/services/courses.service';
+import { CoursesService } from 'src/app/courses/courses.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NewContentComponent } from './../new-content.component';
 import { MatDialogRef } from '@angular/material';

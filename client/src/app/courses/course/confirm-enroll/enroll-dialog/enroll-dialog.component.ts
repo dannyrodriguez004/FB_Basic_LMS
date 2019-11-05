@@ -1,5 +1,5 @@
 import { YesNoDialogComponent } from 'src/app/yes-no-dialog/yes-no-dialog.component';
-import { CoursesService } from 'src/app/services/courses.service';
+import { CoursesService } from 'src/app/courses/courses.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Component, OnInit, Optional, Inject } from '@angular/core';
 import { ModuleEditorComponent } from '../../modules/module-editor/module-editor.component';

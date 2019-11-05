@@ -25,12 +25,12 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MainComponent } from './main/main.component';
 import { NewcourseComponent } from './newcourse/newcourse.component';
-import { RegisterComponent} from './register/register.component';
+import { FBRegisterComponent} from './fbregister/fbregister.component';
 import { SecurityModule } from '../security/security.module';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
-  declarations: [NavbarComponent, MainComponent, NewcourseComponent, RegisterComponent],
+  declarations: [NavbarComponent, MainComponent, NewcourseComponent, FBRegisterComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -61,7 +61,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatProgressSpinnerModule,
   ],
   entryComponents: [
-    NewcourseComponent, RegisterComponent
+    NewcourseComponent, FBRegisterComponent
   ]
 })
 export class NavModule { }

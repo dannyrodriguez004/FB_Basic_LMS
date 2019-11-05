@@ -1,15 +1,15 @@
 import { CourseNav } from '../../models/courses.models';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../user.service';
 import {Component, OnChanges, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { CourseDetailEditorComponent } from '../../courses/course/info/course-detail-editor/course-detail-editor.component';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
-import {AdminService} from '../../services/admin.service';
+import {AdminService} from '../../admin.service';
 import {Router} from '@angular/router';
 import {UserModel} from '../../models/usermodel.models';
-import {CoursesService} from '../../services/courses.service';
-import { RegisterComponent } from '../register/register.component';
+import {CoursesService} from '../../courses/courses.service';
+import { FBRegisterComponent } from '../fbregister/fbregister.component';
 
 @Component({
   selector: 'app-navbar',
@@ -21,6 +21,8 @@ export class NavbarComponent implements OnInit, OnChanges {
   myCourses: CourseNav[] = []; // the user's courses names and id
   user: UserModel;
   FBuserID: string;
+  adminCoureses: CourseNav[] = [];
+
   // tslint:disable-next-line:variable-name
   private student_id = '';
   private subscriptions: Subscription[] = [];
@@ -54,7 +56,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   }
 
   openRegisterStudentDialog() {
-    const dialogRef = this.dialog.open(RegisterComponent, {
+    const dialogRef = this.dialog.open(FBRegisterComponent, {
       width: '90%',
       data: {
         id: this.userServices.user().id,
@@ -129,6 +131,14 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.subscriptions.push(this.coursesServices.getStudentCourses(this.student_id).subscribe( (resp: CourseNav[]) => {
       this.myCourses = resp;
     } ));
+
+    if ( this.userServices.getIsAdmin() ) {
+      this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe( (resp: CourseNav[]) => {
+        this.adminCoureses = resp;
+      }));
+    } else {
+      console.log('ERROR LOADING COURSES');
+    }
   }
 
   toggleLogin() {

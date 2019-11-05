@@ -254,7 +254,21 @@ export class CoursesService {
     return this.http.get(`${environment.apiAddress}/courses/courses-by`, params);
   }
 
+  getCoursesCatergorySortBy(category, sort, start) {
+    const params = {params: new HttpParams().set('category', `${category}`).set('sort', `${sort}`).set('start', `${start}`)};
+    return this.http.get(`${environment.apiAddress}/courses/courses-cat-by`, params);
+  }
+
   getAdminCourses() {
-    return this.http.get(`${environment.apiAddress}/courses/courses-by`);
+    return this.http.get(`${environment.apiAddress}/courses/admin-courses`);
+  }
+
+  tryEnroll(student, course) {
+    return this.http.post(`${environment.apiAddress}/courses/signup`, {student, course});
+  }
+
+  canRegister(student, course) {
+    const params = {params: new HttpParams().set('student', `${student}`).set('course', `${course}`)};
+    return this.http.get(`${environment.apiAddress}/courses/can-register`, params);
   }
 }

@@ -111,7 +111,7 @@
                 </mat-card-title>
 
                 <mat-list>
-                    <mat-list-item><strong>Answer:</strong> {{ ' ' + getLetter(item.answer)}}</mat-list-item>
+                    <mat-list-item><strong>Answer:</strong> {{ ' ' + getLetter(item.answer - 1)}}</mat-list-item>
                     <mat-list-item><strong>Options:</strong></mat-list-item>
                     <mat-list-item *ngFor="let option of item.options">
                         ({{getLetter( item.options.indexOf(option) )}}){{' ' + option}}

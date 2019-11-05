@@ -17,7 +17,7 @@ class CoursesService {
 
         try {
             let course = await database.ref('/courses').once('value');
-            let newRef = course.ref.push(
+            course.ref.push(
                 {
                     name: newCourse.name,
                     description: newCourse.description,
@@ -28,12 +28,13 @@ class CoursesService {
                     discussions: [],
                     MAX_SIZE: newCourse.MAX_SIZE,
                     isOpen: newCourse.isOpen,
-                    endEnrollDate: newCourse.endEnrollDate
+                    endEnrollDate: newCourse.endEnrollDate,
+                    category: newCourse.category,
                 }
             );
 
-            let cat = await database.ref('/categories/' + newCourse.category).once('value');
-            cat.child(newRef.key).ref.set({ courseId: newRef.key })
+            /*let cat = await database.ref('/categories/' + newCourse.category).once('value');
+            cat.child(newRef.key).ref.set({ courseId: newRef.key })*/
             
         } catch (err) {
             console.error(err);
@@ -910,8 +911,9 @@ class CoursesService {
      * @returns {boolean} true if this student is enrolled in this course
      */
     async studentHasCourse(student_id, course_id) {
+        console.log(student_id, course_id);
         let student = await database.ref('/courses/' + course_id + '/students').once('value');
-        return student.hasChild(student_id);
+        return student.numChildren() > 0 && student.hasChild(student_id);
     }
 
     async updateCourse(course) {
@@ -1226,7 +1228,7 @@ class CoursesService {
             title: quiz.title,
             outOf: quiz.outOf,
             score: 0,
-            dueDate: quiz.dueDate,
+            dueDate: quiz.dueDate || null,
             doneOn: new Date(),
             items: responses,
             attempted: oldRecord.attempted + 1,
@@ -1258,6 +1260,50 @@ class CoursesService {
         return true;
     }
 
+    async getCoursesPageByCategory(category, sortby, start) {
+        
+        sortby = sortby == 'name' ? 'title' : sortby;
+        let whole_category = [];
+        let page = [];
+        let counter = 0;
+        
+        try {
+            let ref = await database.ref('/courses').orderByChild('category').equalTo(category).once('value');
+            ref.forEach( (member) => {
+                var course = member.toJSON();
+                whole_category.push({
+                    id: member.key,
+                    title: course.name,
+                    description: course.description,
+                    instructor: course.instructor_id,
+                    size: course.size,
+                    MAX_SIZE: course.MAX_SIZE,
+                    endEnrollDate: course.endEnrollDate,
+                    category: course.category,
+                });
+            });
+
+            whole_category.sort((x, y) => ((x[sortby] === y[sortby]) ? 0 : ((x[sortby] > y[sortby]) ? 1 : -1)));
+
+            let index = 0;
+            for(index = start;  (index < 10 && index < whole_category.length); index++) {
+                page.push(whole_category[index]);
+                counter++;
+            }
+
+            for(let i = 0; i < page.length; i++) {
+                page[i].instructor = (await userService.getInstructor(page[i].instructor)).name;
+            }
+
+        } catch (err) {
+            console.error(err);
+        }
+
+        return {
+            courses: page,
+            size: counter,
+        };
+    }
 
     async getCoursesPage(sortby, start) {
 
@@ -1282,6 +1328,7 @@ class CoursesService {
                     size: course.size,
                     MAX_SIZE: course.MAX_SIZE,
                     endEnrollDate: course.endEnrollDate,
+                    category: course.category
                 });
                 counter++;
             });
@@ -1338,7 +1385,22 @@ class CoursesService {
 
         return payload;
     }
-}
 
+    async canRegister(student, course) {
+        try {
+            let ref = await database.ref('/students/' + student + '/enrolled').child(course).once('value');
+            if(ref.exists()) return {stat: false, message: 'Already in class!'};
+            ref = await database.ref('/courses/' + course).once('value');
+
+            if(ref.child('/registered').hasChild(student)) return {stat: false, message: 'Already registered!'};
+            if(ref.child('/waiting-list').hasChild(student)) return {stat: false, message: 'Already in waiting-list!'};
+        } catch(err) {
+            console.error(err);
+            return {stat: false, message: 'Error!'};
+        }
+
+        return {stat: true, message: ''};
+    }
+}
 
 module.exports = new CoursesService();

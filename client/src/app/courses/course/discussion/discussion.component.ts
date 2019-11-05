@@ -1,14 +1,15 @@
 import { DiscussionEditorComponent } from './discussion-editor/discussion-editor.component';
 import { MatDialog } from '@angular/material';
-import { UserService } from '../../../services/user.service';
-import { CoursesService } from '../../../services/courses.service';
-import { IPost } from '../../../models/courses.models';
-import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '../../../user.service';
+import { AdminService } from '../../../admin.service';
+import { CoursesService } from '../../courses.service';
+import { IPost } from './../../../models/courses.models';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
-const POST_PER_PAGE: number = 50;
+const POST_PER_PAGE = 50;
 
 @Component({
   selector: 'app-discussion',
@@ -23,9 +24,9 @@ export class DiscussionComponent implements OnInit {
   // discussion variables
   id: string;                 // discussin id
   title: string;              // discussion title
-  description : string;        // discussion description HTML format
+  description: string;        // discussion description HTML format
   posts: IPost[] = [];         // discussion posts
-  isClosed: boolean = false;   // discussion isClosed
+  isClosed = false;   // discussion isClosed
   today: Date = new Date();
   endDate: Date = this.today;
 
@@ -49,21 +50,21 @@ export class DiscussionComponent implements OnInit {
     defaultFontName: 'Arial',
     customClasses: [
       {
-        name: "titleText",
-        class: "titleText",
-        tag: "h1",
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
       },
     ]
   };
 
   @Input('current_course') current_course: string;
-
   constructor(
     private route: ActivatedRoute,
     private coursesServices: CoursesService,
     private userServices: UserService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private adminServices: AdminService
     ) {}
 
   openEditDiscussionDialog() {
@@ -75,9 +76,8 @@ export class DiscussionComponent implements OnInit {
 
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
       if (result) {
-        // this.loadDiscussion();
         this.subscriptions.push(this.coursesServices.getDiscussionInfo(this.current_course, this.id)
-        .subscribe( (resp: {title: any, description:any, isClosed:any, endDate: string}) => {
+        .subscribe( (resp: {title: any, description: any, isClosed: any, endDate: string}) => {
           this.description = resp.description;
           this.title = resp.title;
           this.isClosed = resp.isClosed;
@@ -96,20 +96,38 @@ export class DiscussionComponent implements OnInit {
       if (params.discussion) {
         this.id = params.discussion;
       }
-
       if (params.start) {
         this.startFrom = Number(params.start);
       }
     }));
 
     this.loadDiscussion();
+    this.subscriptions.push(this.router.events.subscribe((e: any) => {
+      if (e instanceof NavigationEnd) {
+        this.loading = true;
+
+        this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
+          if (params.discussion) {
+            this.id = params.discussion;
+          }
+
+          if (params.start) {
+            this.startFrom = Number(params.start);
+          } else {
+            this.startFrom = 0;
+          }
+        }));
+
+        this.loadDiscussion();
+      }
+    }));
   }
 
   // adds post to discussion and reloads posts
   pushPost() {
     const post = {
-      user_id: this.userServices.getCurrentUser(),
-      user_name: "John Doe",
+      user_id: this.userServices.getIsAdmin() ? this.adminServices.getAdmin().id : this.userServices.user(),
+      user_name: this.userServices.getIsAdmin() ? this.adminServices.getAdmin().name : this.userServices.user().first_name,
       date: new Date().getTime(),
       post: this.htmlContent};
 
@@ -168,12 +186,7 @@ export class DiscussionComponent implements OnInit {
 
   // true is post is empty
   isPostEmpty() {
-    return this.htmlContent == '';
-  }
-
-  // runs if input values change, current_course
-  ngOnChanges() {
-    this.ngOnInit();
+    return this.htmlContent === '';
   }
 
   // can only go to a previous page if current start position is not in the first page.
@@ -205,7 +218,7 @@ export class DiscussionComponent implements OnInit {
     this.setParams();
   }
 
-  //navigates to the last page of discussion posts
+  // navigates to the last page of discussion posts
   lastPage() {
     this.startFrom = Math.trunc(this.totalPosts / POST_PER_PAGE) * POST_PER_PAGE
     this.setParams();
@@ -213,7 +226,8 @@ export class DiscussionComponent implements OnInit {
 
   // sets the parameters for navigation and reloads the discussion
   setParams() {
-    this.router.navigate(['/nav/courses/view-course'],{ queryParams: {course: this.current_course, select:'Discussion', discussion: this.id, start: this.startFrom} });
+    this.router.navigate(['/nav/courses/view-course'], { queryParams:
+        {course: this.current_course, select: 'Discussion', discussion: this.id, start: this.startFrom} });
     this.loadDiscussion();
   }
 

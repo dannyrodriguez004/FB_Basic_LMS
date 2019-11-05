@@ -1,11 +1,11 @@
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../user.service';
 import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // import { AuthenticationService } from '../../services/authentication.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { NgForm } from '@angular/forms';
-import {AdminService} from '../../services/admin.service';
+import {AdminService} from '../../admin.service';
 declare var FB: any;
 
 @Component({
