@@ -37,7 +37,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   ) {
     this.userServices.isLoggedIn().subscribe(loggedIn => {
       this.loggedIn = loggedIn;
-      // this.isRegistered = true;
+      this.isRegistered = true;
   }); }
 
   doLogin() {
