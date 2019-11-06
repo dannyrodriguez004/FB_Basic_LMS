@@ -1,0 +1,55 @@
+<div class="mat-app-background">
+    <header> Profile </header>
+    <div class="card-deck-container">
+      <ng-container>
+    <mat-card class="example-card">
+    <mat-card-title> STUDENT INFO </mat-card-title>
+    <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
+    <mat-card-content *ngIf="!loading">
+      <p>
+        <strong>First Name: </strong>{{userModel.first_name}}
+        <br>
+        <strong>Last Name: </strong> {{userModel.last_name}}
+        <br>
+        <strong>Email: </strong>{{userModel.email}}
+        <br>
+        <strong>Phone: </strong>{{userModel.phone}}
+        <br>
+        <strong>Country: </strong>{{userModel.country}}
+      </p>
+    </mat-card-content>
+  </mat-card>
+ </ng-container>
+    </div>
+</div>
+
+  <!--  <mat-toolbar class="example-header">-->
+  <!--    <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>-->
+  <!--    <h1>{{userModel.first_name}}</h1>-->
+  <!--  </mat-toolbar>-->
+
+  <!--  <mat-sidenav-container class=container>-->
+
+  <!--    <mat-sidenav class="size-nav" #snav mode="side" opened>-->
+  <!--      <mat-nav-list >-->
+  <!--        <a *ngFor="let nav of navs" mat-list-item [routerLink]="" [queryParams]="{student: userID, select: nav.val}" (click)="setNav(nav.val)"><mat-icon>{{nav.ico}}</mat-icon>{{nav.val}}</a>-->
+  <!--      </mat-nav-list>-->
+  <!--    </mat-sidenav>-->
+
+
+  <!--    <mat-sidenav-content class="course_viewer">-->
+  <!--      {val: 'Course History', ico: 'view_module'},-->
+  <!--      {val: 'Contact Inforamtion', ico: 'assessment'},-->
+  <!--      {val: 'About Me', ico: 'forum'},-->
+  <!--      {val: 'Privacy', ico: 'forum'}];-->
+  <!--      <div class="content">-->
+  <!--        <app-profile-home [userID]="userID" *ngIf="isEqual('Home')"></app-profile-home>-->
+  <!--        <app-course-history [userID]="userID" *ngIf="isEqual('Course History')"></app-course-history>-->
+  <!--        <app-about-user [userID]="userID" *ngIf="isEqual('About Me')"></app-about-user>-->
+  <!--        <app-user-privacy [userID]="userID" *ngIf="isEqual('Privacy')"></app-user-privacy>-->
+  <!--      </div>-->
+
+  <!--    </mat-sidenav-content>-->
+
+  <!--  </mat-sidenav-container>-->
+

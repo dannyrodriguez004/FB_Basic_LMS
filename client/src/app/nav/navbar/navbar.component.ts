@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { UserService } from '../../services/user.service';
 import {Component, OnChanges, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { CourseDetailEditorComponent } from '../../courses/course/info/course-detail-editor/course-detail-editor.component';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
 import {AdminService} from '../../services/admin.service';
 import {Router} from '@angular/router';
@@ -77,7 +76,7 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   doLogout() {
     this.logout();
-    this.ngOnInit();
+    // this.ngOnInit();
   }
   // Runs whenever this component is loaded
   ngOnInit() {
@@ -96,7 +95,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   // }
 
   getUserInfo() {
-    this.subscriptions.push(this.userServices.getUserInfo(this.getCurrentUser()).subscribe((resp: any) => {
+    this.subscriptions.push(this.userServices.getUserInfo(this.FBuserID).subscribe((resp: any) => {
       console.log(resp);
       this.user = resp.user_info;
   }));

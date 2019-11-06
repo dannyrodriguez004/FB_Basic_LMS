@@ -26,18 +26,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { YesNoDialogComponent } from './yes-no-dialog/yes-no-dialog.component';
 
-/* Unused */
-import { NewContentComponent } from './courses/course/modules/new-content/new-content.component';
-import { ModuleEditorComponent } from './courses/course/modules/module-editor/module-editor.component';
-import { CourseDetailEditorComponent } from './courses/course/info/course-detail-editor/course-detail-editor.component';
-import { DiscussionEditorComponent } from './courses/course/discussion/discussion-editor/discussion-editor.component';
-import { NewDiscussionComponent } from './courses/course/discussions/new-discussion/new-discussion.component';
-import { NewcourseComponent } from './nav/newcourse/newcourse.component';
 
 import { CookieService } from 'ngx-cookie-service';
 import { JwtTokenInterceptorService } from './jwt-token.interceptor';
 import {EnsureHttpsInterceptorModule} from 'angular-interceptors';
 import {ToastrModule} from 'ngx-toastr';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ProfileComponent} from './security/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +57,11 @@ import {ToastrModule} from 'ngx-toastr';
     MatSortModule,
     MatSelectModule,
     MatDialogModule,
-    EnsureHttpsInterceptorModule.forRoot()
+    EnsureHttpsInterceptorModule.forRoot(),
+    MatIconModule,
+    MatSidenavModule,
+    MatListModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     UserService,

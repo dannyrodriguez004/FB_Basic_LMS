@@ -10,12 +10,14 @@ import {
   MatButtonModule
 } from '@angular/material';
 import { RegisterComponent } from './register/register.component';
+import {ProfileComponent} from './profile/profile.component';
 
 const routes: Routes = [
   {path: '', component: SecurityComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'admin-register', component: AdminRegisterComponent}
+  {path: 'admin-register', component: AdminRegisterComponent},
+  {path: 'profile', component: ProfileComponent}
 ];
 
 @NgModule({

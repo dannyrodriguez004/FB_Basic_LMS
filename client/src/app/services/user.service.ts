@@ -121,7 +121,7 @@ export class UserService {
     FB.login(result => {
       console.log(result);
       const params = {params: new HttpParams().set('userID', result.authResponse.userID)};
-      console.log('BEFORE IF', result.authResponse);
+      console.log('RESULT.AUTHRESPONSE:  ', result.authResponse);
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
         console.log(response);
         this.userModel = {
@@ -139,12 +139,6 @@ export class UserService {
             this.FBLoggedIn = true;
             console.log('POST RESPONSE', response);
             this.saveToken(response.token);
-            if (params) {
-              localStorage.setItem('id_token', stringify(params));
-              console.log(params);
-            } else {
-              console.log('NO RESPONSE');
-            }
           });
       }
     }, {scope: 'email', return_scopes: true});
@@ -207,12 +201,13 @@ export class UserService {
       this.cookies.deleteAll('/');
     }
     this.isAdmin = false;
+    this.FBLoggedIn = false;
     this.auth = -1;
     this.router.navigate(['/nav/home']);
     localStorage.removeItem('id_token');
     this.destroyToken();
   }
-  //
+
   isLoggedIn() {
       return this.getCurrentUser();
   }
@@ -227,9 +222,9 @@ export class UserService {
 
   getFbUserID() {
     this.getCurrentUser().subscribe((resp: any) => {
-      console.log(resp.userID);
       this.student_id = resp.userID;
     });
+    console.log(this.student_id);
     return this.student_id;
   }
 // tslint:disable-next-line:variable-name
@@ -260,6 +255,7 @@ export class UserService {
 
   user() {
     return this.getFbUserID();
+    // return this.student_id;
   }
 
   getIsAdmin() {
