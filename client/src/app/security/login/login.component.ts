@@ -1,11 +1,10 @@
-import { UserService } from '../../user.service';
+import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// import { AuthenticationService } from '../../services/authentication.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { NgForm } from '@angular/forms';
-import {AdminService} from '../../admin.service';
+import {AdminService} from '../../services/admin.service';
 declare var FB: any;
 
 @Component({
@@ -29,55 +28,18 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    // private authentication: AuthenticationService,
     private router: Router,
     private userServices: UserService,
     private adminServices: AdminService
   ) { }
 
   async ngOnInit() {
-    // (window as any).fbAsyncInit = function() {
-    //   FB.init({
-    //     appId      : '398974807682335',
-    //     cookie     : true,
-    //     xfbml      : true,
-    //     version    : 'v4.0'
-    //   });
-    //   FB.AppEvents.logPageView();
-    // };
-    //
-    // (function(d, s, id) {
-    //   let js, fjs = d.getElementsByTagName(s)[0];
-    //   if (d.getElementById(id)) {return; }
-    //   js = d.createElement(s); js.id = id;
-    //   js.src = 'https://connect.facebook.net/en_US/sdk.js';
-    //   fjs.parentNode.insertBefore(js, fjs);
-    // }(document, 'script', 'facebook-jssdk'));
     this.subscription = [];
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.email, Validators.required]],
       password: ['', Validators.required]
     });
   }
-  //
-  // submitLogin() {
-  //   console.log('submit login to facebook');
-  //   // FB.login();
-  //   FB.login((response) => {
-  //     console.log('submitLogin', response);
-  //     if (response.authResponse) {
-  //       // login success
-  //       // login success code here
-  //       // redirect to home page
-  //     } else {
-  //       console.log('UserModel login failed');
-  //     }
-  //   });
-  //
-  // }
-  // submitLogin() {
-  //   return this.userServices.submitLogin();
-  // }
 
   onLogin(form: NgForm) {
     if (form.invalid) {
@@ -113,6 +75,25 @@ export class LoginComponent implements OnInit, OnDestroy {
   //     this.type = 'password';
   //   }
   // }
+
+  authenticateUser() {
+    const authUser = {
+      username: this.loginForm.value.email,
+      password: this.loginForm.value.password
+    };
+    this.subscription.push(
+      this.adminServices.Adminlogin(authUser)
+        .subscribe(
+          (payload) => {
+            this.router.navigateByUrl('');
+          },
+          (err) => {
+            if (err.status === 401) {
+              this.invalidCredentials = true;
+            }
+          })
+    );
+  }
 
   authenticateUserWithFacebook() {
     const authUser = {

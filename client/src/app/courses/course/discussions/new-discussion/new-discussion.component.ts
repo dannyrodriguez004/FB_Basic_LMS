@@ -1,5 +1,5 @@
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { CoursesService } from '../../../courses.service';
+import { CoursesService } from '../../../../services/courses.service';
 import { MatDialogRef, MAT_DIALOG_DATA,  } from '@angular/material';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, Optional, Inject } from '@angular/core';

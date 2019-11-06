@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../../user.service';
+import {UserService} from '../../services/user.service';
 import {UserModel} from '../../models/usermodel.models';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';

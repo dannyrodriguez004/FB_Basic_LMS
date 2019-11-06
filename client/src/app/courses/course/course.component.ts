@@ -1,5 +1,5 @@
-import { CoursesService } from '../courses.service';
-import { UserService } from '../../user.service';
+import { CoursesService } from '../../services/courses.service';
+import { UserService } from '../../services/user.service';
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -25,6 +25,7 @@ export class CourseComponent implements OnInit, OnChanges {
   // tslint:disable-next-line:variable-name
   current_course = '';
   course = {name: '', id: this.current_course, description: '', instructor: ''};
+  private user_id: string;
 
 
   constructor(
@@ -55,7 +56,9 @@ export class CourseComponent implements OnInit, OnChanges {
       }
     }));
 
-    this.subscriptions.push(this.coursesServices.studentHasCourse(this.current_course).subscribe( (resp: boolean) => {
+    this.user_id = this.userServices.user();
+
+    this.subscriptions.push(this.coursesServices.studentHasCourse(this.user_id, this.current_course).subscribe( (resp: boolean) => {
       this.authorized = resp;
       if (this.authorized || this.userServices.getIsAdmin()) {
         this.subscriptions.push(this.coursesServices
@@ -63,7 +66,6 @@ export class CourseComponent implements OnInit, OnChanges {
           .subscribe( (course: {id: string, name: string,
             description: string, instructor: string, students: string[]}) => {
           this.course = course;
-          // console.log(course);
         }));
       } else {
         console.log('not authorized!');

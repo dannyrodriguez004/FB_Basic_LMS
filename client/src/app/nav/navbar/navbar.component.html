@@ -31,7 +31,7 @@
 
       <span class="fill"></span>
       <span>
-            <button mat-raised-button [mat-menu-trigger-for]="fbMenu"> Profile </button>
+            <button mat-raised-button *ngIf="this.isLoggedIn()" [mat-menu-trigger-for]="fbMenu"> Profile </button>
         <mat-menu #fbMenu="matMenu">{{FBuserID}}
           <p mat-menu-item *ngIf="this.isLoggedIn()" value=""></p>
         </mat-menu>
@@ -56,8 +56,6 @@
                         <mat-icon>person_add</mat-icon>REGISTER FROM FACEBOOK
                   </button>
 
-                  <button (click)="doLogout()" mat-menu-item> </button>
-
                   <button [routerLink]="['security/register/']" mat-menu-item>
                         <mat-icon>person_add</mat-icon>Register
                   </button>
@@ -73,11 +71,14 @@
                         <mat-icon>verified_user</mat-icon>Admin Register
                   </button>
 
-<!--                  <button *ngIf="this.isAdmin()" (click)="doLogout()" mat-menu-item>-->
-<!--                        <mat-icon style="color: red;">power_settings_new</mat-icon>Log out-->
-<!--                  </button>-->
+                  <button *ngIf="this.isAdmin()" (click)="logout()" mat-menu-item>
+                        <mat-icon style="color: red;">power_settings_new</mat-icon>Log out
+                  </button>
+                  <button *ngIf="this.isAdmin()" (click)="doLogout()" mat-menu-item>
+                        <mat-icon style="color: red;">power_settings_new</mat-icon>Log out
+                  </button>
 
-                  <button (click)="doLogout()" mat-menu-item>
+                  <button *ngIf="this.loggedIn" (click)="doLogout()" mat-menu-item>
                         <mat-icon style="color: red;">power_settings_new</mat-icon>Log out
                   </button>
 

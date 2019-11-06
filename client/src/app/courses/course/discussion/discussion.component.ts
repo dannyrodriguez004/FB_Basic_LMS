@@ -1,8 +1,8 @@
 import { DiscussionEditorComponent } from './discussion-editor/discussion-editor.component';
 import { MatDialog } from '@angular/material';
-import { UserService } from '../../../user.service';
-import { AdminService } from '../../../admin.service';
-import { CoursesService } from '../../courses.service';
+import { UserService } from '../../../services/user.service';
+import { AdminService } from '../../../services/admin.service';
+import { CoursesService } from '../../../services/courses.service';
 import { IPost } from './../../../models/courses.models';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
@@ -126,8 +126,8 @@ export class DiscussionComponent implements OnInit {
   // adds post to discussion and reloads posts
   pushPost() {
     const post = {
-      user_id: this.userServices.getIsAdmin() ? this.adminServices.getAdmin().id : this.userServices.user(),
-      user_name: this.userServices.getIsAdmin() ? this.adminServices.getAdmin().name : this.userServices.user().first_name,
+      user_id: this.adminServices.getIsAdmin() ? this.adminServices.getAdmin().id : this.userServices.user(),
+      user_name: this.adminServices.getIsAdmin() ? this.adminServices.getAdmin().name : this.userServices.user(),
       date: new Date().getTime(),
       post: this.htmlContent};
 
@@ -152,7 +152,7 @@ export class DiscussionComponent implements OnInit {
       this.title = resp.title;
       this.isClosed = resp.isClosed;
       this.endDate = new Date(resp.endDate);
-    }))
+    }));
 
     // tslint:disable-next-line:max-line-length
     this.subscriptions.push(this.coursesServices.getDiscussionPosts(this.current_course, this.id, this.startFrom)
@@ -220,7 +220,7 @@ export class DiscussionComponent implements OnInit {
 
   // navigates to the last page of discussion posts
   lastPage() {
-    this.startFrom = Math.trunc(this.totalPosts / POST_PER_PAGE) * POST_PER_PAGE
+    this.startFrom = Math.trunc(this.totalPosts / POST_PER_PAGE) * POST_PER_PAGE;
     this.setParams();
   }
 

@@ -1,8 +1,8 @@
 import {Course} from '../../models/courses.models';
 import {Subscription} from 'rxjs';
-import {UserService} from '../../user.service';
+import {UserService} from '../../services/user.service';
 import {Component, OnInit} from '@angular/core';
-import {CoursesService} from '../../courses/courses.service';
+import {CoursesService} from '../../services/courses.service';
 
 
 @Component({
@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
     private coursesServices: CoursesService,
 
   ) {
-    this.student_id = this.userServices.user().id; // get debug student id
+    this.student_id = this.userServices.user(); // get debug student id
   }
 
   /**
@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
         this.myCourses = resp;
       })
     } else {
-      this.subscriptions.push(this.userServices.getStudentCourses(this.student_id).subscribe( (resp: Course[]) => {
+      this.subscriptions.push(this.coursesServices.getStudentCourses(this.student_id).subscribe( (resp: Course[]) => {
         this.myCourses = resp;
       } ));
     }

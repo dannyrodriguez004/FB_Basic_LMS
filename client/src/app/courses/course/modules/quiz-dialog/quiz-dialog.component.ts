@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Item } from './../../../assessment/assessment.component';
-import { CoursesService } from '../../../courses.service';
-import { AdminService } from '../../../../admin.service';
+import { CoursesService } from '../../../../services/courses.service';
+import { AdminService } from '../../../../services/admin.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Component, OnInit, Optional, Inject } from '@angular/core';
 

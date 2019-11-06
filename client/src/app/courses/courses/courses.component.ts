@@ -1,7 +1,7 @@
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
-import {CoursesService} from '../courses.service';
-import {UserService} from '../../user.service';
+import {CoursesService} from '../../services/courses.service';
+import {UserService} from '../../services/user.service';
 import {Subscription} from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import {Course} from '../../models/courses.models';

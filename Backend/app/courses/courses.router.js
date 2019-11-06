@@ -142,17 +142,30 @@ module.exports = (passport) => {
     });
 
     // get all the courses that a student is enrolled in
-    router.get('/student-courses', jwtMiddleware, async (req, res, next) => {
-        const resp = await coursesServices.getMyCourses(req.decoded);
+    // router.get('/student-courses', jwtMiddleware, async (req, res, next) => {
+    //     const resp = await coursesServices.getMyCourses(req.decoded);
+    //     res.json(resp);
+    // })
+
+    // get all the courses that a student is enrolled in
+    router.get('/student-courses', async (req, res, next) => {
+        const resp = await coursesServices.getMyCourses(req.query.student);
         res.json(resp);
     })
 
     // get whether a student is enrolled in a particullar course
-    router.get('/student-has-course', jwtMiddleware, async (req, res, next) => {
-        const resp = await coursesServices.studentHasCourse(req.decoded, req.query.course);
-        console.log('STUDENT HAS COURSE:  ' + resp);
+    // router.get('/student-has-course', jwtMiddleware, async (req, res, next) => {
+    //     const resp = await coursesServices.studentHasCourse(req.decoded, req.query.course);
+    //     console.log('STUDENT HAS COURSE:  ' + resp);
+    //     res.json(resp);
+    // });
+
+    // get whether a student is enrolled in a particullar course
+    router.get('/student-has-course', async (req, res, next) => {
+        const resp = await coursesServices.studentHasCourse(req.query.student, req.query.course);
         res.json(resp);
     });
+
 
     // get a student's grades for a particular course
     router.get('/student-grades', async(req, res, next) => {
@@ -196,10 +209,15 @@ module.exports = (passport) => {
     });
 
 
-    router.get('/course-students', jwtMiddleware, async (req, res, next) => {
-        const resp = await coursesServices.getStudents(req.query.course, req.decoded);
+    router.get('/course-students', async(req, res, next) => {
+        const resp = await coursesServices.getStudents(req.query.course, req.query.student);
         res.json(resp);
     });
+
+    // router.get('/course-students', jwtMiddleware, async (req, res, next) => {
+    //     const resp = await coursesServices.getStudents(req.query.course, req.decoded);
+    //     res.json(resp);
+    // });
 
     // get courses
     router.get('/courses', async (req, res, next) => {

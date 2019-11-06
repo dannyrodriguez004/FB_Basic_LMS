@@ -1,6 +1,6 @@
-import { UserService } from '../../../user.service';
+import { UserService } from '../../../services/user.service';
 import { Subscription } from 'rxjs';
-import { CoursesService } from '../../courses.service';
+import { CoursesService } from '../../../services/courses.service';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import {Students} from '../../../models/courses.models';
 import {ActivatedRoute} from '@angular/router';
@@ -14,6 +14,7 @@ import {ActivatedRoute} from '@angular/router';
 export class RollcallComponent implements OnInit {
 
   loading = true;
+  // tslint:disable-next-line:variable-name
   @Input('current_course') current_course: string;
   students: {id: '', fname: '', lname: '', email: ''}[];
   subscriptions: Subscription[] = [];

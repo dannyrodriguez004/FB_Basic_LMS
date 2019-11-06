@@ -1,14 +1,14 @@
 import { CourseNav } from '../../models/courses.models';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { UserService } from '../../user.service';
+import { UserService } from '../../services/user.service';
 import {Component, OnChanges, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { CourseDetailEditorComponent } from '../../courses/course/info/course-detail-editor/course-detail-editor.component';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
-import {AdminService} from '../../admin.service';
+import {AdminService} from '../../services/admin.service';
 import {Router} from '@angular/router';
 import {UserModel} from '../../models/usermodel.models';
-import {CoursesService} from '../../courses/courses.service';
+import {CoursesService} from '../../services/courses.service';
 import { FBRegisterComponent } from '../fbregister/fbregister.component';
 
 @Component({
@@ -37,10 +37,12 @@ export class NavbarComponent implements OnInit, OnChanges {
     private adminServices: AdminService,
     private router: Router
   ) {
+    this.student_id = this.userServices.user();
     this.userServices.isLoggedIn().subscribe(loggedIn => {
       this.loggedIn = loggedIn;
       this.isRegistered = true;
-  }); }
+  });
+}
 
   doLogin() {
     this.userServices.submitLogin();
@@ -59,10 +61,10 @@ export class NavbarComponent implements OnInit, OnChanges {
     const dialogRef = this.dialog.open(FBRegisterComponent, {
       width: '90%',
       data: {
-        id: this.userServices.user().id,
-        first_name: this.userServices.user().first_name,
-        last_name: this.userServices.user().last_name,
-        email: this.userServices.user().email
+        id: this.userServices.fbUser().id,
+        first_name: this.userServices.fbUser().first_name,
+        last_name: this.userServices.fbUser().last_name,
+        email: this.userServices.fbUser().email
       }
     });
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
@@ -89,9 +91,9 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.ngOnInit();
   }
 
-  submitLogin() {
-    return this.userServices.submitLogin();
-  }
+  // submitLogin() {
+  //   return this.userServices.submitLogin();
+  // }
 
   getUserInfo() {
     this.subscriptions.push(this.userServices.getUserInfo(this.getCurrentUser()).subscribe((resp: any) => {
@@ -106,6 +108,7 @@ export class NavbarComponent implements OnInit, OnChanges {
       console.log(resp.userID);
       this.FBuserID = resp.userID;
     });
+    return this.FBuserID;
   }
 
   openAddCourseDialog() {
@@ -116,7 +119,6 @@ export class NavbarComponent implements OnInit, OnChanges {
         description: 'Enter Course description here'
       }
     });
-
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
       if (result) {
         console.log(result);
@@ -127,20 +129,31 @@ export class NavbarComponent implements OnInit, OnChanges {
   /**
    * Load courses, id and name, for the current user.
    */
-  loadCourses() {
-    this.subscriptions.push(this.coursesServices.getStudentCourses(this.student_id).subscribe( (resp: CourseNav[]) => {
-      this.myCourses = resp;
-    } ));
+  // loadCourses() {
+  //   this.subscriptions.push(this.coursesServices.getStudentCourses(this.student_id).subscribe( (resp: CourseNav[]) => {
+  //     this.myCourses = resp;
+  //   } ));
+  //
+  //   if ( this.userServices.getIsAdmin() ) {
+  //     this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe( (resp: CourseNav[]) => {
+  //       this.adminCoureses = resp;
+  //     }));
+  //   } else {
+  //     console.log('ERROR LOADING COURSES');
+  //   }
+  // }
 
-    if ( this.userServices.getIsAdmin() ) {
+  loadCourses() {
+    this.subscriptions.push(this.coursesServices.getStudentCourses(this.getCurrentUser()).subscribe( (resp: CourseNav[]) => {
+      this.myCourses = resp;
+    }));
+
+    if ( this.adminServices.getIsAdmin()) {
       this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe( (resp: CourseNav[]) => {
         this.adminCoureses = resp;
       }));
-    } else {
-      console.log('ERROR LOADING COURSES');
     }
   }
-
   toggleLogin() {
     this.userServices.toggleLoggedIn();
   }
@@ -150,10 +163,15 @@ export class NavbarComponent implements OnInit, OnChanges {
   }
 
   isAdmin() {
-    return this.userServices.getIsAdmin();
+    return this.adminServices.getIsAdmin();
   }
 
+  // logout() {
+  //   this.userServices.logout();
+  // }
+
   logout() {
+    this.adminServices.logOutUser();
     this.userServices.logout();
   }
 

@@ -1,8 +1,8 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Item } from '../assessment.component';
-import { CoursesService } from '../../courses.service';
-import { UserService } from '../../../user.service';
+import { CoursesService } from '../../../services/courses.service';
+import { UserService } from '../../../services/user.service';
 
 export class Record {
   title: string;

@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams, HttpResponse, HttpHeaders} from '@angular/common/http';
-import {environment} from '../environments/environment';
+import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {stringify} from 'querystring';
 import {BehaviorSubject} from 'rxjs';
-import {UserModel} from './models/usermodel.models';
+import {UserModel} from '../models/usermodel.models';
+import { Router } from '@angular/router';
+import { distinctUntilChanged, catchError, tap } from 'rxjs/operators';
+import { CookieService} from 'ngx-cookie-service';
+import * as jwt_decode from 'jwt-decode';
 
 declare var FB: any;
 
@@ -16,8 +20,16 @@ export class UserService {
   private isAdmin = false;
   private FBLoggedIn;
   private userModel: UserModel;
+  // tslint:disable-next-line:variable-name
+  private student_id = ''; // debugging value
+  private admin: {id: string, name: string};
+  private auth = 0;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private cookies: CookieService,
+    private router: Router) {
+    this.isAdmin = this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session'));
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
     (window as any).fbAsyncInit = () => {
@@ -41,6 +53,43 @@ export class UserService {
       js.src = 'https://connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
+  }
+
+  isTokenFresh(token: string): any {
+    try {
+      const decoded = jwt_decode(token);
+      console.log(decoded);
+      if (!decoded.exp) { throw false; }
+      this.auth = decoded.auth;
+      this.admin = {id: decoded.id, name: decoded.name};
+      if (decoded.exp < Date.now().valueOf() / 1000) {
+        throw false;
+      } else {
+        return true;
+      }
+    } catch (err) {
+      return err;
+    }
+  }
+
+  getAdmin() {
+    return this.admin;
+  }
+
+  Adminlogin(loginData) {
+    let options = new HttpParams();
+    options = options.append('username', loginData.username);
+    options = options.append('password', loginData.password);
+    return this.http.post(`${environment.apiAddress}/users/admin-login`, loginData).pipe(
+      distinctUntilChanged(),
+      tap((jwt: any) => {
+        this.cookies.set('admin-session', jwt.payload, 2, '/');
+        this.isAdmin = true;
+        const decoded = jwt_decode(jwt.payload);
+        this.auth = decoded.auth;
+      }),
+      catchError(this.handleError('adminLogin'))
+    );
   }
 
   getToken(): string {
@@ -143,20 +192,27 @@ export class UserService {
   //     }});
   }
 
-  existingStudent(user) {
-    const opts = {
-      headers:  this.buildHeaders(),
-      userID: user
-    };
-    console.log('IN EXISTING STUDENT', opts);
-    return this.http.post(`${environment.apiAddress}/users/existing-student`, opts);
-  }
+  // existingStudent(user) {
+  //   const opts = {
+  //     headers:  this.buildHeaders(),
+  //     userID: user
+  //   };
+  //   console.log('IN EXISTING STUDENT', opts);
+  //   return this.http.post(`${environment.apiAddress}/users/existing-student`, opts);
+  // }
 
   logout() {
+    // tslint:disable-next-line:triple-equals
+    if (this.cookies.getAll() != {}) {
+      this.cookies.deleteAll('/');
+    }
+    this.isAdmin = false;
+    this.auth = -1;
+    this.router.navigate(['/nav/home']);
     localStorage.removeItem('id_token');
     this.destroyToken();
   }
-
+  //
   isLoggedIn() {
       return this.getCurrentUser();
   }
@@ -169,20 +225,42 @@ export class UserService {
   return this.http.get(`${environment.apiAddress}/security/auth/me`, opts);
 }
 
+  getFbUserID() {
+    this.getCurrentUser().subscribe((resp: any) => {
+      console.log(resp.userID);
+      this.student_id = resp.userID;
+    });
+    return this.student_id;
+  }
 // tslint:disable-next-line:variable-name
-  getStudentCourses(student_id: string) {
-    const opts = {
-      headers: this.buildHeaders()
-    };
-    console.log('StudentID: ' + student_id);
-    return this.http.get(`${environment.apiAddress}/courses/student-courses`,
-      opts);
+//   getStudentCourses(student_id: string) {
+//     const opts = {
+//       headers: this.buildHeaders()
+//     };
+//     console.log('StudentID: ' + student_id);
+//     return this.http.get(`${environment.apiAddress}/courses/student-courses`,
+//       opts);
+//   }
+
+  isUsernameAvailable(username) {
+    return this.http.post(`${environment.apiAddress}/users/available-username`, {username});
   }
 
-  user() {
+  addInstructor(user) {
+    return this.http.post(`${environment.apiAddress}/users/add-instructor`, {user});
+  }
+
+  addStudent(user) {
+    return this.http.post(`${environment.apiAddress}/users/add-student`, {user});
+  }
+
+  fbUser() {
     return this.userModel;
   }
 
+  user() {
+    return this.getFbUserID();
+  }
 
   getIsAdmin() {
     return this.isAdmin;

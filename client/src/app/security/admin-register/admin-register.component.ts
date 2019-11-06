@@ -1,8 +1,8 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { UserService } from '../../user.service';
-import { AdminService } from '../../admin.service';
+import { UserService } from '../../services/user.service';
+import { AdminService } from '../../services/admin.service';
 
 
 function equalsValidator(controlA: FormControl) {

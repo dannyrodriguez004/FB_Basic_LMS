@@ -28,24 +28,12 @@ const jwtMiddleware = (req, res, next) => {
 
     }
 };
-// const securityServices = require('./security.service');
 
 module.exports = (passport) => {
 
     router.get('/foo', async (req, res, next) => {
         res.json('foo');
     })
-    //
-    // router.get('/security/facebook',
-    //     passport.authenticate('facebook'));
-    //
-    // router.get('/security/facebook/callback',
-    //     passport.authenticate('facebook', {failureRedirect: '/login'}),
-    //     function (req, res) {
-    //         // Successful authentication, redirect home.
-    //         res.redirect('/');
-    //     });
-
 
     var createToken = function(auth) {
         console.log("AUTH : ");
@@ -71,11 +59,8 @@ module.exports = (passport) => {
         console.log('REQ.AUTH' + req.auth);
     };
 
-    // passport.authenticate('facebook-token', {session: true})
-
     router.post('/auth/facebook', (req, res, next) => {
             console.log("HERE I AM AUTH FACEBOOK");
-            // console.log(JSON.stringify(req.body.params.updates));  JSON.parse(JSON.stringify
             var userID = req.body.params.updates[0].value;
             console.log(userID);
             const token = jwt.sign(userID, '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx');
@@ -89,43 +74,6 @@ module.exports = (passport) => {
             token: token
         });
     });
-
-// token handling middleware
-//     var authenticate = expressJwt({
-//         secret: '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx',
-//         requestProperty: 'auth',
-//         getToken: function(req) {
-//             if (req.headers['x-auth-token']) {
-//                 console.log("REQHEADERS:");
-//                 console.log(req.headers['x-auth-token']);
-//                 return req.headers['x-auth-token'];
-//             }else{
-//             return null;
-//             }
-//         }
-//     });
-
-
-    // var getCurrentUser = function(req, res, next) {
-    //     console.log('GETCURR USER');
-    //     UserModel.findById(req.auth.id, function(err, user) {
-    //         if (err) {
-    //             next(err);
-    //         } else {
-    //             req.user = user;
-    //             next();
-    //         }
-    //     });
-    // };
-    //
-    // var getOne = function (req, res) {
-    //     var user = req.user.toObject();
-    //
-    //     delete user['facebookProvider'];
-    //     delete user['__v'];
-    //
-    //     res.json(user);
-    // };
 
     router.get('/auth/me', jwtMiddleware, async (req, res, next) => {
         console.log('IN AUTHME');

@@ -17,7 +17,7 @@ import { MatInputModule,
   MatDialogModule} from '@angular/material';
 
 /* Services */
-import { UserService } from './user.service';
+import { UserService } from './services/user.service';
 
 /* Routing */
 import { AppRoutingModule } from './app-routing.module';
@@ -64,7 +64,7 @@ import {ToastrModule} from 'ngx-toastr';
   providers: [
     UserService,
     CookieService,
-    // {provide: HTTP_INTERCEPTORS, useClass: JwtTokenInterceptorService, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: JwtTokenInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent],
   entryComponents: [YesNoDialogComponent],
