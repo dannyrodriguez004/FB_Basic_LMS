@@ -1,8 +1,8 @@
 import {Course} from '../../courses/courses.models';
 import {Subscription} from 'rxjs';
-import {UserService} from '../../user.service';
+import {UserService} from '../../services/user.service';
 import {Component, OnInit} from '@angular/core';
-import {CoursesService} from '../../courses/courses.service';
+import {CoursesService} from '../../services/courses.service';
 
 
 @Component({

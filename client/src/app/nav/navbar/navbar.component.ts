@@ -1,7 +1,7 @@
-import { CoursesService } from 'src/app/courses/courses.service';
+import { CoursesService } from 'src/app/services/courses.service';
 import { CourseNav } from './../../courses/courses.models';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { UserService } from './../../user.service';
+import { UserService } from '../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { CourseDetailEditorComponent } from '../../courses/course/info/course-detail-editor/course-detail-editor.component';

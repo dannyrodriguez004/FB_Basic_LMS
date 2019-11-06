@@ -1,7 +1,7 @@
 import { EnrollDialogComponent } from './enroll-dialog/enroll-dialog.component';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-import { CoursesService } from './../../courses.service';
+import { CoursesService } from '../../../services/courses.service';
 import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 

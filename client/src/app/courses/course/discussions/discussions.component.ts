@@ -1,5 +1,5 @@
-import { UserService } from './../../../user.service';
-import { CoursesService } from './../../courses.service';
+import { UserService } from '../../../services/user.service';
+import { CoursesService } from '../../../services/courses.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { DIscussions } from '../../courses.models';

@@ -1,7 +1,7 @@
 import { DiscussionEditorComponent } from './discussion-editor/discussion-editor.component';
 import { MatDialog } from '@angular/material';
-import { UserService } from './../../../user.service';
-import { CoursesService } from './../../courses.service';
+import { UserService } from '../../../services/user.service';
+import { CoursesService } from '../../../services/courses.service';
 import { IPost } from './../../courses.models';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
