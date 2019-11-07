@@ -39,7 +39,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-
+    this.userModel = new UserModel();
     this.subscriptions.push(this.userServices.getCurrentUser().subscribe( (resp: any) => {
       this.authorized = resp;
       console.log(this.authorized);

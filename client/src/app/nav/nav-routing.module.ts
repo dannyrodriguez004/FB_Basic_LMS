@@ -15,7 +15,7 @@ const routes: Routes = [
         {path: 'add-course', loadChildren: () => import('./newcourse/newcourse.component')
             .then(mod => mod.NewcourseComponent), canActivate: [AuthGuard]},
         {path: 'security', loadChildren: () => import('../security/security.module').then(mod => mod.SecurityModule)},
-        {path: 'profile', loadChildren: () => import('../security/profile/profile.component').then(mod => mod.ProfileComponent)}
+        {path: 'security/profile', loadChildren: () => import('../security/profile/profile.component').then(mod => mod.ProfileComponent)}
 
       ]}
 ];
