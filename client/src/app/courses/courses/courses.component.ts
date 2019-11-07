@@ -96,10 +96,10 @@ export class CoursesComponent implements OnInit {
   }
 
   register(course) {
-    this.coursesServices.canRegister(this.userServices.user(), course)
+    this.coursesServices.canRegister(this.userServices.fbUser().id, course)
       .subscribe((resp: {stat: boolean, message: string}) => {
       if (resp.stat) {
-        this.coursesServices.tryEnroll(this.userServices.user(), course).subscribe((result) => {
+        this.coursesServices.tryEnroll(this.userServices.fbUser().id, course).subscribe((result) => {
           if (result) {
             this.snackbar.openFromComponent(NotifyEnrolledComponent, {
               duration: 3 * 1000,
@@ -123,7 +123,7 @@ export class CoursesComponent implements OnInit {
 
   openFullDialog(course) {
     console.log(course);
-    this.coursesServices.canRegister(this.userServices.user(), course)
+    this.coursesServices.canRegister(this.userServices.fbUser().id, course)
       .subscribe((resp: {stat: boolean, message: string}) => {
       if (resp.stat) {
         const dialogRef = this.dialog.open(YesNoDialogComponent, {

@@ -126,8 +126,9 @@ export class DiscussionComponent implements OnInit {
   // adds post to discussion and reloads posts
   pushPost() {
     const post = {
-      user_id: this.adminServices.getIsAdmin() ? this.adminServices.getAdmin().id : this.userServices.user(),
-      user_name: this.adminServices.getIsAdmin() ? this.adminServices.getAdmin().name : this.userServices.user(),
+      user_id: this.adminServices.getIsAdmin() ? this.adminServices.getAdmin().id : this.userServices.fbUser().id,
+      user_name: this.adminServices.getIsAdmin() ? this.adminServices.getAdmin().name : this.userServices.fbUser().first_name + ' ' +
+      this.userServices.fbUser().last_name,
       date: new Date().getTime(),
       post: this.htmlContent};
 

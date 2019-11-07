@@ -56,7 +56,7 @@ export class CourseComponent implements OnInit, OnChanges {
       }
     }));
 
-    this.user_id = this.userServices.user();
+    this.user_id = this.userServices.fbUser().id;
 
     this.subscriptions.push(this.coursesServices.studentHasCourse(this.user_id, this.current_course).subscribe( (resp: boolean) => {
       this.authorized = resp;

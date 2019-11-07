@@ -52,7 +52,7 @@ export class QuizResultComponent implements OnInit {
       if (params.quiz) {
         this.quizId = params.quiz;
       }
-      this.courseServices.getStudentQuizRecord(this.userServices.user(), this.course, this.quizId).subscribe( (resp: Record) => {
+      this.courseServices.getStudentQuizRecord(this.userServices.fbUser().id, this.course, this.quizId).subscribe( (resp: Record) => {
         this.record = resp;
         if (this.getPercent() < 60) { this.barColor = 'warn'; }
         this.barMode = 'determinate';

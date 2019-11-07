@@ -18,11 +18,17 @@ module.exports = (passport) => {
     });
 
     // add post to a discussion
-    router.post('/add-discussion-post', async (req, res, next) => {
+    // router.post('/add-discussion-post', async (req, res, next) => {
+    //     const resp = await coursesServices.addDiscussionPost(req.body.course, req.body.discussion, req.body.post);
+    //     res.json(resp);
+    // });
+    router.post('/add-discussion-post', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
+        // if (!req.body.post.user_id){
+        //     req.body.post.user_id = req.user;
+        // }
         const resp = await coursesServices.addDiscussionPost(req.body.course, req.body.discussion, req.body.post);
         res.json(resp);
     });
-
     // add module to a course
     router.post('/add-module', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addCourseModule(req.body.course, req.body.module);

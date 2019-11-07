@@ -34,7 +34,7 @@ export class ProfileComponent implements OnInit {
     private coursesServices: CoursesService,
     private router: Router
   ) {
-    this.userID = this.userServices.user();
+    this.userID = this.userServices.fbUser().id;
   }
 
   ngOnInit() {
@@ -75,7 +75,7 @@ export class ProfileComponent implements OnInit {
     //   }
     // }));
 
-    this.userID = this.userServices.user();
+    this.userID = this.userServices.fbUser().id;
 
   }
 

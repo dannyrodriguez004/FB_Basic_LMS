@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
     private coursesServices: CoursesService,
 
   ) {
-    this.student_id = this.userServices.user(); // get debug student id
+    this.student_id = this.userServices.fbUser().id; // get debug student id
   }
 
   /**
@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
         this.myCourses = resp;
       })
     } else {
-      this.subscriptions.push(this.coursesServices.getStudentCourses(this.student_id).subscribe( (resp: Course[]) => {
+      this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe( (resp: Course[]) => {
         this.myCourses = resp;
       } ));
     }

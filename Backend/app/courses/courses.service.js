@@ -90,8 +90,8 @@ class CoursesService {
      * @return true if post is successfully added
      */
     async addDiscussionPost(course, discussion, post) {
-        try {
 
+        try {
             await database.ref('/courses/' + course + '/discussions/')
             .child(discussion).child('posts').push(
                 {

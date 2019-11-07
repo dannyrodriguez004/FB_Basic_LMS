@@ -52,6 +52,8 @@ export class NavbarComponent implements OnInit, OnChanges {
         this.openRegisterStudentDialog();
       } else {
         this.isRegistered = true;
+        console.log('AFTER DO LOGIN', resp.user_info);
+        window.localStorage.user_info = JSON.stringify(resp.user_info);
       }
     }));
   }
@@ -66,6 +68,7 @@ export class NavbarComponent implements OnInit, OnChanges {
         email: this.userServices.fbUser().email
       }
     });
+
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
       if (result) {
         this.isRegistered = true;
@@ -84,8 +87,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.loadCourses();
     console.log('BEFORE GET CURR USER');
-    this.getCurrentUser();
-    this.getUserInfo();
+    console.log(this.userServices.getCurrentUser());
   }
 
   ngOnChanges() {
@@ -104,13 +106,13 @@ export class NavbarComponent implements OnInit, OnChanges {
     return this.user;
   }
 
-  getCurrentUser() {
-    this.userServices.getCurrentUser().subscribe((resp: any) => {
-      console.log(resp.userID);
-      this.FBuserID = resp.userID;
-    });
-    return this.FBuserID;
-  }
+  // getCurrentUser() {
+  //   this.userServices.getCurrentUser().subscribe((resp: any) => {
+  //     console.log(resp.userID);
+  //     this.FBuserID = resp.userID;
+  //   });
+  //   return this.FBuserID;
+  // }
 
   openAddCourseDialog() {
     const dialogRef = this.dialog.open(NewcourseComponent, {
@@ -145,7 +147,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   // }
 
   loadCourses() {
-    this.subscriptions.push(this.coursesServices.getStudentCourses(this.getCurrentUser()).subscribe( (resp: CourseNav[]) => {
+    this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe( (resp: CourseNav[]) => {
       this.myCourses = resp;
     }));
 

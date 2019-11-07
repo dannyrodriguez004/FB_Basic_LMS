@@ -78,7 +78,7 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
       .subscribe( (resp: Quiz) => {
       this.quiz = resp as Quiz;
       console.log(this.quiz);
-      this.courseServices.getStudentQuizRecord(this.userServices.user(), this.current_course, this.assessment_id)
+      this.courseServices.getStudentQuizRecord(this.userServices.fbUser().id, this.current_course, this.assessment_id)
       // tslint:disable-next-line:no-shadowed-variable
         .subscribe( (resp:
                        {title: string, attempted: number,
@@ -128,7 +128,7 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
       });
     });
 
-    this.courseServices.saveResponses(this.userServices.user(), this.current_course, this.assessment_id, answers).subscribe( (resp) => {
+    this.courseServices.saveResponses(this.userServices.fbUser().id, this.current_course, this.assessment_id, answers).subscribe( (resp) => {
       this.saving = false;
     });
   }
@@ -172,7 +172,7 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
     });
 
     // tslint:disable-next-line:max-line-length
-    this.courseServices.submitQuiz(this.userServices.user(),
+    this.courseServices.submitQuiz(this.userServices.fbUser().id,
       this.current_course, this.current_module, this.assessment_id, answers).subscribe( (resp) => {
       if (resp) {console.log('Quiz graded!'); }
 
@@ -183,7 +183,7 @@ export class AssessmentComponent implements OnInit, AfterViewInit {
   }
 
   setStartTime() {
-    this.courseServices.setQuizStartTime(this.userServices.user(), this.current_course, this.assessment_id).subscribe( (resp) => {
+    this.courseServices.setQuizStartTime(this.userServices.fbUser().id, this.current_course, this.assessment_id).subscribe( (resp) => {
       console.log(resp);
     });
   }

@@ -24,7 +24,7 @@ export class GradesComponent implements OnInit {
 
   loading = true;
 
-  private debugUser = this.userServices.user();
+  private debugUser = this.userServices.fbUser().id;
   private subscriptions: Subscription[] = [];
 
   constructor(

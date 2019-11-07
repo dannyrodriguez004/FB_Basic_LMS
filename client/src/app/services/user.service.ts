@@ -217,9 +217,10 @@ export class UserService {
 
   getFbUserID() {
     this.getCurrentUser().subscribe((resp: any) => {
+      console.log(resp);
       this.student_id = resp.userID;
+      console.log(this.student_id);
     });
-    console.log(this.student_id);
     return this.student_id;
   }
 
