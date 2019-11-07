@@ -22,19 +22,6 @@ export class CoursesService {
     return window.localStorage.jwtToken;
   }
 
-  buildHeaders(): HttpHeaders {
-    const headersConfig = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    };
-    if (this.getToken()) {
-      headersConfig['Authorization'] = `Token ${this.getToken()}`;
-    }
-    let headers = new HttpHeaders(headersConfig);
-    console.log(headers);
-    return headers;
-  }
-
   getCourseInfo(course) {
     // const opts = {
     //   params: new HttpParams().set('key', `${course}`),
@@ -227,9 +214,10 @@ export class CoursesService {
   //     opts);
   // }
 
-  getStudentCourses(student_id: string) {
-    const params = { params: new HttpParams().set('student', `${student_id}`)};
-    return this.http.get(`${environment.apiAddress}/courses/student-courses`, params);
+  // getStudentCourses(student_id: string) {
+  getStudentCourses() {
+    // const params = { params: new HttpParams().set('student', `${student_id}`)};
+    return this.http.get(`${environment.apiAddress}/courses/student-courses`);
   }
 
   getQuiz(course, moduleID, quiz) {

@@ -9,6 +9,7 @@ import {Router} from '@angular/router';
 import {UserModel} from '../../models/usermodel.models';
 import {CoursesService} from '../../services/courses.service';
 import { FBRegisterComponent } from '../fbregister/fbregister.component';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -36,17 +37,16 @@ export class NavbarComponent implements OnInit, OnChanges {
     private adminServices: AdminService,
     private router: Router
   ) {
-    this.student_id = this.userServices.user();
-    this.userServices.isLoggedIn().subscribe(loggedIn => {
-      this.loggedIn = loggedIn;
-      this.isRegistered = true;
-  });
+    const jwtToken = this.userServices.getToken();
+    this.loggedIn = new BehaviorSubject<boolean>(!!jwtToken);
 }
 
   doLogin() {
     this.userServices.submitLogin();
+    this.loggedIn.next(true);
     this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
       console.log(resp);
+      this.loadCourses();
       if (!resp.user_info) {
         this.isRegistered = false;
         this.openRegisterStudentDialog();
@@ -76,8 +76,10 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   doLogout() {
     this.logout();
-    // this.ngOnInit();
+    this.myCourses = [];
+    this.loggedIn.next(undefined);
   }
+
   // Runs whenever this component is loaded
   ngOnInit() {
     this.loadCourses();

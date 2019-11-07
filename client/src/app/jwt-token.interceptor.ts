@@ -15,12 +15,22 @@ export class JwtTokenInterceptorService implements HttpInterceptor {
       const jwt = this.cookies.get('admin-session');
       const modifiedRequest = req.clone({
         setHeaders: {
-            Authorization: `Bearer ${jwt}`
+          Authorization: `Bearer ${jwt}`
         }
       });
       return next.handle(modifiedRequest);
     } else {
-      return next.handle(req);
+      const jwtToken = window.localStorage.jwtToken;
+      if (jwtToken) {
+        const modifiedRequest = req.clone({
+          setHeaders: {
+            Authorization: `Bearer ${jwtToken}`
+          }
+        });
+        return next.handle(modifiedRequest);
+      } else {
+        return next.handle(req);
+      }
     }
   }
 }

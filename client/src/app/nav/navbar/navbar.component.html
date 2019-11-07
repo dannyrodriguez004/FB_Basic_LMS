@@ -10,7 +10,7 @@
       <span>
             <button [routerLink]="['nav']" mat-button><mat-icon>dashboard</mat-icon>Dashboard</button>
       </span>
-      <span *ngIf="myCourses.length > 0">
+      <span *ngIf="loggedIn.value">
             <button (click)="loadCourses()" mat-button [matMenuTriggerFor]="menu"><mat-icon>list</mat-icon>My Courses</button>
 
             <mat-menu #menu="matMenu">
@@ -31,7 +31,7 @@
 
       <span class="fill"></span>
       <span>
-            <button mat-raised-button *ngIf="FBuserID" [mat-menu-trigger-for]="fbMenu"> Profile </button>
+            <button mat-raised-button *ngIf="loggedIn.value" [mat-menu-trigger-for]="fbMenu"> Profile </button>
         <mat-menu #fbMenu="matMenu">{{FBuserID}}
 <!--          <p mat-menu-item *ngIf="this.isLoggedIn()" value=""></p>-->
           <button [routerLink]="['/security/profile/']" mat-menu-item> Visit Profile </button>

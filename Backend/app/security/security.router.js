@@ -5,29 +5,29 @@ const jwt = require('jsonwebtoken');
 var passport = require('passport');
 const d = require('./passport.strategy');
 const database = require('firebase-admin').database();
-const jwtMiddleware = (req, res, next) => {
-    const authString = req.headers['authorization'];
-    if(typeof authString === 'string' && authString.indexOf(' ') > -1) {
-        const authArray = authString.split(' ');
-        const token = authArray[1];
-        jwt.verify(token, '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx', (err, decoded) =>
-        {
-            if(err) {
-                res.status(403).send({
-                    errorMessage: 'Permission denied'
-                });
-            } else {
-                req.decoded = decoded;
-                next();
-            }
-        });
-    } else {
-        res.status(403).send({
-            errorMessage: 'Permission denied'
-        });
-
-    }
-};
+// const jwtMiddleware = (req, res, next) => {
+//     const authString = req.headers['authorization'];
+//     if(typeof authString === 'string' && authString.indexOf(' ') > -1) {
+//         const authArray = authString.split(' ');
+//         const token = authArray[1];
+//         jwt.verify(token, '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx', (err, decoded) =>
+//         {
+//             if(err) {
+//                 res.status(403).send({
+//                     errorMessage: 'Permission denied'
+//                 });
+//             } else {
+//                 req.decoded = decoded;
+//                 next();
+//             }
+//         });
+//     } else {
+//         res.status(403).send({
+//             errorMessage: 'Permission denied'
+//         });
+//
+//     }
+// };
 
 module.exports = (passport) => {
 
@@ -75,18 +75,18 @@ module.exports = (passport) => {
         });
     });
 
-    router.get('/auth/me', jwtMiddleware, async (req, res, next) => {
+    router.get('/auth/me', passport.authenticate('jwt', {session:true}), async (req, res, next) => {
         console.log('IN AUTHME');
-        console.log(req.decoded);
-        var users = await database.ref('/users').orderByKey().equalTo(req.decoded).once('value');
+        console.log(req.user);
+        var users = await database.ref('/users').orderByKey().equalTo(req.user).once('value');
         if(users) {
             res.json({
-                userID: req.decoded,
+                userID: req.user,
                 user_info: users
             });
         } else {
             console.log('AUTH/ME CANNOT GET USERS');
-            res.json({userID: req.decoded});
+            res.json({userID: req.user});
         }
     });
     return router;

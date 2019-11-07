@@ -9,7 +9,6 @@ import { Router } from '@angular/router';
 import { distinctUntilChanged, catchError, tap } from 'rxjs/operators';
 import { CookieService} from 'ngx-cookie-service';
 import * as jwt_decode from 'jwt-decode';
-
 declare var FB: any;
 
 @Injectable({
@@ -21,7 +20,7 @@ export class UserService {
   private FBLoggedIn;
   private userModel: UserModel;
   // tslint:disable-next-line:variable-name
-  private student_id = ''; // debugging value
+  private student_id: string; // debugging value
   private admin: {id: string, name: string};
   private auth = 0;
 
@@ -103,19 +102,19 @@ export class UserService {
   destroyToken() {
     window.localStorage.removeItem('jwtToken');
   }
-
-  buildHeaders(): HttpHeaders {
-    const headersConfig = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    };
-    if (this.getToken()) {
-      headersConfig['Authorization'] = `Token ${this.getToken()}`;
-    }
-    let headers = new HttpHeaders(headersConfig);
-    console.log(headers);
-    return headers;
-  }
+  //
+  // buildHeaders(): HttpHeaders {
+  //   const headersConfig = {
+  //     'Content-Type': 'application/json',
+  //     'Accept': 'application/json'
+  //   };
+  //   if (this.getToken()) {
+  //     headersConfig['Authorization'] = `Token ${this.getToken()}`;
+  //   }
+  //   let headers = new HttpHeaders(headersConfig);
+  //   console.log(headers);
+  //   return headers;
+  // }
 
   submitLogin() {
     FB.login(result => {
@@ -213,11 +212,7 @@ export class UserService {
   }
 
   getCurrentUser() {
-  const opts = {
-    headers: this.buildHeaders()
-  };
-  console.log(opts);
-  return this.http.get(`${environment.apiAddress}/security/auth/me`, opts);
+  return this.http.get(`${environment.apiAddress}/security/auth/me`);
 }
 
   getFbUserID() {
@@ -227,6 +222,7 @@ export class UserService {
     console.log(this.student_id);
     return this.student_id;
   }
+
 // tslint:disable-next-line:variable-name
 //   getStudentCourses(student_id: string) {
 //     const opts = {
