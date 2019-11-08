@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
       this.authorized = true;
       return this.authorized;
       } else {
-        const IS_USER = this.cookies.check('admin-session');
+        const IS_USER = this.cookies.check('admin-session') || this.userServices.fbUser() != null;
         const FB_USER = this.userServices.fbUser();
         if ( !IS_USER ) {
          if (FB_USER) {
