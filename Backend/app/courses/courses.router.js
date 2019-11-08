@@ -125,7 +125,7 @@ module.exports = (passport) => {
     });
 
     // get all the courses that a student is enrolled in
-    // router.get('/student-courses', jwtMiddleware, async (req, res, next) => {
+    // router.get('/student-courses', async (req, res, next) => {
     //     const resp = await coursesServices.getMyCourses(req.decoded);
     //     res.json(resp);
     // })

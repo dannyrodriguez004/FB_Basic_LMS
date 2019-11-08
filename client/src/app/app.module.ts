@@ -25,17 +25,13 @@ import { AppRoutingModule } from './app-routing.module';
 /* App Components */
 import { AppComponent } from './app.component';
 import { YesNoDialogComponent } from './yes-no-dialog/yes-no-dialog.component';
-
-
 import { CookieService } from 'ngx-cookie-service';
 import { JwtTokenInterceptorService } from './jwt-token.interceptor';
 import {EnsureHttpsInterceptorModule} from 'angular-interceptors';
-import {ToastrModule} from 'ngx-toastr';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {ProfileComponent} from './security/profile/profile.component';
 
 @NgModule({
   declarations: [

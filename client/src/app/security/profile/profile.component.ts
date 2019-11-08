@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import {UserModel} from '../../models/usermodel.models';
+import {UsertypeModel} from "../../models/usertype.model";
 
 @Component({
   selector: 'app-profile',
@@ -47,7 +48,7 @@ export class ProfileComponent implements OnInit {
         this.subscriptions.push(this.userServices
           .getUserInfo(this.userID)
           .subscribe( (userInfo: {id: string, first_name: string,
-            last_name: string, email: string, type: string, phone: string, country: string}) => {
+            last_name: string, email: string, type: UsertypeModel, phone: string, country: string}) => {
             this.userModel = userInfo;
             console.log(this.userModel);
           }));
@@ -74,9 +75,7 @@ export class ProfileComponent implements OnInit {
     //     this.userModel = params.userModel;
     //   }
     // }));
-
     this.userID = this.userServices.fbUser().id;
-
   }
 
   setNav(val: string) {

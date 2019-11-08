@@ -4,7 +4,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { NgForm } from '@angular/forms';
-import {AdminService} from '../../services/admin.service';
+// import {AdminService} from '../../services/admin.service';
 declare var FB: any;
 
 @Component({
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private router: Router,
     private userServices: UserService,
-    private adminServices: AdminService
+    // private adminServices: AdminService
   ) { }
 
   async ngOnInit() {
@@ -47,9 +47,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     this.isLoading = true;
     // this.authentication.login(form.value.email, form.value.password);
-    this.adminServices.Adminlogin({email: form.value.email, password: form.value.password}).subscribe((login) => { console.log(login); });
-
+    this.userServices.Adminlogin({email: form.value.email, password: form.value.password}).subscribe((login) => { console.log(login); });
   }
+
   // onSubmit() {
   //   this.submitted = true;
   //
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: this.loginForm.value.password
     };
     this.subscription.push(
-      this.adminServices.Adminlogin(authUser)
+      this.userServices.Adminlogin(authUser)
         .subscribe(
           (payload) => {
             this.router.navigateByUrl('');
@@ -101,7 +101,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: this.loginForm.value.password
     };
     this.subscription.push(
-      this.adminServices.Adminlogin(authUser)
+      this.userServices.Adminlogin(authUser)
         .subscribe(
           (payload) => {
             this.router.navigateByUrl('');

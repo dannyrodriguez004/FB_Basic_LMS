@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams, HttpResponse, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {Observable} from 'rxjs';
-import {stringify} from 'querystring';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {UserModel} from '../models/usermodel.models';
-import { Router } from '@angular/router';
-import { distinctUntilChanged, catchError, tap } from 'rxjs/operators';
-import { CookieService} from 'ngx-cookie-service';
+import {Router} from '@angular/router';
+import {catchError, distinctUntilChanged, tap} from 'rxjs/operators';
+import {CookieService} from 'ngx-cookie-service';
 import * as jwt_decode from 'jwt-decode';
+import {UsertypeModel} from '../models/usertype.model';
+
 declare var FB: any;
 
 @Injectable({
@@ -16,19 +16,19 @@ declare var FB: any;
 })
 export class UserService {
 
-  private isAdmin = false;
+  // private isAdmin = false;
   private FBLoggedIn;
   private userModel: UserModel;
   // tslint:disable-next-line:variable-name
   private student_id: string; // debugging value
   private admin: {id: string, name: string};
   private auth = 0;
-
+  adminLoggedIn;
   constructor(
     private http: HttpClient,
     private cookies: CookieService,
     private router: Router) {
-    this.isAdmin = this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session'));
+    // this.isAdmin = this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session'));
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
     (window as any).fbAsyncInit = () => {
@@ -60,7 +60,8 @@ export class UserService {
       console.log(decoded);
       if (!decoded.exp) { throw false; }
       this.auth = decoded.auth;
-      this.admin = {id: decoded.id, name: decoded.name};
+      // this.admin = {id: decoded.id, name: decoded.name};
+      this.userModel = {id: decoded.id, first_name: decoded.split()[0], last_name: decoded.split()[1], type: UsertypeModel.Admin};
       if (decoded.exp < Date.now().valueOf() / 1000) {
         throw false;
       } else {
@@ -71,9 +72,9 @@ export class UserService {
     }
   }
 
-  getAdmin() {
-    return this.admin;
-  }
+  // getAdmin() {
+  //   return this.admin;
+  // }
 
   Adminlogin(loginData) {
     let options = new HttpParams();
@@ -83,7 +84,7 @@ export class UserService {
       distinctUntilChanged(),
       tap((jwt: any) => {
         this.cookies.set('admin-session', jwt.payload, 2, '/');
-        this.isAdmin = true;
+        // this.isAdmin = true;
         const decoded = jwt_decode(jwt.payload);
         this.auth = decoded.auth;
       }),
@@ -127,7 +128,8 @@ export class UserService {
           id: response.id,
           first_name: response.first_name,
           last_name: response.last_name,
-          email: response.email
+          email: response.email,
+          type: UsertypeModel.Student
         };
         console.log(this.userModel);
         console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
@@ -199,7 +201,7 @@ export class UserService {
     if (this.cookies.getAll() != {}) {
       this.cookies.deleteAll('/');
     }
-    this.isAdmin = false;
+    // this.isAdmin = false;
     this.FBLoggedIn = false;
     this.auth = -1;
     this.router.navigate(['/nav/home']);
@@ -256,7 +258,8 @@ export class UserService {
   }
 
   getIsAdmin() {
-    return this.isAdmin;
+    // return this.adminLoggedIn;
+    return this.userModel && this.userModel.type === UsertypeModel.Admin;
   }
 
   fbLoggedIn() {
@@ -265,6 +268,10 @@ export class UserService {
 
   toggleLoggedIn() {
     this.FBLoggedIn = !this.FBLoggedIn;
+  }
+
+  getAuth() {
+    return this.auth;
   }
 
   private handleError<T>(operation = 'operation', result ?: T) {

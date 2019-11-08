@@ -4,6 +4,7 @@ import { CoursesService } from '../../../../services/courses.service';
 import { AdminService } from '../../../../services/admin.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Component, OnInit, Optional, Inject } from '@angular/core';
+import {UserService} from "../../../../services/user.service";
 
 export interface Record {
   title: string;
@@ -51,7 +52,8 @@ export class QuizDialogComponent implements OnInit {
     public dialogRed: MatDialogRef<QuizDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) Data: { module: string , course: string, quiz: string},
     private courseServices: CoursesService,
-    private adminServices: AdminService,
+    // private adminServices: AdminService,
+    private userServices: UserService,
     private router: Router,
   ) {
     this.data = Data;
@@ -60,7 +62,7 @@ export class QuizDialogComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.courseServices.getStudentQuizRecord(this.adminServices.user(), this.data.course, this.data.quiz).subscribe( (resp: Record) => {
+    this.courseServices.getStudentQuizRecord(this.userServices.fbUser().id, this.data.course, this.data.quiz).subscribe( (resp: Record) => {
       this.record = resp;
       this.courseServices.getQuizInfo(this.data.course, this.data.module, this.data.quiz).subscribe( (resp2: Record) => {
         this.record.attempts = resp2.attempts;

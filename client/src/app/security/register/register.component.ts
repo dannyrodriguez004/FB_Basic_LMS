@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userServices: UserService,
-    private adminServices: AdminService,
+    // private adminServices: AdminService,
     private router: Router
   ) {
     this.registerForm = this.formBuilder.group({
@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     this.loading = true;
-    this.adminServices.addStudent({
+    this.userServices.addStudent({
       key: '0', /////////////////////// debug value change it! to facebook id value
       token: 'token', /////////////////////////////// same story here
       email: this.registerForm.value.email,

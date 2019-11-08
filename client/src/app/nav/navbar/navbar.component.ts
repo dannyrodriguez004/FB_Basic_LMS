@@ -4,12 +4,14 @@ import { UserService } from '../../services/user.service';
 import {Component, OnChanges, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
-import {AdminService} from '../../services/admin.service';
+// import {AdminService} from '../../services/admin.service';
 import {Router} from '@angular/router';
 import {UserModel} from '../../models/usermodel.models';
 import {CoursesService} from '../../services/courses.service';
 import { FBRegisterComponent } from '../fbregister/fbregister.component';
 import {BehaviorSubject} from 'rxjs';
+import {UsertypeModel} from '../../models/usertype.model';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,7 +24,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   user: UserModel;
   FBuserID: string;
   adminCoureses: CourseNav[] = [];
-
+  adminLoggedIn;
   // tslint:disable-next-line:variable-name
   private student_id = '';
   private subscriptions: Subscription[] = [];
@@ -34,12 +36,16 @@ export class NavbarComponent implements OnInit, OnChanges {
     private userServices: UserService,
     private coursesServices: CoursesService,
     private dialog: MatDialog,
-    private adminServices: AdminService,
+    private cookiesServices: CookieService,
+    // private adminServices: AdminService,
     private router: Router
   ) {
     const jwtToken = this.userServices.getToken();
     this.loggedIn = new BehaviorSubject<boolean>(!!jwtToken);
+    const jwtCookie = this.cookiesServices.check('admin-session');
+    this.adminLoggedIn = new BehaviorSubject<boolean>(!!jwtCookie);
 }
+
 
   doLogin() {
     this.userServices.submitLogin();
@@ -53,7 +59,7 @@ export class NavbarComponent implements OnInit, OnChanges {
       } else {
         this.isRegistered = true;
         console.log('AFTER DO LOGIN', resp.user_info);
-        window.localStorage.user_info = JSON.stringify(resp.user_info);
+        // window.localStorage.user_info = JSON.stringify(resp.user_info);
       }
     }));
   }
@@ -65,7 +71,8 @@ export class NavbarComponent implements OnInit, OnChanges {
         id: this.userServices.fbUser().id,
         first_name: this.userServices.fbUser().first_name,
         last_name: this.userServices.fbUser().last_name,
-        email: this.userServices.fbUser().email
+        email: this.userServices.fbUser().email,
+        type: UsertypeModel.Student
       }
     });
 
@@ -97,14 +104,14 @@ export class NavbarComponent implements OnInit, OnChanges {
   // submitLogin() {
   //   return this.userServices.submitLogin();
   // }
-
-  getUserInfo() {
-    this.subscriptions.push(this.userServices.getUserInfo(this.FBuserID).subscribe((resp: any) => {
-      console.log(resp);
-      this.user = resp.user_info;
-  }));
-    return this.user;
-  }
+  //
+  // getUserInfo() {
+  //   this.subscriptions.push(this.userServices.getUserInfo(this.FBuserID).subscribe((resp: any) => {
+  //     console.log(resp);
+  //     this.user = resp.user_info;
+  // }));
+  //   return this.user;
+  // }
 
   // getCurrentUser() {
   //   this.userServices.getCurrentUser().subscribe((resp: any) => {
@@ -147,16 +154,27 @@ export class NavbarComponent implements OnInit, OnChanges {
   // }
 
   loadCourses() {
-    this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe( (resp: CourseNav[]) => {
-      this.myCourses = resp;
-    }));
-
-    if ( this.adminServices.getIsAdmin()) {
-      this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe( (resp: CourseNav[]) => {
-        this.adminCoureses = resp;
-      }));
+    console.log(this.loggedIn.value);
+    console.log(this.adminLoggedIn.value);
+    if (this.loggedIn.value || this.adminLoggedIn.value) {
+      if (this.loggedIn.value) {
+        this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
+          this.myCourses = resp;
+        }));
+      } else if (this.adminLoggedIn.value) {
+        this.adminLoggedIn.next(true);
+        this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
+          this.adminCoureses = resp;
+        }));
+      }
     }
   }
+    // if ( this.adminServices.getIsAdmin()) {
+    //   this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe( (resp: CourseNav[]) => {
+    //     this.adminCoureses = resp;
+    //   }));
+    // }
+
   toggleLogin() {
     this.userServices.toggleLoggedIn();
   }
@@ -166,7 +184,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   }
 
   isAdmin() {
-    return this.adminServices.getIsAdmin();
+    return this.userServices.getIsAdmin();
   }
 
   // logout() {
@@ -174,12 +192,12 @@ export class NavbarComponent implements OnInit, OnChanges {
   // }
 
   logout() {
-    this.adminServices.logOutUser();
+    // this.adminServices.logOutUser();
     this.userServices.logout();
   }
 
   auth() {
-    return this.adminServices.getAuth();
+    return this.userServices.getAuth();
   }
 
 }

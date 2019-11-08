@@ -2,8 +2,8 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-import { AdminService } from '../../services/admin.service';
-
+// import { AdminService } from '../../services/admin.service';
+//
 
 function equalsValidator(controlA: FormControl) {
   return function innerEqualsValidator(controlB: FormControl) {
@@ -35,7 +35,7 @@ export class AdminRegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private userServices: UserService,
     private router: Router,
-    private adminServices: AdminService
+    // private adminServices: AdminService
   ) {
     this.registerForm = this.formBuilder.group({
       fname: ['', Validators.required],
@@ -50,9 +50,9 @@ export class AdminRegisterComponent implements OnInit {
 
   register() {
     this.loading = true;
-    this.adminServices.isUsernameAvailable(this.registerForm.value.primary).subscribe( (resp: boolean) => {
+    this.userServices.isUsernameAvailable(this.registerForm.value.primary).subscribe( (resp: boolean) => {
       if (resp) {
-        this.adminServices.addInstructor({
+        this.userServices.addInstructor({
           email: this.registerForm.value.primary,
 		      contactEmail: this.registerForm.value,
 		      f_name: this.registerForm.value.fname,
@@ -71,7 +71,7 @@ export class AdminRegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth = this.adminServices.getAuth();
+    this.auth = this.userServices.getAuth();
   }
 
 }
