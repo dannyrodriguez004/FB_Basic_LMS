@@ -6,10 +6,10 @@
           <mat-card  [ngStyle]="{'width':'300' + 'px'}">
             <h1>{{course.name}}</h1>
             <p>
-              <strong>Instructor: </strong>{{course.instructor_name}}
+              <strong>Instructor: </strong> {{course.instructor_name}}
               <br>
             </p>
-            <button [routerLink]="['/nav/courses/']" mat-button>Syllabus</button>
+            <a [routerLink]="['/nav/courses/view-course']" [queryParams]="{ course: course.id }" mat-button>Syllabus</a>
             <hr>
           </mat-card>
       </ng-container>

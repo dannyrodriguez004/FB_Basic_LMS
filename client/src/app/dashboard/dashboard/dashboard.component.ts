@@ -3,6 +3,7 @@ import {Subscription} from 'rxjs';
 import {UserService} from '../../services/user.service';
 import {Component, Input, OnInit} from '@angular/core';
 import {CoursesService} from '../../services/courses.service';
+import {UserModel} from '../../models/usermodel.models';
 
 
 @Component({
@@ -15,18 +16,14 @@ export class DashboardComponent implements OnInit {
 
   private subscriptions: Subscription[] =  [];
   myCourses: Course[] = []; // the user's courses names and id
-  @Input('current_course') current_course: string;
-  courseData: {id: string, name: string, description: string, instructor: string};
-
-
   // tslint:disable-next-line:variable-name
-  private student_id: string;
+  user: UserModel;
   constructor(
     private userServices: UserService,
     private coursesServices: CoursesService,
 
   ) {
-    this.student_id = this.userServices.fbUser().id; // get debug student id
+    // this.user.id = this.userServices.fbUser().id; // get debug student id
   }
 
   /**
@@ -34,32 +31,52 @@ export class DashboardComponent implements OnInit {
    */
   loadCourses() {
     if (this.userServices.getIsAdmin()) {
-      this.coursesServices.getAdminCourses().subscribe(( resp: Course[]) => {
+      this.coursesServices.getAdminCourses().subscribe((resp: Course[]) => {
         this.myCourses = resp;
       });
     } else {
-      this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe( (resp: boolean) => {
+      this.myCourses = [];
+      this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: Course[]) => {
         if (this.userServices.fbUser().id) {
-          this.subscriptions.push(this.coursesServices.getCourseInfo(this.current_course)
-            .subscribe( (course: {id: string, name: string,
-              description: string, instructor: string, students: string[]}) => {
-              this.courseData = course;
-            }));
+          resp.forEach((course: Course) => {
+            this.coursesServices.getCourseInfo(course.id)
+              .subscribe((courseInfo: any) => {
+                console.log('BOO ' + JSON.stringify(courseInfo));
+                this.coursesServices.getInstructorInfo(courseInfo.instructor).subscribe((instructor: any) => {
+                  console.log('FOO ' + JSON.stringify(instructor));
+                  course.instructor_name = instructor.name;
+                  this.myCourses.push(JSON.parse(JSON.stringify(course)));
+                });
+              });
+          });
         } else {
           console.log('not authorized!');
           // this.router.navigateByUrl('/');
         }
       }));
-      this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe( (resp: Course[]) => {
-        this.myCourses = resp;
-      } ));
     }
-    // this.subscriptions.push(this.coursesServices.getInstructorInfo(this.myCourses)
-    //     .subscribe( (course: (instructor: string, instructorEmail: string}) => {
-    //       this.course = this.coursesServices.getInstructorInfo()
-
-    }
-
+  }
+  // loadCourses() {
+  //   if (this.userServices.getIsAdmin()) {
+  //     this.coursesServices.getAdminCourses().subscribe((resp: Course[]) => {
+  //       this.myCourses = resp;
+  //     });
+  //   } else {
+  //     this.coursesServices.getStudentCourses().subscribe((resp: Course[]) => {
+  //       console.log(resp);
+  //       this.myCourses = resp;
+  //       this.subscriptions.push(this.coursesServices.getCourseInfo(this.myCourses).subscribe((course: Course[]) => {
+  //         console.log(course);
+  //         this.course = course;
+  //       }));
+  //       this.subscriptions.push(this.coursesServices.getInstructorInfo(this.myCourses)
+  //         .subscribe((response: Course) => {
+  //           console.log(response);
+  //           this.course = response.instructor_name;
+  //         }));
+  //     });
+  //   }
+  // }
 
   ngOnInit() {
     this.loadCourses();
