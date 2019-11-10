@@ -13,7 +13,7 @@ const routes: Routes = [
   {path: 'home', loadChildren: () => import('./home/home.module').then(mod => mod.HomeModule)},
   {path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(mod => mod.DashboardModule)},
   {path: 'student-enroll', loadChildren: () => import('./courses/courses.module').then(mod => mod.CoursesModule)},
-  {path: 'security', loadChildren: () => import('./security/security.module').then(mod => mod.SecurityModule)},
+  {path: 'admin', redirectTo: '/nav/security/login'},
   {path: '**', redirectTo: 'nav/dashboard'}
 ];
 
