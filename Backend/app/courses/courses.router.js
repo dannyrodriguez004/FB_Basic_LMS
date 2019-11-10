@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const coursesServices = require('./courses.service');
 const express = require('express');
 const router = express.Router();
+const Utils = require('../utils/utils.service');
 
 module.exports = (passport) => {
 
@@ -9,12 +10,14 @@ module.exports = (passport) => {
     router.post('/add-course', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addCourse(req.body.course);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.addCourse.name, params: [req.body.course], result: resp}, "Adding New Course");
     });
 
     // add course discussion to course
     router.post('/add-course-discussion', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addDiscussion(req.body.course, req.body.discussion);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.addDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Adding New Discussion");
     });
 
     // add post to a discussion
@@ -22,7 +25,7 @@ module.exports = (passport) => {
     //     const resp = await coursesServices.addDiscussionPost(req.body.course, req.body.discussion, req.body.post);
     //     res.json(resp);
     // });
-    router.post('/add-discussion-post', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
+    router.post('/add-discussion-post', async (req, res, next) => {
         // if (!req.body.post.user_id){
         //     req.body.post.user_id = req.user;
         // }
@@ -33,29 +36,34 @@ module.exports = (passport) => {
     router.post('/add-module', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addCourseModule(req.body.course, req.body.module);
         res.json({success: resp});
+        Utils.AdminLog(req.user, {method: coursesServices.addCourseModule.name, params: [req.body.course, req.body.module], result: resp}, "Adding New Module");
     });
 
     // add link content to module
     router.post('/add-module-link', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleLink(req.body.course, req.body.module, req.body.content);
         res.json({success: resp});
+        Utils.AdminLog(req.user, {method: coursesServices.addModuleLink.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding a link to a module.");
     });
 
     // add quiz content to module
     router.post('/add-module-quiz', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleQuiz(req.body.course, req.body.module, req.body.content);
         res.json({success: resp});
+        Utils.AdminLog(req.user, {method: coursesServices.addModuleQuiz.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding a quiz to a Module");
     });
 
     // add external link to module
     router.post('/add-module-url', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleUrl(req.body.course, req.body.module, req.body.content);
         res.json({success: resp});
+        Utils.AdminLog(req.user, {method: coursesServices.addModuleUrl.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding an external link to a module.");
     });
 
     router.post('/add-module-content', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleContent(req.body.course, req.body.module, req.body.content);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.addModuleContent.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding a content to a module.");
     });
 
     // get course catergories
@@ -159,11 +167,13 @@ module.exports = (passport) => {
     router.post('/update-course', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.updateCourse(req.body.course);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.updateCourse.name, params: [req.body.course], result: resp}, "Updating Course Information.");
     });
 
     router.post('/remove-content', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeContent(req.body.course, req.body.module, req.body.content);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.removeContent.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Removing Course Content.");
     });
 
     router.get('/course-module', async(req, res, next) => {
@@ -174,11 +184,13 @@ module.exports = (passport) => {
     router.post('/update-discussion', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.updateDiscussion(req.body.course, req.body.discussion);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.updateDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Updating Course Discussion.");
     });
 
     router.post('/remove-discussion', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeDiscussion(req.body.course, req.body.discussion);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.removeDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Removing Course Discussion.");
     });
 
     router.get('/registered-students', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
@@ -216,11 +228,13 @@ module.exports = (passport) => {
     router.post('/remove-registree', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeRegistree(req.body.student, req.body.course);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.removeRegistree.name, params: [req.body.student, req.body.course], result: resp}, "Removing Course Registree.");
     });
 
     router.post('/confirm-enrollment', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.confirmEnrollment(req.body.student, req.body.course);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.confirmEnrollment.name, params: [req.body.student, req.body.course], result: resp}, "Confirming Student Enrollment.");
     });
 
     router.get('/course-students-2', passport.authenticate('jwt', {session: true}), async(req, res, next) => {

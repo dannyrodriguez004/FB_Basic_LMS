@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const usersServices = require('./users.service');
 const express = require('express');
 const router = express.Router();
+const Utils = require('../utils/utils.service');
 
 module.exports = (passport) => {
 
@@ -11,6 +12,7 @@ module.exports = (passport) => {
     router.post('/add-instructor', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.addInstructor(req.body.user);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: usersServices.addInstructor.name, params: [req.body.user], result: resp}, "Adding Instructor");
     })
 
 
@@ -36,6 +38,7 @@ module.exports = (passport) => {
     router.post('/enroll-student', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.enrollIn(req.body.student, req.body.course);
         res.json(resp);
+        Utils.AdminLog(req.user, {method: usersServices.enrollIn.name, params: [req.body.student, req.body.course], result: resp}, "Enrolling student into course.");
     });
 
     router.get('/all-instructors', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
