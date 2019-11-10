@@ -10,7 +10,6 @@ const routes: Routes = [
             .then(mod => mod.DashboardModule), canActivate: [AuthGuard]},
         {path: 'helppage', loadChildren: () => import('../helppage/helppage.module').then(mod => mod.HelppageModule)},
         {path: 'home', loadChildren: () => import('../home/home.module').then(mod => mod.HomeModule)},
-        {path: 'add-course', loadChildren: () => import('./newcourse/newcourse.component').then(mod => mod.NewcourseComponent)},
         {path: 'add-user', loadChildren: () => import('./fbregister/fbregister.component').then(mod => mod.FBRegisterComponent)},
         {path: 'add-course', loadChildren: () => import('./newcourse/newcourse.component')
             .then(mod => mod.NewcourseComponent), canActivate: [AuthGuard]},

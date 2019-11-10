@@ -26,6 +26,35 @@ class UtilsService {
         }
     }
 
+    async getLogs() {
+
+        let payload = [];
+
+        try {
+
+            let logsRef = await database.ref('/logs/admin/').once('value');
+
+            logsRef.forEach(date => {
+                let Day = {date: date.key, logs: []};
+                date.forEach( log => {
+
+                    Day.logs.push({
+                        id: log.key,
+                        user: log.child('user').val(),
+                        description: log.child('description').val()
+                    });
+                });
+                payload.push(Day);
+            });
+
+        } catch(err) {
+            console.error(err);
+            
+        }
+
+        return payload;
+    }
+
 }
 
 module.exports = new UtilsService();

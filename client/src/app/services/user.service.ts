@@ -17,8 +17,12 @@ declare var FB: any;
 export class UserService {
 
   // private isAdmin = false;
+
+
+  private isLoggedIn = false;
+
   private FBLoggedIn;
-  private userModel: UserModel;
+  private userModel: UserModel = new UserModel();
   // tslint:disable-next-line:variable-name
   private student_id: string; // debugging value
   private admin: {id: string, name: string};
@@ -28,6 +32,8 @@ export class UserService {
     private http: HttpClient,
     private cookies: CookieService,
     private router: Router) {
+
+      this.loadUser();
     // this.isAdmin = this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session'));
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
@@ -52,19 +58,43 @@ export class UserService {
       js.src = 'https://connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
+
+
+    console.log(this.userModel);
   }
 
-  isTokenFresh(token: string): any {
+
+  loadUser() {
+    if (this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session')) || this.FBLoggedIn) {
+      this.isLoggedIn = true;
+    }
+  }
+
+
+  isTokenFresh(token: string) {
     try {
+
       const decoded = jwt_decode(token);
-      console.log(decoded);
+      
       if (!decoded.exp) { throw false; }
+      
+      console.log(decoded);
       this.auth = decoded.auth;
-      // this.admin = {id: decoded.id, name: decoded.name};
-      this.userModel = {id: decoded.id, first_name: decoded.split()[0], last_name: decoded.split()[1], type: UsertypeModel.Admin};
+      
+      
+
       if (decoded.exp < Date.now().valueOf() / 1000) {
         throw false;
       } else {
+
+        var name: string[] = decoded.name.split(' ');
+        console.log(name);
+        this.userModel.first_name = name[0];
+        this.userModel.last_name = name[1] || '';
+        this.userModel.type = decoded.auth;
+
+        console.log(this.userModel);
+
         return true;
       }
     } catch (err) {
@@ -85,8 +115,10 @@ export class UserService {
       tap((jwt: any) => {
         this.cookies.set('admin-session', jwt.payload, 2, '/');
         // this.isAdmin = true;
-        const decoded = jwt_decode(jwt.payload);
-        this.auth = decoded.auth;
+
+        this.isTokenFresh(jwt.payload);
+        this.isLoggedIn = true;
+
       }),
       catchError(this.handleError('adminLogin'))
     );
@@ -201,6 +233,11 @@ export class UserService {
     if (this.cookies.getAll() != {}) {
       this.cookies.deleteAll('/');
     }
+
+    this.userModel = new UserModel();
+    this.isLoggedIn = false;
+
+    console.log(this.userModel);
     // this.isAdmin = false;
     this.FBLoggedIn = false;
     this.auth = -1;
@@ -209,8 +246,8 @@ export class UserService {
     this.destroyToken();
   }
 
-  isLoggedIn() {
-      return this.getCurrentUser();
+  getIsLoggedIn() {
+      return this.isLoggedIn;
   }
 
   getCurrentUser() {
@@ -259,7 +296,7 @@ export class UserService {
 
   getIsAdmin() {
     // return this.adminLoggedIn;
-    return this.userModel && this.userModel.type === UsertypeModel.Admin;
+    return this.isLoggedIn && this.userModel.type < UsertypeModel.Guest;
   }
 
   fbLoggedIn() {

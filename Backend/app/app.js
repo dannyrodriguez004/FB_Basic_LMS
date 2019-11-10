@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 
 //------ Routes -------//
 
-const utilsRoutes = require('./utils/utils.router')();
+const utilsRoutes = require('./utils/utils.router')(passport);
 app.use('/utils', utilsRoutes);
 
 const coursesRoutes = require('./courses/courses.router')(passport);

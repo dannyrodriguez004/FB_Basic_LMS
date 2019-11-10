@@ -4,9 +4,10 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatCardModule, MatButtonModule} from '@angular/material';
 import { MatMenuModule } from '@angular/material';
+import { ViewLogsComponent } from './view-logs/view-logs.component';
 
 @NgModule({
-  declarations: [DashboardComponent
+  declarations: [DashboardComponent, ViewLogsComponent
     ],
   imports: [
     CommonModule,

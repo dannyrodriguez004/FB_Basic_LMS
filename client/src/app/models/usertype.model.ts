@@ -1,6 +1,7 @@
 export enum UsertypeModel {
-  Admin = 'USER_ADMIN',
-  Instructor = 'USER_INSTRUCTOR',
-  Student = 'USER_STUDENT',
-  Guest = 'ROLE_GUEST'
+  Master = 2,
+  Admin = 1,
+  Instructor = 0,
+  Student = 4,
+  Guest = 3
 }
