@@ -43,11 +43,11 @@
             <button *ngIf="!loggedIn.value" (click)="loadCourses()" mat-raised-button [matMenuTriggerFor]="userMenu"><mat-icon>account_circle</mat-icon>Account</button>
 
             <mat-menu #userMenu="matMenu" >
-                  <button *ngIf="!this.isAdmin()" [routerLink]="['security/login/']" mat-menu-item>
+                  <!--<button *ngIf="!this.isAdmin()" [routerLink]="['security/login/']" mat-menu-item>
                         <mat-icon>fingerprint</mat-icon>Login
-                  </button>
+                  </button>-->
 
-                  <button mat-menu-item (click)="openAddCourseDialog()" class="add_button">
+                  <button *ngIf="this.isAdmin()" mat-menu-item (click)="openAddCourseDialog()" class="add_button">
                         <mat-icon>add</mat-icon>Add Course
                   </button>
 
@@ -63,7 +63,7 @@
                         <mat-icon>person_add</mat-icon>Register
                   </button>
 
-                  <button *ngIf="this.adminLoggedIn.value" mat-menu-item [matMenuTriggerFor]="menu">
+                  <button *ngIf="this.isAdmin()" mat-menu-item [matMenuTriggerFor]="menu">
                     <mat-icon>list</mat-icon>Manage Courses</button>
 
                   <mat-menu #menu="matMenu">
@@ -77,14 +77,7 @@
                         <mat-icon>verified_user</mat-icon>Admin Register
                   </button>
 
-                  <button *ngIf="this.isAdmin()" (click)="logout()" mat-menu-item>
-                        <mat-icon style="color: red;">power_settings_new</mat-icon>Log out
-                  </button>
-                  <button *ngIf="this.isAdmin()" (click)="doLogout()" mat-menu-item>
-                        <mat-icon style="color: red;">power_settings_new</mat-icon>Log out
-                  </button>
-
-                  <button *ngIf="this.loggedIn" (click)="doLogout()" mat-menu-item>
+                  <button *ngIf="isLoggedIn()" (click)="doLogout()" mat-menu-item>
                         <mat-icon style="color: red;">power_settings_new</mat-icon>Log out
                   </button>
 

@@ -71,7 +71,9 @@ export class AdminRegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth = this.userServices.getAuth();
+    var _auth = this.userServices.getAuth();
+    this.auth = -1;
+    if(_auth < 3) this.auth = _auth;
   }
 
 }

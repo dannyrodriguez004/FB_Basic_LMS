@@ -180,7 +180,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   }
 
   isLoggedIn() {
-    return this.userServices.fbLoggedIn;
+    return this.userServices.getIsLoggedIn();
   }
 
   isAdmin() {

@@ -28,12 +28,15 @@ export class UserService {
   private admin: {id: string, name: string};
   private auth = 0;
   adminLoggedIn;
+
+
+
   constructor(
     private http: HttpClient,
     private cookies: CookieService,
     private router: Router) {
 
-      this.loadUser();
+
     // this.isAdmin = this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session'));
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
@@ -44,8 +47,15 @@ export class UserService {
         xfbml: true,
         version: 'v4.0'
       });
+      
       FB.AppEvents.logPageView();
+      this.loadUser();
+      if(!this.isLoggedIn) {
+        this.submitLogin();
+      }
     };
+
+
     // tslint:disable-next-line:only-arrow-functions
     ( function(d, s, id) {
       // tslint:disable-next-line:one-variable-per-declaration prefer-const
@@ -59,15 +69,30 @@ export class UserService {
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
+    
 
     console.log(this.userModel);
   }
 
 
   loadUser() {
-    if (this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session')) || this.FBLoggedIn) {
+    if (this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session')) || this.isLoggedFacebookLoggedIn()) {
       this.isLoggedIn = true;
     }
+  }
+
+  isLoggedFacebookLoggedIn() {
+    FB.getLoginStatus( (response) => {
+      if (response.status === 'connected') {
+        this.FBLoggedIn = true;
+        //var accessToken = response.authResponse.accessToken;
+      } else {
+        this.FBLoggedIn = false;
+      }
+      return this.FBLoggedIn;
+    });
+
+    
   }
 
 
@@ -154,8 +179,9 @@ export class UserService {
       console.log(result);
       const params = {params: new HttpParams().set('userID', result.authResponse.userID)};
       console.log('RESULT.AUTHRESPONSE:  ', result.authResponse);
+      
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
-        console.log(response);
+        console.log('this is the response:', response);
         this.userModel = {
           id: response.id,
           first_name: response.first_name,
@@ -308,7 +334,7 @@ export class UserService {
   }
 
   getAuth() {
-    return this.auth;
+    return this.userModel.type;
   }
 
   private handleError<T>(operation = 'operation', result ?: T) {
