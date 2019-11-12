@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
 
       return true;
 
-      } else if(this.userServices.getIsLoggedIn()) {
+      } else if (this.userServices.getIsLoggedIn() || this.userServices.fbUser()) {
         return true;
       } else {
         this.router.navigate(['/nav/security/register']);

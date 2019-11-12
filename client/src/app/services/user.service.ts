@@ -35,8 +35,6 @@ export class UserService {
     private http: HttpClient,
     private cookies: CookieService,
     private router: Router) {
-
-
     // this.isAdmin = this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session'));
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
@@ -47,10 +45,9 @@ export class UserService {
         xfbml: true,
         version: 'v4.0'
       });
-      
       FB.AppEvents.logPageView();
       this.loadUser();
-      if(!this.isLoggedIn) {
+      if (!this.isLoggedIn) {
         this.submitLogin();
       }
     };
@@ -69,8 +66,6 @@ export class UserService {
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    
-
     console.log(this.userModel);
   }
 
@@ -85,34 +80,25 @@ export class UserService {
     FB.getLoginStatus( (response) => {
       if (response.status === 'connected') {
         this.FBLoggedIn = true;
-        //var accessToken = response.authResponse.accessToken;
       } else {
         this.FBLoggedIn = false;
       }
       return this.FBLoggedIn;
     });
-
-    
   }
 
 
   isTokenFresh(token: string) {
     try {
-
       const decoded = jwt_decode(token);
-      
       if (!decoded.exp) { throw false; }
-      
       console.log(decoded);
       this.auth = decoded.auth;
-      
-      
 
       if (decoded.exp < Date.now().valueOf() / 1000) {
         throw false;
       } else {
-
-        var name: string[] = decoded.name.split(' ');
+        const name: string[] = decoded.name.split(' ');
         console.log(name);
         this.userModel.first_name = name[0];
         this.userModel.last_name = name[1] || '';
@@ -140,10 +126,8 @@ export class UserService {
       tap((jwt: any) => {
         this.cookies.set('admin-session', jwt.payload, 2, '/');
         // this.isAdmin = true;
-
         this.isTokenFresh(jwt.payload);
         this.isLoggedIn = true;
-
       }),
       catchError(this.handleError('adminLogin'))
     );
@@ -160,26 +144,12 @@ export class UserService {
   destroyToken() {
     window.localStorage.removeItem('jwtToken');
   }
-  //
-  // buildHeaders(): HttpHeaders {
-  //   const headersConfig = {
-  //     'Content-Type': 'application/json',
-  //     'Accept': 'application/json'
-  //   };
-  //   if (this.getToken()) {
-  //     headersConfig['Authorization'] = `Token ${this.getToken()}`;
-  //   }
-  //   let headers = new HttpHeaders(headersConfig);
-  //   console.log(headers);
-  //   return headers;
-  // }
 
   submitLogin() {
     FB.login(result => {
       console.log(result);
       const params = {params: new HttpParams().set('userID', result.authResponse.userID)};
       console.log('RESULT.AUTHRESPONSE:  ', result.authResponse);
-      
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
         console.log('this is the response:', response);
         this.userModel = {
@@ -241,8 +211,6 @@ export class UserService {
           this.http.post(`${environment.apiAddress}/users/add-user`, opts).subscribe((result: any) => {
       console.log(result);
     });
-  // });
-  //     }});
   }
 
   // existingStudent(user) {
