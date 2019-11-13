@@ -16,6 +16,7 @@ export class DiscussionsComponent implements OnInit, OnChanges {
   discussions: DIscussions[] = [];
   subscriptions: Subscription[] = [];
   @Input('current_course') current_course: string;
+  isPublic: boolean;
 
   constructor(
     private coursesServices: CoursesService,
@@ -40,14 +41,25 @@ export class DiscussionsComponent implements OnInit, OnChanges {
 
   // Runs whenever this component is loaded
   ngOnInit() {
-    this.loadDiscussions();
+     if (this.current_course) {
+      this.isPublic = true;
+    } else {
+      this.isPublic = false;
+    }
+     this.loadDiscussions();
   }
 
   // Loads discussions id, title, and description
   loadDiscussions() {
-    this.subscriptions.push(this.coursesServices.getDiscussions(this.current_course).subscribe( (resp: DIscussions[]) => {
-      this.discussions = resp;
-    }));
+    if (this.isPublic) {
+      this.subscriptions.push(this.coursesServices.getDiscussions(this.current_course).subscribe( (resp: DIscussions[]) => {
+        this.discussions = resp;
+      }));
+    } else {
+      this.subscriptions.push(this.coursesServices.getConversations().subscribe( (resp: DIscussions[]) => {
+        this.discussions = resp;
+      }));
+    }
   }
 
   isAdmin() {

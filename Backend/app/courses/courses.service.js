@@ -672,6 +672,36 @@ class CoursesService {
         return payload.announcements;
     }
 
+    async getConversations(user) {
+
+        let payload = {
+            discussions: []
+        };
+
+        try {
+
+            let courses = await this.getMyCourses(user);
+            // console.log(courses);
+            for await (let course of courses) {
+                // courses.forEach( async (course) => {
+                // console.log(course);
+                let discussions = await this.getDiscussions(course.id, false);
+                console.log(discussions);
+                payload.discussions = payload.discussions.concat(discussions);
+                // for await (let discussion of discussions) {
+                // console.log('###' + JSON.stringify(discussion) + '###');
+                // discussions.forEach( (discussion) => {
+                // payload.discussions = discussions;
+                // }
+            }
+
+        } catch (err) {
+            console.error(err);
+        }
+        console.log('Payload ' + JSON.stringify(payload.discussions));
+        console.log('DONE #############################');
+        return payload.discussions;
+    }
     /**
      * 
      * @param {string} course , course key in the database

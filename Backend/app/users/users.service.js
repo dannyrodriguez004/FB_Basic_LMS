@@ -31,14 +31,11 @@ class UsersService {
                     password: hashedPass,
                     auth: user.auth
                 });
-
                 return true;
             }
-
         } catch (err) {
             console.error(err);
         }
-
         return false;
     }
 

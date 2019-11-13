@@ -112,6 +112,11 @@ export class CoursesService {
     return this.http.post(`${environment.apiAddress}/courses/add-course-discussion`, {course, discussion});
   }
 
+  getConversations() {
+    // const params = {params: new HttpParams().set('course', `${course_id}`)};
+    return this.http.get(`${environment.apiAddress}/courses/course-conversations`);
+  }
+
   newConversation(course, discussion) {
     discussion.public = false;
     return this.http.post(`${environment.apiAddress}/courses/add-course-discussion`, {course, discussion});

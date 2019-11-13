@@ -21,14 +21,12 @@ module.exports = (passport) => {
         Utils.AdminLog(req.user, {method: coursesServices.addDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Adding New Discussion");
     });
 
-    // add course conversation
-    // router.post('/add-course-conversation', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
-    //     const resp = await coursesServices.addDiscussion(req.body.course, req.body.discussion);
-    //     console.log(req.body.discussion);
-    //     res.json(resp);
-    //     Utils.AdminLog(req.user, {method: coursesServices.addDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Adding New Discussion");
-    // });
-    //
+    // get course conversations
+    router.get('/course-conversations', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
+        const resp = await coursesServices.getConversations(req.user);
+        res.json(resp);
+    });
+
     router.post('/add-course-announcement', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addAnnouncement(req.body.course, req.body.announcement);
         res.json(resp);
