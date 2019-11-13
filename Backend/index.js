@@ -50,15 +50,6 @@ const onListening = () => {
 const port = portNorm(process.env.PORT || '3001');
 app.set('port', port);
 
-/*
-const server = https.createServer({
-	key: fileStream.readFileSync('server.key'),
-	cert: fileStream.readFileSync('server.crt'),
-	ca: fileStream.readFileSync('selfCA.crt'),
-},app);*/
-
-//const server = http.createServer(app);
-
 let tempServer;
 if(process.env.NODE_ENV == 'dev') {
 	console.log('we are running dev enviroment');
