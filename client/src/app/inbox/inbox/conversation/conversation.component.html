@@ -17,7 +17,7 @@
     </mat-card-content>
 
     <mat-card-actions class="controls">
-      <button [disabled]="isClosed || isMessageEmpty()" (click)="sendMessage()" mat-flat-button color='primary'>Submit</button>
+      <button [disabled]="isMessageEmpty()" (click)="sendMessage()" mat-flat-button color='primary'>Submit</button>
 
       <button (click)="closeEditor()" mat-stroked-button>Cancel</button>
     </mat-card-actions>

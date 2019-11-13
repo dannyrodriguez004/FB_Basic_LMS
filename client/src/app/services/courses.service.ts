@@ -38,6 +38,11 @@ export class CoursesService {
     return this.http.get(`${environment.apiAddress}/courses/course-discussions`, params);
   }
 
+  getAnnouncements(course_id) {
+    const params = {params: new HttpParams().set('course', `${course_id}`)};
+    return this.http.get(`${environment.apiAddress}/courses/course-announcements`, params);
+  }
+
   // tslint:disable-next-line:variable-name
   getModules(course_id) {
     const params = {params: new HttpParams().set('course', `${course_id}`)};
@@ -104,6 +109,10 @@ export class CoursesService {
 
   newDiscussion(course, discussion) {
     return this.http.post(`${environment.apiAddress}/courses/add-course-discussion`, {course, discussion});
+  }
+
+  newAnnouncement(course, announcement) {
+    return this.http.post(`${environment.apiAddress}/courses/add-course-announcement`, {course, announcement});
   }
 
   addCourse(course) {

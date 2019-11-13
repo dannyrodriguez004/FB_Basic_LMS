@@ -20,6 +20,11 @@ module.exports = (passport) => {
         Utils.AdminLog(req.user, {method: coursesServices.addDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Adding New Discussion");
     });
 
+    router.post('/add-course-announcement', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
+        const resp = await coursesServices.addAnnouncement(req.body.course, req.body.announcement);
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.addAnnouncement.name, params: [req.body.course, req.body.announcement], result: resp}, "Adding New Announcement");
+    });
     // add post to a discussion
     // router.post('/add-discussion-post', async (req, res, next) => {
     //     const resp = await coursesServices.addDiscussionPost(req.body.course, req.body.discussion, req.body.post);
@@ -96,6 +101,11 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    // get course announcements
+    router.get('/course-announcements', async (req, res, next) => {
+        const resp = await coursesServices.getAnnouncements(req.query.course);
+        res.json(resp);
+    });
     // get course discussion info
     router.get('/course-discussion-info', async (req, res, next) => {
         const resp = await coursesServices.getDiscussionInfo(req.query.course, req.query.discussion);

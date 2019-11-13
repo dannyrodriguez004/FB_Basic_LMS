@@ -82,6 +82,42 @@ class CoursesService {
     }
 
     /**
+     *
+     * @param {string} course_key
+     * @param {title: string, description: string, isClosed: boolean} newAnnouncement
+     *
+     * @return true if successfully added new discussion
+     */
+    async addAnnouncement(course_key, newAnnouncement) {
+
+        try {
+
+            let courses = await database.ref('/courses')
+                .orderByKey()
+                .equalTo(course_key)
+                .once('value');
+
+            if(courses.numChildren() > 1) {
+                return false;
+            }
+
+            courses.forEach((course) => {
+                course.child('announcements').ref.push({
+                    title: newAnnouncement.title,
+                    description: newAnnouncement.description,
+                    instructor_name: newAnnouncement.instructor_name,
+                    date: newAnnouncement.date,
+                });
+            });
+        } catch(err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+
+    }
+    /**
      * 
      * @param {string} course, course key in database
      * @param {string} discussion, discussion key in database
@@ -567,9 +603,9 @@ class CoursesService {
     }
 
     /**
-     * 
+     *
      * @param {string} course_key , course key in the database
-     * 
+     *
      * @return {{title: string, id: string}[]} discussions
      */
     async getDiscussions(course_key) {
@@ -595,6 +631,39 @@ class CoursesService {
         }
 
         return payload.discusions;
+    }
+    /**
+     *
+     * @param {string} course_key , course key in the database
+     *
+     * @return {{title: string, id: string}[]} discussions
+     */
+    async getAnnouncements(course_key) {
+
+        let payload = {
+            announcements: []
+        };
+
+        try {
+
+            let announcements = await database.ref('/courses/' + course_key + '/announcements')
+                .once('value');
+
+            announcements.forEach( (announcement) => {
+                payload.announcements.push({
+                    id: announcement.key,
+                    title: announcement.child('title').val(),
+                    date: announcement.child('date').val(),
+                    instructor: announcement.child('instructor_name').val(),
+                    description: announcement.child('description').val()
+                });
+            });
+
+        } catch (err) {
+            console.error(err);
+        }
+
+        return payload.announcements;
     }
 
     /**

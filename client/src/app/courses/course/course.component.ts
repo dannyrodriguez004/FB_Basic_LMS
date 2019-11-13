@@ -17,9 +17,11 @@ export class CourseComponent implements OnInit, OnChanges {
     {val: 'Modules', ico: 'view_module'},
     {val: 'Grades', ico: 'assessment'},
     {val: 'Discussions', ico: 'forum'},
-    {val: 'Roll Call', ico: 'forum'}];
+    {val: 'Roll Call', ico: 'forum'},
+    {val: 'Announcements', ico: 'forum'}];
 
-  private navItem = 'Home';
+
+private navItem = 'Home';
 
   private subscriptions: Subscription[] = [];
   private authorized = false;

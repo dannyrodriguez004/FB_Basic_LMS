@@ -146,6 +146,37 @@ class UsersService {
         return payload;
     }
 
+    // In users.service.js
+    async getInbox(userId) {
+        let resp = [];
+        try {
+            let inbox = await database.ref('/inbox/' + userId + '/messages').orderByKey().once('value');
+            if(!inbox.hasChildren()) return resp;
+            for await (let messageId of Object.keys(inbox.val())) {
+                console.log(messageId);
+                let messageUserData = inbox.child(messageId).val();
+                console.log(messageUserData);
+                let message = await database.ref('/messages/' + messageId).orderByKey().once('value');
+                let messageData = message.val();
+                console.log(messageData);
+                let messageInfo = {
+                    id: messageId,
+                    read: messageUserData.read,
+                    message: messageData.message,
+                    sender: messageData.sender,
+                    sent: messageData.sent,
+                    subject: messageData.subject
+                }
+                resp.push(messageInfo);
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+        console.log(resp);
+        return resp;
+    }
+
 
     async getAllCategories() {
 

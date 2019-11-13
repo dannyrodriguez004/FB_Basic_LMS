@@ -13,11 +13,13 @@ export class NewDiscussionComponent implements OnInit {
 
   today = new Date();
   discussionForm: FormGroup;
+  // tslint:disable-next-line:variable-name
   current_course: string;
 
   constructor(
     public dialogRef: MatDialogRef<NewDiscussionComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) data: string,
+    // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private coursesServices: CoursesService,
   ) {

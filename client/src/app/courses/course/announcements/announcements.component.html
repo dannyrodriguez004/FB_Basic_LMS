@@ -1,0 +1,67 @@
+<!-- Container for Announcement -->
+
+<mat-accordion>
+  <mat-expansion-panel  *ngFor='let announcement of Announcement'>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon>folder_open</mat-icon>
+        {{announcement.date + '   |   ' + announcement.title}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+<!--    <mat-card>-->
+
+<!--   lists all Announcements and creates links to-->
+  <mat-nav-list *ngFor='let announcement of Announcement'>
+    <a mat-list-item [routerLink]="['/nav/courses/view-course']" [queryParams]="{course: current_course, select:'Announcements', announcement: announcement.id, start: 0}">
+      <mat-icon>insert_comment</mat-icon>{{announcement.description}}
+    </a>
+  </mat-nav-list>
+  </mat-expansion-panel>
+
+<!--  <table mat-table-->
+<!--         [dataSource]="Announcement" multiTemplateDataRows-->
+<!--         class="mat-elevation-z8">-->
+<!--    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">-->
+<!--      <th mat-header-cell *matHeaderCellDef> {{column}} </th>-->
+<!--      <td mat-cell *matCellDef="let announcement"> {{announcement[column]}} </td>-->
+<!--    </ng-container>-->
+
+<!--    &lt;!&ndash; Expanded Content Column - The detail row is made up of this one column that spans across all columns &ndash;&gt;-->
+<!--    <ng-container matColumnDef="expandedDetail">-->
+<!--      <td mat-cell *matCellDef="let announcement" [attr.colspan]="columnsToDisplay.length">-->
+<!--        <div class="example-element-detail"-->
+<!--             [@detailExpand]="announcement == expandedElement ? 'expanded' : 'collapsed'">-->
+<!--          <div class="example-element-diagram">-->
+<!--            <div class="example-element-position"> {{announcement.title}} </div>-->
+<!--            <div class="example-element-name"> {{announcement.date}} </div>-->
+<!--            <div class="example-element-weight"> {{announcement.instructor}} </div>-->
+<!--          </div>-->
+<!--          <div class="example-element-description">-->
+<!--            {{announcement.description}}-->
+<!--            <span class="example-element-description-attribution"> &#45;&#45; Wikipedia </span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </td>-->
+<!--    </ng-container>-->
+
+<!--    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>-->
+<!--    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"-->
+<!--        class="example-element-row"-->
+<!--        [class.example-expanded-row]="expandedElement === element"-->
+<!--        (click)="expandedElement = expandedElement === element ? null : element">-->
+<!--    </tr>-->
+<!--    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>-->
+<!--  </table>-->
+  <!-- if there are not Announcements tell the user -->
+  <div class="empty_message" *ngIf="1 > Announcement.length">
+    There are no Announcements.
+  </div>
+
+  <!-- Add Announcement button -->
+  <mat-nav-list *ngIf="this.isAdmin()">
+    <a (click)="openAnnouncementsDialog()" mat-list-item class="add_button empty_message"><mat-icon>add</mat-icon>Add Announcement</a>
+  </mat-nav-list>
+
+<!--</mat-card>-->
+</mat-accordion>

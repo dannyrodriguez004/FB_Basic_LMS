@@ -22,7 +22,6 @@ export class ConversationComponent implements OnInit {
   title: string;              // discussion title
   description: string;        // discussion description HTML format
   posts: IPost[] = [];         // discussion posts
-  isClosed = false;   // discussion isClosed
   today: Date = new Date();
   endDate: Date = this.today;
 

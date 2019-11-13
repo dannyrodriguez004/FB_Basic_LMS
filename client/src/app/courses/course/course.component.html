@@ -25,6 +25,7 @@
                 <app-discussions [current_course]="current_course" *ngIf="isEqual('Discussions')"></app-discussions>
                 <app-rollcall [current_course]="current_course" *ngIf="isEqual('Roll Call')"></app-rollcall>
                 <app-discussion [current_course]="current_course" *ngIf="isEqual('Discussion')"></app-discussion>
+                <app-announcements [current_course]="current_course" *ngIf="isEqual('Announcements')"></app-announcements>
                 <app-document-viewer *ngIf="isEqual('ViewDocument')"></app-document-viewer>
                 <app-pages  [current_course]="current_course" *ngIf="isEqual('Page')"></app-pages>
             </div>

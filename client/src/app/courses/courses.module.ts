@@ -58,6 +58,8 @@ import { EnrollDialogComponent } from './course/confirm-enroll/enroll-dialog/enr
 import { GradeReportsComponent } from './course/grade-reports/grade-reports.component';
 import { QuizResultComponent } from './assessment/quiz-result/quiz-result.component';
 import { QuizDialogComponent } from './course/modules/quiz-dialog/quiz-dialog.component';
+import { AnnouncementsComponent } from './course/announcements/announcements.component';
+import { NewAnnouncementComponent } from './course/announcements/new-announcement/new-announcement.component';
 
 
 
@@ -91,6 +93,8 @@ import { QuizDialogComponent } from './course/modules/quiz-dialog/quiz-dialog.co
     NotifyEnrolledComponent,
     NotifyInClassComponent,
     NotifyInWaitingComponent,
+    AnnouncementsComponent,
+    NewAnnouncementComponent,
   ],
   imports: [
     CommonModule,
@@ -126,6 +130,7 @@ import { QuizDialogComponent } from './course/modules/quiz-dialog/quiz-dialog.co
   entryComponents: [
     DiscussionEditorComponent,
     NewDiscussionComponent,
+    NewAnnouncementComponent,
     CourseDetailEditorComponent,
     ModuleEditorComponent,
     NewContentComponent,

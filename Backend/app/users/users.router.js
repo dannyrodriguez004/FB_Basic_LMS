@@ -92,6 +92,13 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+// In users.router.js
+    router.get('/get-inbox', async (req, res, next) => {
+        // const resp = await usersServices.getInbox(req.body.user);
+        const resp = await usersServices.getInbox('10220661315904132');
+        res.json(resp);
+    });
+
     router.post('/existing-student', async (req, res, next) => {
         var userID = req.body.userID;
         console.log(userID);

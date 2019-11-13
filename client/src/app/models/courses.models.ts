@@ -66,6 +66,19 @@ export class Discussion {
     isClosed: boolean;
 }
 
+export class Announcement {
+  id: string;
+  title: string;
+  description: string;
+  instructor: string;
+  date: string;
+}
+
+export interface Announcements {
+  id: string;
+  title: string;
+}
+
 export class Post {
     id: string;
     user_name: string;

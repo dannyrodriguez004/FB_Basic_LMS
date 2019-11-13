@@ -29,10 +29,12 @@ export class AuthGuard implements CanActivate {
 
       return true;
 
-      } else if (this.userServices.getIsLoggedIn() || this.userServices.fbUser()) {
+      } else if (this.userServices.getIsLoggedIn() || this.userServices.fbUser().id) {
+        console.log(this.userServices.getIsLoggedIn());
+        console.log(this.userServices.fbUser().id);
         return true;
       } else {
         this.router.navigate(['/nav/security/register']);
-      }
+    }
   }
 }
