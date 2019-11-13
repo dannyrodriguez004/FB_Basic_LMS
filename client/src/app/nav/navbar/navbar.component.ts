@@ -162,13 +162,15 @@ export class NavbarComponent implements OnInit, OnChanges {
         this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
           this.myCourses = resp;
         }));
-      } else if (this.adminLoggedIn.value) {
-        this.adminLoggedIn.next(true);
-        this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
-          console.log(resp);
-          this.adminCoureses = resp;
-        }));
       }
+    }
+
+    if (this.userServices.getIsAdmin()) {
+      this.adminLoggedIn.next(true);
+      this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
+        console.log(resp);
+        this.adminCoureses = resp;
+    }));
     }
   }
     // if ( this.adminServices.getIsAdmin()) {
