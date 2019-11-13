@@ -15,7 +15,6 @@ export class NewDiscussionComponent implements OnInit {
   discussionForm: FormGroup;
   // tslint:disable-next-line:variable-name
   current_course: string;
-
   constructor(
     public dialogRef: MatDialogRef<NewDiscussionComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) data: string,
@@ -27,7 +26,7 @@ export class NewDiscussionComponent implements OnInit {
       title: ['', Validators.required],
       description: ['', Validators.required],
       isClosed: [false, Validators.required],
-      endDate: ['', Validators.required]
+      endDate: ['', Validators.required],
     });
 
     this.current_course = data;
@@ -66,6 +65,7 @@ export class NewDiscussionComponent implements OnInit {
       description: this.discussionForm.value.description,
       isClosed: this.discussionForm.value.isClosed,
       endDate: this.discussionForm.value.endDate,
+      // public: this.discussionForm.value.public
     };
 
     this.coursesServices.newDiscussion(this.current_course, discussion).subscribe( (resp) => {
@@ -73,6 +73,9 @@ export class NewDiscussionComponent implements OnInit {
     });
   }
 
+  setPrivate() {
+    // this.public = false;
+  }
   onNoClick() {
     this.dialogRef.close();
   }

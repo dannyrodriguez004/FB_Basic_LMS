@@ -64,6 +64,7 @@ export class Discussion {
     description: string;
     posts: Post[];
     isClosed: boolean;
+    public: boolean;
 }
 
 export class Announcement {
@@ -72,11 +73,6 @@ export class Announcement {
   description: string;
   instructor: string;
   date: string;
-}
-
-export interface Announcements {
-  id: string;
-  title: string;
 }
 
 export class Post {

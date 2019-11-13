@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
           resp.forEach((course: Course) => {
             this.coursesServices.getCourseInfo(course.id)
               .subscribe((courseInfo: any) => {
-                console.log('BOO ' + JSON.stringify(courseInfo));
+                // console.log('BOO ' + JSON.stringify(courseInfo));
                 this.coursesServices.getInstructorInfo(courseInfo.instructor).subscribe((instructor: any) => {
                   console.log('FOO ' + JSON.stringify(instructor));
                   course.instructor_name = instructor.name;

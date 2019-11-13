@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {Announcement, Announcements} from '../../../models/courses.models';
+import {Announcement} from '../../../models/courses.models';
 import {Subscription} from 'rxjs';
 import {CoursesService} from '../../../services/courses.service';
 import {UserService} from '../../../services/user.service';

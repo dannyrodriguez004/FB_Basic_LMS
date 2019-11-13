@@ -52,12 +52,19 @@ export class GradeReportsComponent implements OnInit {
     this.loadGrades();
   }
 
+
   loadStudents() {
-    this.subscriptions.push(this.coursesServices.getCourseStudents(this.current_course).subscribe( (resp: {id: string, fname: string, lname: string}[]) => {
+    this.subscriptions.push(this.coursesServices.getStudents(this.current_course).subscribe( (resp: {id: string, fname: string, lname: string}[]) => {
       this.students = resp;
       //console.log(resp);
     }));
   }
+  // loadStudents() {
+  //   this.subscriptions.push(this.coursesServices.getCourseStudents(this.current_course).subscribe( (resp: {id: string, fname: string, lname: string}[]) => {
+  //     this.students = resp;
+  //     //console.log(resp);
+  //   }));
+  // }
 
   isAdmin() {
     return this.userServices.getIsAdmin();

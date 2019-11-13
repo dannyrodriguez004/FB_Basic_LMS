@@ -108,6 +108,12 @@ export class CoursesService {
   }
 
   newDiscussion(course, discussion) {
+    discussion.public = true;
+    return this.http.post(`${environment.apiAddress}/courses/add-course-discussion`, {course, discussion});
+  }
+
+  newConversation(course, discussion) {
+    discussion.public = false;
     return this.http.post(`${environment.apiAddress}/courses/add-course-discussion`, {course, discussion});
   }
 

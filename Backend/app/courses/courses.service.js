@@ -70,6 +70,7 @@ class CoursesService {
                     description: newDiscussion.description,
                     isClosed: newDiscussion.isClosed,
                     endDate: newDiscussion.endDate,
+                    public: newDiscussion.public
                 });
             });
         } catch(err) {
@@ -608,10 +609,10 @@ class CoursesService {
      *
      * @return {{title: string, id: string}[]} discussions
      */
-    async getDiscussions(course_key) {
+    async getDiscussions(course_key, isPublic) {
 
         let payload = {
-            discusions: []
+            discussions: []
         };
 
         try {
@@ -620,17 +621,22 @@ class CoursesService {
             .once('value');
 
             discussions.forEach( (discussion) => {
-                payload.discusions.push({
-                    id: discussion.key,
-                    title: discussion.child('title').val(),
-                });
+                console.log(discussion.val());
+                console.log(isPublic);
+                if(discussion.child('public').val() === isPublic) {
+                    console.log("HERE I AM IN DISCUSSION GET");
+                    payload.discussions.push({
+                        id: discussion.key,
+                        title: discussion.child('title').val(),
+                    });
+                }
             });
 
         } catch (err) {
             console.error(err);
         }
 
-        return payload.discusions;
+        return payload.discussions;
     }
     /**
      *

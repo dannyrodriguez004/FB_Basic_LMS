@@ -16,10 +16,19 @@ module.exports = (passport) => {
     // add course discussion to course
     router.post('/add-course-discussion', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addDiscussion(req.body.course, req.body.discussion);
+        console.log(req.body.discussion);
         res.json(resp);
         Utils.AdminLog(req.user, {method: coursesServices.addDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Adding New Discussion");
     });
 
+    // add course conversation
+    // router.post('/add-course-conversation', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
+    //     const resp = await coursesServices.addDiscussion(req.body.course, req.body.discussion);
+    //     console.log(req.body.discussion);
+    //     res.json(resp);
+    //     Utils.AdminLog(req.user, {method: coursesServices.addDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Adding New Discussion");
+    // });
+    //
     router.post('/add-course-announcement', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addAnnouncement(req.body.course, req.body.announcement);
         res.json(resp);
@@ -97,7 +106,7 @@ module.exports = (passport) => {
 
     // get course discussions
     router.get('/course-discussions', async (req, res, next) => {
-        const resp = await coursesServices.getDiscussions(req.query.course);
+        const resp = await coursesServices.getDiscussions(req.query.course, true);
         res.json(resp);
     });
 
