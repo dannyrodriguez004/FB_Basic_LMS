@@ -70,7 +70,7 @@ export class NewAnnouncementComponent implements OnInit {
       instructor_name: this.userServices.fbUser().first_name + ' ' + this.userServices.fbUser().last_name,
       date: this.announcementForm.value.date,
     };
-
+    console.log(announcements);
     this.coursesServices.newAnnouncement(this.current_course, announcements).subscribe( (resp) => {
       this.dialogRef.close(resp);
     });

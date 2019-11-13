@@ -65,8 +65,6 @@ export class AnnouncementsComponent implements OnInit, OnChanges {
     return this.userServices.getIsAdmin();
   }
 
-
-
   // Runs whenever input values change
   ngOnChanges() {
 

@@ -284,10 +284,10 @@ export class UserService {
     return this.userModel;
   }
 
-  user() {
-    return this.getFbUserID();
-    // return this.student_id;
-  }
+  // user() {
+  //   return this.getFbUserID();
+  //   // return this.student_id;
+  // }
 
   getIsAdmin() {
     // return this.adminLoggedIn;

@@ -3,18 +3,18 @@
 <mat-accordion>
   <mat-expansion-panel  *ngFor='let announcement of Announcement'>
     <mat-expansion-panel-header>
-      <mat-panel-title>
+      <mat-panel-title class="header">
         <mat-icon>folder_open</mat-icon>
-        {{announcement.date + '   |   ' + announcement.title}}
+        {{announcement.date.substr(0, 10) + '   |   ' + announcement.title}}
       </mat-panel-title>
     </mat-expansion-panel-header>
 
 <!--    <mat-card>-->
 
 <!--   lists all Announcements and creates links to-->
-  <mat-nav-list *ngFor='let announcement of Announcement'>
+  <mat-nav-list>
     <a mat-list-item [routerLink]="['/nav/courses/view-course']" [queryParams]="{course: current_course, select:'Announcements', announcement: announcement.id, start: 0}">
-      <mat-icon>insert_comment</mat-icon>{{announcement.description}}
+      <p [innerHTML]="announcement.description"></p>
     </a>
   </mat-nav-list>
   </mat-expansion-panel>
