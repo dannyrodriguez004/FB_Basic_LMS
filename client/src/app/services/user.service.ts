@@ -48,7 +48,7 @@ export class UserService {
       FB.AppEvents.logPageView();
       this.loadUser();
       if (!this.isLoggedIn) {
-        this.submitLogin();
+        //this.submitLogin();
       }
     };
 
