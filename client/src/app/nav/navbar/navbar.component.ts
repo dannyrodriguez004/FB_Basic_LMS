@@ -42,7 +42,8 @@ export class NavbarComponent implements OnInit, OnChanges {
   ) {
     const jwtToken = this.userServices.getToken();
     this.loggedIn = new BehaviorSubject<boolean>(!!jwtToken);
-    const jwtCookie = this.cookiesServices.check('admin-session');
+    // const jwtCookie = this.cookiesServices.check('admin-session');
+    const jwtCookie = this.userServices.isTokenFresh('admin-session');
     this.adminLoggedIn = new BehaviorSubject<boolean>(!!jwtCookie);
 }
 
@@ -87,7 +88,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   doLogout() {
     this.logout();
     this.myCourses = [];
-    this.loggedIn.next(undefined);
+    this.loggedIn.next(false);
   }
 
   // Runs whenever this component is loaded
@@ -164,6 +165,7 @@ export class NavbarComponent implements OnInit, OnChanges {
       } else if (this.adminLoggedIn.value) {
         this.adminLoggedIn.next(true);
         this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
+          console.log(resp);
           this.adminCoureses = resp;
         }));
       }

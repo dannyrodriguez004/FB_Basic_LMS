@@ -615,6 +615,7 @@ class CoursesService {
         return 0;
     }
 
+
     /**
      * 
      * @param {string} user, student key in the database
@@ -1348,43 +1349,70 @@ class CoursesService {
     }
 
     async getAdminCourses(user) {
-
         let payload = [];
-
         try {
-
             let courses;
-
             console.log(user);
-
-            if(user.auth > 0) {
-
-                courses = await database.ref('/courses')
-                .once('value');
+            if(user.auth < 3) {
                 console.log('admin');
-
-            } else {
-
-                console.log('instructor');
                 courses = await database.ref('/courses')
-                .orderByChild('instructor_name')
-                .equalTo(user.id)
-                .once('value');
+                    .orderByChild('instructor_id')
+                    .equalTo(user.id)
+                    .once('value');
+            } else {
+                console.log('Not an Instructor');
             }
-
             courses.forEach( (member) => {
                 payload.push({
                     id: member.key,
                     name: member.child('name').val(),
                 });
             });
-
         } catch(err) {
             console.error(err);
         }
-
         return payload;
     }
+
+
+    // async getAdminCourses(user) {
+    //
+    //     let payload = [];
+    //
+    //     try {
+    //
+    //         let courses;
+    //
+    //         console.log(user);
+    //
+    //         if(user.auth < 0) {
+    //
+    //             courses = await database.ref('/courses')
+    //             .once('value');
+    //             console.log('admin');
+    //
+    //         } else {
+    //
+    //             console.log('instructor');
+    //             courses = await database.ref('/courses')
+    //             .orderByChild('instructor_name')
+    //             .equalTo(user.id)
+    //             .once('value');
+    //         }
+    //
+    //         courses.forEach( (member) => {
+    //             payload.push({
+    //                 id: member.key,
+    //                 name: member.child('name').val(),
+    //             });
+    //         });
+    //
+    //     } catch(err) {
+    //         console.error(err);
+    //     }
+    //
+    //     return payload;
+    // }
 
     async canRegister(student, course) {
         try {

@@ -100,6 +100,7 @@ export class UserService {
       } else {
         const name: string[] = decoded.name.split(' ');
         console.log(name);
+        this.userModel.id = decoded.id;
         this.userModel.first_name = name[0];
         this.userModel.last_name = name[1] || '';
         this.userModel.type = decoded.auth;
