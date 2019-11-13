@@ -1,0 +1,29 @@
+<ng-container >
+
+  <mat-toolbar class="example-header">
+    <button mat-icon-button (click)="snav.toggle()"><h1>Inbox</h1></button>
+    <mat-icon>message</mat-icon>
+  </mat-toolbar>
+
+  <mat-sidenav-container class=container>
+
+    <mat-sidenav class="size-nav" #snav mode="side" opened>
+      <mat-nav-list >
+        <a *ngFor="let nav of navs" mat-list-item [routerLink]="" [queryParams]="{conversation: currentConversation, select: nav.val}" (click)="setNav(nav.val)"><mat-icon>{{nav.ico}}</mat-icon>{{nav.val}}</a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+
+    <mat-sidenav-content class="course_viewer">
+
+      <div class="content">
+<!--        <app-conversation [currentConversation]="currentConversation"></app-conversation>-->
+        <app-conversation *ngIf="isEqual('Conversation')" ></app-conversation>
+
+      </div>
+
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+</ng-container>
