@@ -127,7 +127,9 @@ export class DiscussionComponent implements OnInit {
   pushPost() {
     const post = {
       // user_id: this.adminServices.getIsAdmin() ? this.userServices.fbUser().id : this.userServices.fbUser().id,
-      // user_name: this.adminServices.getIsAdmin() ? this.userServices.fbUser().first_name + ' ' + this.userServices.fbUser().last_name : this.userServices.fbUser().first_name + ' ' +
+      // user_name: this.adminServices.getIsAdmin() ?
+      // this.userServices.fbUser().first_name + ' ' +
+      // this.userServices.fbUser().last_name : this.userServices.fbUser().first_name + ' ' +
       // this.userServices.fbUser().last_name,
       user_id: this.userServices.fbUser().id,
       user_name: this.userServices.fbUser().first_name + ' ' + this.userServices.fbUser().last_name,

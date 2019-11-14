@@ -18,11 +18,12 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatDialogModule} from "@angular/material/dialog";
+import { ConversationReplyComponent } from './inbox/conversation/conversation-reply/conversation-reply.component';
 
 
 
 @NgModule({
-  declarations: [InboxComponent, ConversationComponent, NewMessageComponent],
+  declarations: [InboxComponent, ConversationComponent, NewMessageComponent, ConversationReplyComponent],
   imports: [
     CommonModule,
     MatToolbarModule,

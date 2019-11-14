@@ -12,6 +12,9 @@
   <p [innerHTML]="this.title"></p>
   <p [innerHTML]="this.description"></p>
 
+  <mat-nav-list >
+    <a *ngIf="!replying" mat-list-item (click)="openEditor()"><mat-icon>reply</mat-icon>Reply</a>
+  </mat-nav-list>
   <div *ngIf="replying" >
     <mat-card-content>
       <angular-editor [(ngModel)]="htmlContent" [config]="config"></angular-editor>

@@ -730,6 +730,7 @@ class CoursesService {
         console.log('DONE #############################');
         return payload.discussions;
     }
+
     /**
      *
      * @param {string} course , course key in the database

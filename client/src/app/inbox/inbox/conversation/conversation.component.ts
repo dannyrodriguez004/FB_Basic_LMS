@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {Discussion, DIscussions, IPost, Message, Post} from '../../../models/courses.models';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
@@ -13,7 +13,7 @@ import {DiscussionEditorComponent} from '../../../courses/course/discussion/disc
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.scss']
 })
-export class ConversationComponent implements OnInit {
+export class ConversationComponent implements OnInit, OnChanges {
 
   private subscriptions: Subscription[] = [];
 
@@ -75,7 +75,7 @@ export class ConversationComponent implements OnInit {
       }
     }));
 
-    this.loadDiscussion();
+    // this.loadDiscussion();
     this.subscriptions.push(this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
         this.loading = true;
@@ -92,7 +92,7 @@ export class ConversationComponent implements OnInit {
           }
         }));
 
-        this.loadDiscussion();
+        // this.loadDiscussion();
       }
     }));
   }
@@ -117,6 +117,7 @@ export class ConversationComponent implements OnInit {
     this.loading = true;
     this.replying = false;
     this.htmlContent = '';
+    this.messages = [];
 
     this.subscriptions.push(this.coursesServices.getConversationInfo(this.courseId, this.id)
       .subscribe( (resp: {id: any, title: any, description: any, isClosed: any, date: string}) => {
@@ -127,8 +128,9 @@ export class ConversationComponent implements OnInit {
 
     this.subscriptions.push(this.coursesServices.getAllDiscussionPosts(this.courseId, this.id)
         .subscribe( (resp: Post[]) => {
-            this.messages = resp;
-            this.loading = false;
+          this.messages = [];
+          this.messages = this.messages.concat(resp);
+          this.loading = false;
         }));
 
     //tslint:disable-next-line:max-line-length
@@ -145,12 +147,22 @@ export class ConversationComponent implements OnInit {
     return this.userServices.getIsAdmin();
   }
 
+  // allows the new post editor to display
+  openEditor() {
+    this.replying = true;
+  }
+
+  // disables the new post editor to display
   closeEditor() {
     this.replying = false;
   }
 
   isMessageEmpty() {
     return this.htmlContent === '';
+  }
+
+  ngOnChanges() {
+    this.loadDiscussion();
   }
 
 }
