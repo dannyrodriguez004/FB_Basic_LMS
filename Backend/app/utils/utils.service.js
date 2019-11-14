@@ -17,6 +17,7 @@ class UtilsService {
             await database.ref('/logs/admin/')
             .child(NOW.toDateString()).push({
                 user: user.id,
+                time: (new Date()).getTime(),
                 context: context,
                 description: description,
             });
@@ -41,6 +42,7 @@ class UtilsService {
                     Day.logs.push({
                         id: log.key,
                         user: log.child('user').val(),
+                        time: log.child('time').val(),
                         description: log.child('description').val()
                     });
                 });

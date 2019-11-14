@@ -1,5 +1,6 @@
 export interface Log {
     id: string,
+    time: Date,
     context: Context,
     description: string,
     user: string,

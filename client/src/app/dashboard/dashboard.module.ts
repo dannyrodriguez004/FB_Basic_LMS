@@ -1,8 +1,10 @@
+import { MatTableModule } from '@angular/material/table';
+import { MatListModule } from '@angular/material/list';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { MatCardModule, MatButtonModule} from '@angular/material';
+import { MatCardModule, MatButtonModule, MatExpansionModule} from '@angular/material';
 import { MatMenuModule } from '@angular/material';
 import { ViewLogsComponent } from './view-logs/view-logs.component';
 
@@ -14,7 +16,10 @@ import { ViewLogsComponent } from './view-logs/view-logs.component';
     DashboardRoutingModule,
     MatMenuModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule,
+    MatListModule,
+    MatTableModule
   ]
 })
 export class DashboardModule { }

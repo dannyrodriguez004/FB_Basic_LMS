@@ -9,13 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewLogsComponent implements OnInit {
 
-  logsPayload: LogDay[] = [];
+  logsPayload: LogDay[] = [{date: new Date(), logs: [
+    {id: '0', time: new Date(), context: {method: '', params: [], result: true}, description: 'nothing in particular', user: '0'},
+    {id: '0', time: new Date(), context: {method: '', params: [], result: true}, description: 'nothing in particular', user: '0'},
+    {id: '0', time: new Date(), context: {method: '', params: [], result: true}, description: 'nothing in particular', user: '0'},
+    {id: '0', time: new Date(), context: {method: '', params: [], result: true}, description: 'nothing in particular', user: '0'}
+  ]}];
+
+  displayedColumns: string[] = ['time', 'description', 'user', 'id'];
+  
 
   constructor(private UtilityServices: UtilityService) { }
 
   ngOnInit() {
     this.UtilityServices.getAdminLogs().subscribe( (resp: LogDay[]) => {
       console.log(resp);
+      this.logsPayload = resp;
     });
   }
 
