@@ -130,14 +130,14 @@ class CoursesService {
 
         try {
             await database.ref('/courses/' + course + '/discussions/')
-            .child(discussion).child('posts').push(
-                {
-                    user_name: post.user_name,
-                    user_id: post.user_id,
-                    date: post.date,
-                    post: post.post
-                }
-            )
+                .child(discussion).child('posts').push(
+                    {
+                        user_name: post.user_name,
+                        user_id: post.user_id,
+                        date: post.date,
+                        post: post.post
+                    }
+                )
         } catch (err) {
             console.error(err);
             return false;
@@ -146,6 +146,33 @@ class CoursesService {
         return true;
     }
 
+    /**
+     *
+     * @param {string} course, course key in database
+     * @param {string} discussion, discussion key in database
+     * @param {user_name: string, user_id: string, date: string, post: string} post
+     *
+     * @return true if post is successfully added
+     */
+    async addConversationMessage(course, conversation, message) {
+
+        try {
+            await database.ref('/courses/' + course + '/conversations/')
+                .child(conversation).child('posts').push(
+                    {
+                        user_name: message.user_name,
+                        user_id: message.user_id,
+                        date: message.date,
+                        message: message.post
+                    }
+                )
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
+    }
     
 
 

@@ -62,6 +62,10 @@ export class CoursesService {
     return this.http.get(`${environment.apiAddress}/courses/course-discussion-info`, params);
   }
 
+  getConversationInfo(course_id, conversation_id) {
+    const params = {params: new HttpParams().set('course', `${course_id}`).set('discussion', `${conversation_id}`)};
+    return this.http.get(`${environment.apiAddress}/courses/course-discussion-info`, params);
+  }
   // tslint:disable-next-line:variable-name
   getPage(course_id, module_id, page_id) {
     const params = {params: new HttpParams().set('course', `${course_id}`).set('module', `${module_id}`).set('page', `${page_id}`)};
@@ -102,6 +106,15 @@ export class CoursesService {
     });
   }
 
+  sendMessage(course_id, discussion_id, post) {
+    // tslint:disable-next-line:max-line-length
+    // const params = { params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`).set('post', `${post}`)};
+    return this.http.post(`${environment.apiAddress}/courses/add-conversation-message`, {
+      course: course_id,
+      discussion: discussion_id,
+      post
+    });
+  }
   updateCourse(course) {
     // const params = { params: new HttpParams().set('course', `${course}`)};
     return this.http.post(`${environment.apiAddress}/courses/update-course`, {course});

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {IPost} from '../../../models/courses.models';
+import {Discussion, DIscussions, IPost} from '../../../models/courses.models';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {CoursesService} from '../../../services/courses.service';
@@ -21,9 +21,9 @@ export class ConversationComponent implements OnInit {
   id: string;                 // discussin id
   title: string;              // discussion title
   description: string;        // discussion description HTML format
-  posts: IPost[] = [];         // discussion posts
+  messages: DIscussions[] = [];         // discussion posts
   today: Date = new Date();
-  endDate: Date = this.today;
+  date: Date = this.today;
 
   // pagination variables
   totalExchanges = 0;
@@ -66,8 +66,8 @@ export class ConversationComponent implements OnInit {
     this.loading = true;
 
     this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
-      if (params.message) {
-        this.id = params.message;
+      if (params.conversation) {
+        this.id = params.conversation;
       }
       if (params.start) {
         this.startFrom = Number(params.start);
@@ -80,8 +80,8 @@ export class ConversationComponent implements OnInit {
         this.loading = true;
 
         this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
-          if (params.message) {
-            this.id = params.message.id;
+          if (params.conversation) {
+            this.id = params.conversation.id;
           }
 
           if (params.start) {
@@ -97,18 +97,18 @@ export class ConversationComponent implements OnInit {
   }
 
   sendMessage() {
-    const message = {
+    const conversation = {
       user_id: this.userServices.fbUser().id,
       user_name: this.userServices.fbUser().first_name + ' ' + this.userServices.fbUser().last_name,
       date: new Date().getTime(),
-      post: this.htmlContent};
+      message: this.htmlContent};
 
-    // this.subscriptions.push(this.coursesServices.sendMessage(this.currentConversation, this.id, message).subscribe( (resp) => {
-    //   console.log(resp);
-    //   if (resp) {
-    //     this.totalExchanges++;
-    //   }
-    // }));
+    this.subscriptions.push(this.coursesServices.sendMessage(this.currentConversation, this.id, conversation).subscribe( (resp) => {
+      console.log(resp);
+      if (resp) {
+        this.totalExchanges++;
+      }
+    }));
   }
 
   loadDiscussion() {
@@ -116,23 +116,22 @@ export class ConversationComponent implements OnInit {
     this.replying = false;
     this.htmlContent = '';
 
-    // this.subscriptions.push(this.coursesServices.getMessageInfo(this.currentConversation, this.id)
-    //   .subscribe( (resp: {title: any, description: any, isClosed: any, endDate: string}) => {
-    //     this.description = resp.description;
-    //     this.title = resp.title;
-    //     this.isClosed = resp.isClosed;
-    //     this.endDate = new Date(resp.endDate);
-    //   }));
+    this.subscriptions.push(this.coursesServices.getConversationInfo(this.currentConversation, this.id)
+      .subscribe( (resp: {id: any, title: any, description: any, isClosed: any, date: string}) => {
+        this.description = resp.description;
+        this.title = resp.title;
+        this.date = new Date(resp.date);
+      }));
     //
-    // // tslint:disable-next-line:max-line-length
-    // this.subscriptions.push(this.coursesServices.getMessages(this.currentConversation, this.id, this.startFrom)
-    //   .subscribe( (resp: {posts: IPost[], total: number}) => {
-    //     if (resp.posts.length > 0) {
-    //       this.posts = resp.posts;
-    //       this.totalExchanges = resp.total;
-    //     }
-    //     this.loading = false;
-    //   }));
+    // tslint:disable-next-line:max-line-length
+    this.subscriptions.push(this.coursesServices.getConversations()
+      .subscribe( (resp: {conversations: DIscussions[], total: number}) => {
+        if (resp.conversations.length > 0) {
+          this.messages = resp.conversations;
+          this.totalExchanges = resp.total;
+        }
+        this.loading = false;
+      }));
 
   }
 

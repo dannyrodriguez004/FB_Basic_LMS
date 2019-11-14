@@ -44,6 +44,12 @@ module.exports = (passport) => {
         const resp = await coursesServices.addDiscussionPost(req.body.course, req.body.discussion, req.body.post);
         res.json(resp);
     });
+
+    router.post('/add-conversation-message', async (req, res, next) => {
+        const resp = await coursesServices.addConversationMessage(req.body.course, req.body.conversation, req.body.message);
+        res.json(resp);
+    });
+
     // add module to a course
     router.post('/add-module', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addCourseModule(req.body.course, req.body.module);
