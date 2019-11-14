@@ -3,6 +3,11 @@
   <mat-toolbar class="example-header">
     <button mat-icon-button (click)="snav.toggle()"><h1>Inbox</h1></button>
     <mat-icon>message</mat-icon>
+    <span>
+      <button mat-button routerLink="">
+        <a (click)="openConversationDialog()" mat-list-item class="add_button empty_message"><mat-icon>add</mat-icon>Add Discussion</a>
+      </button>
+    </span>
   </mat-toolbar>
 
   <mat-sidenav-container class=container>
@@ -10,8 +15,8 @@
       <mat-sidenav class="size-nav" #snav mode="side" opened>
         <mat-nav-list >
           <a *ngFor="let conversation of conversations" mat-list-item [routerLink]=""
-             [queryParams]="{conversation: currentConversation, select: conversation.id}"
-             (click)="setNav(conversation.id)"><mat-icon>message</mat-icon>{{nav.val}}</a>
+             [queryParams]="{conversation: conversation.id, select: 'Conversation', start: 0}"
+             (click)="setNav(conversation.id)"><mat-icon>message</mat-icon>{{conversation.title}}</a>
         </mat-nav-list>
       </mat-sidenav>
 

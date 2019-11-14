@@ -5,6 +5,9 @@ import {UserService} from '../../services/user.service';
 import {CoursesService} from '../../services/courses.service';
 import {DiscussionsComponent} from '../../courses/course/discussions/discussions.component';
 import {DIscussions} from "../../models/courses.models";
+import {NewDiscussionComponent} from "../../courses/course/discussions/new-discussion/new-discussion.component";
+import {MatDialog} from "@angular/material/dialog";
+import {NewMessageComponent} from "./new-message/new-message.component";
 
 @Component({
   selector: 'app-inbox',
@@ -29,9 +32,24 @@ export class InboxComponent implements OnInit, OnChanges {
     private route: ActivatedRoute,
     private userServices: UserService,
     private coursesServices: CoursesService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+
   ) { }
 
+  openConversationDialog() {
+    const dialogRef =  this.dialog.open(NewMessageComponent, {
+      width: '90%',
+      data: this.conversation
+    });
+
+    this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
+      if (result) {
+        this.loadConversations();
+        console.log(result);
+      }
+    }));
+  }
   ngOnInit() {
     this.loadConversations();
     //

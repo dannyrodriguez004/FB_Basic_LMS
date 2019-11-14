@@ -11,12 +11,18 @@ import {RouterModule} from '@angular/router';
 import {MatCardModule} from '@angular/material/card';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {AngularEditorModule} from '@kolkov/angular-editor';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonModule} from "@angular/material/button";
+import { NewMessageComponent } from './inbox/new-message/new-message.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 
 @NgModule({
-  declarations: [InboxComponent, ConversationComponent],
+  declarations: [InboxComponent, ConversationComponent, NewMessageComponent],
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -27,9 +33,16 @@ import {FormsModule} from '@angular/forms';
     MatCardModule,
     MatProgressSpinnerModule,
     AngularEditorModule,
-    FormsModule
+    FormsModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatSlideToggleModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatDialogModule
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  entryComponents: [NewMessageComponent]
 
 })
 export class InboxModule { }

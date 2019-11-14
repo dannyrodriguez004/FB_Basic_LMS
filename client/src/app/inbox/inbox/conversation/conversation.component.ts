@@ -66,8 +66,8 @@ export class ConversationComponent implements OnInit {
     this.loading = true;
 
     this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
-      if (params.conversation) {
-        this.id = params.conversation;
+      if (params.message) {
+        this.id = params.message;
       }
       if (params.start) {
         this.startFrom = Number(params.start);
@@ -80,8 +80,8 @@ export class ConversationComponent implements OnInit {
         this.loading = true;
 
         this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
-          if (params.conversation) {
-            this.id = params.conversation.id;
+          if (params.message) {
+            this.id = params.message.id;
           }
 
           if (params.start) {
@@ -126,11 +126,9 @@ export class ConversationComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
     this.subscriptions.push(this.coursesServices.getConversations()
       .subscribe( (resp: {conversations: DIscussions[], total: number}) => {
-        if (resp.conversations.length > 0) {
           this.messages = resp.conversations;
           this.totalExchanges = resp.total;
-        }
-        this.loading = false;
+          this.loading = false;
       }));
 
   }
