@@ -65,6 +65,25 @@ export class Discussion {
     posts: Post[];
     isClosed: boolean;
     public: boolean;
+    courseId?: string;
+}
+
+export class Conversation {
+  id: string;
+  title: string;
+  description: string;
+  messages: Message[];
+  isClosed: boolean;
+  public: boolean;
+  courseId?: string;
+}
+
+export class Message {
+  id: string;
+  user_name: string;
+  user_id: string;
+  date: string;
+  post: string;
 }
 
 export class Announcement {

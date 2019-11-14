@@ -4,7 +4,7 @@ import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {CoursesService} from '../../services/courses.service';
 import {DiscussionsComponent} from '../../courses/course/discussions/discussions.component';
-import {DIscussions} from "../../models/courses.models";
+import {Conversation, Discussion, DIscussions} from "../../models/courses.models";
 import {NewDiscussionComponent} from "../../courses/course/discussions/new-discussion/new-discussion.component";
 import {MatDialog} from "@angular/material/dialog";
 import {NewMessageComponent} from "./new-message/new-message.component";
@@ -16,13 +16,10 @@ import {NewMessageComponent} from "./new-message/new-message.component";
 })
 export class InboxComponent implements OnInit, OnChanges {
 
-  conversations: DIscussions[] = []
-  navs = [
-    {val: 'Conversation', ico: 'forum'}
-    ];
+  conversations: Conversation[] = []
 
   private navItem = 'Conversation';
-  currentConversation = '';
+  currentConversation: Conversation;
   conversation = {id: ''};
   private user_id: string;
 
@@ -50,6 +47,7 @@ export class InboxComponent implements OnInit, OnChanges {
       }
     }));
   }
+
   ngOnInit() {
     this.loadConversations();
     //
@@ -61,7 +59,7 @@ export class InboxComponent implements OnInit, OnChanges {
   }
 
   loadConversations() {
-    this.subscriptions.push(this.coursesServices.getConversations().subscribe( (resp: DIscussions[]) => {
+    this.subscriptions.push(this.coursesServices.getConversations().subscribe( (resp: Conversation[]) => {
       this.conversations = resp;
     }));
     // this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
@@ -78,6 +76,14 @@ export class InboxComponent implements OnInit, OnChanges {
 
   setNav(val: string) {
     this.navItem = val;
+  }
+
+  async onSetCurrentConversation(c: any) {
+    console.log(c)
+    this.coursesServices.getDiscussionInfo(c.courseId, c.id).subscribe( (result) => {
+      console.log(result);
+    });
+    this.currentConversation = c;
   }
 
   isEqual(val: string) {

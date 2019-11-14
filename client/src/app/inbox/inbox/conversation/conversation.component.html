@@ -9,6 +9,7 @@
     </mat-card-title>
   </mat-card-header>
 
+  <p [innerHTML]="this.title"></p>
   <p [innerHTML]="this.description"></p>
 
   <div *ngIf="replying" >
@@ -25,13 +26,13 @@
   <br>
 
 </mat-card>
-
 <!-- List posts in card containers -->
 <mat-card *ngFor="let message of messages">
   <mat-card-header>
     <mat-card-title>{{message.user_name}}</mat-card-title>
-    <mat-card-subtitle>{{post.date | date: 'medium'}}</mat-card-subtitle>
-  </mat-card-header>
-  <p [innerHTML]="post.post"></p>
-</mat-card>
+<!--    <mat-card-subtitle>{{message.user_name}}</mat-card-subtitle>-->
+    <mat-card-subtitle>{{message.date | date: 'medium'}}</mat-card-subtitle>
 
+  </mat-card-header>
+  <p [innerHTML]="message.post"></p>
+</mat-card>

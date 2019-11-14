@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Discussion, DIscussions, IPost} from '../../../models/courses.models';
+import {Discussion, DIscussions, IPost, Message, Post} from '../../../models/courses.models';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {CoursesService} from '../../../services/courses.service';
@@ -18,10 +18,11 @@ export class ConversationComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   // discussion variables
-  id: string;                 // discussin id
-  title: string;              // discussion title
-  description: string;        // discussion description HTML format
-  messages: DIscussions[] = [];         // discussion posts
+  @Input('id') id: string;                 // discussion id
+  @Input('courseId') courseId: string;     // course id
+  @Input('title') title: string;           // discussion title
+  description: string;                     // discussion description HTML format
+  messages: Message[] = [];            // discussion posts
   today: Date = new Date();
   date: Date = this.today;
 
@@ -101,6 +102,7 @@ export class ConversationComponent implements OnInit {
       user_id: this.userServices.fbUser().id,
       user_name: this.userServices.fbUser().first_name + ' ' + this.userServices.fbUser().last_name,
       date: new Date().getTime(),
+      courseId: this.courseId,
       message: this.htmlContent};
 
     this.subscriptions.push(this.coursesServices.sendMessage(this.currentConversation, this.id, conversation).subscribe( (resp) => {
@@ -116,20 +118,26 @@ export class ConversationComponent implements OnInit {
     this.replying = false;
     this.htmlContent = '';
 
-    this.subscriptions.push(this.coursesServices.getConversationInfo(this.currentConversation, this.id)
+    this.subscriptions.push(this.coursesServices.getConversationInfo(this.courseId, this.id)
       .subscribe( (resp: {id: any, title: any, description: any, isClosed: any, date: string}) => {
         this.description = resp.description;
         this.title = resp.title;
         this.date = new Date(resp.date);
       }));
-    //
-    // tslint:disable-next-line:max-line-length
-    this.subscriptions.push(this.coursesServices.getConversations()
-      .subscribe( (resp: {conversations: DIscussions[], total: number}) => {
-          this.messages = resp.conversations;
-          this.totalExchanges = resp.total;
-          this.loading = false;
-      }));
+
+    this.subscriptions.push(this.coursesServices.getAllDiscussionPosts(this.courseId, this.id)
+        .subscribe( (resp: Post[]) => {
+            this.messages = resp;
+            this.loading = false;
+        }));
+
+    //tslint:disable-next-line:max-line-length
+    // this.subscriptions.push(this.coursesServices.getConversations()
+    //   .subscribe( (resp: {conversations: DIscussions[], total: number}) => {
+    //       this.messages = resp.conversations;
+    //       this.totalExchanges = resp.total;
+    //       this.loading = false;
+    //   }));
 
   }
 
@@ -146,4 +154,3 @@ export class ConversationComponent implements OnInit {
   }
 
 }
-

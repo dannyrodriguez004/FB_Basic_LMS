@@ -57,6 +57,13 @@ export class CoursesService {
   }
 
   // tslint:disable-next-line:variable-name
+  getAllDiscussionPosts(course_id, discussion_id) {
+    // tslint:disable-next-line:max-line-length
+    const params = {params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`)};
+    return this.http.get(`${environment.apiAddress}/courses/discussion-posts`, params);
+  }
+
+  // tslint:disable-next-line:variable-name
   getDiscussionInfo(course_id, discussion_id) {
     const params = {params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-discussion-info`, params);

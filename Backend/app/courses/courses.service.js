@@ -7,9 +7,9 @@ class CoursesService {
     constructor() {}
 
     /**
-     * 
-     * @param {name: string, description: string, indtructor_id: ,max_size: number, isOpen: boolean} newCourse 
-     * 
+     *
+     * @param {name: string, description: string, indtructor_id: ,max_size: number, isOpen: boolean} newCourse
+     *
      * @return true if successfully added
      */
 
@@ -35,7 +35,7 @@ class CoursesService {
 
             /*let cat = await database.ref('/categories/' + newCourse.category).once('value');
             cat.child(newRef.key).ref.set({ courseId: newRef.key })*/
-            
+
         } catch (err) {
             console.error(err);
             return false;
@@ -45,14 +45,14 @@ class CoursesService {
     }
 
     /**
-     * 
-     * @param {string} course_key 
-     * @param {title: string, description: string, isClosed: boolean} newDiscussion 
-     * 
+     *
+     * @param {string} course_key
+     * @param {title: string, description: string, isClosed: boolean} newDiscussion
+     *
      * @return true if successfully added new discussion
      */
     async addDiscussion(course_key, newDiscussion) {
-        
+
         try {
 
             let courses = await database.ref('/courses')
@@ -79,7 +79,7 @@ class CoursesService {
         }
 
         return true;
-            
+
     }
 
     /**
@@ -119,11 +119,11 @@ class CoursesService {
 
     }
     /**
-     * 
+     *
      * @param {string} course, course key in database
      * @param {string} discussion, discussion key in database
-     * @param {user_name: string, user_id: string, date: string, post: string} post 
-     * 
+     * @param {user_name: string, user_id: string, date: string, post: string} post
+     *
      * @return true if post is successfully added
      */
     async addDiscussionPost(course, discussion, post) {
@@ -173,14 +173,14 @@ class CoursesService {
 
         return true;
     }
-    
+
 
 
     /**
-     * 
+     *
      * @param {string} course, course key in the database
      * @param {name: string} module_obj
-     * 
+     *
      * @return true if successfully added module to course
      */
     async addCourseModule(course, module_obj) {
@@ -203,12 +203,12 @@ class CoursesService {
     }
 
     /**
-     * 
+     *
      * @param {string} course_key , course key in the database
      * @param {string} module_key , module key in the database
-     * @param {title: string, isTimed: boolean, time: number, dueDate: string, attempts: number, 
-     * items: {cal,: number, question: string, answer: string, options: string[]}[]} content 
-     * 
+     * @param {title: string, isTimed: boolean, time: number, dueDate: string, attempts: number,
+     * items: {cal,: number, question: string, answer: string, options: string[]}[]} content
+     *
      * @return true if successfully added quiz
      */
     async addModuleQuiz(course_key, module_key, content) {
@@ -255,11 +255,11 @@ class CoursesService {
     }
 
     /**
-     * 
+     *
      * @param {string} course_key , course key in the database
      * @param {string} module_key , module key in the database
-     * @param {title: string, url: string} content 
-     * 
+     * @param {title: string, url: string} content
+     *
      * @return true if successfully added Url link to module
      */
     async addModuleUrl(course_key, module_key, content) {
@@ -283,11 +283,11 @@ class CoursesService {
 
 
     /**
-     * 
+     *
      * @param {string} course_key , course key in the database
      * @param {string} module_key , module key in the database
-     * @param {title: string, link: string} content 
-     * 
+     * @param {title: string, link: string} content
+     *
      * @return true if successfully added link to module
      */
     async addModuleLink(course_key, module_key, content) {
@@ -334,7 +334,7 @@ class CoursesService {
 
     /**
      * @return {
-     * {id: string, name: string, isOpen: boolean, description: string, 
+     * {id: string, name: string, isOpen: boolean, description: string,
      * instructor_id: string, size: number, MAX_SIZE: number}[]
      * } courses
      */
@@ -356,9 +356,9 @@ class CoursesService {
     }
 
     /**
-     * 
+     *
      * @param {string} course_id , course key in the database
-     * 
+     *
      * @return {{id: string, title: string, dueDate: string, outOf: number}[]} assessments
      */
     async getAssessmentsList(course_id) {
@@ -407,8 +407,8 @@ class CoursesService {
     }
 
     /** Debugging, loads all the data in a course
-     * 
-     * @param {*} key 
+     *
+     * @param {*} key
      */
     async getCourse(key) {
         let myCourse;
@@ -423,9 +423,9 @@ class CoursesService {
     }
 
     /**
-     * 
+     *
      * @param {string} key , course key in the database
-     * 
+     *
      * @return {id: string, name: string, description: string, instructor: string, size: number, MAX_SIZE: number} course_info
      */
     async getCourseInfo(key) {
@@ -450,31 +450,31 @@ class CoursesService {
     }
 
     /**
-     * 
+     *
      * @param {string} courses_id , course key in the database
-     * 
+     *
      * @returns {name: string,
      *           resources: {id: string, title: string, url: string, link: string, isTime}[]}[]
      */
     async getCourseModules(courses_id) {
-    
+
         let payload = {
             modules: []
         };
-   
+
         let tempModule;
-   
+
         try {
-   
+
             var courseModules = await database.ref('/courses/' + courses_id + '/modules').once('value');
-   
+
             courseModules.forEach( (mod) => {
 
                 tempModule = {id:'', name: '', resources: []};
-   
+
                 tempModule.name = mod.child('name').val();
                 tempModule.id = mod.key;
-   
+
                 mod.child('content').forEach( (item) => {
                     tempModule.resources.push({
                     id: item.key,
@@ -487,20 +487,20 @@ class CoursesService {
                     page: item.child('page').val(),
                     });
                 });
-   
+
                    payload.modules.push(tempModule);
             });
         } catch (err) {
                console.error(err);
         }
-   
+
            return payload.modules;
     }
 
 
     /**
-     * 
-     * 
+     *
+     *
      * @return {{id: string, name: string, description: string, instructor: string}[]} courses_info
      */
     async getCoursesInfo() {
@@ -520,16 +520,16 @@ class CoursesService {
             });
         });
     }
-    
+
     /**
-     * 
+     *
      * @param {string} course , course key in the database
      * @param {string} discussion_id , discussion key in the database
-     * 
+     *
      * @return {title: string, description: string, isClosed: boolean} discussion_info
      */
     async getDiscussionInfo(course, discussion_id) {
-        
+
         try {
 
             var discussion = await database.ref('/courses/' + course + '/discussions/' + discussion_id).once('value');
@@ -548,10 +548,10 @@ class CoursesService {
     }
 
     /**
-     * 
+     *
      * @param {string} course , course key in the database
      * @param {string} discussion_id , discussion key in the database
-     * 
+     *
      * @return {{id: string, date: string, post: string, user_id: string, user_name: string}[]} posts
      */
     async getDiscussionPosts(course, discussion) {
@@ -566,7 +566,7 @@ class CoursesService {
             if(!posts.hasChildren()) {
                 return payload;
             }
-            
+
             posts.forEach( (item) => {
                 var post = item.toJSON();
                 post.id = item.key;
@@ -582,11 +582,11 @@ class CoursesService {
     }
 
     /**
-     * 
+     *
      * @param {string} course , course key in the database
      * @param {string} discussion_id , discussion key in the database
      * @param {number} start , element "index" from which to begin fetching post
-     * 
+     *
      * @return {{id: string, date: string, post: string, user_id: string, user_name: string}[]} posts
      */
     async getDiscussionPostsFrom(course, discussion, start) {
@@ -610,7 +610,7 @@ class CoursesService {
             if(!posts.hasChildren()) {
                 return payload;
             }
-            
+
             posts.forEach( (item) => {
                 if(loadedPosts < MAX_POSTS) {
                     var post = item.toJSON();
@@ -654,6 +654,7 @@ class CoursesService {
                     console.log("HERE I AM IN DISCUSSION GET");
                     payload.discussions.push({
                         id: discussion.key,
+                        courseId: course_key,
                         title: discussion.child('title').val(),
                     });
                 }
@@ -730,10 +731,10 @@ class CoursesService {
         return payload.discussions;
     }
     /**
-     * 
+     *
      * @param {string} course , course key in the database
      * @param {string} discussion_id , discussion key in the database
-     * 
+     *
      * @param {number}, number of posts in a discussion
      */
     async getNumberOfPosts(course, discussion) {
@@ -749,9 +750,9 @@ class CoursesService {
 
 
     /**
-     * 
+     *
      * @param {string} user, student key in the database
-     * 
+     *
      * @return {{id: string, name: string}[]} courses
      */
     async getMyCourses(user) {
@@ -791,10 +792,10 @@ class CoursesService {
     }
 
     /**
-     * 
+     *
      * @param {string} course_id , course key in the database
      * @param {string} student_id , student key in the database
-     * 
+     *
      * @return {{{id: string, title: string, dueDate: string, outOf: number, doneOn: string, score: number}[]}} records
      */
     async getStudentGrades(course_id, student_id) {
@@ -819,7 +820,7 @@ class CoursesService {
                     startTime: rec.startTime,
                 });
             }
-            
+
         } catch(err) {
             console.error(err);
         }
@@ -827,13 +828,13 @@ class CoursesService {
         return records;
 
     }
-    
+
     /**
-     * 
+     *
      * @param {string} course_id , course key in the database
      * @param {string} student_id , student key in the database
      * @param {string} assessment_id, assesment key in the database
-     * 
+     *
      * @return {doneOn: string, score: number} record
 
      */
@@ -965,11 +966,11 @@ class CoursesService {
                     time: record.time || -1,
                     title: record.title || null,
                 };
-    
+
             } catch (err) {
                 console.error(err);
             }
-    
+
 
             return payload;
     }
@@ -1014,7 +1015,7 @@ class CoursesService {
                 });
             });
 
-            
+
 
         } catch (err) {
             console.error(err);
@@ -1023,7 +1024,7 @@ class CoursesService {
         return payload;
 
     }
-    
+
 
     async removeContent(course, module_id, content) {
         try {
@@ -1040,7 +1041,7 @@ class CoursesService {
     /**
      * @param {string} course_id , course key in the database
      * @param {string} student_id , student key in the database
-     * 
+     *
      * @returns {boolean} true if this student is enrolled in this course
      */
     async studentHasCourse(student_id, course_id) {
@@ -1264,7 +1265,7 @@ class CoursesService {
     }
 
     async confirmEnrollment(student, course) {
-        
+
         try {
             if(await userService.enrollIn(student, course)) {
                 let studentRef = await database.ref('/courses/' + course + '/registered/' + student).once('value');
@@ -1288,9 +1289,9 @@ class CoursesService {
     }
 
     async moveFromWaitToRegister(course) {
-        
+
         if( await this.waitingListSize(course) < 1) return false;
-        
+
         try {
 
             let waitlistRef = await database.ref('/courses/' + course + '/waiting-list').limitToFirst(1).once('value');
@@ -1316,7 +1317,7 @@ class CoursesService {
         let list = [];
 
         let students = await database.ref('/courses/' + course + '/students').once('value');
-        
+
         students.forEach( (item) => {
             list.push(item.key);
         })
@@ -1382,7 +1383,7 @@ class CoursesService {
     }
 
     async saveResponses(student, course, assesment, responses) {
-        
+
         try {
             await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assesment)
             .update({items: responses});
@@ -1394,12 +1395,12 @@ class CoursesService {
     }
 
     async getCoursesPageByCategory(category, sortby, start) {
-        
+
         sortby = sortby == 'name' ? 'title' : sortby;
         let whole_category = [];
         let page = [];
         let counter = 0;
-        
+
         try {
             let ref = await database.ref('/courses').orderByChild('category').equalTo(category).once('value');
             ref.forEach( (member) => {
