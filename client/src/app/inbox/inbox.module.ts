@@ -9,9 +9,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {InboxRoutingModule} from './inbox-routing.module';
 import {RouterModule} from '@angular/router';
 import {MatCardModule} from '@angular/material/card';
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {AngularEditorModule} from "@kolkov/angular-editor";
-import {FormsModule} from "@angular/forms";
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {AngularEditorModule} from '@kolkov/angular-editor';
+import {FormsModule} from '@angular/forms';
 
 
 
