@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {UserModel} from '../models/usermodel.models';
 import {Router} from '@angular/router';
 import {catchError, distinctUntilChanged, tap} from 'rxjs/operators';
@@ -20,7 +20,7 @@ export class UserService {
 
 
   private isLoggedIn = false;
-
+  private subscriptions: Subscription[] = [];
   private FBLoggedIn;
   private userModel: UserModel = new UserModel();
   // tslint:disable-next-line:variable-name
@@ -47,11 +47,10 @@ export class UserService {
       });
       FB.AppEvents.logPageView();
       this.loadUser();
-      // if (!this.isLoggedIn) {
-      //   this.submitLogin();
-      // }
+      if (this.getToken()) {
+          // this.getCurrentUser();
+      }
     };
-
 
     // tslint:disable-next-line:only-arrow-functions
     ( function(d, s, id) {
@@ -66,7 +65,15 @@ export class UserService {
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    console.log(this.userModel);
+    if (this.getToken()) {
+      this.subscriptions.push(this.getCurrentUser().subscribe((userInfo: {
+        id: string, first_name: string,
+        last_name: string, email: string, type: UsertypeModel, phone: string, country: string
+      }) => {
+        this.userModel = userInfo;
+        console.log(this.userModel);
+      }));
+    }
   }
 
 

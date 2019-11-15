@@ -113,13 +113,13 @@ export class CoursesService {
     });
   }
 
-  sendMessage(course_id, discussion_id, post) {
+  sendMessage(course_id, discussion_id, conversation) {
     // tslint:disable-next-line:max-line-length
     // const params = { params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`).set('post', `${post}`)};
     return this.http.post(`${environment.apiAddress}/courses/add-conversation-message`, {
       course: course_id,
       discussion: discussion_id,
-      post
+      conversation
     });
   }
   updateCourse(course) {

@@ -7,15 +7,15 @@
     <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
     <mat-card-content *ngIf="!loading">
       <p>
-        <strong>First Name: </strong>{{userModel.first_name}}
+        <strong>First Name: </strong>{{userServices.fbUser().first_name}}
         <br>
-        <strong>Last Name: </strong> {{userModel.last_name}}
+        <strong>Last Name: </strong> {{userServices.fbUser().last_name}}
         <br>
-        <strong>Email: </strong>{{userModel.email}}
+        <strong>Email: </strong>{{userServices.fbUser().email}}
         <br>
-        <strong>Phone: </strong>{{userModel.phone}}
+        <strong>Phone: </strong>{{userServices.fbUser().phone}}
         <br>
-        <strong>Country: </strong>{{userModel.country}}
+        <strong>Country: </strong>{{userServices.fbUser().country}}
       </p>
     </mat-card-content>
   </mat-card>

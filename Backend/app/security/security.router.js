@@ -82,7 +82,13 @@ module.exports = (passport) => {
         if(users) {
             res.json({
                 userID: req.user,
-                user_info: users
+                // user_info: users.child(req.user),
+                first_name: users.child(req.user).first_name,
+                last_name: users.child(req.user).last_name,
+                email: users.child(req.user).email,
+                phone: users.child(req.user).phone,
+                country: users.child(req.user).country
+
             });
         } else {
             console.log('AUTH/ME CANNOT GET USERS');

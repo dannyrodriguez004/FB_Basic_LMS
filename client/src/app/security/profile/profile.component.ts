@@ -23,8 +23,8 @@ export class ProfileComponent implements OnInit {
   private navItem = 'Home';
 
   private subscriptions: Subscription[] = [];
-  private authorized = false;
-  private userModel: UserModel;
+  // private authorized = false;
+  // private userModel: UserModel;
   private userID: string;
   loading = true;
 
@@ -34,30 +34,14 @@ export class ProfileComponent implements OnInit {
     private userServices: UserService,
     private coursesServices: CoursesService,
     private router: Router
-  ) {
-    this.userID = this.userServices.fbUser().id;
-  }
+  ) {}
 
   ngOnInit() {
     this.loading = true;
-    this.userModel = new UserModel();
-    this.subscriptions.push(this.userServices.getCurrentUser().subscribe( (resp: any) => {
-      this.authorized = resp;
-      console.log(this.authorized);
-      if (this.authorized || this.userServices.getIsAdmin()) {
-        this.subscriptions.push(this.userServices
-          .getUserInfo(this.userID)
-          .subscribe( (userInfo: {id: string, first_name: string,
-            last_name: string, email: string, type: UsertypeModel, phone: string, country: string}) => {
-            this.userModel = userInfo;
-            console.log(this.userModel);
-          }));
-        return this.userModel;
-      } else {
+    if (!this.userServices.fbUser() && !this.userServices.getIsAdmin()) {
         console.log('not authorized!');
         this.router.navigateByUrl('/');
       }
-    }));
     this.loading = false;
     // this.subscriptions.push(this.router.events.subscribe((e: any) => {
     //   if (e instanceof NavigationEnd) {
@@ -75,7 +59,7 @@ export class ProfileComponent implements OnInit {
     //     this.userModel = params.userModel;
     //   }
     // }));
-    this.userID = this.userServices.fbUser().id;
+    // this.userID = this.userServices.fbUser().id;
   }
 
   setNav(val: string) {

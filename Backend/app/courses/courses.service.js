@@ -714,7 +714,7 @@ class CoursesService {
                 // courses.forEach( async (course) => {
                 // console.log(course);
                 let discussions = await this.getDiscussions(course.id, false);
-                console.log(discussions);
+                // console.log(discussions);
                 payload.discussions = payload.discussions.concat(discussions);
                 // for await (let discussion of discussions) {
                 // console.log('###' + JSON.stringify(discussion) + '###');
@@ -726,7 +726,7 @@ class CoursesService {
         } catch (err) {
             console.error(err);
         }
-        console.log('Payload ' + JSON.stringify(payload.discussions));
+        // console.log('Payload ' + JSON.stringify(payload.discussions));
         console.log('DONE #############################');
         return payload.discussions;
     }
