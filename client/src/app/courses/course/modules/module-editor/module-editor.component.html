@@ -32,7 +32,8 @@
 </div>
 <mat-dialog-actions>
     <span class="fill"></span>
-    <button type="button" (click)="onNoClick()" mat-raised-button color="warn">Cancel</button>
+    <button type="button" (click)="onNoClick()" mat-raised-button>Cancel</button>
+    <button type="button" (click)="removeModule()" *ngIf="current_module.id != null" mat-raised-button color="warn">Remove Module</button>
     <button [disabled]="submitting || moduleForm.invalid" type="submit" *ngIf="current_module.id != null" mat-raised-button color="primary">Update Module</button>
     <button [disabled]="submitting || moduleForm.invalid" type="submit" (click)="createModule()" *ngIf="current_module.id == null" mat-raised-button color="primary">Create Module</button>
 </mat-dialog-actions>

@@ -2,6 +2,7 @@
   Library of Courses 
   <button mat-button [matMenuTriggerFor]="menu">Select Category</button>
   <mat-menu #menu="matMenu">
+      <button (click)="setCategories('null')" mat-menu-item>None</button>
     <button (click)="setCategories(cats.name)" *ngFor="let cats of getCategories()" mat-menu-item>{{cats.name}}</button>
   </mat-menu>
 </mat-toolbar>

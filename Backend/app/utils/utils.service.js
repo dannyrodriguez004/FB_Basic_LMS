@@ -13,9 +13,10 @@ class UtilsService {
         
         try {
             const NOW = new Date();
+            const NowString = NOW.toDateString();
             //console.log("" + NOW.getMonth() + '_' + NOW.getDay() + '_' + NOW.getFullYear())
             await database.ref('/logs/admin/')
-            .child(NOW.toDateString()).push({
+            .child( NowString.substring(NowString.indexOf(' ') + 1)).push({
                 user: user.id,
                 time: (new Date()).getTime(),
                 context: context,

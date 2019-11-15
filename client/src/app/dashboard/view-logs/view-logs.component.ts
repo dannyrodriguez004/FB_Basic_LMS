@@ -9,12 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewLogsComponent implements OnInit {
 
-  logsPayload: LogDay[] = [{date: new Date(), logs: [
-    {id: '0', time: new Date(), context: {method: '', params: [], result: true}, description: 'nothing in particular', user: '0'},
-    {id: '0', time: new Date(), context: {method: '', params: [], result: true}, description: 'nothing in particular', user: '0'},
-    {id: '0', time: new Date(), context: {method: '', params: [], result: true}, description: 'nothing in particular', user: '0'},
-    {id: '0', time: new Date(), context: {method: '', params: [], result: true}, description: 'nothing in particular', user: '0'}
-  ]}];
+  logsPayload: LogDay[] = [];
+
+  loading = false;
 
   displayedColumns: string[] = ['time', 'description', 'user', 'id'];
   
@@ -22,9 +19,11 @@ export class ViewLogsComponent implements OnInit {
   constructor(private UtilityServices: UtilityService) { }
 
   ngOnInit() {
+    this.loading = true;
     this.UtilityServices.getAdminLogs().subscribe( (resp: LogDay[]) => {
       console.log(resp);
       this.logsPayload = resp;
+      this.loading = false;
     });
   }
 

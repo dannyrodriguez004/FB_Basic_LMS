@@ -292,6 +292,12 @@ module.exports = (passport) => {
         res.json(resp);
     });
 
+    router.post('/remove-module', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
+        const resp = await coursesServices.removeModule(req.body.course, req.body.moduleId);
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.removeModule.name, params: [req.body.course, req.body.moduleId], result: resp}, "Removing Course Module.");
+    });
+
     return router;
 }
 // router.post('/add-course', passport.authenticate('jwt', {session: true}), async (req, res, next) => {

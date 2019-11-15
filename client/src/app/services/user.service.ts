@@ -47,9 +47,6 @@ export class UserService {
       });
       FB.AppEvents.logPageView();
       this.loadUser();
-      if(!this.isLoggedIn) {
-        //this.submitLogin();
-      }
     };
 
 
@@ -75,6 +72,10 @@ export class UserService {
         this.cookies.check('fb-token') && this.isTokenFresh(this.cookies.get('fb-token')) ||
         this.isLoggedFacebookLoggedIn()) {
       this.isLoggedIn = true;
+      return true;
+    } else {
+      this.isLoggedIn = false;
+      return false;
     }
   }
 
@@ -84,14 +85,14 @@ export class UserService {
       if (response.status === 'connected') {
 
         console.log('HERE!!!',response);
-        this.FBLoggedIn = true;
+        this.isLoggedIn = true;
         this.userModel.id = response.authResponse.userID;
 
       } else {
-        this.FBLoggedIn = false;
+        this.isLoggedIn = false;
       }
       console.log(this.userModel);
-      return this.FBLoggedIn;
+      return this.isLoggedIn;
     });
   }
 
@@ -176,7 +177,7 @@ export class UserService {
       if (result.authResponse) {
         this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
           .subscribe((response: any) => {
-            this.FBLoggedIn = true;
+            this.isLoggedIn = true;
             console.log('POST RESPONSE', response);
             this.saveToken(response.token);
             this.cookies.set('fb-token',response.token, 2, '/');
@@ -245,7 +246,7 @@ export class UserService {
 
     console.log(this.userModel);
     // this.isAdmin = false;
-    this.FBLoggedIn = false;
+    this.isLoggedIn = false;
     this.auth = -1;
     this.router.navigate(['/nav/home']);
     localStorage.removeItem('id_token');

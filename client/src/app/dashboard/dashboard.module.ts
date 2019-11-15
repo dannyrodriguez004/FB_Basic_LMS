@@ -1,3 +1,4 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
 import { NgModule } from '@angular/core';
@@ -19,7 +20,8 @@ import { ViewLogsComponent } from './view-logs/view-logs.component';
     MatCardModule,
     MatExpansionModule,
     MatListModule,
-    MatTableModule
+    MatTableModule,
+    MatProgressSpinnerModule
   ]
 })
 export class DashboardModule { }

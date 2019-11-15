@@ -628,16 +628,20 @@ class CoursesService {
             courses: []
         };
 
-        let student = await database.ref('/students/' + user + '/enrolled').once('value');
+        try {
+            let student = await database.ref('/students/' + user + '/enrolled').once('value');
 
 
-        student.forEach( (item) => {
-            payload.courses.push({id: item.child('id').toJSON()});
-        })
+            student.forEach( (item) => {
+                payload.courses.push({id: item.child('id').toJSON()});
+            })
 
-        let courses = await database.ref('/courses').once('value');
-        for(var i =0; i < payload.courses.length; i++){
-            payload.courses[i].name = (courses.child(payload.courses[i].id).child('name').val());
+            let courses = await database.ref('/courses').once('value');
+            for(var i =0; i < payload.courses.length; i++){
+                payload.courses[i].name = (courses.child(payload.courses[i].id).child('name').val());
+            }
+        } catch (err) {
+            console.error(err);
         }
 
         return payload.courses;
@@ -746,8 +750,15 @@ class CoursesService {
     }
 
 
-    async removeModule() {
+    async removeModule(course, moduleId) {
 
+        try {
+            await database.ref('/courses/' + course + '/modules/' + moduleId).remove();
+        } catch(err) {
+            return false;
+        }
+
+        return true;
     }
 
     async getQuiz(course, module_key, quiz) {
@@ -1357,7 +1368,7 @@ class CoursesService {
                 console.log('admin');
                 courses = await database.ref('/courses')
                     .orderByChild('instructor_id')
-                    .equalTo(user.id)
+                //    .equalTo(user.id)
                     .once('value');
             } else {
                 console.log('Not an Instructor');

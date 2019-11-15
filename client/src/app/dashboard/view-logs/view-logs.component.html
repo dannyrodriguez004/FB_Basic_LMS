@@ -1,15 +1,16 @@
 
 
+<mat-card class="main" *ngIf="loading">
+    <mat-spinner  style="margin-left: auto; margin-right: auto;"></mat-spinner>
+</mat-card>
+
 <div class="main">
 <mat-accordion>
     <mat-expansion-panel *ngFor="let day of logsPayload">
         <mat-expansion-panel-header>
             <mat-panel-title>
-              {{day.date | date: 'dd/MM/yyyy'}}
+              {{day.date | date: 'MM/dd/yyyy'}}
             </mat-panel-title>
-            <mat-panel-description>
-              Type your name and age
-            </mat-panel-description>
         </mat-expansion-panel-header>
 
         <table mat-table [dataSource]="day.logs" style="width: 100%;">
@@ -25,6 +26,7 @@
                 <th mat-header-cell *matHeaderCellDef> Description </th>
                 <td mat-cell *matCellDef="let element"> {{element.description}} </td>
             </ng-container>
+            
             
             <!-- Weight Column -->
             <ng-container matColumnDef="user">

@@ -84,6 +84,27 @@ export class ModuleEditorComponent implements OnInit {
 
   }
 
+  removeModule() {
+    const yesNoDialogRef = this.dialog.open(YesNoDialogComponent, {
+      data: {
+        title: "Warning!",
+        message: "Do you really want to delete this discussion?\n This action cannot be undone.",
+      }
+    });
+
+    yesNoDialogRef.afterClosed().subscribe( (resp) => {
+      if(resp) {
+        console.log('remove?',resp);
+        this.courseServices.removeModule(this.current_course, this.current_module.id).subscribe( resp => {
+          if(resp) {
+            this.changed = true;
+            this.onNoClick();
+          }
+        })
+      }
+    });
+  }
+
   openNewContentDialog() {
 
     const dialogReference = this.dialog.open(NewContentComponent, {

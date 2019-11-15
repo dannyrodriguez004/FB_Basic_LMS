@@ -34,6 +34,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
+    console.log('is logged in', this.userServices.loadUser());
+    if(this.userServices.loadUser()) this.router.navigateByUrl('/');
     this.subscription = [];
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.email, Validators.required]],
@@ -48,6 +50,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     // this.authentication.login(form.value.email, form.value.password);
     this.userServices.Adminlogin({email: form.value.email, password: form.value.password}).subscribe((login) => { console.log(login); });
+  }
+
+  isLoggedIn() {
+    console.log( this.userServices.getIsLoggedIn());
   }
 
   // onSubmit() {
