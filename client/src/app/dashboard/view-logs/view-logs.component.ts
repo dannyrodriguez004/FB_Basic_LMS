@@ -1,3 +1,5 @@
+//import { ContextComponent } from './context/context.component';
+import { MatDialog } from '@angular/material';
 import { UtilityService } from './../../services/utility.service';
 import { LogDay } from './../../models/log.model';
 import { Component, OnInit } from '@angular/core';
@@ -13,10 +15,13 @@ export class ViewLogsComponent implements OnInit {
 
   loading = false;
 
-  displayedColumns: string[] = ['time', 'description', 'user', 'id'];
+  displayedColumns: string[] = ['time', 'description', 'user', 'id', 'more'];
   
 
-  constructor(private UtilityServices: UtilityService) { }
+  constructor(
+    private UtilityServices: UtilityService,
+    private dialog: MatDialog,
+    ) { }
 
   ngOnInit() {
     this.loading = true;
@@ -26,5 +31,12 @@ export class ViewLogsComponent implements OnInit {
       this.loading = false;
     });
   }
+
+  /*openMore(context) {
+    const dialogRef = this.dialog.open(ContextComponent, {
+      width: '90%',
+      //data: context
+    });
+  }*/
 
 }

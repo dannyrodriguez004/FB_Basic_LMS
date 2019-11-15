@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
@@ -5,12 +6,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { MatCardModule, MatButtonModule, MatExpansionModule} from '@angular/material';
+import { MatCardModule, MatButtonModule, MatExpansionModule, MatToolbarModule} from '@angular/material';
 import { MatMenuModule } from '@angular/material';
 import { ViewLogsComponent } from './view-logs/view-logs.component';
+//import { ContextComponent } from './view-logs/context/context.component';
 
 @NgModule({
-  declarations: [DashboardComponent, ViewLogsComponent
+  declarations: [DashboardComponent, ViewLogsComponent, 
     ],
   imports: [
     CommonModule,
@@ -21,7 +23,12 @@ import { ViewLogsComponent } from './view-logs/view-logs.component';
     MatExpansionModule,
     MatListModule,
     MatTableModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatToolbarModule,
+    MatIconModule
+  ],
+  entryComponents: [
+    ,
   ]
 })
 export class DashboardModule { }
