@@ -147,23 +147,21 @@ class CoursesService {
     }
 
     /**
-     *
      * @param {string} course, course key in database
      * @param {string} discussion, discussion key in database
      * @param {user_name: string, user_id: string, date: string, post: string} post
-     *
      * @return true if post is successfully added
      */
-    async addConversationMessage(course, conversation, message) {
+    async addConversationMessage(course, discussion, message) {
 
         try {
-            await database.ref('/courses/' + course + '/conversations/')
-                .child(conversation).child('posts').push(
+            await database.ref('/courses/' + course + '/discussions/')
+                .child(discussion).child('posts').push(
                     {
                         user_name: message.user_name,
                         user_id: message.user_id,
                         date: message.date,
-                        message: message.post
+                        post: message.message
                     }
                 )
         } catch (err) {
@@ -561,7 +559,8 @@ class CoursesService {
 
         try {
 
-            let posts = await database.ref('/courses/' + course + '/discussions/' + discussion + '/posts/').orderByKey().once('value');
+            let posts = await database.ref('/courses/' + course + '/discussions/' + discussion + '/posts/')
+                .orderByChild('date').once('value');
 
             if(!posts.hasChildren()) {
                 return payload;

@@ -46,7 +46,7 @@ module.exports = (passport) => {
     });
 
     router.post('/add-conversation-message', async (req, res, next) => {
-        const resp = await coursesServices.addConversationMessage(req.body.course, req.body.conversation, req.body.message);
+        const resp = await coursesServices.addConversationMessage(req.body.conversation.courseId, req.body.discussion, req.body.conversation);
         res.json(resp);
     });
 

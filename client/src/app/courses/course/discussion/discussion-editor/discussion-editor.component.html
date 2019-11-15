@@ -4,14 +4,14 @@
 
     <div>
         <mat-slide-toggle formControlName="isClosed" color="primary">
-            Clossed Discussion
+            Closed Discussion
         </mat-slide-toggle>
     </div>
 
     <br>
 
     <mat-form-field appearance="outline">
-        <mat-label>Disccussion End Date</mat-label>
+        <mat-label>Discussion End Date</mat-label>
         <input matInput formControlName="endDate" [min]="today" [matDatepicker]="picker" placeholder="Choose an end date" required>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>

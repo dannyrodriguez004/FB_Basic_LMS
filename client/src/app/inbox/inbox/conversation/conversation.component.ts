@@ -109,7 +109,9 @@ export class ConversationComponent implements OnInit, OnChanges {
       console.log(resp);
       if (resp) {
         this.totalExchanges++;
+        this.loadDiscussion();
       }
+
     }));
   }
 

@@ -30,7 +30,7 @@
 
 </mat-card>
 <!-- List posts in card containers -->
-<mat-card *ngFor="let message of messages">
+<mat-card *ngFor="let message of messages.reverse()">
   <mat-card-header>
     <mat-card-title>{{message.user_name}}</mat-card-title>
 <!--    <mat-card-subtitle>{{message.user_name}}</mat-card-subtitle>-->
