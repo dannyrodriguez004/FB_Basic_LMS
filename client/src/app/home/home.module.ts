@@ -10,6 +10,7 @@ import {MatTableModule} from "@angular/material/table";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { TOSComponent } from './homepage/tos/tos.component';
 import { PrivacyComponent } from './homepage/privacy/privacy.component';
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { PrivacyComponent } from './homepage/privacy/privacy.component';
     MatIconModule,
     MatFormFieldModule,
     MatTableModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatToolbarModule
   ]
 })
 export class HomeModule { }

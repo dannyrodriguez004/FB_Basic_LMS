@@ -11,6 +11,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {AdminRegisterComponent} from './admin-register/admin-register.component';
 import {RegisterComponent} from './register/register.component';
 import {ProfileComponent} from './profile/profile.component';
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 
 
@@ -24,7 +25,8 @@ import {ProfileComponent} from './profile/profile.component';
     MatProgressSpinnerModule,
     FormsModule,
     MatSelectModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatToolbarModule
   ]
 })
 export class SecurityModule { }

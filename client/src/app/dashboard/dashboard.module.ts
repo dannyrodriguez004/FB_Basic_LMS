@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatCardModule, MatButtonModule} from '@angular/material';
 import { MatMenuModule } from '@angular/material';
 import { ViewLogsComponent } from './view-logs/view-logs.component';
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 @NgModule({
   declarations: [DashboardComponent, ViewLogsComponent
@@ -14,7 +15,8 @@ import { ViewLogsComponent } from './view-logs/view-logs.component';
     DashboardRoutingModule,
     MatMenuModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatToolbarModule
   ]
 })
 export class DashboardModule { }

@@ -1,6 +1,8 @@
 <ng-container >
 <mat-toolbar>
-  <mat-toolbar-row class="example-header">
+  <mat-toolbar-row style="background-color: #3f51b5; color: #fafafa;
+          border-bottom-style: solid; border-bottom-width: 1px;
+          border-bottom-color: black;">
     <button mat-icon-button (click)="snav.toggle()"><h1>Inbox</h1></button>
     <mat-icon style="padding-left: 15px">message</mat-icon>
     <span>
@@ -14,7 +16,7 @@
 
       <mat-sidenav class="size-nav" #snav mode="side" opened>
         <mat-nav-list >
-          <a *ngFor="let conversation of conversations" mat-list-item [routerLink]=""
+          <a *ngFor="let conversation of conversations.reverse()" mat-list-item [routerLink]=""
              [queryParams]="{conversation: conversation.id, select: 'Conversation', start: 0}"
              (click)="onSetCurrentConversation(conversation)"><mat-icon>message</mat-icon>{{conversation.title}}</a>
         </mat-nav-list>

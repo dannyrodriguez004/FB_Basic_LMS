@@ -1,23 +1,24 @@
 .mat-app-background{
-  background-color: lightgrey;
+  background-color: white;
   height: 100%;
 }
 
 header{
-  background-color: lightblue;
+  background-color: #3f51b5;
   height: 65px;
   left: 5px;
   font-size: 50px;
   font-weight: 500;
   top: 15px;
   font-style: normal;
+
 }
 
 
 mat-card {
   width: 80%;
   padding: 1rem;
-  //background-color: lightskyblue;
+  background-color: #c5dce9e0;
   align-content: flex-start;
   margin-top: 20px;
   margin-left: 20px;

@@ -1,27 +1,22 @@
 .mat-app-background{
-  background-color: lightgrey;
+  background-color: white;
   height: 100%;
 }
-
-header{
-  //background-color: lightblue;
-  height: 65px;
-  left: 5px;
-  font-size: 50px;
-  font-weight: 500;
-  top: 15px;
-  font-style: normal;
-}
-
-.dashboard-header{
-  background-color: lightblue;
-  height: 65px;
-}
+//
+//header{
+//  background-color: #3f51b5;
+//  height: 65px;
+//  left: 5px;
+//  font-size: 50px;
+//  font-weight: 500;
+//  top: 15px;
+//  font-style: normal;
+//}
 
 mat-card {
   width: 80%;
   padding: 1rem;
-  //background-color: lightskyblue;
+  background-color: #c5dce9e0;
   padding: 1rem;
   margin-top: 20px;
   margin-left: 20px;
@@ -35,7 +30,7 @@ mat-card {
   border-radius: 2px;
   padding: 10px 10px 30px;
   margin: 10px 10px 10px 10px;
-  background-color: dimgray;
+  background-color: white;
   display: flex;
   flex-wrap: wrap;
 }
