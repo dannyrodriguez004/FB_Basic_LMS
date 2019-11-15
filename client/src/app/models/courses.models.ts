@@ -76,6 +76,8 @@ export class Conversation {
   isClosed: boolean;
   public: boolean;
   courseId?: string;
+  lastmessageusername?: string;
+  lastmessagedate?: string;
 }
 
 export class Message {

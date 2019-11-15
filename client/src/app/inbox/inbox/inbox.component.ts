@@ -50,6 +50,7 @@ export class InboxComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.loadConversations();
+    console.log(this.conversations);
     //
     // this.subscriptions.push(this.router.events.subscribe((e: any) => {
     //   if (e instanceof NavigationEnd) {
@@ -61,6 +62,7 @@ export class InboxComponent implements OnInit, OnChanges {
   loadConversations() {
     this.subscriptions.push(this.coursesServices.getConversations().subscribe( (resp: Conversation[]) => {
       this.conversations = resp;
+      console.log(this.conversations);
     }));
     // this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
     //   if (params.select) {

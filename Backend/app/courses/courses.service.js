@@ -163,7 +163,10 @@ class CoursesService {
                         date: message.date,
                         post: message.message
                     }
-                )
+                );
+            await database.ref('/conversations/')
+                .child(discussion).update({
+                    lastmessagedate: message.date, lastmessageusername: message.user_name});
         } catch (err) {
             console.error(err);
             return false;
@@ -647,8 +650,8 @@ class CoursesService {
             .once('value');
 
             discussions.forEach( (discussion) => {
-                console.log(discussion.val());
-                console.log(isPublic);
+                // console.log(discussion.val());
+                // console.log(isPublic);
                 if(discussion.child('public').val() === isPublic) {
                     console.log("HERE I AM IN DISCUSSION GET");
                     payload.discussions.push({
@@ -704,28 +707,25 @@ class CoursesService {
         let payload = {
             discussions: []
         };
-
         try {
 
             let courses = await this.getMyCourses(user);
-            // console.log(courses);
             for await (let course of courses) {
-                // courses.forEach( async (course) => {
-                // console.log(course);
                 let discussions = await this.getDiscussions(course.id, false);
-                // console.log(discussions);
+                for await (let discussion of discussions) {
+                    let conversation = await database.ref('/conversations/').child(discussion.id).once('value');
+                    // let convo = JSON.parse(JSON.stringify(conversation));
+                    discussion.lastmessageusername = conversation.child('lastmessageusername').val();
+                    discussion.lastmessagedate = conversation.child('lastmessagedate').val();
+                }
                 payload.discussions = payload.discussions.concat(discussions);
-                // for await (let discussion of discussions) {
-                // console.log('###' + JSON.stringify(discussion) + '###');
-                // discussions.forEach( (discussion) => {
-                // payload.discussions = discussions;
-                // }
             }
+            // console.log(payload);
 
         } catch (err) {
             console.error(err);
         }
-        // console.log('Payload ' + JSON.stringify(payload.discussions));
+        console.log('Payload ' + JSON.stringify(payload.discussions));
         console.log('DONE #############################');
         return payload.discussions;
     }

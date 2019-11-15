@@ -126,6 +126,7 @@ export class ConversationComponent implements OnInit, OnChanges {
         this.description = resp.description;
         this.title = resp.title;
         this.date = new Date(resp.date);
+
       }));
 
     this.subscriptions.push(this.coursesServices.getAllDiscussionPosts(this.courseId, this.id)
