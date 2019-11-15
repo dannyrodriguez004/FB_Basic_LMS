@@ -64,16 +64,6 @@ export class UserService {
       js.src = 'https://connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-
-    if (this.getToken()) {
-      this.subscriptions.push(this.getCurrentUser().subscribe((userInfo: {
-        id: string, first_name: string,
-        last_name: string, email: string, type: UsertypeModel, phone: string, country: string
-      }) => {
-        this.userModel = userInfo;
-        console.log(this.userModel);
-      }));
-    }
   }
 
 
@@ -94,6 +84,18 @@ export class UserService {
     });
   }
 
+  resetUserModel() {
+    if (this.getToken()) {
+      this.isLoggedIn = true;
+      this.subscriptions.push(this.getCurrentUser().subscribe((userInfo: {
+        id: string, first_name: string,
+        last_name: string, email: string, type: UsertypeModel, phone: string, country: string
+      }) => {
+        this.userModel = userInfo;
+        console.log(this.userModel);
+      }));
+    }
+  }
 
   isTokenFresh(token: string) {
     try {

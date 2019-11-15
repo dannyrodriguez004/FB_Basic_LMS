@@ -17,12 +17,12 @@ export class DashboardComponent implements OnInit {
   private subscriptions: Subscription[] =  [];
   myCourses: Course[] = []; // the user's courses names and id
   // tslint:disable-next-line:variable-name
-  user: UserModel;
   constructor(
     private userServices: UserService,
     private coursesServices: CoursesService,
 
   ) {
+    this.userServices.resetUserModel();
     // this.user.id = this.userServices.fbUser().id; // get debug student id
   }
 
@@ -38,6 +38,7 @@ export class DashboardComponent implements OnInit {
       this.myCourses = [];
       this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: Course[]) => {
         if (this.userServices.fbUser().id) {
+          console.log(this.userServices.fbUser());
           resp.forEach((course: Course) => {
             this.coursesServices.getCourseInfo(course.id)
               .subscribe((courseInfo: any) => {

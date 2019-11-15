@@ -45,6 +45,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     // const jwtCookie = this.cookiesServices.check('admin-session');
     const jwtCookie = this.userServices.isTokenFresh('admin-session');
     this.adminLoggedIn = new BehaviorSubject<boolean>(!!jwtCookie);
+    this.userServices.resetUserModel();
     // if (jwtToken) {
     //   this.userServices.submitLogin();
     // }

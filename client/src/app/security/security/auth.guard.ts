@@ -14,7 +14,9 @@ export class AuthGuard implements CanActivate {
     private cookies: CookieService,
     private router: Router,
     private userServices: UserService,
-) {}
+) {
+    this.userServices.resetUserModel();
+  }
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -29,12 +31,16 @@ export class AuthGuard implements CanActivate {
 
       return true;
 
-      } else if (this.userServices.getIsLoggedIn() || this.userServices.fbUser().id) {
+      } else {
+      this.userServices.resetUserModel();
+      // this.authorized = !!this.userServices.fbUser().id;
+      if (this.userServices.getIsLoggedIn() || this.userServices.fbUser().id) {
         console.log(this.userServices.getIsLoggedIn());
         console.log(this.userServices.fbUser().id);
         return true;
       } else {
         this.router.navigate(['/nav/security/register']);
+      }
     }
   }
 }
