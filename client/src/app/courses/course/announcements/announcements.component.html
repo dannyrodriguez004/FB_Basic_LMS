@@ -1,7 +1,7 @@
 <!-- Container for Announcement -->
 
 <mat-accordion>
-  <mat-expansion-panel  *ngFor='let announcement of Announcement'>
+  <mat-expansion-panel  *ngFor='let announcement of Announcement.reverse()'>
     <mat-expansion-panel-header>
       <mat-panel-title class="header">
         <mat-icon>folder_open</mat-icon>
