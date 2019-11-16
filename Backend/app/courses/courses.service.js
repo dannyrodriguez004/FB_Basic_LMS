@@ -1365,11 +1365,18 @@ class CoursesService {
             let courses;
             console.log(user);
             if(user.auth < 3) {
-                console.log('admin');
-                courses = await database.ref('/courses')
-                    .orderByChild('instructor_id')
-                //    .equalTo(user.id)
-                    .once('value');
+                if(user.auth > 0){
+                    console.log('admin');
+                    courses = await database.ref('/courses')
+                        .orderByChild('instructor_id')
+                        .once('value');
+                } else {
+                    console.log('instructor');
+                    courses = await database.ref('/courses')
+                        .orderByChild('instructor_id')
+                        .equalTo(user.id)
+                        .once('value');
+                }
             } else {
                 console.log('Not an Instructor');
             }
