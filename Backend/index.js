@@ -50,9 +50,18 @@ const onListening = () => {
 const port = portNorm(process.env.PORT || '3001');
 app.set('port', port);
 
+
+// const server = https.createServer({
+// 	key: fileStream.readFileSync('server.key'),
+// 	cert: fileStream.readFileSync('server.crt'),
+// 	ca: fileStream.readFileSync('selfCA.crt'),
+// },app);
+
+// const server = http.createServer(app);
+
 let tempServer;
 if(process.env.NODE_ENV == 'dev') {
-	console.log('we are running dev enviroment');
+	console.log('we are running dev environment');
 	tempServer = https.createServer({
 		key: fileStream.readFileSync('server.key'),
 		cert: fileStream.readFileSync('server.crt'),
@@ -63,7 +72,7 @@ if(process.env.NODE_ENV == 'dev') {
 		key: fileStream.readFileSync('home/master/myagent/fb_backend/server.key'),
 		cert: fileStream.readFileSync('home/master/myagent/fb_backend/server.crt'),
 	},app);
-	console.log('we are running production enviroment');
+	console.log('we are running production environment');
 }
 const server = tempServer;
 

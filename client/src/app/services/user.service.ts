@@ -66,7 +66,11 @@ export class UserService {
     }(document, 'script', 'facebook-jssdk'));
   }
 
-
+  // loadUser() {
+  //   if (this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session')) || this.isLoggedFacebookLoggedIn()) {
+  //     this.isLoggedIn = true;
+  //   }
+  // }
   loadUser() {
     if (this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session')) ||
         this.cookies.check('fb-token') && this.isTokenFresh(this.cookies.get('fb-token')) ||
@@ -79,12 +83,21 @@ export class UserService {
     }
   }
 
+  // isLoggedFacebookLoggedIn() {
+  //   FB.getLoginStatus( (response) => {
+  //     if (response.status === 'connected') {
+  //       this.FBLoggedIn = true;
+  //     } else {
+  //       this.FBLoggedIn = false;
+  //     }
+  //     return this.FBLoggedIn;
+  //   });
+  // }
+
   isLoggedFacebookLoggedIn() {
     FB.getLoginStatus( (response) => {
-      
       if (response.status === 'connected') {
-
-        console.log('HERE!!!',response);
+        console.log('HERE!!!', response);
         this.isLoggedIn = true;
         this.userModel.id = response.authResponse.userID;
 
@@ -174,7 +187,6 @@ export class UserService {
       console.log('RESULT.AUTHRESPONSE:  ', result.authResponse);
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
         console.log('this is the response:', response);
-
         this.userModel = {
           id: response.id,
           first_name: response.first_name,
@@ -182,17 +194,17 @@ export class UserService {
           email: response.email,
           type: UsertypeModel.Student
         };
-
         console.log(this.userModel);
         console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
       });
       if (result.authResponse) {
         this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
           .subscribe((response: any) => {
+            this.FBLoggedIn = true;
             this.isLoggedIn = true;
             console.log('POST RESPONSE', response);
             this.saveToken(response.token);
-            this.cookies.set('fb-token',response.token, 2, '/');
+            this.cookies.set('fb-token', response.token, 2, '/');
           });
       }
     }, {scope: 'email', return_scopes: true});

@@ -57,14 +57,14 @@ export class GradesComponent implements OnInit {
     var now: Date;
     var total = 0;
     var score = 0;
-    this.coursesServices.getServerTime().subscribe((time:Date) => {
+    this.coursesServices.getServerTime().subscribe((time: Date) => {
       now = new Date(time);
 
       this.dataSource.forEach( record => {
 
         console.log('doneOn', record.doneOn != null);
         console.log('dueDate', new Date(record.dueDate).getTime() < now.getTime());
-        if(record.doneOn != null || new Date(record.dueDate).getTime() < now.getTime()) {
+        if (record.doneOn != null || new Date(record.dueDate).getTime() < now.getTime()) {
           total+= record.outOf;
           score+= record.score;
         } else {
@@ -76,7 +76,7 @@ export class GradesComponent implements OnInit {
       if(total <= 0) {this.percentage = 0} else {
         this.percentage = score / total;
       }
-      
+
     })
   }
 

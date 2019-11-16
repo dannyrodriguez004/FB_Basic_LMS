@@ -12,8 +12,7 @@ import { ViewLogsComponent } from './view-logs/view-logs.component';
 import { ManageCoursesComponent } from './manage-courses/manage-courses.component';
 
 @NgModule({
-  declarations: [DashboardComponent, ViewLogsComponent, ManageCoursesComponent, 
-    ],
+  declarations: [DashboardComponent, ViewLogsComponent, ManageCoursesComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,

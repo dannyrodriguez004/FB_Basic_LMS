@@ -13,10 +13,10 @@ export class ContextComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ContextComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) data: Context,
-  ) { 
+  ) {
     this.context.method = data.method;
     this.context.result = data.result;
-    var items: string[] = [];
+    const items: string[] = [];
     data.params.forEach(item => {
       items.push(
         JSON.stringify(item)
