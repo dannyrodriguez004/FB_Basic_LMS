@@ -50,6 +50,10 @@
                         <mat-icon>add</mat-icon>Add Course
                   </button>
 
+                  <button [routerLink]="['/nav/dashboard/logs']" mat-menu-item>
+                        Logs
+                  </button>
+
                   <button mat-menu-item *ngIf="!loggedIn.value" (click)="doLogin()">
                      <mat-icon>person_add</mat-icon>Login with facebook
                   </button>
