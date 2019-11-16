@@ -33,7 +33,6 @@ export class ViewLogsComponent implements OnInit {
   }
 
   openMore(context) {
-    console.log(context);
     const dialogRef = this.dialog.open(ContextComponent, {
       width: '90%',
       data: context

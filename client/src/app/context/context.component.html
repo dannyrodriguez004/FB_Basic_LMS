@@ -1,4 +1,4 @@
-<mat-list>
+<mat-list style="width: 100%;">
 
     <mat-list-item>
         <strong>Method:</strong> {{context.method}}
@@ -12,7 +12,7 @@
         <strong>Parameters:</strong>
     </mat-list-item>
 
-    <mat-list-item *ngFor="let item of context.params">
+    <mat-list-item style="width: 100%; overflow-wrap: break-word;" *ngFor="let item of context.params">
         {{item}}
     </mat-list-item>
 </mat-list>
