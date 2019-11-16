@@ -1,4 +1,4 @@
-//import { ContextComponent } from './context/context.component';
+import { ContextComponent } from '../../context/context.component';
 import { MatDialog } from '@angular/material';
 import { UtilityService } from './../../services/utility.service';
 import { LogDay } from './../../models/log.model';
@@ -32,11 +32,12 @@ export class ViewLogsComponent implements OnInit {
     });
   }
 
-  /*openMore(context) {
+  openMore(context) {
+    console.log(context);
     const dialogRef = this.dialog.open(ContextComponent, {
       width: '90%',
-      //data: context
+      data: context
     });
-  }*/
+  }
 
 }

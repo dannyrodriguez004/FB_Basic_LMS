@@ -44,7 +44,8 @@ class UtilsService {
                         id: log.key,
                         user: log.child('user').val(),
                         time: log.child('time').val(),
-                        description: log.child('description').val()
+                        description: log.child('description').val(),
+                        context: log.child('context').val(),
                     });
                 });
                 payload.push(Day);

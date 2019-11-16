@@ -624,6 +624,8 @@ class CoursesService {
      */
     async getMyCourses(user) {
 
+        console.log('HEre', user);
+
         let payload = {
             courses: []
         };

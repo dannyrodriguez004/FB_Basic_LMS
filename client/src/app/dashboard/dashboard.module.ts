@@ -9,7 +9,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatCardModule, MatButtonModule, MatExpansionModule, MatToolbarModule} from '@angular/material';
 import { MatMenuModule } from '@angular/material';
 import { ViewLogsComponent } from './view-logs/view-logs.component';
-//import { ContextComponent } from './view-logs/context/context.component';
 
 @NgModule({
   declarations: [DashboardComponent, ViewLogsComponent, 
@@ -26,9 +25,6 @@ import { ViewLogsComponent } from './view-logs/view-logs.component';
     MatProgressSpinnerModule,
     MatToolbarModule,
     MatIconModule
-  ],
-  entryComponents: [
-    ,
   ]
 })
 export class DashboardModule { }

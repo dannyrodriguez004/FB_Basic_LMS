@@ -8,7 +8,7 @@ export interface Log {
 
 export interface Context {
     method: string,
-    params: [],
+    params: any[],
     result: any,
 }
 

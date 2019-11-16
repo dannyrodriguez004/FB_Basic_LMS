@@ -32,11 +32,13 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { ContextComponent } from './context/context.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    YesNoDialogComponent
+    YesNoDialogComponent,
+    ContextComponent
   ],
   imports: [
     AppRoutingModule,
@@ -65,6 +67,6 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     {provide: HTTP_INTERCEPTORS, useClass: JwtTokenInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent],
-  entryComponents: [YesNoDialogComponent],
+  entryComponents: [YesNoDialogComponent, ContextComponent],
 })
 export class AppModule { }
