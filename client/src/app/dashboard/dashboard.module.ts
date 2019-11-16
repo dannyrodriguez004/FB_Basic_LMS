@@ -9,9 +9,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatCardModule, MatButtonModule, MatExpansionModule, MatToolbarModule} from '@angular/material';
 import { MatMenuModule } from '@angular/material';
 import { ViewLogsComponent } from './view-logs/view-logs.component';
+import { ManageCoursesComponent } from './manage-courses/manage-courses.component';
 
 @NgModule({
-  declarations: [DashboardComponent, ViewLogsComponent, 
+  declarations: [DashboardComponent, ViewLogsComponent, ManageCoursesComponent, 
     ],
   imports: [
     CommonModule,
