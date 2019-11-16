@@ -13,10 +13,12 @@ class UtilsService {
         
         try {
             const NOW = new Date();
+            const NowString = NOW.toDateString();
             //console.log("" + NOW.getMonth() + '_' + NOW.getDay() + '_' + NOW.getFullYear())
             await database.ref('/logs/admin/')
-            .child(NOW.toDateString()).push({
+            .child( NowString.substring(NowString.indexOf(' ') + 1)).push({
                 user: user.id,
+                time: (new Date()).getTime(),
                 context: context,
                 description: description,
             });
@@ -41,7 +43,9 @@ class UtilsService {
                     Day.logs.push({
                         id: log.key,
                         user: log.child('user').val(),
-                        description: log.child('description').val()
+                        time: log.child('time').val(),
+                        description: log.child('description').val(),
+                        context: log.child('context').val(),
                     });
                 });
                 payload.push(Day);

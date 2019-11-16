@@ -1,21 +1,17 @@
 <mat-toolbar>
- <mat-toolbar-row style="background-color: #3f51b5; color: #fafafa;
-          border-bottom-style: solid; border-bottom-width: 1px;
-          border-bottom-color: black;">
-  Library of Courses
+  Library of Courses 
   <button mat-button [matMenuTriggerFor]="menu">Select Category</button>
   <mat-menu #menu="matMenu">
+      <button (click)="setCategories('null')" mat-menu-item>None</button>
     <button (click)="setCategories(cats.name)" *ngFor="let cats of getCategories()" mat-menu-item>{{cats.name}}</button>
   </mat-menu>
- </mat-toolbar-row>
 </mat-toolbar>
 
 <mat-card *ngIf="loading">
   <mat-spinner style="margin-left: auto; margin-top: 1rem; margin-right: auto;"></mat-spinner>
 </mat-card>
 
-<div *ngIf="!loading" style="background-color: white; padding-top: 1rem"
->
+<div *ngIf="!loading" class="content">
   <mat-card  *ngIf="1 > courses.length">
       <div style="margin-left: auto; margin-right: auto;">
           No courses matched.
@@ -32,7 +28,7 @@
             <mat-list-item><h5>Open Spots: {{course.MAX_SIZE - course.size}}</h5></mat-list-item>
           </mat-list>
         </mat-card-subtitle>
-
+        
       </mat-card-header>
       <mat-card-content style="width: 100%;">
         <p [innerHTML]="course.description">

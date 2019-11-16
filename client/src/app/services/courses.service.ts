@@ -313,4 +313,8 @@ export class CoursesService {
     const params = {params: new HttpParams().set('student', `${student}`).set('course', `${course}`)};
     return this.http.get(`${environment.apiAddress}/courses/can-register`, params);
   }
+
+  removeModule(course, moduleId) {
+    return this.http.post(`${environment.apiAddress}/courses/remove-module`, {course, moduleId});
+  }
 }

@@ -1,5 +1,6 @@
 export interface Log {
     id: string,
+    time: Date,
     context: Context,
     description: string,
     user: string,
@@ -7,7 +8,7 @@ export interface Log {
 
 export interface Context {
     method: string,
-    params: [],
+    params: any[],
     result: any,
 }
 

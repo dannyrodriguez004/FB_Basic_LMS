@@ -26,6 +26,7 @@ export class GradesComponent implements OnInit {
 
   private debugUser = this.userServices.fbUser().id;
   private subscriptions: Subscription[] = [];
+  private percentage = 0;
 
   constructor(
     private userServices: UserService,
@@ -46,15 +47,41 @@ export class GradesComponent implements OnInit {
     this.loading = true;
     this.subscriptions.push(this.coursesServices.getStudentCourseGrades(this.current_course, this.debugUser).subscribe( (resp: Record[]) => {
       this.dataSource = resp;
+      this.setPercent();
       this.loading = false;
     }));
 
   }
 
+  setPercent() {
+    var now: Date;
+    var total = 0;
+    var score = 0;
+    this.coursesServices.getServerTime().subscribe((time:Date) => {
+      now = new Date(time);
+
+      this.dataSource.forEach( record => {
+
+        console.log('doneOn', record.doneOn != null);
+        console.log('dueDate', new Date(record.dueDate).getTime() < now.getTime());
+        if(record.doneOn != null || new Date(record.dueDate).getTime() < now.getTime()) {
+          total+= record.outOf;
+          score+= record.score;
+        } else {
+          //skip
+        }
+
+      });
+
+      if(total <= 0) {this.percentage = 0} else {
+        this.percentage = score / total;
+      }
+      
+    })
+  }
+
   getPercent() {
-    var total = this.dataSource.map( data => data.outOf).reduce( (acc , value) => (acc + value), 0.0);
-    if(total < 0) return 0;
-    return this.dataSource.map( data => data.score).reduce( (acc , value) => (acc + value), 0.0) / total;
+    return this.percentage;
   }
 
 }
