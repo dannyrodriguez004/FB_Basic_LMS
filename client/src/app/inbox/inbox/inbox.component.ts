@@ -1,13 +1,14 @@
-import {Component, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {CoursesService} from '../../services/courses.service';
 import {DiscussionsComponent} from '../../courses/course/discussions/discussions.component';
-import {Conversation, Discussion, DIscussions} from "../../models/courses.models";
-import {NewDiscussionComponent} from "../../courses/course/discussions/new-discussion/new-discussion.component";
-import {MatDialog} from "@angular/material/dialog";
-import {NewMessageComponent} from "./new-message/new-message.component";
+import {Conversation, Discussion, DIscussions} from '../../models/courses.models';
+import {NewDiscussionComponent} from '../../courses/course/discussions/new-discussion/new-discussion.component';
+import {MatDialog} from '@angular/material/dialog';
+import {NewMessageComponent} from './new-message/new-message.component';
+import {NewConversationComponent} from "./conversation/new-conversation/new-conversation.component";
 
 @Component({
   selector: 'app-inbox',
@@ -16,13 +17,14 @@ import {NewMessageComponent} from "./new-message/new-message.component";
 })
 export class InboxComponent implements OnInit, OnChanges {
 
-  conversations: Conversation[] = []
+  conversations: Conversation[] = [];
 
   private navItem = 'Conversation';
   currentConversation: Conversation;
   conversation = {id: ''};
   private user_id: string;
-
+  current_course = '';
+  course = {name: '', id: this.current_course, description: '', instructor: ''};
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -35,6 +37,7 @@ export class InboxComponent implements OnInit, OnChanges {
   ) { }
 
   openConversationDialog() {
+    this.loadData();
     const dialogRef =  this.dialog.open(NewMessageComponent, {
       width: '90%',
       data: this.conversation
@@ -59,6 +62,38 @@ export class InboxComponent implements OnInit, OnChanges {
     // }));
   }
 
+  loadData() {
+    this.subscriptions.push(this.route.queryParams.subscribe((params) => {
+      if (params.select) {
+        this.navItem = params.select;
+      }
+      if (params.course) {
+        this.current_course = params.course;
+      }
+    }));
+    this.user_id = this.userServices.fbUser().id;
+    console.log(this.user_id);
+    if (this.isAdmin()) {
+      this.subscriptions.push(this.coursesServices
+        .getCourseInfo(this.current_course)
+        .subscribe((course: {
+          id: string, name: string,
+          description: string, instructor: string, students: string[]
+        }) => {
+          this.course = course;
+        }));
+    } else if (this.user_id) {
+      this.subscriptions.push(this.coursesServices
+        .getCourseInfo(this.current_course)
+        .subscribe((course: {
+          id: string, name: string,
+          description: string, instructor: string, students: string[]
+        }) => {
+          this.course = course;
+        }));
+    }
+  }
+
   loadConversations() {
     this.subscriptions.push(this.coursesServices.getConversations().subscribe( (resp: Conversation[]) => {
       this.conversations = resp;
@@ -81,7 +116,7 @@ export class InboxComponent implements OnInit, OnChanges {
   }
 
   async onSetCurrentConversation(c: any) {
-    console.log(c)
+    console.log(c);
     this.coursesServices.getDiscussionInfo(c.courseId, c.id).subscribe( (result) => {
       console.log(result);
     });

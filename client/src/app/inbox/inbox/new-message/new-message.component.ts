@@ -21,6 +21,7 @@ export class NewMessageComponent implements OnInit {
   conversationForm: FormGroup;
   // tslint:disable-next-line:variable-name
   current_course: string;
+  @Input ('courseName') courseName: string;
   @Input('courseId') courseId: string;     // course id
   @Input('title') title: string;           // discussion title
   description: string;                     // discussion description HTML format
@@ -47,12 +48,15 @@ export class NewMessageComponent implements OnInit {
     this.conversationForm = this.FormBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      user_id: [false, Validators.required],
+      user_id: ['', Validators.required],
       date: ['', Validators.required],
       isPublic: ['', Validators.required],
       courseId: ['', Validators.required],
       recipients: ['', Validators.required]
     });
+
+    this.current_course = data;
+
   }
 
   config: AngularEditorConfig = {
@@ -82,22 +86,27 @@ export class NewMessageComponent implements OnInit {
 
   ngOnInit() {
     this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
-        resp.forEach((course: Course) => {
-          this.coursesServices.getCourseInfo(course.id)
-            .subscribe((courseInfo: any) => {
-              this.courseId = courseInfo.id;
-              this.myCourses = courseInfo.name
-              console.log('STUDENT COURSES:', resp);
-              this.subscriptions.push(this.coursesServices.getStudents(this.courseId)
-              .subscribe( (response: {id: '', fname: '', lname: '', email: ''}[]) => {
-                this.recipients = response;
-                console.log('STUDENTS', resp);
-              }));
-            });
-        });
+      this.myCourses = resp;
+      console.log(this.myCourses);
     }));
+    // this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
+    //     resp.forEach((course: Course) => {
+    //       this.coursesServices.getCourseInfo(course.id)
+    //         .subscribe((courseInfo: any) => {
+    //           this.courseId = courseInfo.id;
+    //           this.courseName = courseInfo.name
+    //           console.log('STUDENT COURSES:', resp);
+    //           this.subscriptions.push(this.coursesServices.getStudents(this.courseId)
+    //           .subscribe( (response: {id: '', fname: '', lname: '', email: ''}[]) => {
+    //             this.recipients = response;
+    //             console.log('STUDENTS', resp);
+    //           }));
+    //         });
+    //     });
+    // }));
 
   }
+
   sendMessage() {
     const conversation = {
       title: this.conversationForm.value.title,

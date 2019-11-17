@@ -18,14 +18,17 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
-import { ConversationReplyComponent } from './inbox/conversation/conversation-reply/conversation-reply.component';
 import {MatOptionModule} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
+import {NewDiscussionComponent} from "../courses/course/discussions/new-discussion/new-discussion.component";
+import { NewConversationComponent } from './inbox/conversation/new-conversation/new-conversation.component';
+import {MatInputModule} from "@angular/material/input";
+// import {DiscussionsComponent} from "../courses/course/discussions/discussions.component";
 
 
 
 @NgModule({
-  declarations: [InboxComponent, ConversationComponent, NewMessageComponent, ConversationReplyComponent],
+  declarations: [InboxComponent, ConversationComponent, NewMessageComponent, NewConversationComponent],
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -44,10 +47,13 @@ import {MatSelectModule} from '@angular/material/select';
     MatDatepickerModule,
     MatDialogModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatInputModule
   ],
   exports: [RouterModule],
-  entryComponents: [NewMessageComponent]
+  entryComponents: [NewMessageComponent, NewConversationComponent
+    // DiscussionsComponent
+  ]
 
 })
 export class InboxModule { }
