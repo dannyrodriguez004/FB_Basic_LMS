@@ -728,20 +728,29 @@ class CoursesService {
         try {
 
             let courses = [];
+            let user_id = '';
             if(!isAdmin) {
                 courses = await this.getMyCourses(user);
+                user_id = user;
             } else {
                 courses = await this.getAdminCourses(user);
+                user_id = user.id
             }
             for await (let course of courses) {
+                let myDiscussions = [];
                 let discussions = await this.getDiscussions(course.id, false);
                 for await (let discussion of discussions) {
                     let conversation = await database.ref('/conversations/').child(discussion.id).once('value');
                     // let convo = JSON.parse(JSON.stringify(conversation));
-                    discussion.lastmessageusername = conversation.child('lastmessageusername').val();
-                    discussion.lastmessagedate = conversation.child('lastmessagedate').val();
+                    if (conversation.child('recipients').hasChild(user_id)) {
+                        discussion.lastmessageusername = conversation.child('lastmessageusername').val();
+                        discussion.lastmessagedate = conversation.child('lastmessagedate').val();
+                        myDiscussions.push(discussion);
+                        console.log('#### MY DISCUSSION' + discussion.id);
+                    }
+
                 }
-                payload.discussions = payload.discussions.concat(discussions);
+                payload.discussions = payload.discussions.concat(myDiscussions);
             }
             // console.log(payload);
 
