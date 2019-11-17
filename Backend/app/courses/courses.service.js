@@ -1519,6 +1519,8 @@ class CoursesService {
                 payload.push({
                     id: member.key,
                     name: member.child('name').val(),
+                    instructor: member.child('instructor_id').val(),
+                    category: member.child('category').val(),
                 });
             });
         } catch(err) {
@@ -1527,45 +1529,6 @@ class CoursesService {
         return payload;
     }
 
-
-    // async getAdminCourses(user) {
-    //
-    //     let payload = [];
-    //
-    //     try {
-    //
-    //         let courses;
-    //
-    //         console.log(user);
-    //
-    //         if(user.auth < 0) {
-    //
-    //             courses = await database.ref('/courses')
-    //             .once('value');
-    //             console.log('admin');
-    //
-    //         } else {
-    //
-    //             console.log('instructor');
-    //             courses = await database.ref('/courses')
-    //             .orderByChild('instructor_name')
-    //             .equalTo(user.id)
-    //             .once('value');
-    //         }
-    //
-    //         courses.forEach( (member) => {
-    //             payload.push({
-    //                 id: member.key,
-    //                 name: member.child('name').val(),
-    //             });
-    //         });
-    //
-    //     } catch(err) {
-    //         console.error(err);
-    //     }
-    //
-    //     return payload;
-    // }
 
     async canRegister(student, course) {
         try {

@@ -58,6 +58,10 @@
                         Logs
                   </button>
 
+                  <button [routerLink]="['/nav/dashboard/manager']" mat-menu-item>
+                        Manager
+                  </button>
+
                   <button mat-menu-item *ngIf="!loggedIn.value" (click)="doLogin()">
                      <mat-icon>person_add</mat-icon>Login with facebook
                   </button>
