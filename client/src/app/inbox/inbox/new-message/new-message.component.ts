@@ -1,8 +1,13 @@
-import {Component, Inject, OnInit, Optional} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {CoursesService} from "../../../services/courses.service";
-import {AngularEditorConfig} from "@kolkov/angular-editor";
+import {Component, Inject, Input, OnInit, Optional} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {CoursesService} from '../../../services/courses.service';
+import {AngularEditorConfig} from '@kolkov/angular-editor';
+import {UserService} from '../../../services/user.service';
+import {Conversation, Course, CourseNav, Message, Post} from '../../../models/courses.models';
+import {NewDiscussionComponent} from '../../../courses/course/discussions/new-discussion/new-discussion.component';
+import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-new-message',
@@ -10,24 +15,44 @@ import {AngularEditorConfig} from "@kolkov/angular-editor";
   styleUrls: ['./new-message.component.scss']
 })
 export class NewMessageComponent implements OnInit {
+
+  subscriptions: Subscription[] = [];
   today = new Date();
   conversationForm: FormGroup;
   // tslint:disable-next-line:variable-name
   current_course: string;
+  @Input('courseId') courseId: string;     // course id
+  @Input('title') title: string;           // discussion title
+  description: string;                     // discussion description HTML format
+  conversation: Conversation;            // discussion posts
+  date: Date = this.today;
+  replying = false;
+  htmlContent = '';
+  recipients: {id: '', fname: '', lname: '', email: ''}[];
+  recipient: {id: '', fname: '', lname: '', email: ''};
+
+  loading = true;
+  private myCourses: CourseNav[];
+  isPublic = false;
+
   constructor(
     public dialogRef: MatDialogRef<NewMessageComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) data: string,
     // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private coursesServices: CoursesService,
+    private userServices: UserService,
+    private router: Router,
   ) {
     this.conversationForm = this.FormBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
       user_id: [false, Validators.required],
       date: ['', Validators.required],
+      isPublic: ['', Validators.required],
+      courseId: ['', Validators.required],
+      recipients: ['', Validators.required]
     });
-
   }
 
   config: AngularEditorConfig = {
@@ -56,25 +81,42 @@ export class NewMessageComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
+    this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
+        resp.forEach((course: Course) => {
+          this.coursesServices.getCourseInfo(course.id)
+            .subscribe((courseInfo: any) => {
+              this.courseId = courseInfo.id;
+              this.myCourses = courseInfo.name
+              console.log('STUDENT COURSES:', resp);
+              this.subscriptions.push(this.coursesServices.getStudents(this.courseId)
+              .subscribe( (response: {id: '', fname: '', lname: '', email: ''}[]) => {
+                this.recipients = response;
+                console.log('STUDENTS', resp);
+              }));
+            });
+        });
+    }));
 
+  }
   sendMessage() {
     const conversation = {
       title: this.conversationForm.value.title,
       description: this.conversationForm.value.description,
-      user_id: this.conversationForm.value.isClosed,
-      date: this.conversationForm.value.endDate,
-      // public: this.discussionForm.value.public
+      user_id: this.userServices.fbUser().id,
+      user_name: this.userServices.fbUser().first_name + ' ' + this.userServices.fbUser().last_name,
+      date: new Date().getTime(),
+      recipients: this.recipients,
+      courseId: this.courseId,
+      current_course: this.current_course,
+      message: this.htmlContent,
+      isPublic: false
     };
 
-    this.coursesServices.newConversation(this.current_course, conversation).subscribe( (resp) => {
+    this.coursesServices.newConversation(this.courseId, conversation).subscribe( (resp) => {
       this.dialogRef.close(resp);
     });
   }
 
-  setPrivate() {
-    // this.public = false;
-  }
   onNoClick() {
     this.dialogRef.close();
   }

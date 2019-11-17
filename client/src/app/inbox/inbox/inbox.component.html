@@ -5,9 +5,12 @@
           border-bottom-color: black;">
     <button mat-icon-button (click)="snav.toggle()"><h1>Inbox</h1></button>
     <mat-icon style="padding-left: 15px">message</mat-icon>
+
+    <span class="fill"></span>
+
     <span>
       <button mat-button routerLink="">
-        <a (click)="openConversationDialog()" mat-list-item class="add_button empty_message"><mat-icon>add</mat-icon>Compose Message</a>
+        <a (click)="openConversationDialog()" mat-list-item class="add_button empty_message"><mat-icon inline>add</mat-icon>Compose Message</a>
       </button>
     </span>
   </mat-toolbar-row>

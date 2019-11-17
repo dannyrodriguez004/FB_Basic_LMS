@@ -16,9 +16,11 @@ import {MatButtonModule} from "@angular/material/button";
 import { NewMessageComponent } from './inbox/new-message/new-message.component';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatDialogModule} from "@angular/material/dialog";
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatDialogModule} from '@angular/material/dialog';
 import { ConversationReplyComponent } from './inbox/conversation/conversation-reply/conversation-reply.component';
+import {MatOptionModule} from '@angular/material/core';
+import {MatSelectModule} from '@angular/material/select';
 
 
 
@@ -40,7 +42,9 @@ import { ConversationReplyComponent } from './inbox/conversation/conversation-re
     MatSlideToggleModule,
     MatFormFieldModule,
     MatDatepickerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatOptionModule,
+    MatSelectModule
   ],
   exports: [RouterModule],
   entryComponents: [NewMessageComponent]
