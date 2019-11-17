@@ -30,7 +30,8 @@ export class NewMessageComponent implements OnInit {
   replying = false;
   htmlContent = '';
   recipients: {id: '', fname: '', lname: '', email: ''}[];
-  recipient: {id: '', fname: '', lname: '', email: ''};
+  recipient: [];
+
 
   loading = true;
   private myCourses: CourseNav[];
@@ -88,13 +89,25 @@ export class NewMessageComponent implements OnInit {
   }
 
   getCourses() {
-    this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
-      this.myCourses = resp;
+    if (this.userServices.getIsAdmin()) {
+      this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
+        console.log(resp);
+        this.myCourses = resp;
     }));
+    } else {
+      this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
+        this.myCourses = resp;
+      }));
+    }
   }
 
   onCourseSelected(val: any) {
         this.getStudents(val);
+  }
+
+  chooseRecipient(event: any) {
+    console.log(event.value);
+    this.recipient = event.value;
   }
 
   getStudents(courseId) {
@@ -112,7 +125,7 @@ export class NewMessageComponent implements OnInit {
       user_id: this.userServices.fbUser().id,
       user_name: this.userServices.fbUser().first_name + ' ' + this.userServices.fbUser().last_name,
       date: new Date().getTime(),
-      recipients: this.recipients,
+      recipients: this.recipient,
       courseId: this.courseId,
       current_course: this.current_course,
       message: this.htmlContent,

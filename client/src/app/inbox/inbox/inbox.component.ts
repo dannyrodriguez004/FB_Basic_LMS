@@ -73,7 +73,7 @@ export class InboxComponent implements OnInit, OnChanges {
     }));
     this.user_id = this.userServices.fbUser().id;
     console.log(this.user_id);
-    if (this.isAdmin()) {
+    if (this.userServices.getIsAdmin()) {
       this.subscriptions.push(this.coursesServices
         .getCourseInfo(this.current_course)
         .subscribe((course: {
@@ -131,7 +131,4 @@ export class InboxComponent implements OnInit, OnChanges {
     this.ngOnInit();
   }
 
-  isAdmin() {
-    return this.userServices.getIsAdmin();
-  }
 }

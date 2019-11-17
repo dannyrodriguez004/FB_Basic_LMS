@@ -75,17 +75,19 @@ class CoursesService {
                 }).key;
                 if (newDiscussion.public === false) {
                     console.log(key);
+                    let receivers = {};
+                    newDiscussion.recipients.forEach((user_id) => {
+                        receivers[user_id] = {
+                            read: false
+                        }
+                    })
                     database.ref('/conversations/')
                         .child(key)
                         .update({
                                 creator: newDiscussion.user_id,
                                 lastmessagedate: Date.now(),
                                 lastmesssageusername: newDiscussion.user_name,
-                                recipients: {
-                                    [newDiscussion.recipients[1].id]: {
-                                        read: false
-                                    }
-                                },
+                                recipients: receivers
                         })
                 }
             })
@@ -718,14 +720,19 @@ class CoursesService {
         return payload.announcements;
     }
 
-    async getConversations(user) {
+    async getConversations(user, isAdmin) {
 
         let payload = {
             discussions: []
         };
         try {
 
-            let courses = await this.getMyCourses(user);
+            let courses = [];
+            if(!isAdmin) {
+                courses = await this.getMyCourses(user);
+            } else {
+                courses = await this.getAdminCourses(user);
+            }
             for await (let course of courses) {
                 let discussions = await this.getDiscussions(course.id, false);
                 for await (let discussion of discussions) {
@@ -773,7 +780,7 @@ class CoursesService {
      */
     async getMyCourses(user) {
 
-        console.log('HEre', user);
+        console.log('In getMyCourses backend', user);
 
         let payload = {
             courses: []

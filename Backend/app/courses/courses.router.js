@@ -24,15 +24,25 @@ module.exports = (passport) => {
 
     router.post('/add-course-conversation', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         req.body.discussion.public = false;
-        const resp = await coursesServices.addDiscussion(req.body.course, req.body.discussion);
         console.log(req.body.discussion);
+        const resp = await coursesServices.addDiscussion(req.body.course, req.body.discussion);
         res.json(resp);
         // Utils.AdminLog(req.user, {method: coursesServices.addDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Adding New Discussion");
     });
 
     // get course conversations
     router.get('/course-conversations', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
-        const resp = await coursesServices.getConversations(req.user);
+        console.log('USER OR ADMIN');
+        console.log(req.user);
+        let user =  req.user;
+        let isAdmin = false;
+        if(typeof req.user === 'string') {
+            isAdmin = false;
+        } else {
+            isAdmin = true;
+        }
+        console.log(user);
+        const resp = await coursesServices.getConversations(user, isAdmin);
         res.json(resp);
     });
 
