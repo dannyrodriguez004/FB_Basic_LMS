@@ -50,9 +50,6 @@ export class NewMessageComponent implements OnInit {
     this.conversationForm = this.FormBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      user_id: ['', Validators.required],
-      date: ['', Validators.required],
-      isPublic: ['', Validators.required],
       courseId: ['', Validators.required],
       recipients: ['', Validators.required]
     });
@@ -119,7 +116,6 @@ export class NewMessageComponent implements OnInit {
       courseId: this.courseId,
       current_course: this.current_course,
       message: this.htmlContent,
-      isPublic: false
     };
 
     this.coursesServices.newConversation(this.courseId, conversation).subscribe( (resp) => {

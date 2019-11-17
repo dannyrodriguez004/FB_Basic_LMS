@@ -139,7 +139,9 @@ export class CoursesService {
 
   newConversation(course, discussion) {
     discussion.public = false;
-    return this.http.post(`${environment.apiAddress}/courses/add-course-discussion`, {course, discussion});
+    discussion.isClosed = false;
+    discussion.endDate = new Date('2099-01-01');
+    return this.http.post(`${environment.apiAddress}/courses/add-course-conversation`, {course, discussion});
   }
 
   newAnnouncement(course, announcement) {

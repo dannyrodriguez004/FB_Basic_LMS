@@ -26,7 +26,6 @@ import {MatInputModule} from "@angular/material/input";
 // import {DiscussionsComponent} from "../courses/course/discussions/discussions.component";
 
 
-
 @NgModule({
   declarations: [InboxComponent, ConversationComponent, NewMessageComponent, NewConversationComponent],
   imports: [

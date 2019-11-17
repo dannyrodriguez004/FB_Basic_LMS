@@ -65,14 +65,30 @@ class CoursesService {
             }
 
             courses.forEach((course) => {
-                course.child('discussions').ref.push({
+            //     for await (let course of courses) {
+                let key = course.child('discussions').ref.push({
                     title: newDiscussion.title,
                     description: newDiscussion.description,
                     isClosed: newDiscussion.isClosed,
                     endDate: newDiscussion.endDate,
                     public: newDiscussion.public
-                });
-            });
+                }).key;
+                if (newDiscussion.public === false) {
+                    console.log(key);
+                    database.ref('/conversations/')
+                        .child(key)
+                        .update({
+                                creator: newDiscussion.user_id,
+                                lastmessagedate: Date.now(),
+                                lastmesssageusername: newDiscussion.user_name,
+                                recipients: {
+                                    [newDiscussion.recipients[1].id]: {
+                                        read: false
+                                    }
+                                },
+                        })
+                }
+            })
         } catch(err) {
             console.error(err);
             return false;

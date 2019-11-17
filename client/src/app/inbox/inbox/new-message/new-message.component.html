@@ -10,7 +10,7 @@
   </mat-form-field>>
 
   <mat-form-field appearance="outline">
-    <mat-select  formControlName="recipients">
+    <mat-select multiple formControlName="recipients">
       <mat-option>None</mat-option>
       <mat-option *ngFor="let recipient of recipients" value="{{recipient.id}}">{{recipient.fname + ' ' + recipient.lname}} </mat-option>
     </mat-select>
