@@ -54,12 +54,6 @@ export class InboxComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.loadConversations();
     console.log(this.conversations);
-    //
-    // this.subscriptions.push(this.router.events.subscribe((e: any) => {
-    //   if (e instanceof NavigationEnd) {
-    //     this.loadConversation();
-    //   }
-    // }));
   }
 
   loadData() {
@@ -99,20 +93,6 @@ export class InboxComponent implements OnInit, OnChanges {
       this.conversations = resp;
       console.log(this.conversations);
     }));
-    // this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
-    //   if (params.select) {
-    //     this.navItem = params.select;
-    //   }
-    //   if (params.course) {
-    //     this.currentConversation = params.conversation;
-    //   }
-    // }));
-    // this.user_id = this.userServices.fbUser().id;
-
-  }
-
-  setNav(val: string) {
-    this.navItem = val;
   }
 
   async onSetCurrentConversation(c: any) {
