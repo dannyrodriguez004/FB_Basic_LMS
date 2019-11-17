@@ -75,6 +75,7 @@ export class Conversation {
   messages: Message[];
   isClosed: boolean;
   public: boolean;
+  course_name?: string;
   courseId?: string;
   lastmessageusername?: string;
   lastmessagedate?: string;

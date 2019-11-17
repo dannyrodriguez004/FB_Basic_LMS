@@ -4,7 +4,7 @@ import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {CoursesService} from '../../services/courses.service';
 import {DiscussionsComponent} from '../../courses/course/discussions/discussions.component';
-import {Conversation, Discussion, DIscussions} from '../../models/courses.models';
+import {Conversation, CourseNav, Discussion, DIscussions} from '../../models/courses.models';
 import {NewDiscussionComponent} from '../../courses/course/discussions/new-discussion/new-discussion.component';
 import {MatDialog} from '@angular/material/dialog';
 import {NewMessageComponent} from './new-message/new-message.component';
@@ -18,8 +18,6 @@ import {NewConversationComponent} from "./conversation/new-conversation/new-conv
 export class InboxComponent implements OnInit, OnChanges {
 
   conversations: Conversation[] = [];
-
-  private navItem = 'Conversation';
   currentConversation: Conversation;
   conversation = {id: ''};
   private user_id: string;
@@ -33,7 +31,6 @@ export class InboxComponent implements OnInit, OnChanges {
     private coursesServices: CoursesService,
     private router: Router,
     private dialog: MatDialog,
-
   ) { }
 
   openConversationDialog() {
@@ -52,43 +49,24 @@ export class InboxComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.loadData();
     this.loadConversations();
     console.log(this.conversations);
   }
 
   loadData() {
-    this.subscriptions.push(this.route.queryParams.subscribe((params) => {
-      if (params.select) {
-        this.navItem = params.select;
-      }
-      if (params.course) {
-        this.current_course = params.course;
-      }
-    }));
     this.user_id = this.userServices.fbUser().id;
-    console.log(this.user_id);
-    if (this.userServices.getIsAdmin()) {
-      this.subscriptions.push(this.coursesServices
-        .getCourseInfo(this.current_course)
-        .subscribe((course: {
-          id: string, name: string,
-          description: string, instructor: string, students: string[]
-        }) => {
+    if (this.user_id) {
+      this.subscriptions.push(this.coursesServices.getCourseInfo(this.current_course).subscribe((course: {
+          id: string, name: string, description: string, instructor: string, students: string[]}) => {
           this.course = course;
-        }));
-    } else if (this.user_id) {
-      this.subscriptions.push(this.coursesServices
-        .getCourseInfo(this.current_course)
-        .subscribe((course: {
-          id: string, name: string,
-          description: string, instructor: string, students: string[]
-        }) => {
-          this.course = course;
+          console.log(this.course);
         }));
     }
   }
 
   loadConversations() {
+    console.log(this.course.name);
     this.subscriptions.push(this.coursesServices.getConversations().subscribe( (resp: Conversation[]) => {
       this.conversations = resp;
       console.log(this.conversations);
@@ -100,11 +78,14 @@ export class InboxComponent implements OnInit, OnChanges {
     this.coursesServices.getDiscussionInfo(c.courseId, c.id).subscribe( (result) => {
       console.log(result);
     });
+    // this.subscriptions.push(this.coursesServices.getCourseInfo(c.courseId).subscribe( (course: {id: string, name: string,
+    //   description: string, instructor: string, students: string[]}) => {
+    //   console.log(this.course);
+    //   this.currentConversation.course_name = course.name;
+    // }));
+    // console.log(this.currentConversation.course_name);
     this.currentConversation = c;
-  }
-
-  isEqual(val: string) {
-    return this.navItem === val;
+    console.log(this.currentConversation);
   }
 
   ngOnChanges() {

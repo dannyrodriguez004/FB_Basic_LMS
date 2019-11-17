@@ -21,7 +21,6 @@ export class NewMessageComponent implements OnInit {
   conversationForm: FormGroup;
   // tslint:disable-next-line:variable-name
   current_course: string;
-  @Input ('courseName') courseName: string;
   @Input('courseId') courseId: string;     // course id
   @Input('title') title: string;           // discussion title
   description: string;                     // discussion description HTML format
@@ -31,6 +30,7 @@ export class NewMessageComponent implements OnInit {
   htmlContent = '';
   recipients: {id: '', fname: '', lname: '', email: ''}[];
   recipient: [];
+  course = {name: '', id: this.current_course, description: '', instructor: ''};
 
 
   loading = true;
@@ -103,6 +103,13 @@ export class NewMessageComponent implements OnInit {
 
   onCourseSelected(val: any) {
         this.getStudents(val);
+        this.subscriptions.push(this.coursesServices
+      .getCourseInfo(val)
+      .subscribe( (course: {id: string, name: string,
+        description: string, instructor: string, students: string[]}) => {
+        this.course  = course;
+        console.log(this.course);
+      }));
   }
 
   chooseRecipient(event: any) {
@@ -127,6 +134,7 @@ export class NewMessageComponent implements OnInit {
       date: new Date().getTime(),
       recipients: this.recipient,
       courseId: this.courseId,
+      course_name: this.course.name,
       current_course: this.current_course,
       message: this.htmlContent,
     };

@@ -22,36 +22,16 @@
       [queryParams]="{conversation: conversation.id, select: 'Conversation', start: 0}"
       (click)="onSetCurrentConversation(conversation)">
        <mat-icon>message</mat-icon>
-        <p mat-line>{{conversation.lastmessageusername}}</p>
-        <p mat-line style="font-weight: bold" >{{conversation.title}}</p>
+        <p mat-line style="font-weight: bold">{{conversation.lastmessageusername}}  |  {{conversation.course_name}}</p>
+        <p mat-line>{{conversation.title}}</p>
         <p mat-line style="font-style: italic">{{conversation.lastmessagedate | date: 'medium'}}</p>
       </mat-list-item>
     </mat-nav-list>
     </mat-sidenav>
 
-    <!--      <mat-sidenav #snav mode="side" opened>-->
-<!--        <mat-nav-list >-->
-<!--          <a [routerLink]=""-->
-<!--             [queryParams]="{conversation: conversation.id, select: 'Conversation', start: 0}"-->
-<!--             (click)="onSetCurrentConversation(conversation)">-->
-<!--            {{conversation.lastmessageusername}}-->
-<!--            <mat-icon>message</mat-icon>{{conversation.title}}</a>-->
-<!--        </mat-nav-list>-->
-<!--      </mat-sidenav>-->
-<!--    <mat-sidenav class="size-nav" #snav mode="side" opened>-->
-<!--      <mat-nav-list >-->
-<!--        <a *ngFor="let conversation of conversations" mat-list-item [routerLink]=""-->
-<!--           (click)="setNav(conversation.id)"><mat-icon>message</mat-icon>{{conversation.title}}</a>-->
-<!--      </mat-nav-list>-->
-
-<!--    <a *ngFor="let nav of navs" mat-list-item [routerLink]="['/nav/courses/conversations']"-->
-<!--       [queryParams]="{conversation: currentConversation, select: nav.val}"-->
-<!--       (click)="setNav(nav.val)"><mat-icon>{{nav.ico}}</mat-icon>{{nav.val}}</a>-->
-
     <mat-sidenav-content class="course_viewer">
 
       <div class="content">
-        <!-- <app-conversation [currentConversation]="currentConversation"*ngIf="currentConversation"></app-conversation> -->
        <app-conversation *ngIf= "currentConversation"   [id]="currentConversation.id"
                          [courseId]="currentConversation.courseId" [title]="currentConversation.title"
        ></app-conversation>

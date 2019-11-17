@@ -87,7 +87,8 @@ class CoursesService {
                                 creator: newDiscussion.user_id,
                                 lastmessagedate: Date.now(),
                                 lastmesssageusername: newDiscussion.user_name,
-                                recipients: receivers
+                                recipients: receivers,
+                                course_name: newDiscussion.course_name
                         })
                 }
             })
@@ -668,10 +669,7 @@ class CoursesService {
             .once('value');
 
             discussions.forEach( (discussion) => {
-                // console.log(discussion.val());
-                // console.log(isPublic);
                 if(discussion.child('public').val() === isPublic) {
-                    console.log("HERE I AM IN DISCUSSION GET");
                     payload.discussions.push({
                         id: discussion.key,
                         courseId: course_key,
@@ -727,6 +725,7 @@ class CoursesService {
         };
         try {
 
+
             let courses = [];
             let user_id = '';
             if(!isAdmin) {
@@ -736,21 +735,27 @@ class CoursesService {
                 courses = await this.getAdminCourses(user);
                 user_id = user.id
             }
+            console.log(user_id);
             for await (let course of courses) {
                 let myDiscussions = [];
                 let discussions = await this.getDiscussions(course.id, false);
                 for await (let discussion of discussions) {
+                    // let sender = await database.ref('/conversations/').child(discussion.id).once('value');
+                    // console.log('SENDER', sender.child('creator').val());
+                    // console.log('USER_ID', user_id);
                     let conversation = await database.ref('/conversations/').child(discussion.id).once('value');
-                    // let convo = JSON.parse(JSON.stringify(conversation));
-                    if (conversation.child('recipients').hasChild(user_id)) {
+                    // if (conversation.child('creator').key === user_id);
+                    if (conversation.child('recipients').hasChild(user_id) || conversation.child('creator').val() === user_id) {
                         discussion.lastmessageusername = conversation.child('lastmessageusername').val();
                         discussion.lastmessagedate = conversation.child('lastmessagedate').val();
+                        discussion.course_name = conversation.child('course_name').val();
                         myDiscussions.push(discussion);
-                        console.log('#### MY DISCUSSION' + discussion.id);
+                        // console.log('#### MY DISCUSSION' + myDiscussions);
                     }
 
                 }
-                payload.discussions = payload.discussions.concat(myDiscussions);
+                payload.discussions = payload.discussions.concat(myDiscussions)
+                ;
             }
             // console.log(payload);
 
