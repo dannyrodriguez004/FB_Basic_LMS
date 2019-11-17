@@ -5,13 +5,14 @@
   <div>
     <mat-select formControlName="courseId">
       <mat-option>None</mat-option>
-      <mat-option *ngFor="let course of myCourses" value="{{course.id}}">{{course.name}}</mat-option>
+      <mat-option *ngFor="let course of myCourses" value="{{course.id}}" [(ngModel)]="courseId" >{{course.name}} </mat-option>
    </mat-select>
   </div>
 
   <br>
+
   <div>
-    <mat-select formControlName="recipients">
+    <mat-select [(ngModel)]="courseId" formControlName="recipients">
       <mat-option>None</mat-option>
       <mat-option *ngFor="let recipient of recipients" value="{{recipient.id}}">{{recipient.fname}}</mat-option>
     </mat-select>

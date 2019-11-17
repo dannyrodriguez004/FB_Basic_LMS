@@ -89,22 +89,15 @@ export class NewMessageComponent implements OnInit {
       this.myCourses = resp;
       console.log(this.myCourses);
     }));
-    // this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
-    //     resp.forEach((course: Course) => {
-    //       this.coursesServices.getCourseInfo(course.id)
-    //         .subscribe((courseInfo: any) => {
-    //           this.courseId = courseInfo.id;
-    //           this.courseName = courseInfo.name
-    //           console.log('STUDENT COURSES:', resp);
-    //           this.subscriptions.push(this.coursesServices.getStudents(this.courseId)
-    //           .subscribe( (response: {id: '', fname: '', lname: '', email: ''}[]) => {
-    //             this.recipients = response;
-    //             console.log('STUDENTS', resp);
-    //           }));
-    //         });
-    //     });
-    // }));
 
+  }
+
+  getStudents() {
+    this.subscriptions.push(this.coursesServices.getStudents(this.current_course)
+      .subscribe( (response: {id: '', fname: '', lname: '', email: ''}[]) => {
+        this.recipients = response;
+        console.log('STUDENTS', response);
+      }));
   }
 
   sendMessage() {
