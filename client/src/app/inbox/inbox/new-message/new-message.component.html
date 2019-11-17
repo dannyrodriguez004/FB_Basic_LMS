@@ -2,21 +2,19 @@
 <h3 mat-dialog-title>New Conversation Editor</h3>
 <form [formGroup]="conversationForm">
 
-  <div>
-    <mat-select formControlName="courseId">
+  <mat-form-field appearance="outline">
+    <mat-select [(ngModel)]="courseId" (ngModelChange)="onCourseSelected(courseId)" formControlName="courseId">
       <mat-option>None</mat-option>
-      <mat-option *ngFor="let course of myCourses" value="{{course.id}}" [(ngModel)]="courseId" >{{course.name}} </mat-option>
+      <mat-option *ngFor="let course of myCourses" [value]="course.id"  >{{course.name}} </mat-option>
    </mat-select>
-  </div>
+  </mat-form-field>>
 
-  <br>
-
-  <div>
-    <mat-select [(ngModel)]="courseId" formControlName="recipients">
+  <mat-form-field appearance="outline">
+    <mat-select  formControlName="recipients">
       <mat-option>None</mat-option>
-      <mat-option *ngFor="let recipient of recipients" value="{{recipient.id}}">{{recipient.fname}}</mat-option>
+      <mat-option *ngFor="let recipient of recipients" value="{{recipient.id}}">{{recipient.fname + ' ' + recipient.lname}} </mat-option>
     </mat-select>
-  </div>
+  </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Conversation Title</mat-label>
@@ -33,6 +31,6 @@
 <mat-dialog-actions>
   <span class="fill"></span>
   <button (click)="onNoClick()" mat-raised-button color="warn">Cancel</button>
-  <button [disabled]="conversationForm.invalid" (click)="sendMessage()" mat-raised-button color="primary">Create</button>
+  <button [disabled]="conversationForm.invalid" (click)="sendMessage()" mat-raised-button color="primary">Send</button>
 </mat-dialog-actions>
 </ng-container>

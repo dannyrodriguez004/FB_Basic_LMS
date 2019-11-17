@@ -6,7 +6,7 @@ import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {UserService} from '../../../services/user.service';
 import {Conversation, Course, CourseNav, Message, Post} from '../../../models/courses.models';
 import {NewDiscussionComponent} from '../../../courses/course/discussions/new-discussion/new-discussion.component';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -15,7 +15,7 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./new-message.component.scss']
 })
 export class NewMessageComponent implements OnInit {
-
+  private navItem: string;
   subscriptions: Subscription[] = [];
   today = new Date();
   conversationForm: FormGroup;
@@ -44,6 +44,8 @@ export class NewMessageComponent implements OnInit {
     private coursesServices: CoursesService,
     private userServices: UserService,
     private router: Router,
+    private route: ActivatedRoute
+
   ) {
     this.conversationForm = this.FormBuilder.group({
       title: ['', Validators.required],
@@ -85,15 +87,21 @@ export class NewMessageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
-      this.myCourses = resp;
-      console.log(this.myCourses);
-    }));
-
+      this.getCourses();
   }
 
-  getStudents() {
-    this.subscriptions.push(this.coursesServices.getStudents(this.current_course)
+  getCourses() {
+    this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
+      this.myCourses = resp;
+    }));
+  }
+
+  onCourseSelected(val: any) {
+        this.getStudents(val);
+  }
+
+  getStudents(courseId) {
+    this.subscriptions.push(this.coursesServices.getStudents(courseId)
       .subscribe( (response: {id: '', fname: '', lname: '', email: ''}[]) => {
         this.recipients = response;
         console.log('STUDENTS', response);
