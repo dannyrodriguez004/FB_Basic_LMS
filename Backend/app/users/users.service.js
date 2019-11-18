@@ -188,7 +188,7 @@ class UsersService {
             id: user.key,
             name: user.f_name + ' ' + user.l_name,
             email: user.email,
-            contactEmail: user.concatEmail,
+            contactEmail: user.contactEmail,
             auth: user.auth
         };
         return await jwt.sign(userInfo, '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx',

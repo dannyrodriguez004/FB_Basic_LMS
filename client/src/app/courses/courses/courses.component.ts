@@ -205,6 +205,7 @@ export class CoursesComponent implements OnInit {
     }
   `],
 })
+
 export class NotifyEnrolledComponent {}
 
 @Component({
@@ -217,6 +218,7 @@ export class NotifyEnrolledComponent {}
     }
   `],
 })
+
 export class NotifyInClassComponent {}
 
 @Component({

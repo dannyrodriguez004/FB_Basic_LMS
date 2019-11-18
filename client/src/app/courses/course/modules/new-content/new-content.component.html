@@ -3,7 +3,7 @@
 <div id="content" mat-dialog-content>
 <mat-tab-group backgroundColor="primary"  dynamicHeight>
 
-    <mat-tab [disabled]="isSubmitting" label="Extenal Link">
+    <mat-tab [disabled]="isSubmitting" label="External Link">
         <app-new-external-link (isSubmitting)="loading($event)" class="myForms" [data]="data" [current_dialog]="dialogRef"></app-new-external-link>
     </mat-tab>
 
@@ -12,7 +12,7 @@
     </mat-tab>
 
     <mat-tab [disabled]="isSubmitting" label="Embedded Video">
-        <app-new-embedded-video (isSubmitting)="$event; loading($event)" [current_dialog]="dialogRef" [data]="data"
+        <app-new-embedded-video (isSubmitting)="loading($event)" [current_dialog]="dialogRef" [data]="data"
                                 class="myForms"></app-new-embedded-video>
     </mat-tab>
 
