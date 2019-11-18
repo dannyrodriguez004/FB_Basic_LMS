@@ -1,3 +1,4 @@
+import { CourseDetailEditorComponent } from './../../courses/course/info/course-detail-editor/course-detail-editor.component';
 import { YesNoDialogComponent } from './../../yes-no-dialog/yes-no-dialog.component';
 import { NewcourseComponent } from './../../nav/newcourse/newcourse.component';
 import { MatDialog } from '@angular/material';
@@ -24,6 +25,8 @@ export class ManageCoursesComponent implements OnInit {
 
   courses: Course[] = [];
 
+  loading = false;
+
   constructor(
     private userServices: UserService,
     private coursesServices: CoursesService,
@@ -32,12 +35,14 @@ export class ManageCoursesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.coursesServices.getAdminCourses().subscribe( (resp: Course[]) => {
       this.courses = resp;
       this.courses.forEach( course => {
         this.coursesServices.getInstructorInfo(course.instructor).subscribe((inst: {contactEmail: string, name: string}) => {
           course.instructor = inst.name;
           course.email = inst.contactEmail;
+          this.loading = false;
         }); 
       })
     })
@@ -69,9 +74,40 @@ export class ManageCoursesComponent implements OnInit {
 
     YesNoRef.afterClosed().subscribe(resp => {
       if(resp) {
+        this.loading = true;
+        this.coursesServices.removeCourse(course).subscribe(resp => {
+          if(resp) {
+            console.log('course removed!');
+            this.courses.splice(this.courses.indexOf(course), 1);
+          }
+          this.loading = false;
+        })
         console.log('deleting course', course);
       }
     })
+  }
+
+  openEditCourse(courseId) {
+
+    this.coursesServices.getCourseInfo(courseId)
+        .subscribe( (course: {id: string, name: string,
+          description: string, instructor: string, students: string[]}) => {
+
+
+          const dialogRef = this.dialog.open(CourseDetailEditorComponent, {
+            width: '90%',
+            data: course
+          });
+      
+          dialogRef.afterClosed().subscribe( (result) => {
+            if(result) {
+              console.log(result);
+              this.ngOnInit();
+            }
+          });
+
+    });
+    
   }
 
 }

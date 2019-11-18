@@ -62,23 +62,15 @@ private navItem = 'Home';
     }));
     this.user_id = this.userServices.fbUser().id;
     console.log(this.user_id);
-    if (this.isAdmin()) {
+    if (this.isAdmin() || this.user_id) {
       this.subscriptions.push(this.coursesServices
         .getCourseInfo(this.current_course)
         .subscribe( (course: {id: string, name: string,
           description: string, instructor: string, students: string[]}) => {
           this.course = course;
         }));
-    } else if (this.user_id) {
-        this.subscriptions.push(this.coursesServices
-          .getCourseInfo(this.current_course)
-          .subscribe((course: {
-            id: string, name: string,
-            description: string, instructor: string, students: string[]
-          }) => {
-            this.course = course;
-          }));
-      }
+    }
+    
     // this.subscriptions.push(this.coursesServices.studentHasCourse(this.user_id, this.current_course).subscribe( (resp: boolean) => {
     //   this.authorized = resp;
     //   if (this.authorized || this.userServices.getIsAdmin()) {

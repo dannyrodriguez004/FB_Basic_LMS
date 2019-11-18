@@ -127,6 +127,7 @@ import { NewAnnouncementComponent } from './course/announcements/new-announcemen
     MatMenuModule,
     MatSnackBarModule
   ],
+  exports: [CourseDetailEditorComponent],
   entryComponents: [
     DiscussionEditorComponent,
     NewDiscussionComponent,

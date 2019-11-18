@@ -317,4 +317,8 @@ export class CoursesService {
   removeModule(course, moduleId) {
     return this.http.post(`${environment.apiAddress}/courses/remove-module`, {course, moduleId});
   }
+
+  removeCourse(courseId) {
+    return this.http.post(`${environment.apiAddress}/courses/remove-course`, {"courseId" : courseId});
+  }
 }

@@ -1545,6 +1545,18 @@ class CoursesService {
 
         return {stat: true, message: ''};
     }
+
+    async RemoveCourse(course) {
+        try {
+
+            await database.ref('/courses/' + course).remove();
+
+        } catch(err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
 }
 
 module.exports = new CoursesService();

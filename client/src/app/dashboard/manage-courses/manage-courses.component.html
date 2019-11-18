@@ -3,7 +3,8 @@
     <mat-card-title>
         Manage Courses
     </mat-card-title>
-    <mat-card-content>
+    <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
+    <mat-card-content *ngIf="!loading">
         <table mat-table [dataSource]="courses">
 
             <!--- Note that these columns can be defined in any order.
@@ -32,6 +33,7 @@
               <th mat-header-cell *matHeaderCellDef> Actions </th>
               <td mat-cell *matCellDef="let element">
                 <button (click)="removeCourse(element.id)" mat-button color="warn">Delete</button>
+                <button (click)="openEditCourse(element.id)" mat-button >Edit</button>
               </td>
             </ng-container>
           
@@ -42,6 +44,7 @@
         <mat-nav-list>
           <a mat-list-item (click)="openAddCourseDialog()">New Course</a>
         </mat-nav-list>
+
 
     </mat-card-content>
 </mat-card>

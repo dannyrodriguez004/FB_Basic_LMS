@@ -321,6 +321,12 @@ module.exports = (passport) => {
         Utils.AdminLog(req.user, {method: coursesServices.removeModule.name, params: [req.body.course, req.body.moduleId], result: resp}, "Removing Course Module.");
     });
 
+    router.post('/remove-course', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
+        const resp = await coursesServices.RemoveCourse(req.body.courseId);
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.RemoveCourse.name, params: [req.body.courseId], result: resp}, "Removing Course.");
+    })
+
     return router;
 }
 // router.post('/add-course', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
