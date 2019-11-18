@@ -7,7 +7,6 @@ const routes: Routes = [
   {path: '', component: DashboardComponent},
   {path: 'logs', component: ViewLogsComponent},
   {path: '**', redirectTo: ''},
-
 ];
 
 @NgModule({

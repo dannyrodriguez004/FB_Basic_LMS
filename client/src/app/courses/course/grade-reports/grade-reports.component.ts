@@ -21,6 +21,7 @@ export interface Record {
 })
 export class GradeReportsComponent implements OnInit {
 
+  // tslint:disable-next-line:variable-name no-input-rename
   @Input('current_course') current_course: string;
 
   student = '';
@@ -34,7 +35,6 @@ export class GradeReportsComponent implements OnInit {
   ];
   loading = true;
 
-  private debugUser = this.userServices.fbUser().id;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -55,13 +55,15 @@ export class GradeReportsComponent implements OnInit {
 
 
   loadStudents() {
-    this.subscriptions.push(this.coursesServices.getStudents(this.current_course).subscribe( (resp: {id: string, fname: string, lname: string}[]) => {
+    this.subscriptions.push(this.coursesServices.getStudents(this.current_course)
+      .subscribe( (resp: {id: string, fname: string, lname: string}[]) => {
       this.students = resp;
-      //console.log(resp);
     }));
   }
+
   // loadStudents() {
-  //   this.subscriptions.push(this.coursesServices.getCourseStudents(this.current_course).subscribe( (resp: {id: string, fname: string, lname: string}[]) => {
+  //   this.subscriptions.push(this.coursesServices.getCourseStudents(this.current_course)
+  //   .subscribe( (resp: {id: string, fname: string, lname: string}[]) => {
   //     this.students = resp;
   //     //console.log(resp);
   //   }));
@@ -105,7 +107,7 @@ export class GradeReportsComponent implements OnInit {
       if(total <= 0) {this.percentage = 0} else {
         this.percentage = score / total;
       }
-      
+
     })
   }
 

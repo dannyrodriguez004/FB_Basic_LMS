@@ -12,16 +12,13 @@ import { Component, OnInit } from '@angular/core';
 export class ViewLogsComponent implements OnInit {
 
   logsPayload: LogDay[] = [];
-
   loading = false;
-
   displayedColumns: string[] = ['time', 'description', 'user', 'id', 'more'];
-  
 
   constructor(
     private UtilityServices: UtilityService,
     private dialog: MatDialog,
-    ) { }
+    ) {}
 
   ngOnInit() {
     this.loading = true;
@@ -38,5 +35,4 @@ export class ViewLogsComponent implements OnInit {
       data: context
     });
   }
-
 }

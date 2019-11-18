@@ -12,51 +12,46 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class NewQuizComponent implements OnInit {
 
+  // tslint:disable-next-line:variable-name no-input-rename
   @Input('current_dialog') current_dialog: MatDialogRef<NewContentComponent>;
+  // tslint:disable-next-line:no-input-rename
   @Input('data') data: {course: string, current_module: string};
   @Output() isSubmitting = new EventEmitter<boolean>();
-
   submitting = false;
-
-
   today = new Date();
   newQuizForm: FormGroup;
   newQuestionForm: FormGroup;
   questionsForm: FormGroup;
   enteringQuestion = true;
   answerInvalid = false;
-
   items: {question: string, value: number, options: string[], answer: number}[] = [];
+
   constructor(private formBuilder: FormBuilder,
               private coursesServices: CoursesService) {
-      this.newQuizForm = this.formBuilder.group({
-        title: ['', Validators.required],
-        isTimed: [false, Validators.required],
-        time: [{value: 10, disabled: true}, [Validators.min(1), Validators.required]],
-        noDueDate: [true, Validators.required],
-        dueDate: [{value: this.today, disabled: false}, Validators.required],
-        isUnlimited: [true, Validators.required],
-        attempts: [{value: 1, disabled: false}, [Validators.min(1), Validators.required]]
-      });
-
-      this.newQuestionForm = this.formBuilder.group({
-        question: ['', Validators.required],
-        value: [1, [Validators.min(0), Validators.required]],
-        answer: [null, [Validators.required, Validators.min(1), Validators.max(4)]],
-        A: ['', Validators.required],
-        B: ['', Validators.required],
-        C: [''],
-        D: [''],
-      });
-
-      this.questionsForm = this.formBuilder.group({
-        hasQuestion: [ false, Validators.requiredTrue ]
-      });
-
-    }
-
-  ngOnInit() {
+    this.newQuizForm = this.formBuilder.group({
+      title: ['', Validators.required],
+      isTimed: [false, Validators.required],
+      time: [{value: 10, disabled: true}, [Validators.min(1), Validators.required]],
+      noDueDate: [true, Validators.required],
+      dueDate: [{value: this.today, disabled: false}, Validators.required],
+      isUnlimited: [true, Validators.required],
+      attempts: [{value: 1, disabled: false}, [Validators.min(1), Validators.required]]
+    });
+    this.newQuestionForm = this.formBuilder.group({
+      question: ['', Validators.required],
+      value: [1, [Validators.min(0), Validators.required]],
+      answer: [null, [Validators.required, Validators.min(1), Validators.max(4)]],
+      A: ['', Validators.required],
+      B: ['', Validators.required],
+      C: [''],
+      D: [''],
+    });
+    this.questionsForm = this.formBuilder.group({
+      hasQuestion: [ false, Validators.requiredTrue ]
+    });
   }
+
+  ngOnInit() {}
 
   timeCheck() {
     if (!this.newQuizForm.value.isTimed) {
@@ -64,7 +59,7 @@ export class NewQuizComponent implements OnInit {
     } else { this.newQuizForm.controls.time.disable(); }
   }
 
-  attempsCheck() {
+  attemptsCheck() {
     if (!this.newQuizForm.value.isUnlimited) {
       this.newQuizForm.controls.attempts.enable();
     } else { this.newQuizForm.controls.attempts.disable(); }
@@ -83,11 +78,8 @@ export class NewQuizComponent implements OnInit {
       answer: this.newQuestionForm.value.answer,
       options: [this.newQuestionForm.value.A, this.newQuestionForm.value.B],
     };
-
-
     if (this.newQuestionForm.value.C) { newItem.options.push(this.newQuestionForm.value.C); }
     if (this.newQuestionForm.value.D) { newItem.options.push(this.newQuestionForm.value.D); }
-
     if (newItem.answer > newItem.options.length) {
       this.answerInvalid = true;
       return null;
@@ -96,7 +88,6 @@ export class NewQuizComponent implements OnInit {
     }
     this.items.push(newItem);
     this.questionsForm.controls.hasQuestion.setValue(true);
-
     this.newQuestionForm.reset();
     this.newQuestionForm.controls.value.setValue(1);
     this.newQuestionForm.controls.answer.setValue(1);
@@ -109,10 +100,8 @@ export class NewQuizComponent implements OnInit {
       time: this.newQuizForm.value.isTimed ? this.newQuizForm.value.time : -1,
       dueDate: !this.newQuizForm.value.noDueDate ? null : this.newQuizForm.value.dueDate,
       attempts: !this.newQuizForm.value.isUnlimited ? 'unlimited' : this.newQuizForm.value.attempts,
-      items: this.items,
-
+      items: this.items
     };
-
     this.submitting = true;
     this.isSubmitting.emit(true);
     this.coursesServices.newQuizPush(this.data.course, this.data.current_module, newQuiz).subscribe( (resp) => {
@@ -122,13 +111,11 @@ export class NewQuizComponent implements OnInit {
       this.submitting = false;
       this.isSubmitting.emit(false);
     });
-
     console.log(newQuiz);
   }
 
   removeItem(itemIndex) {
     this.items.splice(itemIndex);
-
     if (this.items.length < 1) {
       this.questionsForm.controls.hasQuestion.setValue(false);
     } else {
@@ -140,10 +127,8 @@ export class NewQuizComponent implements OnInit {
     this.current_dialog.close();
   }
 
-
   getLetter(index) {
     console.log(index);
     return String.fromCharCode(65 + Number(index));
   }
-
 }

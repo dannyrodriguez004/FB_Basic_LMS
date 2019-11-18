@@ -10,8 +10,6 @@
     </mat-card-title>
   </mat-card-header>
 
-
-
   <mat-nav-list >
     <a *ngIf="!replying" mat-list-item (click)="openEditor()"><mat-icon>reply</mat-icon>Reply</a>
   </mat-nav-list>
@@ -29,6 +27,7 @@
   <br>
 
 </mat-card>
+
 <!-- List posts in card containers -->
 <mat-card style="margin-bottom: 3px; margin-top: 3px" *ngFor="let message of messages.reverse()">
   <mat-card-header>

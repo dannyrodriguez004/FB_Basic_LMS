@@ -22,8 +22,6 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 
 export class AnnouncementsComponent implements OnInit, OnChanges {
 
-  columnsToDisplay = ['title', 'date'];
-  expandedElement: Announcement | null;
   Announcement: Announcement[] = [];
   subscriptions: Subscription[] = [];
   @Input('current_course') current_course: string;
@@ -33,7 +31,6 @@ export class AnnouncementsComponent implements OnInit, OnChanges {
     private userServices: UserService,
     private dialog: MatDialog,
   ) { }
-
 
   openAnnouncementsDialog() {
     const dialogRef =  this.dialog.open(NewAnnouncementComponent, {
@@ -67,7 +64,6 @@ export class AnnouncementsComponent implements OnInit, OnChanges {
 
   // Runs whenever input values change
   ngOnChanges() {
-
     this.ngOnInit();
   }
 }

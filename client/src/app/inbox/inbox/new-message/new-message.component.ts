@@ -4,8 +4,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CoursesService} from '../../../services/courses.service';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {UserService} from '../../../services/user.service';
-import {Conversation, Course, CourseNav, Message, Post} from '../../../models/courses.models';
-import {NewDiscussionComponent} from '../../../courses/course/discussions/new-discussion/new-discussion.component';
+import {Conversation, CourseNav} from '../../../models/courses.models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 
@@ -15,7 +14,6 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./new-message.component.scss']
 })
 export class NewMessageComponent implements OnInit {
-  private navItem: string;
   subscriptions: Subscription[] = [];
   today = new Date();
   conversationForm: FormGroup;
@@ -26,16 +24,12 @@ export class NewMessageComponent implements OnInit {
   description: string;                     // discussion description HTML format
   conversation: Conversation;            // discussion posts
   date: Date = this.today;
-  replying = false;
   htmlContent = '';
   recipients: {id: '', fname: '', lname: '', email: ''}[];
   recipient: [];
   course = {name: '', id: this.current_course, description: '', instructor: ''};
-
-
   loading = true;
   private myCourses: CourseNav[];
-  isPublic = false;
 
   constructor(
     public dialogRef: MatDialogRef<NewMessageComponent>,
@@ -43,20 +37,14 @@ export class NewMessageComponent implements OnInit {
     // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private coursesServices: CoursesService,
-    private userServices: UserService,
-    private router: Router,
-    private route: ActivatedRoute
-
-  ) {
+    private userServices: UserService) {
     this.conversationForm = this.FormBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
       courseId: ['', Validators.required],
       recipients: ['', Validators.required]
     });
-
     this.current_course = data;
-
   }
 
   config: AngularEditorConfig = {
@@ -72,9 +60,9 @@ export class NewMessageComponent implements OnInit {
     defaultFontName: 'Arial',
     customClasses: [
       {
-        name: "titleText",
-        class: "titleText",
-        tag: "h1",
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
       },
     ]
   };
@@ -138,7 +126,6 @@ export class NewMessageComponent implements OnInit {
       current_course: this.current_course,
       message: this.htmlContent,
     };
-
     this.coursesServices.newConversation(this.courseId, conversation).subscribe( (resp) => {
       this.dialogRef.close(resp);
     });

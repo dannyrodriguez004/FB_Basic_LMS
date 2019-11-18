@@ -24,7 +24,6 @@ const config: ExtraOptions = {
   onSameUrlNavigation: 'reload',
 };
 
-// @ts-ignore
 @NgModule({
   imports: [RouterModule.forRoot(routes, config)],
   exports: [RouterModule]

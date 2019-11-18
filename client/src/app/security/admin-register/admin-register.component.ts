@@ -2,8 +2,6 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-// import { AdminService } from '../../services/admin.service';
-//
 
 function equalsValidator(controlA: FormControl) {
   return function innerEqualsValidator(controlB: FormControl) {
@@ -13,7 +11,6 @@ function equalsValidator(controlA: FormControl) {
     if (pass != rep) {
       return 'NOT EQUAL, ' + pass + ' !=' + rep + '!';
     }
-
     return null;
   };
 }
@@ -25,7 +22,6 @@ function equalsValidator(controlA: FormControl) {
 })
 export class AdminRegisterComponent implements OnInit {
 
-
   registerForm: FormGroup;
   auth = 0;
   loading = false;
@@ -34,9 +30,7 @@ export class AdminRegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userServices: UserService,
-    private router: Router,
-    // private adminServices: AdminService
-  ) {
+    private router: Router) {
     this.registerForm = this.formBuilder.group({
       fname: ['', Validators.required],
       lname: ['', Validators.required],
@@ -54,9 +48,9 @@ export class AdminRegisterComponent implements OnInit {
       if (resp) {
         this.userServices.addInstructor({
           email: this.registerForm.value.primary,
-		      contactEmail: this.registerForm.value,
-		      f_name: this.registerForm.value.fname,
-		      l_name: this.registerForm.value.lname,
+          contactEmail: this.registerForm.value,
+          f_name: this.registerForm.value.fname,
+          l_name: this.registerForm.value.lname,
           password: this.registerForm.value.pass,
           auth: this.registerForm.value.auth
           // tslint:disable-next-line:no-shadowed-variable
@@ -71,9 +65,11 @@ export class AdminRegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    var _auth = this.userServices.getAuth();
+    // tslint:disable-next-line:variable-name
+    const _auth = this.userServices.getAuth();
     this.auth = -1;
-    if(_auth < 3) this.auth = _auth;
+    if (_auth < 3) {
+      this.auth = _auth;
+    }
   }
-
 }

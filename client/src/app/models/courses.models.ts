@@ -3,7 +3,9 @@ export class Course {
     id: string; // databse key
     name: string; // course name
     description: string; // course description
+  // tslint:disable-next-line:variable-name
     instructor_id: number;  // instructor databse key
+  // tslint:disable-next-line:variable-name
     instructor_name: string; // instructor name
     size: number; //  number of studnet enrolled
     MAX_SIZE: number; // number of students this course supports
@@ -31,7 +33,7 @@ export class Document extends Content {
     link: string;
 }
 
-export class EmbededVideo extends Content {
+export class EmbeddedVideo extends Content {
     html: string;
 }
 
@@ -75,6 +77,7 @@ export class Conversation {
   messages: Message[];
   isClosed: boolean;
   public: boolean;
+  // tslint:disable-next-line:variable-name
   course_name?: string;
   courseId?: string;
   lastmessageusername?: string;
@@ -83,7 +86,9 @@ export class Conversation {
 
 export class Message {
   id: string;
+  // tslint:disable-next-line:variable-name
   user_name: string;
+  // tslint:disable-next-line:variable-name
   user_id: string;
   date: string;
   post: string;
@@ -99,7 +104,9 @@ export class Announcement {
 
 export class Post {
     id: string;
+  // tslint:disable-next-line:variable-name
     user_name: string;
+  // tslint:disable-next-line:variable-name
     user_id: string;
     date: string;
     post: string;

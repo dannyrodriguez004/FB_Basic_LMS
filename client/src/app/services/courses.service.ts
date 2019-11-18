@@ -9,25 +9,16 @@ import { environment } from 'src/environments/environment';
 export class CoursesService {
 
   private CATEGORIES: {name: string}[] = [
-    {name:'Languages'}, {name:'Mathematics'}, {name:'English'}, {name:'History'}, {name:'Science'},
-    {name:'Philosophy'}, {name:'Nursing'}, {name:'Computer Science'}, {name:'American Studies'},
-    {name:'Art & Design'}, {name:'Chemistry'}, {name:'Civil Engineering'}, {name:'Economics'},
-    {name:'Education'}, {name:'Film Making'}, {name:'Geology'}, {name:'Marketing'}, {name:'Music'}, {name:'Sociology'},
+    {name: 'Languages'}, {name: 'Mathematics'}, {name: 'English'}, {name: 'History'}, {name: 'Science'},
+    {name: 'Philosophy'}, {name: 'Nursing'}, {name: 'Computer Science'}, {name: 'American Studies'},
+    {name: 'Art & Design'}, {name: 'Chemistry'}, {name: 'Civil Engineering'}, {name: 'Economics'},
+    {name: 'Education'}, {name: 'Film Making'}, {name: 'Geology'}, {name: 'Marketing'}, {name: 'Music'}, {name: 'Sociology'},
   ];
 
   constructor(private http: HttpClient) {
   }
 
-  getToken(): string {
-    return window.localStorage.jwtToken;
-  }
-
   getCourseInfo(course) {
-    // const opts = {
-    //   params: new HttpParams().set('key', `${course}`),
-    //   headers: this.buildHeaders()
-    // }
-    // console.log(opts);
     const params = {params: new HttpParams().set('key', `${course}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-info`, params);
   }
@@ -51,15 +42,15 @@ export class CoursesService {
 
   // tslint:disable-next-line:variable-name
   getDiscussionPosts(course_id, discussion_id, startFrom) {
-    // tslint:disable-next-line:max-line-length
-    const params = {params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`).set('start', `${startFrom}`)};
+    const params = {params: new HttpParams().set('course', `${course_id}`)
+        .set('discussion', `${discussion_id}`).set('start', `${startFrom}`)};
     return this.http.get(`${environment.apiAddress}/courses/discussion-posts-from`, params);
   }
 
   // tslint:disable-next-line:variable-name
   getAllDiscussionPosts(course_id, discussion_id) {
-    // tslint:disable-next-line:max-line-length
-    const params = {params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`)};
+    const params = {params: new HttpParams().set('course', `${course_id}`)
+        .set('discussion', `${discussion_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/discussion-posts`, params);
   }
 
@@ -73,9 +64,11 @@ export class CoursesService {
     const params = {params: new HttpParams().set('course', `${course_id}`).set('discussion', `${conversation_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-discussion-info`, params);
   }
+
   // tslint:disable-next-line:variable-name
   getPage(course_id, module_id, page_id) {
-    const params = {params: new HttpParams().set('course', `${course_id}`).set('module', `${module_id}`).set('page', `${page_id}`)};
+    const params = {params: new HttpParams().set('course', `${course_id}`)
+        .set('module', `${module_id}`).set('page', `${page_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/page`, params);
   }
 
@@ -98,14 +91,8 @@ export class CoursesService {
     return this.CATEGORIES;
   }
 
-  getAllStudents() {
-    return this.http.get(`${environment.apiAddress}/courses/student-has-course`);
-  }
-
   // tslint:disable-next-line:variable-name
   postDiscussionPost(course_id, discussion_id, post) {
-    // tslint:disable-next-line:max-line-length
-    // const params = { params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`).set('post', `${post}`)};
     return this.http.post(`${environment.apiAddress}/courses/add-discussion-post`, {
       course: course_id,
       discussion: discussion_id,
@@ -114,8 +101,6 @@ export class CoursesService {
   }
 
   sendMessage(course_id, discussion_id, conversation) {
-    // tslint:disable-next-line:max-line-length
-    // const params = { params: new HttpParams().set('course', `${course_id}`).set('discussion', `${discussion_id}`).set('post', `${post}`)};
     return this.http.post(`${environment.apiAddress}/courses/add-conversation-message`, {
       course: course_id,
       discussion: discussion_id,
@@ -123,7 +108,6 @@ export class CoursesService {
     });
   }
   updateCourse(course) {
-    // const params = { params: new HttpParams().set('course', `${course}`)};
     return this.http.post(`${environment.apiAddress}/courses/update-course`, {course});
   }
 
@@ -133,7 +117,6 @@ export class CoursesService {
   }
 
   getConversations() {
-    // const params = {params: new HttpParams().set('course', `${course_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-conversations`);
   }
 
@@ -201,33 +184,9 @@ export class CoursesService {
     return this.http.get(`${environment.apiAddress}/courses/registered-students`, params);
   }
 
-  // studentHasCourse(course) {
-  //   const opts = {
-  //     params: new HttpParams().set('course', `${course}`),
-  //     headers: this.buildHeaders()
-  //   }
-  //   return this.http.get(`${environment.apiAddress}/courses/student-has-course`, opts);
-  // }
-  studentHasCourse(student_id, course_id) {
-    const params = { params: new HttpParams().set('student', `${student_id}`).set('course', `${course_id}`)};
-    return this.http.get(`${environment.apiAddress}/courses/student-has-course`, params);
-  }
-
-  // getStudents(course) {
-  //   const opts = {
-  //     params: new HttpParams().set('course', `${course}`),
-  //     headers: this.buildHeaders()
-  //   }
-  //   return this.http.get(`${environment.apiAddress}/courses/course-students`, opts);
-  // }
-
   getStudents(course) {
     const params = { params: new HttpParams().set('course', `${course}`)};
     return this.http.get(`${environment.apiAddress}/courses/course-students`, params);
-  }
-
-  getAllCourses() {
-    return this.http.get(`${environment.apiAddress}/courses`);
   }
 
   getWaitlistSize(course) {
@@ -243,22 +202,7 @@ export class CoursesService {
     return this.http.post(`${environment.apiAddress}/courses/confirm-enrollment`, {student, course});
   }
 
-  getCourseStudents(course: string) {
-    const params = {params: new HttpParams().set('course', `${course}`)};
-    return this.http.get(`${environment.apiAddress}/courses/course-students-2`, params);
-  }
-
-  // getStudentCourses(student_id: string) {
-  //   const opts = {
-  //     headers: this.buildHeaders()
-  //   };
-  //   return this.http.get(`${environment.apiAddress}/courses/student-courses`,
-  //     opts);
-  // }
-
-  // getStudentCourses(student_id: string) {
   getStudentCourses() {
-    // const params = { params: new HttpParams().set('student', `${student_id}`)};
     return this.http.get(`${environment.apiAddress}/courses/student-courses`);
   }
 
@@ -299,7 +243,8 @@ export class CoursesService {
   }
 
   getCoursesCatergorySortBy(category, sort, start) {
-    const params = {params: new HttpParams().set('category', `${category}`).set('sort', `${sort}`).set('start', `${start}`)};
+    const params = {params: new HttpParams().set('category', `${category}`)
+        .set('sort', `${sort}`).set('start', `${start}`)};
     return this.http.get(`${environment.apiAddress}/courses/courses-cat-by`, params);
   }
 

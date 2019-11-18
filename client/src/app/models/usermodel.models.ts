@@ -2,13 +2,13 @@ import {UsertypeModel} from './usertype.model';
 
 export class UserModel {
 
-  constructor () {
+  constructor() {
     this.type = UsertypeModel.Guest;
   }
-
-
   id: string;
+  // tslint:disable-next-line:variable-name
   first_name: string;
+  // tslint:disable-next-line:variable-name
   last_name: string;
   email?: string;
   phone?: string;

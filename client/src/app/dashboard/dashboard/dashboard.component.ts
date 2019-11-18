@@ -3,8 +3,6 @@ import {Subscription} from 'rxjs';
 import {UserService} from '../../services/user.service';
 import {Component, Input, OnInit} from '@angular/core';
 import {CoursesService} from '../../services/courses.service';
-import {UserModel} from '../../models/usermodel.models';
-
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +21,6 @@ export class DashboardComponent implements OnInit {
 
   ) {
     this.userServices.resetUserModel();
-    // this.user.id = this.userServices.fbUser().id; // get debug student id
   }
 
   /**
@@ -42,7 +39,6 @@ export class DashboardComponent implements OnInit {
           resp.forEach((course: Course) => {
             this.coursesServices.getCourseInfo(course.id)
               .subscribe((courseInfo: any) => {
-                // console.log('BOO ' + JSON.stringify(courseInfo));
                 this.coursesServices.getInstructorInfo(courseInfo.instructor).subscribe((instructor: any) => {
                   console.log('FOO ' + JSON.stringify(instructor));
                   course.instructor_name = instructor.name;
@@ -52,37 +48,14 @@ export class DashboardComponent implements OnInit {
           });
         } else {
           console.log('not authorized!');
-          // this.router.navigateByUrl('/');
         }
       }));
     }
   }
-  // loadCourses() {
-  //   if (this.userServices.getIsAdmin()) {
-  //     this.coursesServices.getAdminCourses().subscribe((resp: Course[]) => {
-  //       this.myCourses = resp;
-  //     });
-  //   } else {
-  //     this.coursesServices.getStudentCourses().subscribe((resp: Course[]) => {
-  //       console.log(resp);
-  //       this.myCourses = resp;
-  //       this.subscriptions.push(this.coursesServices.getCourseInfo(this.myCourses).subscribe((course: Course[]) => {
-  //         console.log(course);
-  //         this.course = course;
-  //       }));
-  //       this.subscriptions.push(this.coursesServices.getInstructorInfo(this.myCourses)
-  //         .subscribe((response: Course) => {
-  //           console.log(response);
-  //           this.course = response.instructor_name;
-  //         }));
-  //     });
-  //   }
-  // }
 
   ngOnInit() {
     this.loadCourses();
-
-      }
+  }
 
   isAdmin() {
     return this.userServices.getIsAdmin();

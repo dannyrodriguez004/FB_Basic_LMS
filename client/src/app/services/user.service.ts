@@ -16,9 +16,6 @@ declare var FB: any;
 })
 export class UserService {
 
-  // private isAdmin = false;
-
-
   private isLoggedIn = false;
   private subscriptions: Subscription[] = [];
   private FBLoggedIn;
@@ -27,15 +24,11 @@ export class UserService {
   private student_id: string; // debugging value
   private admin: {id: string, name: string};
   private auth = 0;
-  adminLoggedIn;
-
-
 
   constructor(
     private http: HttpClient,
     private cookies: CookieService,
     private router: Router) {
-    // this.isAdmin = this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session'));
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
     (window as any).fbAsyncInit = () => {
@@ -66,11 +59,6 @@ export class UserService {
     }(document, 'script', 'facebook-jssdk'));
   }
 
-  // loadUser() {
-  //   if (this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session')) || this.isLoggedFacebookLoggedIn()) {
-  //     this.isLoggedIn = true;
-  //   }
-  // }
   loadUser() {
     if (this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session')) ||
         this.cookies.check('fb-token') && this.isTokenFresh(this.cookies.get('fb-token')) ||
@@ -82,17 +70,6 @@ export class UserService {
       return false;
     }
   }
-
-  // isLoggedFacebookLoggedIn() {
-  //   FB.getLoginStatus( (response) => {
-  //     if (response.status === 'connected') {
-  //       this.FBLoggedIn = true;
-  //     } else {
-  //       this.FBLoggedIn = false;
-  //     }
-  //     return this.FBLoggedIn;
-  //   });
-  // }
 
   isLoggedFacebookLoggedIn() {
     FB.getLoginStatus( (response) => {
@@ -148,10 +125,6 @@ export class UserService {
     }
   }
 
-  // getAdmin() {
-  //   return this.admin;
-  // }
-
   Adminlogin(loginData) {
     let options = new HttpParams();
     options = options.append('username', loginData.username);
@@ -160,7 +133,6 @@ export class UserService {
       distinctUntilChanged(),
       tap((jwt: any) => {
         this.cookies.set('admin-session', jwt.payload, 2, '/');
-        // this.isAdmin = true;
         this.isTokenFresh(jwt.payload);
         this.isLoggedIn = true;
       }),
@@ -264,12 +236,9 @@ export class UserService {
     if (this.cookies.getAll() != {}) {
       this.cookies.deleteAll('/');
     }
-
     this.userModel = new UserModel();
     this.isLoggedIn = false;
-
     console.log(this.userModel);
-    // this.isAdmin = false;
     this.isLoggedIn = false;
     this.auth = -1;
     this.router.navigate(['/nav/home']);
@@ -284,25 +253,6 @@ export class UserService {
   getCurrentUser() {
   return this.http.get(`${environment.apiAddress}/security/auth/me`);
 }
-
-  getFbUserID() {
-    this.getCurrentUser().subscribe((resp: any) => {
-      console.log(resp);
-      this.student_id = resp.userID;
-      console.log(this.student_id);
-    });
-    return this.student_id;
-  }
-
-// tslint:disable-next-line:variable-name
-//   getStudentCourses(student_id: string) {
-//     const opts = {
-//       headers: this.buildHeaders()
-//     };
-//     console.log('StudentID: ' + student_id);
-//     return this.http.get(`${environment.apiAddress}/courses/student-courses`,
-//       opts);
-//   }
 
   isUsernameAvailable(username) {
     return this.http.post(`${environment.apiAddress}/users/available-username`, {username});
@@ -320,22 +270,12 @@ export class UserService {
     return this.userModel;
   }
 
-  // user() {
-  //   return this.getFbUserID();
-  //   // return this.student_id;
-  // }
-
   getIsAdmin() {
-    // return this.adminLoggedIn;
     return this.isLoggedIn && this.userModel.type < UsertypeModel.Guest;
   }
 
   fbLoggedIn() {
     return this.FBLoggedIn;
-  }
-
-  toggleLoggedIn() {
-    this.FBLoggedIn = !this.FBLoggedIn;
   }
 
   getAuth() {

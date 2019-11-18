@@ -1,14 +1,11 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {CoursesService} from '../../services/courses.service';
-import {DiscussionsComponent} from '../../courses/course/discussions/discussions.component';
-import {Conversation, CourseNav, Discussion, DIscussions} from '../../models/courses.models';
-import {NewDiscussionComponent} from '../../courses/course/discussions/new-discussion/new-discussion.component';
+import {Conversation} from '../../models/courses.models';
 import {MatDialog} from '@angular/material/dialog';
 import {NewMessageComponent} from './new-message/new-message.component';
-import {NewConversationComponent} from "./conversation/new-conversation/new-conversation.component";
 
 @Component({
   selector: 'app-inbox',
@@ -20,7 +17,9 @@ export class InboxComponent implements OnInit, OnChanges {
   conversations: Conversation[] = [];
   currentConversation: Conversation;
   conversation = {id: ''};
+  // tslint:disable-next-line:variable-name
   private user_id: string;
+  // tslint:disable-next-line:variable-name
   current_course = '';
   course = {name: '', id: this.current_course, description: '', instructor: ''};
   private subscriptions: Subscription[] = [];
@@ -78,12 +77,6 @@ export class InboxComponent implements OnInit, OnChanges {
     this.coursesServices.getDiscussionInfo(c.courseId, c.id).subscribe( (result) => {
       console.log(result);
     });
-    // this.subscriptions.push(this.coursesServices.getCourseInfo(c.courseId).subscribe( (course: {id: string, name: string,
-    //   description: string, instructor: string, students: string[]}) => {
-    //   console.log(this.course);
-    //   this.currentConversation.course_name = course.name;
-    // }));
-    // console.log(this.currentConversation.course_name);
     this.currentConversation = c;
     console.log(this.currentConversation);
   }

@@ -1,6 +1,6 @@
 <mat-horizontal-stepper [linear]="true" #stepper>
     <mat-step [stepControl]="newQuizForm">
-        
+
         <form [formGroup]="newQuizForm">
 
             <mat-form-field style="width: 100%;" appearance="outline">
@@ -17,7 +17,7 @@
             </mat-form-field>
 
 
-            <mat-checkbox color="primary" (click)="attempsCheck()" formControlName="isUnlimited">Limit Number of Attempts</mat-checkbox>
+            <mat-checkbox color="primary" (click)="attemptsCheck()" formControlName="isUnlimited">Limit Number of Attempts</mat-checkbox>
 
             <mat-form-field style="max-width: 100px" appearance="outline">
                 <mat-label>Attempts</mat-label>
@@ -82,7 +82,7 @@
                     <input matInput formControlName="A" type="text" required>
                     <mat-hint>Required Option</mat-hint>
                 </mat-form-field>
-                    
+
                 <mat-form-field style="width:100%;" appearance="outline">
                     <mat-label>Option B</mat-label>
                     <input matInput formControlName="B" type="text" required>
@@ -117,7 +117,7 @@
                         ({{getLetter( item.options.indexOf(option) )}}){{' ' + option}}
                     </mat-list-item>
                 </mat-list>
-                    
+
                 <button type="button" mat-raised-button color="warn" style="width: 100%;" (click)="removeItem(items.indexOf(item))">remove</button>
             </mat-card>
 

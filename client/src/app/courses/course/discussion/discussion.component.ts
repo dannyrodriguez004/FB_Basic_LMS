@@ -1,7 +1,6 @@
 import { DiscussionEditorComponent } from './discussion-editor/discussion-editor.component';
 import { MatDialog } from '@angular/material';
 import { UserService } from '../../../services/user.service';
-import { AdminService } from '../../../services/admin.service';
 import { CoursesService } from '../../../services/courses.service';
 import { IPost } from './../../../models/courses.models';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -31,8 +30,8 @@ export class DiscussionComponent implements OnInit {
   endDate: Date = this.today;
 
   // pagination variables
-  totalPosts: number = 0;
-  startFrom:number = 0;
+  totalPosts = 0;
+  startFrom = 0;
 
   // rich text editor input
   replying = false;
@@ -57,6 +56,7 @@ export class DiscussionComponent implements OnInit {
     ]
   };
 
+  // tslint:disable-next-line:variable-name no-input-rename
   @Input('current_course') current_course: string;
   constructor(
     private route: ActivatedRoute,
@@ -73,7 +73,6 @@ export class DiscussionComponent implements OnInit {
       data: {course: this.current_course, id: this.id, title: this.title,
         description: this.description, isClosed: this.isClosed, endDate: this.endDate},
     });
-
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
       if (result) {
         this.subscriptions.push(this.coursesServices.getDiscussionInfo(this.current_course, this.id)
@@ -89,9 +88,7 @@ export class DiscussionComponent implements OnInit {
 
   // runs when this component is loaded, gets parameters from url
   ngOnInit() {
-
     this.loading = true;
-
     this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
       if (params.discussion) {
         this.id = params.discussion;
@@ -100,24 +97,20 @@ export class DiscussionComponent implements OnInit {
         this.startFrom = Number(params.start);
       }
     }));
-
     this.loadDiscussion();
     this.subscriptions.push(this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
         this.loading = true;
-
         this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
           if (params.discussion) {
             this.id = params.discussion;
           }
-
           if (params.start) {
             this.startFrom = Number(params.start);
           } else {
             this.startFrom = 0;
           }
         }));
-
         this.loadDiscussion();
       }
     }));
@@ -126,19 +119,15 @@ export class DiscussionComponent implements OnInit {
   // adds post to discussion and reloads posts
   pushPost() {
     const post = {
-      // user_id: this.adminServices.getIsAdmin() ? this.userServices.fbUser().id : this.userServices.fbUser().id,
-      // user_name: this.adminServices.getIsAdmin() ?
-      // this.userServices.fbUser().first_name + ' ' +
-      // this.userServices.fbUser().last_name : this.userServices.fbUser().first_name + ' ' +
-      // this.userServices.fbUser().last_name,
       user_id: this.userServices.fbUser().id,
       user_name: this.userServices.fbUser().first_name + ' ' + this.userServices.fbUser().last_name,
       date: new Date().getTime(),
-      post: this.htmlContent};
-
-    this.subscriptions.push(this.coursesServices.postDiscussionPost(this.current_course, this.id, post).subscribe( (resp) => {
-      console.log(resp);
-      if (resp) {
+      post: this.htmlContent
+    };
+    this.subscriptions.push(this.coursesServices.postDiscussionPost(this.current_course, this.id, post)
+      .subscribe( (resp) => {
+        console.log(resp);
+        if (resp) {
         this.totalPosts++;
         this.lastPage();
       }
@@ -150,7 +139,6 @@ export class DiscussionComponent implements OnInit {
     this.loading = true;
     this.replying = false;
     this.htmlContent = '';
-
     this.subscriptions.push(this.coursesServices.getDiscussionInfo(this.current_course, this.id)
       .subscribe( (resp: {title: any, description: any, isClosed: any, endDate: string}) => {
       this.description = resp.description;
@@ -158,7 +146,6 @@ export class DiscussionComponent implements OnInit {
       this.isClosed = resp.isClosed;
       this.endDate = new Date(resp.endDate);
     }));
-
     // tslint:disable-next-line:max-line-length
     this.subscriptions.push(this.coursesServices.getDiscussionPosts(this.current_course, this.id, this.startFrom)
       .subscribe( (resp: {posts: IPost[], total: number}) => {
@@ -168,7 +155,6 @@ export class DiscussionComponent implements OnInit {
       }
       this.loading = false;
     }));
-
   }
 
   isLate() {
@@ -198,7 +184,6 @@ export class DiscussionComponent implements OnInit {
   canBack() {
     return this.startFrom >= POST_PER_PAGE;
   }
-
 
   // navigates to the previous discussion posts page
   back() {
@@ -235,5 +220,4 @@ export class DiscussionComponent implements OnInit {
         {course: this.current_course, select: 'Discussion', discussion: this.id, start: this.startFrom} });
     this.loadDiscussion();
   }
-
 }

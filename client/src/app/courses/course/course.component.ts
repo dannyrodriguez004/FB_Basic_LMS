@@ -3,7 +3,6 @@ import { UserService } from '../../services/user.service';
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
-import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-course',
@@ -19,19 +18,13 @@ export class CourseComponent implements OnInit, OnChanges {
     {val: 'Discussions', ico: 'forum'},
     {val: 'Roll Call', ico: 'forum'},
     {val: 'Announcements', ico: 'forum'}];
-
-
 private navItem = 'Home';
-
   private subscriptions: Subscription[] = [];
-  private authorized = false;
   // tslint:disable-next-line:variable-name
   current_course = '';
   course = {name: '', id: this.current_course, description: '', instructor: ''};
   // tslint:disable-next-line:variable-name
   private user_id: string;
-  adminLoggedIn;
-  loggedIn;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,9 +34,7 @@ private navItem = 'Home';
   ) {}
 
   ngOnInit() {
-
     this.loadData();
-
     this.subscriptions.push(this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
         this.loadData();
@@ -79,20 +70,6 @@ private navItem = 'Home';
             this.course = course;
           }));
       }
-    // this.subscriptions.push(this.coursesServices.studentHasCourse(this.user_id, this.current_course).subscribe( (resp: boolean) => {
-    //   this.authorized = resp;
-    //   if (this.authorized || this.userServices.getIsAdmin()) {
-    //     this.subscriptions.push(this.coursesServices
-    //       .getCourseInfo(this.current_course)
-    //       .subscribe( (course: {id: string, name: string,
-    //         description: string, instructor: string, students: string[]}) => {
-    //       this.course = course;
-    //     }));
-    //   } else {
-    //     console.log('not authorized!');
-    //     this.router.navigateByUrl('/');
-    //   }
-    // }));
   }
 
   setNav(val: string) {

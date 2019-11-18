@@ -9,7 +9,7 @@ import { Component, OnInit, Optional, Inject } from '@angular/core';
 })
 export class ContextComponent implements OnInit {
 
-  context: Context = {method:'', params: [], result: ''};
+  context: Context = {method: '', params: [], result: ''};
   constructor(
     public dialogRef: MatDialogRef<ContextComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) data: Context,

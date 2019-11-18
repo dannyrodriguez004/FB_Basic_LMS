@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {HomepageComponent} from './homepage/homepage.component';
-import {PrivacyComponent} from "./homepage/privacy/privacy.component";
-import {CourseComponent} from "../courses/course/course.component";
-import {TOSComponent} from "./homepage/tos/tos.component";
-
+import {PrivacyComponent} from './homepage/privacy/privacy.component';
+import {TOSComponent} from './homepage/tos/tos.component';
 
 const routes: Routes = [
   {path: '', component: HomepageComponent},

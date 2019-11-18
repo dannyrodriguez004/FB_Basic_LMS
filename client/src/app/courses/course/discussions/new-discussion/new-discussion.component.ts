@@ -28,7 +28,6 @@ export class NewDiscussionComponent implements OnInit {
       isClosed: [false, Validators.required],
       endDate: ['', Validators.required],
     });
-
     this.current_course = data;
   }
 
@@ -45,15 +44,16 @@ export class NewDiscussionComponent implements OnInit {
     defaultFontName: 'Arial',
     customClasses: [
       {
-        name: "titleText",
-        class: "titleText",
-        tag: "h1",
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
       },
     ]
   };
 
   getDescriptionError() {
-    return this.discussionForm.hasError('required', 'discussionForm.description')  ? '' : this.discussionForm.controls['description'].dirty ? 'The description of a discussion cannot be empty!' : '';
+    return this.discussionForm.hasError('required', 'discussionForm.description')  ? ''
+      : this.discussionForm.controls.description.dirty ? 'The description of a discussion cannot be empty!' : '';
   }
 
   ngOnInit() {
@@ -65,7 +65,6 @@ export class NewDiscussionComponent implements OnInit {
       description: this.discussionForm.value.description,
       isClosed: this.discussionForm.value.isClosed,
       endDate: this.discussionForm.value.endDate,
-      // public: this.discussionForm.value.public
     };
 
     this.coursesServices.newDiscussion(this.current_course, discussion).subscribe( (resp) => {
@@ -73,11 +72,7 @@ export class NewDiscussionComponent implements OnInit {
     });
   }
 
-  setPrivate() {
-    // this.public = false;
-  }
   onNoClick() {
     this.dialogRef.close();
   }
-
 }

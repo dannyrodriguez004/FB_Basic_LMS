@@ -13,13 +13,9 @@ import { Component, OnInit } from '@angular/core';
 export class ConfirmEnrollComponent implements OnInit {
 
   loading = true;
-
   students: {id: string, fname: string, lname: string, email: string, phone: string}[];
-
   subscriptions: Subscription[] = [];
-
   waiting = 0;
-
   // tslint:disable-next-line:variable-name
   current_course = '';
 
@@ -27,7 +23,7 @@ export class ConfirmEnrollComponent implements OnInit {
     private coursesServices: CoursesService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loading = true;
@@ -42,26 +38,22 @@ export class ConfirmEnrollComponent implements OnInit {
           this.students = resp;
           this.loading = false;
          }));
-      this.subscriptions.push(this.coursesServices.getWaitlistSize(this.current_course).subscribe( (resp: number) => {
-      this.waiting = resp;
-      }));
+      this.subscriptions.push(this.coursesServices.getWaitlistSize(this.current_course)
+        .subscribe( (resp: number) => {
+          this.waiting = resp;
+        }));
     }));
   }
 
   openEnrollDialog(student) {
-
     const dialogRef = this.dialog.open(EnrollDialogComponent, {
       width: '450px',
       data: {course: this.current_course, student}
     });
-
     dialogRef.afterClosed().subscribe( (result) => {
       if (result) {
         this.ngOnInit();
       }
     });
   }
-
-
-
 }

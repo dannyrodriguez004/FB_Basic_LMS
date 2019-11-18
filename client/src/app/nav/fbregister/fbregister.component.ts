@@ -24,10 +24,7 @@ export class FBRegisterComponent implements OnInit {
     private userServices: UserService,
     private router: Router,
     public dialogRef: MatDialogRef<FBRegisterComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) data: {id: string, first_name: string, last_name: string, email: string},
-
-
-  ) {
+    @Optional() @Inject(MAT_DIALOG_DATA) data: {id: string, first_name: string, last_name: string, email: string}) {
     console.log(data.id);
     this.registerForm = this.formBuilder.group({
       id: data.id,
@@ -59,33 +56,8 @@ export class FBRegisterComponent implements OnInit {
     ]
   };
 
-  // addUser(userModel: any) {
-  //   this.loading = true;
-  //
-  //   if (this.registerForm.pristine) {
-  //     this.dialogRef.close();
-  //   }  else {
-  //     const user = {
-  //       first_name:  this.registerForm.value.first_name,
-  //       last_name: this.registerForm.value.last_name,
-  //       address: this.registerForm.value.address,
-  //       phone: this.registerForm.value.phone
-  //     };
-  //
-  //     this.subscriptions.push(this.userServices.addUser({
-  //       if (resp) {
-  //         this.dialogRef.close(resp);
-  //       }
-  //     }));
-  //   }
-  //
-  // }
   register() {
     this.loading = true;
-    // this.userServices.existingStudent(this.userServices.redirectStudent()).subscribe( (resp: boolean) => {
-    // this.userServices.existingStudent(this.userServices.getCurrentUser()).subscribe( (resp: boolean) => {
-    //
-    //   if (resp) {
     this.userServices.addUser( {
           userID: this.registerForm.value.id,
           email: this.registerForm.value.email,
@@ -94,19 +66,10 @@ export class FBRegisterComponent implements OnInit {
           phone: this.registerForm.value.phone,
           country: this.registerForm.value.country
         });
-      //     .subscribe((response) => {
-    //     if (response) {
-    //       this.router.navigateByUrl('/nav/dashboard');
-    //     }
     this.loading = false;
     this.dialogRef.close();
-    //   });
-    //   }
-    // });
+
   }
 
-  ngOnInit() {
-    // this.user = this.userServices.getCurrentUser();
-  }
-
+  ngOnInit() {}
 }

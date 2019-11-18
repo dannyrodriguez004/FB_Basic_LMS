@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {CoursesService} from "../../../../services/courses.service";
-import {AngularEditorConfig} from "@kolkov/angular-editor";
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {CoursesService} from '../../../../services/courses.service';
+import {AngularEditorConfig} from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-new-conversation',
@@ -45,15 +45,16 @@ export class NewConversationComponent implements OnInit {
     defaultFontName: 'Arial',
     customClasses: [
       {
-        name: "titleText",
-        class: "titleText",
-        tag: "h1",
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
       },
     ]
   };
 
   getDescriptionError() {
-    return this.conversationForm.hasError('required', 'conversationForm.description')  ? '' : this.conversationForm.controls['description'].dirty ? 'The description of a discussion cannot be empty!' : '';
+    return this.conversationForm.hasError('required', 'conversationForm.description')  ? ''
+      : this.conversationForm.controls.description.dirty ? 'The description of a discussion cannot be empty!' : '';
   }
 
   ngOnInit() {
@@ -65,7 +66,6 @@ export class NewConversationComponent implements OnInit {
       description: this.conversationForm.value.description,
       isClosed: this.conversationForm.value.isClosed,
       endDate: this.conversationForm.value.endDate,
-      // public: this.conversationForm.value.public
     };
 
     this.coursesServices.newDiscussion(this.current_course, discussion).subscribe( (resp) => {

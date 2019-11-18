@@ -1,5 +1,5 @@
 import { MainComponent } from './main/main.component';
-import { Routes, RouterModule, ExtraOptions } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from '../security/security/auth.guard';
 
@@ -16,8 +16,6 @@ const routes: Routes = [
         {path: 'security', loadChildren: () => import('../security/security.module').then(mod => mod.SecurityModule)},
         {path: 'security/profile', loadChildren: () => import('../security/profile/profile.component').then(mod => mod.ProfileComponent)},
         {path: 'inbox', loadChildren: () => import('../inbox/inbox.module').then(mod => mod.InboxModule)}
-        // {path: '/courses/courses/discussions/', loadChildren: () => import('../courses/course/discussions/discussions.module').then(mod => mod.Cou)}
-
       ]}
 ];
 

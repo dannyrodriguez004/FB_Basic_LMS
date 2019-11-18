@@ -9,7 +9,6 @@ export class JwtTokenInterceptorService implements HttpInterceptor {
   constructor(
     private cookies: CookieService
   ) {}
-
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     if (this.cookies.check('admin-session')) {
       const jwt = this.cookies.get('admin-session');

@@ -4,7 +4,6 @@ import { UserService } from '../../services/user.service';
 import {Component, OnChanges, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
-// import {AdminService} from '../../services/admin.service';
 import {Router} from '@angular/router';
 import {UserModel} from '../../models/usermodel.models';
 import {CoursesService} from '../../services/courses.service';
@@ -22,11 +21,9 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   myCourses: CourseNav[] = []; // the user's courses names and id
   user: UserModel;
-  FBuserID: string;
-  adminCoureses: CourseNav[] = [];
+  adminCourses: CourseNav[] = [];
   adminLoggedIn;
   // tslint:disable-next-line:variable-name
-  private student_id = '';
   private subscriptions: Subscription[] = [];
   loggedIn;
   loading = false;
@@ -36,21 +33,13 @@ export class NavbarComponent implements OnInit, OnChanges {
     private userServices: UserService,
     private coursesServices: CoursesService,
     private dialog: MatDialog,
-    private cookiesServices: CookieService,
-    // private adminServices: AdminService,
-    private router: Router
   ) {
     const jwtToken = this.userServices.getToken();
     this.loggedIn = new BehaviorSubject<boolean>(!!jwtToken);
-    // const jwtCookie = this.cookiesServices.check('admin-session');
     const jwtCookie = this.userServices.isTokenFresh('admin-session');
     this.adminLoggedIn = new BehaviorSubject<boolean>(!!jwtCookie);
     this.userServices.resetUserModel();
-    // if (jwtToken) {
-    //   this.userServices.submitLogin();
-    // }
   }
-
 
   doLogin() {
     this.userServices.submitLogin();
@@ -106,26 +95,6 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.ngOnInit();
   }
 
-  // submitLogin() {
-  //   return this.userServices.submitLogin();
-  // }
-  //
-  // getUserInfo() {
-  //   this.subscriptions.push(this.userServices.getUserInfo(this.FBuserID).subscribe((resp: any) => {
-  //     console.log(resp);
-  //     this.user = resp.user_info;
-  // }));
-  //   return this.user;
-  // }
-
-  // getCurrentUser() {
-  //   this.userServices.getCurrentUser().subscribe((resp: any) => {
-  //     console.log(resp.userID);
-  //     this.FBuserID = resp.userID;
-  //   });
-  //   return this.FBuserID;
-  // }
-
   openAddCourseDialog() {
     const dialogRef = this.dialog.open(NewcourseComponent, {
       width: '90%',
@@ -144,69 +113,32 @@ export class NavbarComponent implements OnInit, OnChanges {
   /**
    * Load courses, id and name, for the current user.
    */
-  // loadCourses() {
-  //   this.subscriptions.push(this.coursesServices.getStudentCourses(this.student_id).subscribe( (resp: CourseNav[]) => {
-  //     this.myCourses = resp;
-  //   } ));
-  //
-  //   if ( this.userServices.getIsAdmin() ) {
-  //     this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe( (resp: CourseNav[]) => {
-  //       this.adminCoureses = resp;
-  //     }));
-  //   } else {
-  //     console.log('ERROR LOADING COURSES');
-  //   }
-  // }
-
   loadCourses() {
     console.log(this.loggedIn.value);
     console.log(this.adminLoggedIn.value);
     if (this.loggedIn.value || this.adminLoggedIn.value) {
       if (this.loggedIn.value) {
+        console.log('IN LOAD COURSES FOR STUDENT IN NAVBAR');
         this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
           this.myCourses = resp;
         }));
       }
     }
-//   } else if (this.adminLoggedIn.value) {
-//   this.adminLoggedIn.next(true);
-//   this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
-//   console.log(resp);
-//   this.adminCoureses = resp;
-// }));
-// }
     if (this.userServices.getIsAdmin()) {
+      console.log('IN LOAD COURSES FOR ADMIN IN NAVBAR');
       this.adminLoggedIn.next(true);
       this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
         console.log(resp);
-        this.adminCoureses = resp;
+        this.adminCourses = resp;
     }));
     }
-  }
-    // if ( this.adminServices.getIsAdmin()) {
-    //   this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe( (resp: CourseNav[]) => {
-    //     this.adminCoureses = resp;
-    //   }));
-    // }
-
-  toggleLogin() {
-    this.userServices.toggleLoggedIn();
-  }
-
-  isLoggedIn() {
-    return this.userServices.getIsLoggedIn();
   }
 
   isAdmin() {
     return this.userServices.getIsAdmin();
   }
 
-  // logout() {
-  //   this.userServices.logout();
-  // }
-
   logout() {
-    // this.adminServices.logOutUser();
     this.userServices.logout();
   }
 

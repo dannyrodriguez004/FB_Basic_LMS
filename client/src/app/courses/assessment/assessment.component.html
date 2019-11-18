@@ -11,8 +11,6 @@
             <mat-card-subtitle>{{item.value}} pts</mat-card-subtitle>
         </mat-card-header>
 
-        
-
         <mat-button-toggle-group [(ngModel)]="item.response" vertical>
             <mat-button-toggle (click)="save()" value="{{1}}" aria-label="Text align left">
                 A.{{" " + item.options[0]}}
@@ -29,7 +27,7 @@
             <mat-button-toggle (click)="save()" *ngIf="quiz.items[i].options.length > 3"  value="{{4}}" aria-label="Text align left">
                 D.{{" " + item.options[3]}}
             </mat-button-toggle>
-            
+
         </mat-button-toggle-group>
 
         <mat-progress-bar *ngIf="saving" mode="indeterminate"></mat-progress-bar>

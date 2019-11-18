@@ -2,7 +2,6 @@ import { YesNoDialogComponent } from 'src/app/yes-no-dialog/yes-no-dialog.compon
 import { CoursesService } from 'src/app/services/courses.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Component, OnInit, Optional, Inject } from '@angular/core';
-import { ModuleEditorComponent } from '../../modules/module-editor/module-editor.component';
 
 @Component({
   selector: 'app-enroll-dialog',
@@ -11,12 +10,13 @@ import { ModuleEditorComponent } from '../../modules/module-editor/module-editor
 })
 export class EnrollDialogComponent implements OnInit {
 
+  // tslint:disable-next-line:variable-name
   current_course = '';
   student: {id: string, fname: string, lname: string, email: string, phone: string};
   constructor(
     public dialogRef: MatDialogRef<EnrollDialogComponent>,
-    // tslint:disable-next-line:max-line-length
-    @Optional() @Inject(MAT_DIALOG_DATA) data: {student: {id: string, fname: string, lname: string, email: string, phone: string}, course: string},
+    @Optional() @Inject(MAT_DIALOG_DATA) data: {student:
+        {id: string, fname: string, lname: string, email: string, phone: string}, course: string},
     private coursesServices: CoursesService,
     private dialog: MatDialog,
   ) {
@@ -38,7 +38,6 @@ export class EnrollDialogComponent implements OnInit {
         message: 'Confirm enrollment?',
       }
     });
-
     yesNoDialogRef.afterClosed().subscribe( (resp) => {
       if (resp) {
         this.coursesServices.confirmEnrollmet(this.student.id, this.current_course).subscribe( (confirmed) => {
@@ -71,5 +70,4 @@ export class EnrollDialogComponent implements OnInit {
       }
     });
   }
-
 }

@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class YesNoDialogComponent implements OnInit {
 
-  dialogData : {title: string, message: string};
+  dialogData: {title: string, message: string};
 
   constructor(
     public dialogRef: MatDialogRef<YesNoDialogComponent>,
@@ -17,11 +17,9 @@ export class YesNoDialogComponent implements OnInit {
     this.dialogData = data;
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   click_event(resp: boolean) {
     this.dialogRef.close(resp);
   }
-
 }

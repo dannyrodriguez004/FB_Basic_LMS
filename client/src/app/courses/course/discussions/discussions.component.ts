@@ -15,6 +15,7 @@ export class DiscussionsComponent implements OnInit, OnChanges {
 
   discussions: DIscussions[] = [];
   subscriptions: Subscription[] = [];
+  // tslint:disable-next-line:variable-name no-input-rename
   @Input('current_course') current_course: string;
   isPublic: boolean;
 
@@ -22,15 +23,13 @@ export class DiscussionsComponent implements OnInit, OnChanges {
     private coursesServices: CoursesService,
     private userServices: UserService,
     private dialog: MatDialog,
-    ) { }
-
+    ) {}
 
   openDiscussionDialog() {
     const dialogRef =  this.dialog.open(NewDiscussionComponent, {
       width: '90%',
       data: this.current_course
     });
-
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
       if (result) {
         this.loadDiscussions();
@@ -66,11 +65,8 @@ export class DiscussionsComponent implements OnInit, OnChanges {
     return this.userServices.getIsAdmin();
   }
 
-
-
   // Runs whenever input values change
   ngOnChanges() {
-
     this.ngOnInit();
   }
 }

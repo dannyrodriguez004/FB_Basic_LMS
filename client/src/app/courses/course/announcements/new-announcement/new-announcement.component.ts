@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CoursesService} from '../../../../services/courses.service';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
-import {UserService} from "../../../../services/user.service";
+import {UserService} from '../../../../services/user.service';
 
 @Component({
   selector: 'app-new-announcement',
@@ -31,7 +31,6 @@ export class NewAnnouncementComponent implements OnInit {
       instructor: [false, Validators.required],
       date: ['', Validators.required]
     });
-
     this.current_course = data;
   }
 
@@ -79,5 +78,4 @@ export class NewAnnouncementComponent implements OnInit {
   onNoClick() {
     this.dialogRef.close();
   }
-
 }

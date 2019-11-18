@@ -60,12 +60,18 @@ export class QuizResultComponent implements OnInit {
       });
     });
   }
-
   getPercent() {
-    var percent = 0;
-    if(this.record.outOf == 0) percent = 0;
+    let percent = 0;
+    if (this.record.outOf === 0) {
+      percent = 0;
+    }
     percent = this.record.score / this.record.outOf * 100;
     return percent;
   }
-
+  // getPercent() {
+  //   var percent = 0;
+  //   if(this.record.outOf == 0) percent = 0;
+  //   percent = this.record.score / this.record.outOf * 100;
+  //   return percent;
+  // }
 }

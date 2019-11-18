@@ -4,9 +4,7 @@ import {CoursesService} from '../../services/courses.service';
 import {UserService} from '../../services/user.service';
 import {Subscription} from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import {Course} from '../../models/courses.models';
 import { YesNoDialogComponent } from 'src/app/yes-no-dialog/yes-no-dialog.component';
-
 const COURSE_PER_PAGE = 10;
 
 @Component({
@@ -18,12 +16,11 @@ export class CoursesComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
   courses = []; // the user's courses names and id
-  private startFrom: number = 0;
-  private sort: string = 'name';
-  private size: number = 0;
-  currentCategory: string = 'null';
+  private startFrom = 0;
+  private sort = 'name';
+  private size = 0;
+  currentCategory = 'null';
   loading = false;
-
 
   constructor(
     private userServices: UserService,
@@ -32,13 +29,9 @@ export class CoursesComponent implements OnInit {
     private dialog: MatDialog,
     private routing: ActivatedRoute,
     public snackbar: MatSnackBar
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
-
-
-
     this.routing.queryParams.subscribe( params => {
       if (params.start) {
         this.startFrom = params.start;
@@ -49,9 +42,8 @@ export class CoursesComponent implements OnInit {
       if (params.sort) {
         this.sort = params.sort;
       }
-    })
+    });
     this.fetchPage();
-
     this.subscriptions.push(this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
         this.routing.queryParams.subscribe( params => {
@@ -70,12 +62,11 @@ export class CoursesComponent implements OnInit {
           } else {
             this.sort = 'name';
           }
-        })
+        });
         this.fetchPage();
       }
     }));
   }
-
 
   fetchPage() {
     this.loading = true;
@@ -142,7 +133,6 @@ export class CoursesComponent implements OnInit {
         console.log(resp.message);
       }
     });
-
   }
 
   // can only go to a previous page if current start position is not in the first page.
@@ -175,7 +165,7 @@ export class CoursesComponent implements OnInit {
 
   // navigates to the last page of discussion posts
   lastPage() {
-    if(this.size > COURSE_PER_PAGE) {
+    if (this.size > COURSE_PER_PAGE) {
       this.startFrom = Math.trunc(this.size/ COURSE_PER_PAGE) * COURSE_PER_PAGE
     }
     console.log(this);
@@ -185,7 +175,7 @@ export class CoursesComponent implements OnInit {
   // sets the parameters for navigation and reloads the discussion
   setParams() {
     this.router.navigate(['/nav/courses'], { queryParams:
-        {start: this.startFrom, category: this.currentCategory, sort: this.sort} });
+        {start: this.startFrom, category: this.currentCategory, sort: this.sort}});
     this.fetchPage();
   }
 
@@ -203,10 +193,10 @@ export class CoursesComponent implements OnInit {
   userLoggedIn() {
     return this.userServices.fbLoggedIn();
   }
-
 }
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'notify-enrolled',
   template: '<p>Successfully registered!</p>',
   styles: [`
@@ -218,6 +208,7 @@ export class CoursesComponent implements OnInit {
 export class NotifyEnrolledComponent {}
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'notify-enrolled',
   template: '<p>Already Registered!</p>',
   styles: [`
@@ -229,6 +220,7 @@ export class NotifyEnrolledComponent {}
 export class NotifyInClassComponent {}
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'notify-enrolled',
   template: '<p>Already in waiting-list!</p>',
   styles: [`

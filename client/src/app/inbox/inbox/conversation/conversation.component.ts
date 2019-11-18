@@ -1,12 +1,10 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Discussion, DIscussions, IPost, Message, Post} from '../../../models/courses.models';
+import {Message, Post} from '../../../models/courses.models';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {CoursesService} from '../../../services/courses.service';
 import {UserService} from '../../../services/user.service';
-import {MatDialog} from '@angular/material/dialog';
-import {DiscussionEditorComponent} from '../../../courses/course/discussion/discussion-editor/discussion-editor.component';
 
 @Component({
   selector: 'app-conversation',
@@ -18,8 +16,11 @@ export class ConversationComponent implements OnInit, OnChanges {
   private subscriptions: Subscription[] = [];
 
   // discussion variables
+  // tslint:disable-next-line:no-input-rename
   @Input('id') id: string;                 // discussion id
+  // tslint:disable-next-line:no-input-rename
   @Input('courseId') courseId: string;     // course id
+  // tslint:disable-next-line:no-input-rename
   @Input('title') title: string;           // discussion title
   description: string;                     // discussion description HTML format
   messages: Message[] = [];            // discussion posts
@@ -72,7 +73,6 @@ export class ConversationComponent implements OnInit, OnChanges {
         this.startFrom = Number(params.start);
       }
     }));
-    // this.loadDiscussion();
     this.subscriptions.push(this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
         this.loading = true;
@@ -86,7 +86,6 @@ export class ConversationComponent implements OnInit, OnChanges {
             this.startFrom = 0;
           }
         }));
-        // this.loadDiscussion();
       }
     }));
   }
@@ -105,7 +104,6 @@ export class ConversationComponent implements OnInit, OnChanges {
         this.totalExchanges++;
         this.loadDiscussion();
       }
-
     }));
   }
 
@@ -128,15 +126,6 @@ export class ConversationComponent implements OnInit, OnChanges {
           this.messages = this.messages.concat(resp);
           this.loading = false;
         }));
-
-    //tslint:disable-next-line:max-line-length
-    // this.subscriptions.push(this.coursesServices.getConversations()
-    //   .subscribe( (resp: {conversations: DIscussions[], total: number}) => {
-    //       this.messages = resp.conversations;
-    //       this.totalExchanges = resp.total;
-    //       this.loading = false;
-    //   }));
-
   }
 
   isAdmin() {

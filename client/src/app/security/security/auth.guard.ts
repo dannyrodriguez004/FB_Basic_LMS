@@ -8,7 +8,6 @@ import { UserService} from '../../services/user.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  private authorized: boolean;
 
   constructor(
     private cookies: CookieService,
@@ -28,12 +27,9 @@ export class AuthGuard implements CanActivate {
     if (nextPath === 'login' || nextPath === 'nav'
       || nextPath === 'courses' && next.url.length === 1 || nextPath === 'helppage'
       || nextPath === 'home') {
-
       return true;
-
       } else {
       this.userServices.resetUserModel();
-      // this.authorized = !!this.userServices.fbUser().id;
       if (this.userServices.getIsLoggedIn() || this.userServices.fbUser().id) {
         console.log(this.userServices.getIsLoggedIn());
         console.log(this.userServices.fbUser().id);

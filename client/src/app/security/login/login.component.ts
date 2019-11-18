@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { NgForm } from '@angular/forms';
-// import {AdminService} from '../../services/admin.service';
 
 @Component({
   selector: 'app-login',
@@ -15,15 +13,12 @@ import { NgForm } from '@angular/forms';
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   private subscription: Subscription[];
-  submitted = false;
   error = '';
   type = 'password';
-  show = false;
   loading: any;
   username: string;
   password: string;
   invalidCredentials = false;
-  isLoading = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -38,15 +33,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: ['', Validators.required]
     });
   }
-
-  // onLogin(form: NgForm) {
-  //   if (form.invalid) {
-  //     return;
-  //   }
-  //   this.isLoading = true;
-  //   // this.authentication.login(form.value.email, form.value.password);
-  //   this.userServices.Adminlogin({email: form.value.email, password: form.value.password}).subscribe((login) => { console.log(login); });
-  // }
 
   authenticateUser() {
     const authUser = {

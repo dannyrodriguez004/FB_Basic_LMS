@@ -15,8 +15,7 @@
   <mat-spinner style="margin-left: auto; margin-top: 1rem; margin-right: auto;"></mat-spinner>
 </mat-card>
 
-<div *ngIf="!loading" style="background-color: white; padding-top: 1rem"
->
+<div *ngIf="!loading" style="background-color: white; padding-top: 1rem">
   <mat-card  *ngIf="1 > courses.length">
       <div style="margin-left: auto; margin-right: auto;">
           No courses matched.
@@ -40,7 +39,8 @@
         </p>
       </mat-card-content>
       <mat-card-actions>
-          <button [disabled]="!userLoggedIn()" (click)="course.MAX_SIZE - course.size > 0 ?  register(course.id) : openFullDialog(course.id)" mat-raised-button mat-button color="primary">Register</button>
+          <button [disabled]="!userLoggedIn()" (click)="course.MAX_SIZE - course.size > 0 ?  register(course.id)
+           : openFullDialog(course.id)" mat-raised-button mat-button color="primary">Register</button>
       </mat-card-actions>
     </mat-card>
   </div>
@@ -55,7 +55,8 @@
 
         <span><button [disabled]="!canBack()" (click)="back()" mat-stroked-button color="primary">
             <mat-icon>navigate_before</mat-icon>Back
-        </button></span>
+        </button>
+        </span>
 
         <span class="fill"></span>
 
