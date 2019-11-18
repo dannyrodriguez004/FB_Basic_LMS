@@ -43,22 +43,42 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   doLogin() {
     this.userServices.submitLogin();
-    this.loggedIn.next(true);
-    this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
-      console.log(resp);
-      this.loadCourses();
-      if (!resp.user_info) {
-        this.isRegistered = false;
-        this.openRegisterStudentDialog();
-      } else {
-        this.isRegistered = true;
-        console.log('AFTER DO LOGIN', resp.user_info);
-        // window.localStorage.user_info = JSON.stringify(resp.user_info);
-      }
-    }));
+    this.userServices.FBLoggedIn.subscribe(bool => {
+      console.log('############### FBLoggedIn changed to ' + bool);
+      this.loggedIn.next(true);
+      this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
+        console.log(resp);
+        this.loadCourses();
+        if (!resp.registered) {
+          this.isRegistered = false;
+          this.openRegisterStudentDialog();
+        } else {
+          this.isRegistered = true;
+          console.log('AFTER DO LOGIN', resp.user_info);
+          // window.localStorage.user_info = JSON.stringify(resp.user_info);
+        }
+      }));
+    });
   }
+  // doLogin() {
+  //   this.userServices.submitLogin();
+  //   this.loggedIn.next(true);
+  //   this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
+  //     console.log(resp);
+  //     this.loadCourses();
+  //     if (!resp.user_info) {
+  //       this.isRegistered = false;
+  //       this.openRegisterStudentDialog();
+  //     } else {
+  //       this.isRegistered = true;
+  //       console.log('AFTER DO LOGIN', resp.user_info);
+  //       // window.localStorage.user_info = JSON.stringify(resp.user_info);
+  //     }
+  //   }));
+  // }
 
   openRegisterStudentDialog() {
+    this.dialog.closeAll();
     const dialogRef = this.dialog.open(FBRegisterComponent, {
       width: '90%',
       data: {

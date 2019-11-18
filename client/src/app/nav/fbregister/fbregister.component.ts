@@ -66,6 +66,15 @@ export class FBRegisterComponent implements OnInit {
           phone: this.registerForm.value.phone,
           country: this.registerForm.value.country
         });
+    this.userServices.addStudent( {
+      key: this.registerForm.value.id,
+      email: this.registerForm.value.email,
+      fname: this.registerForm.value.first_name,
+      lname: this.registerForm.value.last_name,
+      phone: this.registerForm.value.phone,
+      country: this.registerForm.value.country,
+      token: 'Student'
+    });
     this.loading = false;
     this.dialogRef.close();
 

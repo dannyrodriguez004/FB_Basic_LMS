@@ -18,7 +18,7 @@ export class UserService {
 
   private isLoggedIn = false;
   private subscriptions: Subscription[] = [];
-  private FBLoggedIn;
+  FBLoggedIn;
   private userModel: UserModel = new UserModel();
   // tslint:disable-next-line:variable-name
   private student_id: string; // debugging value
@@ -172,11 +172,11 @@ export class UserService {
       if (result.authResponse) {
         this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
           .subscribe((response: any) => {
-            this.FBLoggedIn = true;
-            this.isLoggedIn = true;
             console.log('POST RESPONSE', response);
             this.saveToken(response.token);
             this.cookies.set('fb-token', response.token, 2, '/');
+            this.FBLoggedIn.next(true);
+            this.isLoggedIn = true;
           });
       }
     }, {scope: 'email', return_scopes: true});
@@ -210,17 +210,6 @@ export class UserService {
   //     }
   //   });
   // }
-
-  addUser(userModel) {
-          const opts = {
-            body: userModel
-          };
-          console.log(opts);
-          // return this.http.post(`${environment.apiAddress}/users/add-user`, opts);
-          this.http.post(`${environment.apiAddress}/users/add-user`, opts).subscribe((result: any) => {
-      console.log(result);
-    });
-  }
 
   // existingStudent(user) {
   //   const opts = {
@@ -258,12 +247,28 @@ export class UserService {
     return this.http.post(`${environment.apiAddress}/users/available-username`, {username});
   }
 
+  addUser(userModel) {
+    const opts = {
+      body: userModel
+    };
+    console.log(opts);
+    this.http.post(`${environment.apiAddress}/users/add-user`, opts).subscribe((result: any) => {
+      console.log(result);
+    });
+  }
+
   addInstructor(user) {
     return this.http.post(`${environment.apiAddress}/users/add-instructor`, {user});
   }
 
   addStudent(user) {
-    return this.http.post(`${environment.apiAddress}/users/add-student`, {user});
+    const opts = {
+      body: user
+    };
+    console.log(opts);
+    return this.http.post(`${environment.apiAddress}/users/add-student`, opts).subscribe((result: any) => {
+      console.log(result);
+    });
   }
 
   fbUser() {

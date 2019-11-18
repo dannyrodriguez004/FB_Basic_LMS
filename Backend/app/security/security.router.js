@@ -40,18 +40,38 @@ module.exports = (passport) => {
 
     router.get('/auth/me', passport.authenticate('jwt', {session:true}), async (req, res, next) => {
         console.log('IN AUTHME');
-        console.log(req.user);
         var users = await database.ref('/users').orderByKey().equalTo(req.user).once('value');
-        if(users) {
+        if(users.val()) {
             let userinfo = users.val()[req.user];
-            let userHeader = { id: req.user };
+            let userHeader = {
+                id: req.user,
+                registered: true
+            };
             let resp = Object.assign(userHeader, userinfo);
+            console.log('#################' + JSON.stringify(resp));
             res.json(resp);
         } else {
             console.log('AUTH/ME CANNOT GET USERS');
-            res.json({userID: req.user});
+            res.json({
+                userID: req.user,
+                registered: false
+            });
         }
     });
+    // router.get('/auth/me', passport.authenticate('jwt', {session:true}), async (req, res, next) => {
+    //     console.log('IN AUTHME');
+    //     console.log(req.user);
+    //     var users = await database.ref('/users').orderByKey().equalTo(req.user).once('value');
+    //     if(users) {
+    //         let userinfo = users.val()[req.user];
+    //         let userHeader = { id: req.user };
+    //         let resp = Object.assign(userHeader, userinfo);
+    //         res.json(resp);
+    //     } else {
+    //         console.log('AUTH/ME CANNOT GET USERS');
+    //         res.json({userID: req.user});
+    //     }
+    // });
     return router;
 }
 

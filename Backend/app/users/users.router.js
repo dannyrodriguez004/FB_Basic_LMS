@@ -16,17 +16,15 @@ module.exports = (passport) => {
 
 
     router.post('/add-user', async (req, res, next) => {
-        console.log('HERE I AM IN ADD USER');
-        console.log(req.body);
         const resp = await usersServices.addUser(req.body);
         await res.json(resp);
-    })
+    });
 
     /**
      * @param user: {key: string, name: string}
      */
     router.post('/add-student', async (req, res, next) => {
-        const resp = await usersServices.addStudent(req.body.user);
+        const resp = await usersServices.addStudent(req.body);
         await res.json(resp);
     });
 
