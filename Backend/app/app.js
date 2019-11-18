@@ -1,12 +1,9 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-var helmet = require('helmet');
+const helmet = require('helmet');
 const errorHandler = require('./middleware/error-handler.middleware');
-
-
 const firebase = require('firebase-admin');
-
 const firebaseAccountConfig = require('../learnfiu_db.json');
 firebase.initializeApp({
 	credential: firebase.credential.cert(firebaseAccountConfig),
@@ -32,9 +29,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-
 //------ Routes -------//
-
 const utilsRoutes = require('./utils/utils.router')(passport);
 app.use('/utils', utilsRoutes);
 
@@ -48,7 +43,6 @@ const securityRoutes = require('./security/security.router')(passport);
 app.use('/security', securityRoutes);
 
 //------- End --------//
-
 
 app.use(errorHandler);
 

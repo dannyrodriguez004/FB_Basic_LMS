@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const usersServices = require('./users.service');
 const express = require('express');
 const router = express.Router();
@@ -11,8 +10,8 @@ module.exports = (passport) => {
      */
     router.post('/add-instructor', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.addInstructor(req.body.user);
-        res.json(resp);
-        Utils.AdminLog(req.user, {method: usersServices.addInstructor.name, params: [req.body.user], result: resp}, "Adding Instructor");
+        await res.json(resp);
+        await Utils.AdminLog(req.user, {method: usersServices.addInstructor.name, params: [req.body.user], result: resp}, "Adding Instructor");
     })
 
 
@@ -20,7 +19,7 @@ module.exports = (passport) => {
         console.log('HERE I AM IN ADD USER');
         console.log(req.body);
         const resp = await usersServices.addUser(req.body);
-        res.json(resp);
+        await res.json(resp);
     })
 
     /**
@@ -28,7 +27,7 @@ module.exports = (passport) => {
      */
     router.post('/add-student', async (req, res, next) => {
         const resp = await usersServices.addStudent(req.body.user);
-        res.json(resp);
+        await res.json(resp);
     });
 
     /**
@@ -37,18 +36,18 @@ module.exports = (passport) => {
      */
     router.post('/enroll-student', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.enrollIn(req.body.student, req.body.course);
-        res.json(resp);
-        Utils.AdminLog(req.user, {method: usersServices.enrollIn.name, params: [req.body.student, req.body.course], result: resp}, "Enrolling student into course.");
+        await res.json(resp);
+        await Utils.AdminLog(req.user, {method: usersServices.enrollIn.name, params: [req.body.student, req.body.course], result: resp}, "Enrolling student into course.");
     });
 
     router.get('/all-instructors', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.getAllInstructors();
-        res.json(resp);
+        await res.json(resp);
     });
 
     router.get('/all-categories', async (req, res, next) => {
         const resp = await usersServices.getAllCategories();
-        res.json(resp);
+        await res.json(resp);
     });
 
     /**
@@ -56,7 +55,7 @@ module.exports = (passport) => {
      */
     router.get('/instructor-info', async (req, res, next) => {
         const resp = await usersServices.getInstructor(req.query.id);
-        res.json(resp);
+        await res.json(resp);
     });
 
     /**
@@ -78,32 +77,32 @@ module.exports = (passport) => {
 
     router.get('/get-student-info', async (req, res, next) => {
         const resp = await usersServices.getStudentDetail(req.query.student);
-        res.json(resp);
+        await res.json(resp);
     });
 
     router.get('/get-user-info', async (req, res, next) => {
         console.log(req.query);
         const resp = await usersServices.getUserInfo(req.query.key);
-        res.json(resp);
+        await res.json(resp);
     });
 
     router.post('/available-username', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await usersServices.isAvailable(req.body.username);
-        res.json(resp);
+        await res.json(resp);
     });
 
 // In users.router.js
     router.get('/get-inbox', async (req, res, next) => {
         // const resp = await usersServices.getInbox(req.body.user);
         const resp = await usersServices.getInbox('10220661315904132');
-        res.json(resp);
+        await res.json(resp);
     });
 
     router.post('/existing-student', async (req, res, next) => {
-        var userID = req.body.userID;
+        let userID = req.body.userID;
         console.log(userID);
         const resp = await usersServices.studentInDatabase(req.body.userID);
-        res.json(resp);
+        await res.json(resp);
     });
     return router;
-}
+};

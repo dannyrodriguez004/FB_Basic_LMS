@@ -12,9 +12,7 @@ class CoursesService {
      *
      * @return true if successfully added
      */
-
     async addCourse(newCourse) {
-
         try {
             let course = await database.ref('/courses').once('value');
             course.ref.push(
@@ -32,15 +30,10 @@ class CoursesService {
                     category: newCourse.category,
                 }
             );
-
-            /*let cat = await database.ref('/categories/' + newCourse.category).once('value');
-            cat.child(newRef.key).ref.set({ courseId: newRef.key })*/
-
         } catch (err) {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
@@ -52,20 +45,16 @@ class CoursesService {
      * @return true if successfully added new discussion
      */
     async addDiscussion(course_key, newDiscussion) {
-
         try {
-
             let courses = await database.ref('/courses')
             .orderByKey()
             .equalTo(course_key)
             .once('value');
-
             if(courses.numChildren() > 1) {
                 return false;
             }
-
             courses.forEach((course) => {
-            //     for await (let course of courses) {
+                // for await (let course of courses) {
                 let key = course.child('discussions').ref.push({
                     title: newDiscussion.title,
                     description: newDiscussion.description,
@@ -80,13 +69,13 @@ class CoursesService {
                         receivers[user_id] = {
                             read: false
                         }
-                    })
+                    });
                     database.ref('/conversations/')
                         .child(key)
                         .update({
                                 creator: newDiscussion.user_id,
                                 lastmessagedate: Date.now(),
-                                lastmesssageusername: newDiscussion.user_name,
+                                lastmessageusername: newDiscussion.user_name,
                                 recipients: receivers,
                                 course_name: newDiscussion.course_name
                         })
@@ -96,9 +85,7 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
-
     }
 
     /**
@@ -109,18 +96,14 @@ class CoursesService {
      * @return true if successfully added new discussion
      */
     async addAnnouncement(course_key, newAnnouncement) {
-
         try {
-
             let courses = await database.ref('/courses')
                 .orderByKey()
                 .equalTo(course_key)
                 .once('value');
-
             if(courses.numChildren() > 1) {
                 return false;
             }
-
             courses.forEach((course) => {
                 course.child('announcements').ref.push({
                     title: newAnnouncement.title,
@@ -133,10 +116,9 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
-
     }
+
     /**
      *
      * @param {string} course, course key in database
@@ -146,7 +128,6 @@ class CoursesService {
      * @return true if post is successfully added
      */
     async addDiscussionPost(course, discussion, post) {
-
         try {
             await database.ref('/courses/' + course + '/discussions/')
                 .child(discussion).child('posts').push(
@@ -161,7 +142,6 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
@@ -172,7 +152,6 @@ class CoursesService {
      * @return true if post is successfully added
      */
     async addConversationMessage(course, discussion, message) {
-
         try {
             await database.ref('/courses/' + course + '/discussions/')
                 .child(discussion).child('posts').push(
@@ -185,16 +164,15 @@ class CoursesService {
                 );
             await database.ref('/conversations/')
                 .child(discussion).update({
-                    lastmessagedate: message.date, lastmessageusername: message.user_name});
+                    lastmessagedate: message.date,
+                    lastmessageusername: message.user_name,
+                    });
         } catch (err) {
             console.error(err);
             return false;
         }
-
         return true;
     }
-
-
 
     /**
      *
@@ -205,20 +183,17 @@ class CoursesService {
      */
     async addCourseModule(course, module_obj) {
         try {
-            var courses = await database.ref('/courses').orderByKey().equalTo(course).once('value');
+            let courses = await database.ref('/courses').orderByKey().equalTo(course).once('value');
             if(courses.numChildren() != 1) {
                 throw false;
             }
-
             courses.child(course).child('modules').ref.push({
                 name: module_obj.name
             });
-
         } catch (err) {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
@@ -234,9 +209,9 @@ class CoursesService {
     async addModuleQuiz(course_key, module_key, content) {
 
         try {
-            var courses = await database.ref('/courses/' +  course_key).once('value');
+            let courses = await database.ref('/courses/' +  course_key).once('value');
             if(courses.hasChildren) {
-                var items = courses.child('modules').child(module_key).child('content').ref.push({
+                let items = courses.child('modules').child(module_key).child('content').ref.push({
                     title: content.title,
                     time: content.time,
                     dueDate: content.dueDate,
@@ -246,9 +221,7 @@ class CoursesService {
                     startTime: "null",
                     score: 0,
                 });
-
                 let total = 0;
-
                 content.items.forEach( (item) => {
                     total += item.value;
                     items.child('items').ref.push({
@@ -259,10 +232,7 @@ class CoursesService {
                         response: '-1',
                     });
                 });
-
-                items.update({outOf: total});
-
-
+                await items.update({outOf: total});
             } else {
                 throw false;
             }
@@ -270,7 +240,6 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
@@ -284,7 +253,7 @@ class CoursesService {
      */
     async addModuleUrl(course_key, module_key, content) {
         try {
-            var courses = await database.ref('/courses').orderByKey().equalTo(course_key).once('value');
+            let courses = await database.ref('/courses').orderByKey().equalTo(course_key).once('value');
             if(courses.hasChildren) {
                 courses.child(course_key).child('modules').child(module_key).child('content').ref.push({
                     title: content.title,
@@ -297,10 +266,8 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
     }
-
 
     /**
      *
@@ -312,7 +279,7 @@ class CoursesService {
      */
     async addModuleLink(course_key, module_key, content) {
         try {
-            var courses = await database.ref('/courses').orderByKey().equalTo(course_key).once('value');
+            let courses = await database.ref('/courses').orderByKey().equalTo(course_key).once('value');
             if(courses.hasChildren) {
                 courses.child(course_key).child('modules').child(module_key).child('content').ref.push({
                     title: content.title,
@@ -325,14 +292,12 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
     async addModuleContent(course_key, module_key, content) {
-
         try {
-            var courses = await database.ref('/courses').orderByKey().equalTo(course_key).once('value');
+            let courses = await database.ref('/courses').orderByKey().equalTo(course_key).once('value');
             if(courses.hasChildren) {
                 courses.child(course_key).child('modules').child(module_key).child('content').ref.push({
                     title: content.title,
@@ -348,7 +313,6 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
@@ -385,7 +349,6 @@ class CoursesService {
         let assessments = [];
         try {
             let courseModules = await database.ref('/courses/' + course_id + '/modules').once('value');
-
             courseModules.forEach( (mod) => {
                 mod.child("content").forEach( (cont) => {
                     if(cont.hasChild('outOf')) {
@@ -400,46 +363,10 @@ class CoursesService {
                     }
                 })
             });
-
-
         } catch(err) {
             console.error(err);
         }
-
         return assessments;
-    }
-
-    /**
-     * @return {string[]} categories
-     */
-    async getAllCategories() {
-        let payload = [];
-
-        let categoriesRef = await database.ref('/categories').orderByValue();
-        categoriesRef.forEach( (category) => {
-            payload.push({
-                name: category.val(),
-                id: category.key,
-            })
-        })
-
-        return payload;
-    }
-
-    /** Debugging, loads all the data in a course
-     *
-     * @param {*} key
-     */
-    async getCourse(key) {
-        let myCourse;
-        let courses = await database.ref('/courses').orderByKey().equalTo(key).once('value');
-        courses.forEach( (member) => {
-            var course = member.toJSON();
-            myCourse = course;
-            myCourse.key = member.key;
-        });
-
-        return myCourse;
     }
 
     /**
@@ -449,12 +376,10 @@ class CoursesService {
      * @return {id: string, name: string, description: string, instructor: string, size: number, MAX_SIZE: number} course_info
      */
     async getCourseInfo(key) {
-
         let myCourse = {};
-
         let courses = await database.ref('/courses').orderByKey().equalTo(key).once('value');
         courses.forEach( (member) => {
-            var course = member.toJSON();
+            let course = member.toJSON();
             myCourse = {
                 id: member.key,
                 name: course.name,
@@ -465,7 +390,6 @@ class CoursesService {
                 endEnrollDate: course.endEnrollDate,
             };
         });
-
         return myCourse;
     }
 
@@ -477,24 +401,16 @@ class CoursesService {
      *           resources: {id: string, title: string, url: string, link: string, isTime}[]}[]
      */
     async getCourseModules(courses_id) {
-
         let payload = {
             modules: []
         };
-
         let tempModule;
-
         try {
-
-            var courseModules = await database.ref('/courses/' + courses_id + '/modules').once('value');
-
+            let courseModules = await database.ref('/courses/' + courses_id + '/modules').once('value');
             courseModules.forEach( (mod) => {
-
                 tempModule = {id:'', name: '', resources: []};
-
                 tempModule.name = mod.child('name').val();
                 tempModule.id = mod.key;
-
                 mod.child('content').forEach( (item) => {
                     tempModule.resources.push({
                     id: item.key,
@@ -507,38 +423,12 @@ class CoursesService {
                     page: item.child('page').val(),
                     });
                 });
-
                    payload.modules.push(tempModule);
             });
         } catch (err) {
                console.error(err);
         }
-
            return payload.modules;
-    }
-
-
-    /**
-     *
-     *
-     * @return {{id: string, name: string, description: string, instructor: string}[]} courses_info
-     */
-    async getCoursesInfo() {
-
-        let payload = [];
-
-        let courses = await database.ref('/courses').orderByKey().equalTo(key).once('value');
-
-        courses.forEach( (member) => {
-            var course = member.toJSON();
-            payload.push({
-                id: member.key,
-                name: course.name,
-                img: course.img,
-                description: course.description,
-                instructor: course.instructor,
-            });
-        });
     }
 
     /**
@@ -549,21 +439,17 @@ class CoursesService {
      * @return {title: string, description: string, isClosed: boolean} discussion_info
      */
     async getDiscussionInfo(course, discussion_id) {
-
         try {
-
-            var discussion = await database.ref('/courses/' + course + '/discussions/' + discussion_id).once('value');
+            let discussion = await database.ref('/courses/' + course + '/discussions/' + discussion_id).once('value');
             return {
                 title: discussion.child("title").val(),
                 description: discussion.child("description").val(),
                 isClosed: discussion.child("isClosed").val(),
                 endDate: discussion.child("endDate").val()
             };
-
         }catch (err) {
             console.error(err);
         }
-
         return {title: "", description: "", isClosed: true};
     }
 
@@ -577,29 +463,22 @@ class CoursesService {
     async getDiscussionPosts(course, discussion) {
         let payload = {
             posts: []
-        }
-
+        };
         try {
-
             let posts = await database.ref('/courses/' + course + '/discussions/' + discussion + '/posts/')
                 .orderByChild('date').once('value');
-
             if(!posts.hasChildren()) {
                 return payload;
             }
-
             posts.forEach( (item) => {
-                var post = item.toJSON();
+                let post = item.toJSON();
                 post.id = item.key;
                 payload.posts.push(post);
             });
-
         }catch (err) {
             console.error(err);
         }
-
         return payload.posts;
-
     }
 
     /**
@@ -614,41 +493,32 @@ class CoursesService {
         let payload = {
             posts: [],
             total: 0,
-        }
-
+        };
         let loadedPosts = 0;
-
         try {
-
             payload.total = await this.getNumberOfPosts(course, discussion);
             if(payload.total < 1) throw 'not error, the discussion is empty';
-
             let posts = await database.ref('/courses/' + course + '/discussions/' + discussion + '/posts/')
             .orderByKey()
             .limitToLast(payload.total - start)
             .once('value');
-
             if(!posts.hasChildren()) {
                 return payload;
             }
-
             posts.forEach( (item) => {
                 if(loadedPosts < MAX_POSTS) {
-                    var post = item.toJSON();
+                    let post = item.toJSON();
                     post.id = item.key;
                     payload.posts.push(post);
                 } else {
-                    throw "Not error, just interrup for each with a throw";
+                    throw "Not error, just interrupt for each with a throw";
                 }
                 loadedPosts++;
             });
-
         }catch (err) {
             console.error(err);
         }
-
         return payload;
-
     }
 
     /**
@@ -658,16 +528,12 @@ class CoursesService {
      * @return {{title: string, id: string}[]} discussions
      */
     async getDiscussions(course_key, isPublic) {
-
         let payload = {
             discussions: []
         };
-
         try {
-
             let discussions = await database.ref('/courses/' + course_key + '/discussions')
             .once('value');
-
             discussions.forEach( (discussion) => {
                 if(discussion.child('public').val() === isPublic) {
                     payload.discussions.push({
@@ -677,13 +543,12 @@ class CoursesService {
                     });
                 }
             });
-
         } catch (err) {
             console.error(err);
         }
-
         return payload.discussions;
     }
+
     /**
      *
      * @param {string} course_key , course key in the database
@@ -691,16 +556,12 @@ class CoursesService {
      * @return {{title: string, id: string}[]} discussions
      */
     async getAnnouncements(course_key) {
-
         let payload = {
             announcements: []
         };
-
         try {
-
             let announcements = await database.ref('/courses/' + course_key + '/announcements')
                 .once('value');
-
             announcements.forEach( (announcement) => {
                 payload.announcements.push({
                     id: announcement.key,
@@ -710,22 +571,17 @@ class CoursesService {
                     description: announcement.child('description').val()
                 });
             });
-
         } catch (err) {
             console.error(err);
         }
-
         return payload.announcements;
     }
 
     async getConversations(user, isAdmin) {
-
         let payload = {
             discussions: []
         };
         try {
-
-
             let courses = [];
             let user_id = '';
             if(!isAdmin) {
@@ -740,30 +596,21 @@ class CoursesService {
                 let myDiscussions = [];
                 let discussions = await this.getDiscussions(course.id, false);
                 for await (let discussion of discussions) {
-                    // let sender = await database.ref('/conversations/').child(discussion.id).once('value');
-                    // console.log('SENDER', sender.child('creator').val());
-                    // console.log('USER_ID', user_id);
                     let conversation = await database.ref('/conversations/').child(discussion.id).once('value');
-                    // if (conversation.child('creator').key === user_id);
                     if (conversation.child('recipients').hasChild(user_id) || conversation.child('creator').val() === user_id) {
                         discussion.lastmessageusername = conversation.child('lastmessageusername').val();
                         discussion.lastmessagedate = conversation.child('lastmessagedate').val();
                         discussion.course_name = conversation.child('course_name').val();
                         myDiscussions.push(discussion);
-                        // console.log('#### MY DISCUSSION' + myDiscussions);
                     }
-
                 }
-                payload.discussions = payload.discussions.concat(myDiscussions)
-                ;
+                payload.discussions = payload.discussions.concat(myDiscussions);
             }
-            // console.log(payload);
-
         } catch (err) {
             console.error(err);
         }
         console.log('Payload ' + JSON.stringify(payload.discussions));
-        console.log('DONE #############################');
+        console.log('####################### DONE DISCUSSION POST #############################');
         return payload.discussions;
     }
 
@@ -781,10 +628,8 @@ class CoursesService {
         } catch (err) {
             console.error(err);
         }
-
         return 0;
     }
-
 
     /**
      *
@@ -793,21 +638,15 @@ class CoursesService {
      * @return {{id: string, name: string}[]} courses
      */
     async getMyCourses(user) {
-
-        console.log('In getMyCourses backend', user);
-
+        console.log('########### getMyCourses(user) LOGGING user:   ', user);
         let payload = {
             courses: []
         };
-
         try {
             let student = await database.ref('/students/' + user + '/enrolled').once('value');
-
-
             student.forEach( (item) => {
                 payload.courses.push({id: item.child('id').toJSON()});
             })
-
             let courses = await database.ref('/courses').once('value');
             for(var i =0; i < payload.courses.length; i++){
                 payload.courses[i].name = (courses.child(payload.courses[i].id).child('name').val());
@@ -815,22 +654,17 @@ class CoursesService {
         } catch (err) {
             console.error(err);
         }
-
         return payload.courses;
     }
 
     async getPage(course_id, module_id, page_id){
-
         let payload = {};
         try {
-
             let page = await database.ref('/courses/' + course_id + '/modules/' + module_id + '/content/' + page_id).once('value');
             return page.toJSON();
-
         } catch(err) {
             console.error(err);
         }
-
         return payload;
     }
 
@@ -842,17 +676,12 @@ class CoursesService {
      * @return {{{id: string, title: string, dueDate: string, outOf: number, doneOn: string, score: number}[]}} records
      */
     async getStudentGrades(course_id, student_id) {
-
         let assessments = await this.getAssessmentsList(course_id);
-
         let records = [];
-
         if(assessments.length < 1) return assessments;
-
         try {
-
             for(let i = 0; i < assessments.length; i++) {
-                var rec = await this.getStudentRecord(student_id, course_id, assessments[i].id);
+                let rec = await this.getStudentRecord(student_id, course_id, assessments[i].id);
                 records.push({
                     id: assessments[i].id,
                     title: assessments[i].title,
@@ -863,13 +692,10 @@ class CoursesService {
                     startTime: rec.startTime,
                 });
             }
-
         } catch(err) {
             console.error(err);
         }
-
         return records;
-
     }
 
     /**
@@ -893,13 +719,9 @@ class CoursesService {
             items: []
         };
         try {
-
             let records = await database.ref('/students/' + student_id + '/enrolled/' + course_id)
             .once('value');
-
-            var record = records.child('records').child(assessment_id).toJSON();
-
-
+            let record = records.child('records').child(assessment_id).toJSON();
             if(record != null) {
                 payload = {
                     title: record.title,
@@ -912,27 +734,20 @@ class CoursesService {
                     items: record.items
                 }
             }
-
         } catch(err) {
             console.error(err);
         }
-
-        //console.log(payload);
         return payload;
     }
 
-
     async removeModule(course, moduleId) {
-
         try {
             await database.ref('/courses/' + course + '/modules/' + moduleId).remove();
         } catch(err) {
             return false;
         }
-
         return true;
     }
-
     async getQuiz(course, module_key, quiz) {
         let payload = {attempted: 0,
             attempts: 'unlimited',
@@ -943,13 +758,11 @@ class CoursesService {
             startTime: 'null',
             time: -1,
             title: 'null',};
-
-
         try {
-
-            let quizes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
-            var record = await quizes.toJSON();
-            payload = await {
+            let quizzes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz)
+                .once('value');
+            let record = await quizzes.toJSON();
+            payload = {
                 attempted: record.attempted || 0,
                 attempts: record.attempts || 'unlimited',
                 dueDate: record.dueDate,
@@ -960,30 +773,23 @@ class CoursesService {
                 time: record.time || -1,
                 title: record.title || null,
             };
-
-            quizes = await quizes.ref.child('items').once('value');
-            quizes.forEach( (item) => {
+            quizzes = await quizzes.ref.child('items').once('value');
+            quizzes.forEach( (item) => {
                 record = item.toJSON();
-                var _item = {
+                let _item = {
                     options: Object.keys(record.options).map( function(key) {
                         return record.options[key];
                     }),
                     question: record.question,
                     response: record.response,
                     value: record.value,
-                }
-
-
-
+                };
                 payload.items.push(_item);
             });
-
         } catch (err) {
             console.error(err);
         }
-
         return payload;
-
     }
 
     async getQuizInfo(course, module_key, quiz) {
@@ -996,15 +802,9 @@ class CoursesService {
             startTime: 'null',
             time: -1,
             title: 'null',};
-
-
             try {
-
-                let quizes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
-                var record = await quizes.toJSON();
-
-                //console.log(record);
-
+                let quizzes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
+                let record = await quizzes.toJSON();
                 payload = {
                     attempted: record.attempted || 0,
                     attempts: record.attempts || -1,
@@ -1016,18 +816,15 @@ class CoursesService {
                     time: record.time || -1,
                     title: record.title || null,
                 };
-
             } catch (err) {
                 console.error(err);
             }
-
-
             return payload;
     }
 
-
     async getQuizFull(course, module_key, quiz) {
-        let payload = {attempted: 0,
+        let payload = {
+            attempted: 0,
             attempts: 'unlimited',
             dueDate: 'null',
             items: [],
@@ -1036,11 +833,10 @@ class CoursesService {
             startTime: 'null',
             time: -1,
             title: 'null',};
-
         try {
-
-            let quizes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz).once('value');
-            var record = await quizes.toJSON();
+            let quizzes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz)
+                .once('value');
+            let record = await quizzes.toJSON();
             payload = {
                 attempted: record.attempted,
                 attempts: record.attempts || -1,
@@ -1052,9 +848,8 @@ class CoursesService {
                 time: record.time || -1,
                 title: record.title || null,
             };
-
-            quizes = await quizes.ref.child('items').once('value');
-            quizes.forEach( (item) => {
+            quizzes = await quizzes.ref.child('items').once('value');
+            quizzes.forEach( (item) => {
                 record = item.toJSON();
                 payload.items.push({
                     answer: record.answer,
@@ -1064,17 +859,11 @@ class CoursesService {
                     value: record.value || null,
                 });
             });
-
-
-
         } catch (err) {
             console.error(err);
         }
-
         return payload;
-
     }
-
 
     async removeContent(course, module_id, content) {
         try {
@@ -1083,10 +872,8 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
     }
-
 
     /**
      * @param {string} course_id , course key in the database
@@ -1101,7 +888,6 @@ class CoursesService {
     }
 
     async updateCourse(course) {
-
         try {
             await database.ref('/courses/' + course.id).update({
                 name: course.name,
@@ -1118,12 +904,9 @@ class CoursesService {
 
     async getModule(course, module_id) {
         let payload = {id: '', title: '', resources: []};
-
         try {
-
             let current_module = await database.ref('/courses').child(course)
             .child('modules').child(module_id).once('value');
-
             payload.title = current_module.child('name').val();
             payload.id = current_module.key;
 
@@ -1139,34 +922,26 @@ class CoursesService {
                     page: item.child('page').val(),
                 });
             });
-
         } catch (err) {
             console.error(err);
         }
-
         return payload;
-
     }
-
 
     async updateDiscussion(course, discussion) {
         try {
-
             await database.ref('/courses/' + course + '/discussions/' + discussion.id).update({
                 description: discussion.description,
                 endDate: discussion.endDate,
                 isClosed: discussion.isClosed,
                 title: discussion.title,
             });
-
         } catch(err) {
             console.error(err);
             return false;
         }
-
         return true;
     }
-
 
     async removeDiscussion(course, discussion) {
         try {
@@ -1175,7 +950,6 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
@@ -1192,32 +966,24 @@ class CoursesService {
                 id: course.key,
                 instructor_name: course.instructor_name
             })
-        })
-
+        });
         return payload;
     }
 
     async signUpFor(user, course) {
         try {
-
             if( await this.studentHasCourse(user, course)) return false;
-
             let courseInfo = await this.getCourseInfo(course);
-
             if(courseInfo.size >= courseInfo.MAX_SIZE) {
                 return await this.addToWaitingList(user, course);
             }
-
             await database.ref('/courses/' + course + '/registered').child(user).set({student_id: user});
-
             let increment = await database.ref('/courses/' + course).once('value');
-            increment.ref.update({size: (increment.child('size').val() + 1) });
-
+            await increment.ref.update({size: (increment.child('size').val() + 1)});
         } catch (err) {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
@@ -1228,7 +994,6 @@ class CoursesService {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
@@ -1237,18 +1002,15 @@ class CoursesService {
         let ids = [];
         try {
             let registered = await database.ref('/courses/' + course + '/registered').once('value');
-
             registered.forEach((item) => {
                 ids.push(item.child('student_id').val());
             });
-
-            var index;
-            for(index = 0; index < ids.length; index++) {
-                var temp = await userService.getStudentDetail(ids[index]);
+            let index;
+            for (index = 0; index < ids.length; index++) {
+                let temp = await userService.getStudentDetail(ids[index]);
                 temp.id = ids[index];
                 payload.push(temp);
             }
-
         } catch (err) {
             console.error(err);
         }
@@ -1260,18 +1022,15 @@ class CoursesService {
         let ids = [];
         try {
             let registered = await database.ref('/courses/' + course + '/students').once('value');
-
             registered.forEach((item) => {
                 ids.push(item.child('id').val());
             });
-
-            var index;
-            for(index = 0; index < ids.length; index++) {
-                var temp = await userService.getStudentDetail(ids[index]);
+            let index;
+            for (index = 0; index < ids.length; index++) {
+                let temp = await userService.getStudentDetail(ids[index]);
                 temp.id = ids[index];
                 payload.push(temp);
             }
-
         } catch (err) {
             console.error(err);
         }
@@ -1280,130 +1039,100 @@ class CoursesService {
 
     async waitingListSize(course) {
         let size = 0;
-
         try {
-            var waitigList = await database.ref('/courses/' + course + '/waiting-list').once('value');
-            size = waitigList.numChildren();
+            let waitingList = await database.ref('/courses/' + course + '/waiting-list').once('value');
+            size = waitingList.numChildren();
         } catch(err) {
             console.error(err);
         }
-
         return size;
     }
 
     async removeRegistree(student, course) {
         try {
-
             let studentRef = await database.ref('/courses/' + course + '/registered/' + student).once('value');
             if(studentRef.exists()) {
-
-                studentRef.ref.remove();
-
-                let decriment = await database.ref('/courses/' + course).once('value');
-                decriment.ref.update({size: (decriment.child('size').val() - 1) });
+                await studentRef.ref.remove();
+                let decrement = await database.ref('/courses/' + course).once('value');
+                await decrement.ref.update({size: (decrement.child('size').val() - 1)});
             } else {
                 return false;
             }
-
             await this.moveFromWaitToRegister(course);
-
         } catch(err){
             return false;
         }
-
         return true;
     }
 
     async confirmEnrollment(student, course) {
-
         try {
             if(await userService.enrollIn(student, course)) {
                 let studentRef = await database.ref('/courses/' + course + '/registered/' + student).once('value');
                 if(studentRef.exists()) {
-                    studentRef.ref.remove();
+                    await studentRef.ref.remove();
                 } else {
                     return false;
                 }
             } else {
                 return false;
             }
-
             await this.moveFromWaitToRegister(course);
-
         } catch (err) {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
     async moveFromWaitToRegister(course) {
-
         if( await this.waitingListSize(course) < 1) return false;
-
         try {
-
-            let waitlistRef = await database.ref('/courses/' + course + '/waiting-list').limitToFirst(1).once('value');
-
-            waitlistRef.forEach( (student) => {
+            let waitListRef = await database.ref('/courses/' + course + '/waiting-list').limitToFirst(1).once('value');
+            waitListRef.forEach( (student) => {
                 database.ref('/courses/' + course + '/registered').child(student.key).set({student_id: student.key});
                 student.ref.remove();
             });
-
             let increment = await database.ref('/courses/' + course).once('value');
-            increment.ref.update({size: (increment.child('size').val() + 1) });
-
+            await increment.ref.update({size: (increment.child('size').val() + 1) });
         } catch (err) {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
     async getCourseStudent(course) {
         let payload = [];
         let list = [];
-
         let students = await database.ref('/courses/' + course + '/students').once('value');
-
         students.forEach( (item) => {
             list.push(item.key);
-        })
-
-        var student;
+        });
+        let student;
         for(let i = 0; i < list.length; i++) {
-
             student = await userService.getStudentDetail(list[i]);
-
             payload.push({
                 id: student.id,
                 fname: student.fname,
                 lname: student.lname
             });
         }
-
         return payload;
     }
 
-
     async setQuizStartTime(student, course, assessment) {
         try {
-
             await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assessment)
             .update({
                 startTime: new Date(),
             });
-
         } catch (err) {
             console.error(err);
             return false;
         }
-
         return true;
     }
-
 
     async submitQuizForGrade(student, course, module_id, assesment, responses) {
         let quiz = await this.getQuizFull(course, module_id, assesment);
@@ -1417,23 +1146,19 @@ class CoursesService {
             items: responses,
             attempted: oldRecord.attempted + 1,
         };
-
         for(let i = 0; i < quiz.items.length; i++) {
             if(quiz.items[i].answer == record.items[i].response) record.score += quiz.items[i].value;
         }
-
         try {
             await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assesment)
             .update(record);
         } catch(err) {
             console.error(err);
         }
-
         return true;
     }
 
     async saveResponses(student, course, assesment, responses) {
-
         try {
             await database.ref('/students/' + student + '/enrolled/' + course + '/records/' + assesment)
             .update({items: responses});
@@ -1445,16 +1170,14 @@ class CoursesService {
     }
 
     async getCoursesPageByCategory(category, sortby, start) {
-
         sortby = sortby == 'name' ? 'title' : sortby;
         let whole_category = [];
         let page = [];
         let counter = 0;
-
         try {
             let ref = await database.ref('/courses').orderByChild('category').equalTo(category).once('value');
             ref.forEach( (member) => {
-                var course = member.toJSON();
+                let course = member.toJSON();
                 whole_category.push({
                     id: member.key,
                     title: course.name,
@@ -1466,44 +1189,35 @@ class CoursesService {
                     category: course.category,
                 });
             });
-
             whole_category.sort((x, y) => ((x[sortby] === y[sortby]) ? 0 : ((x[sortby] > y[sortby]) ? 1 : -1)));
-
-            let index = 0;
+            let index;
             for(index = start;  (index < 10 && index < whole_category.length); index++) {
                 page.push(whole_category[index]);
                 counter++;
             }
-
             for(let i = 0; i < page.length; i++) {
                 page[i].instructor = (await userService.getInstructor(page[i].instructor)).name;
             }
-
         } catch (err) {
             console.error(err);
         }
-
         return {
             courses: page,
             size: counter,
         };
     }
 
-    async getCoursesPage(sortby, start) {
-
+    async getCoursesPage(sortBy, start) {
         let page = [];
         let counter = 0;
         let size = 0;
-
         try {
             let coursesRef = await database.ref('/courses').once('value');
             size = coursesRef.numChildren();
-
-            coursesRef =  await database.ref('/courses').orderByChild(sortby).limitToLast(size - start).once('value');
-
+            coursesRef =  await database.ref('/courses').orderByChild(sortBy).limitToLast(size - start).once('value');
             coursesRef.forEach( (member) => {
                 if(counter >= 10) throw 'payload full';
-                var course = member.toJSON();
+                let course = member.toJSON();
                 page.push({
                     id: member.key,
                     title: course.name,
@@ -1516,15 +1230,12 @@ class CoursesService {
                 });
                 counter++;
             });
-
         } catch(err) {
             console.error(err);
         }
-
         for(let i = 0; i < page.length; i++) {
             page[i].instructor = (await userService.getInstructor(page[i].instructor)).name;
         }
-
         return {
             courses: page,
             size: size,
@@ -1564,59 +1275,17 @@ class CoursesService {
         return payload;
     }
 
-
-    // async getAdminCourses(user) {
-    //
-    //     let payload = [];
-    //
-    //     try {
-    //
-    //         let courses;
-    //
-    //         console.log(user);
-    //
-    //         if(user.auth < 0) {
-    //
-    //             courses = await database.ref('/courses')
-    //             .once('value');
-    //             console.log('admin');
-    //
-    //         } else {
-    //
-    //             console.log('instructor');
-    //             courses = await database.ref('/courses')
-    //             .orderByChild('instructor_name')
-    //             .equalTo(user.id)
-    //             .once('value');
-    //         }
-    //
-    //         courses.forEach( (member) => {
-    //             payload.push({
-    //                 id: member.key,
-    //                 name: member.child('name').val(),
-    //             });
-    //         });
-    //
-    //     } catch(err) {
-    //         console.error(err);
-    //     }
-    //
-    //     return payload;
-    // }
-
     async canRegister(student, course) {
         try {
             let ref = await database.ref('/students/' + student + '/enrolled').child(course).once('value');
             if(ref.exists()) return {stat: false, message: 'Already in class!'};
             ref = await database.ref('/courses/' + course).once('value');
-
             if(ref.child('/registered').hasChild(student)) return {stat: false, message: 'Already registered!'};
             if(ref.child('/waiting-list').hasChild(student)) return {stat: false, message: 'Already in waiting-list!'};
         } catch(err) {
             console.error(err);
             return {stat: false, message: 'Error!'};
         }
-
         return {stat: true, message: ''};
     }
 }

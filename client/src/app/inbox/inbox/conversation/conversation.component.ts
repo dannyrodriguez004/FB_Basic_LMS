@@ -63,9 +63,7 @@ export class ConversationComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
-
     this.loading = true;
-
     this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
       if (params.message) {
         this.id = params.message;
@@ -74,24 +72,20 @@ export class ConversationComponent implements OnInit, OnChanges {
         this.startFrom = Number(params.start);
       }
     }));
-
     // this.loadDiscussion();
     this.subscriptions.push(this.router.events.subscribe((e: any) => {
       if (e instanceof NavigationEnd) {
         this.loading = true;
-
         this.subscriptions.push(this.route.queryParams.subscribe( (params) => {
           if (params.message) {
             this.id = params.message.id;
           }
-
           if (params.start) {
             this.startFrom = Number(params.start);
           } else {
             this.startFrom = 0;
           }
         }));
-
         // this.loadDiscussion();
       }
     }));

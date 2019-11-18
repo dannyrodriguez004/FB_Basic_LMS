@@ -7,16 +7,13 @@ const http = require('http');
 const fileStream = require('fs');
 
 const portNorm = val => {
-    var port = parseInt(val, 10);
-
+    let port = parseInt(val, 10);
     if(isNaN(port)) {
         return val;
     }
-
     if (port >= 0) {
         return port;
     }
-
     return false;
 };
 
@@ -25,7 +22,6 @@ const onError = error => {
 	if (error.syscall !== 'listen') {
 		throw error;
     }
-    
 	const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + port;
 	switch (error.code) {
 		case 'EACCES':

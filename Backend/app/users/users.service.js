@@ -2,7 +2,6 @@ const database = require('firebase-admin').database();
 const jwt = require('jsonwebtoken');
 const crypto = require('bcrypt');
 const coursesService = require('../courses/courses.service');
-//JIQc0dIMic9Cv5kk
 
 class UsersService {
     constructor() {}
@@ -19,7 +18,6 @@ class UsersService {
             .orderByChild('email')
             .equalTo(user.email)
             .once('value');
-
             if(!users.hasChildren()) {
                 const salt = await crypto.genSalt();
                 const hashedPass = await crypto.hash(user.password, salt);
@@ -40,9 +38,8 @@ class UsersService {
     }
 
     async addStudent(user) {
-
         try {
-            var users = await database.ref('/students').orderByKey().equalTo(user.key).once('value');
+            let user = await database.ref('/students').orderByKey().equalTo(user.key).once('value');
             //if(!users.hasChildren()) {
                 await database.ref('/students').child(user.key).update({
                     token: user.token,
@@ -60,6 +57,7 @@ class UsersService {
 
         return true;
     }
+
     /**
      * 
      * @param {key: string, name: string} user 
@@ -70,7 +68,7 @@ class UsersService {
         console.log('IN ADDSTUDENT USERSERVICE');
         console.log(user_info);
         try {
-            var users = await database.ref('/users').orderByKey().equalTo(user_info.body.userID).once('value');
+            let users = await database.ref('/users').orderByKey().equalTo(user_info.body.userID).once('value');
             if(!users || !users.hasChildren()) {
                 await database.ref('/users').child(user_info.body.userID).set({
                     first_name: user_info.body.first_name.trim(),
@@ -87,7 +85,6 @@ class UsersService {
             console.error(err);
             return false;
         }
-
         return true;
     }
 
@@ -99,47 +96,33 @@ class UsersService {
      * @return true if successfully added student to course
      */
     async enrollIn(student_key, course_key) {
-
-
         console.log(coursesService);
-
-        var student = await database.ref('/courses/' + course_key + '/students').once('value');
-         
-
+        let student = await database.ref('/courses/' + course_key + '/students').once('value');
         //var hasCourse = await coursesService.studentHasCourse(student_key, course_key);
         if(student.hasChild(student_key)) return false;
-
         try {
-
             let users = await database.ref('/students').orderByKey().equalTo(student_key).once('value');
-            if(users.numChildren() != 1) {
+            if(users.numChildren() !== 1) {
                 throw false;
             }
-            users.child(student_key).child('enrolled').child(course_key).ref.set({id: course_key});
-
+            await users.child(student_key).child('enrolled').child(course_key).ref.set({id: course_key});
             await database.ref('/courses/' + course_key + '/students').child(student_key).ref.set({id: student_key});
         } catch (err) {
             console.error(err);
             return err;
         }
-
         return true;
     }
 
-
     async getAllInstructors() {
-
         let payload = [];
-
         let instructorsRef =  await database.ref('/instructors').orderByChild('l_name').once('value');
-
         instructorsRef.forEach((instructor) => {
             payload.push({
                 name: instructor.child('l_name').val() + ', ' + instructor.child('f_name').val(),
                 id: instructor.key,
             });
-        })
-
+        });
         return payload;
     }
 
@@ -163,31 +146,14 @@ class UsersService {
                     sender: messageData.sender,
                     sent: messageData.sent,
                     subject: messageData.subject
-                }
+                };
                 resp.push(messageInfo);
             }
-
         } catch (err) {
             console.log(err);
         }
         console.log(resp);
         return resp;
-    }
-
-
-    async getAllCategories() {
-
-        let payload = [];
-
-        let categoriesRef =  await database.ref('/categories').orderByKey().once('value');
-
-        categoriesRef.forEach((category) => {
-            payload.push({
-                name: category.key
-            });
-        })
-
-        return payload;
     }
 
     /**
@@ -197,24 +163,19 @@ class UsersService {
      * @return {concatEmail: string, name: string} isntructor object
      */
     async getInstructor(id) {
-        var resp = {
+        let resp = {
             contactEmail:'',
             name: '',
         };
-
         try {
-
-            var instructor = await database.ref('/instructors/' + id).once('value');
+            let instructor = await database.ref('/instructors/' + id).once('value');
             resp.contactEmail = instructor.child('contactEmail').val();
             resp.name = instructor.child('f_name').val() + ' ' + instructor.child('l_name').val();
-            
         } catch (err) {
             console.log(err);
         }
-
         return resp;
     }
-
 
     /**
      * 
@@ -229,15 +190,12 @@ class UsersService {
             email: user.email,
             contactEmail: user.concatEmail,
             auth: user.auth
-        }
-
-        const token = await jwt.sign(userInfo, '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx',
-        {
-            expiresIn: '7d',
-            algorithm: 'HS512'
-        });
-
-        return token;
+        };
+        return await jwt.sign(userInfo, '85tHm4SdMr7QmT2Xsi20Kcx3XUI3OGYf8siO5JMiThZICLMCtge01L3zDG0qBXx',
+            {
+                expiresIn: '7d',
+                algorithm: 'HS512'
+            });
     }
 
     async getStudentDetail(student_id) {
@@ -253,29 +211,24 @@ class UsersService {
             console.error(err);
             return payload;
         }
-
         return payload;
     }
 
     async isAvailable(username) {
         try {
-
             let reference = await database.ref('/instructors').orderByChild('email').equalTo(username).once('value');
             if(!reference.hasChildren()) return true;
         } catch(err) {
             console.error(err);
         }
-
         return false;
     }
 
     async getUserInfo(key) {
-
         let userInfo = {};
-
         let user = await database.ref('/users').orderByKey().equalTo(key).once('value');
         user.forEach( (member) => {
-            var user = member.toJSON();
+            let user = member.toJSON();
             userInfo = {
                 id: member.key,
                 first_name: user.first_name,
@@ -285,12 +238,10 @@ class UsersService {
                 country: user.country
             };
         });
-
         return userInfo;
     }
 
         async studentInDatabase(userID) {
-
         try {
             console.log('STUDENT IN DATABASE: USERID SENT IN FOR CHECKING');
             console.log(userID);

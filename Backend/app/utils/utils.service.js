@@ -1,16 +1,13 @@
 const database = require('firebase-admin').database();
 
 class UtilsService {
-
-    constructor() {
-    }
+    constructor() {}
 
     async helloWorld() {
         return "Hello World!";
     }
 
     async AdminLog(user, context, description) {
-        
         try {
             const NOW = new Date();
             const NowString = NOW.toDateString();
@@ -22,24 +19,18 @@ class UtilsService {
                 context: context,
                 description: description,
             });
-
         } catch (err) {
             console.error(err);
         }
     }
 
     async getLogs() {
-
         let payload = [];
-
         try {
-
             let logsRef = await database.ref('/logs/admin/').once('value');
-
             logsRef.forEach(date => {
                 let Day = {date: date.key, logs: []};
                 date.forEach( log => {
-
                     Day.logs.push({
                         id: log.key,
                         user: log.child('user').val(),
@@ -50,15 +41,11 @@ class UtilsService {
                 });
                 payload.push(Day);
             });
-
         } catch(err) {
             console.error(err);
-            
         }
-
         return payload;
     }
-
 }
 
 module.exports = new UtilsService();
