@@ -321,4 +321,14 @@ export class CoursesService {
   removeCourse(courseId) {
     return this.http.post(`${environment.apiAddress}/courses/remove-course`, {"courseId" : courseId});
   }
+
+  getPredictions(text) {
+    const params = {params: new HttpParams().set('text', `${text}`)};
+    return this.http.get(`${environment.apiAddress}/courses/predict`, params)
+  }
+
+  getSearchPage(text, start) {
+    const params = {params: new HttpParams().set('text', `${text}`).set('start', `${start}`)};
+    return this.http.get(`${environment.apiAddress}/courses/search-page`, params)
+  }
 }

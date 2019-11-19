@@ -1498,6 +1498,8 @@ class CoursesService {
 
     async searchPrediction(text) {
 
+        console.log('start at:', text);
+        console.log('end at:', text + "\uf8ff");
         let payload = [];
 
         try {
@@ -1509,9 +1511,9 @@ class CoursesService {
             .once('value');
 
             searchRef.forEach(course => {
-                payload.push({
-                    name: course.child('name').val(),
-                });
+                payload.push(
+                    course.child('name').val(),
+                );
             });
 
         } catch (err) {
@@ -1538,6 +1540,7 @@ class CoursesService {
 
             searchRef.forEach(member => {
                 if(size >= start) {
+                    var course = member.toJSON();
                     page.push({
                         id: member.key,
                         title: course.name,
@@ -1557,6 +1560,8 @@ class CoursesService {
                 }
             });
 
+            size = searchRef.numChildren();
+
         } catch(err) {
             console.error(err);
         }
@@ -1567,6 +1572,7 @@ class CoursesService {
 
         page[page.length - 1].instructor = (await userService.getInstructor(page[page.length - 1].instructor)).name;
 
+        console.log(page);
         return {
             courses: page,
             size: size,

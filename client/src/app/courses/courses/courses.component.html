@@ -14,10 +14,19 @@
     <form (keydown)="keyDownFunction($event)">
       <mat-form-field style="width: 75%; height: 50px;">
         <mat-label>Search</mat-label>
-        <input matInput type="text" [(ngModel)]="search" [ngModelOptions]="{standalone: true}" maxlength="100" required>
-        <button mat-button matSuffix mat-icon-button aria-label="Search" (click)="test()">
+        <input matInput type="text" [(ngModel)]="search" [matAutocomplete]="auto" [ngModelOptions]="{standalone: true}" maxlength="100">
+        <button mat-button matSuffix mat-icon-button aria-label="Search" (click)="doSearch()">
           <mat-icon>search</mat-icon>
         </button>
+        <mat-autocomplete #auto="matAutocomplete">
+          
+          <mat-option *ngFor="let text of predictions" [value]="text">
+              <span>{{text}}</span>
+          </mat-option>
+
+          <span><mat-spinner *ngIf="predicting" style="margin-left: auto; margin-top: 1rem; margin-right: auto;"></mat-spinner></span>
+
+        </mat-autocomplete>
       </mat-form-field>
     </form>
   </span>
