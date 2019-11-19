@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoursesService } from '../../services/courses.service';
 import { UserService } from '../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UserModel} from '../../models/usermodel.models';
 
 
 @Component({
@@ -12,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
 
   loading = true;
+  userInfo: UserModel;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,10 +26,11 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    if (!this.userServices.fbUser() && !this.userServices.getIsAdmin()) {
-        console.log('not authorized!');
-        this.router.navigateByUrl('/');
-      }
+    this.userInfo = this.userServices.fbUser();
+    // if (!this.userServices.fbUser() && !this.userServices.getIsAdmin()) {
+    //     console.log('not authorized!');
+    //     this.router.navigateByUrl('/');
+    //   }
     this.loading = false;
   }
 
