@@ -44,12 +44,13 @@ export class RegisterComponent implements OnInit {
       lname: this.registerForm.value.lname,
       phone: this.getCountries().find( (x) => x.name === this.registerForm.value.country).dial_code + this.registerForm.value.phone,
       country: this.registerForm.value.country,
-    }).subscribe( (resp) => {
-      if (resp) {
-        this.router.navigateByUrl('/');
-        this.loading = false;
-      }
     });
+    //   .subscribe( (resp) => {
+    //   if (resp) {
+    //     this.router.navigateByUrl('/');
+    //     this.loading = false;
+    //   }
+    // });
   }
 
   getCountries() {
