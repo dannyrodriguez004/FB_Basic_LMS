@@ -10,14 +10,16 @@
     </mat-menu>
   </span>
 
-  <span style="width: 75%;">
-    <mat-form-field style="width: 75%; padding: 5px;">
-      <mat-label>Search</mat-label>
-      <input matInput type="text" formControlName="title" maxlength="100" required>
-      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-        <mat-icon>search</mat-icon>
-      </button>
-    </mat-form-field>
+  <span style="width: 75%; padding-left: 1rem;">
+    <form (keydown)="keyDownFunction($event)">
+      <mat-form-field style="width: 75%; height: 50px;">
+        <mat-label>Search</mat-label>
+        <input matInput type="text" [(ngModel)]="search" [ngModelOptions]="{standalone: true}" maxlength="100" required>
+        <button mat-button matSuffix mat-icon-button aria-label="Search" (click)="test()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
   </span>
 
 </mat-toolbar>

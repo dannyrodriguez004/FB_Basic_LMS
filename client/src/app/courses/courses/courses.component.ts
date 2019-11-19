@@ -23,6 +23,7 @@ export class CoursesComponent implements OnInit {
   private size: number = 0;
   currentCategory: string = 'null';
   loading = false;
+  search = "";
 
 
   constructor(
@@ -202,6 +203,16 @@ export class CoursesComponent implements OnInit {
 
   userLoggedIn() {
     return this.userServices.fbLoggedIn();
+  }
+
+  test() {
+    console.log(this.search);
+  }
+
+  keyDownFunction(event) {
+    if(event.keyCode == 13) {
+      this.test();
+    }
   }
 
 }
