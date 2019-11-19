@@ -18,7 +18,9 @@ export class ProfileComponent implements OnInit {
     private userServices: UserService,
     private coursesServices: CoursesService,
     private router: Router
-  ) {}
+  ) {
+    this.userServices.resetUserModel();
+    }
 
   ngOnInit() {
     this.loading = true;

@@ -36,8 +36,8 @@ export class NavbarComponent implements OnInit, OnChanges {
   ) {
     const jwtToken = this.userServices.getToken();
     this.loggedIn = new BehaviorSubject<boolean>(!!jwtToken);
-    const jwtCookie = this.userServices.isTokenFresh('admin-session');
-    this.adminLoggedIn = new BehaviorSubject<boolean>(!!jwtCookie);
+    // const jwtCookie = this.userServices.isTokenFresh('admin-session');
+    // this.adminLoggedIn = new BehaviorSubject<boolean>(!!jwtCookie);
     this.userServices.resetUserModel();
   }
 
@@ -134,23 +134,22 @@ export class NavbarComponent implements OnInit, OnChanges {
    * Load courses, id and name, for the current user.
    */
   loadCourses() {
-    console.log(this.loggedIn.value);
-    console.log(this.adminLoggedIn.value);
-    if (this.loggedIn.value || this.adminLoggedIn.value) {
-      if (this.loggedIn.value) {
-        console.log('IN LOAD COURSES FOR STUDENT IN NAVBAR');
-        this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
-          this.myCourses = resp;
-        }));
+    // if (this.loggedIn.value || this.adminLoggedIn.value) {
+      if (this.loggedIn.value || this.isAdmin()) {
+        if (this.loggedIn.value) {
+          console.log('IN LOAD COURSES FOR STUDENT IN NAVBAR');
+          this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
+            this.myCourses = resp;
+          }));
+        }
       }
-    }
-    if (this.userServices.getIsAdmin()) {
-      console.log('IN LOAD COURSES FOR ADMIN IN NAVBAR');
-      this.adminLoggedIn.next(true);
-      this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
-        console.log(resp);
-        this.adminCourses = resp;
-    }));
+      if (this.isAdmin()) {
+        console.log('IN LOAD COURSES FOR ADMIN IN NAVBAR');
+        this.adminLoggedIn.next(true);
+        this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
+          console.log(resp);
+          this.adminCourses = resp;
+        }));
     }
   }
 

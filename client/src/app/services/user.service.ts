@@ -61,8 +61,9 @@ export class UserService {
 
   loadUser() {
     if (this.cookies.check('admin-session') && this.isTokenFresh(this.cookies.get('admin-session')) ||
-        this.cookies.check('fb-token') && this.isTokenFresh(this.cookies.get('fb-token')) ||
-        this.isLoggedFacebookLoggedIn()) {
+        this.cookies.check('fb-token') && this.isTokenFresh(this.cookies.get('fb-token'))) {
+      // ||
+        // this.isLoggedFacebookLoggedIn()) {
       this.isLoggedIn = true;
       return true;
     } else {
@@ -77,7 +78,6 @@ export class UserService {
         console.log('HERE!!!', response);
         this.isLoggedIn = true;
         this.userModel.id = response.authResponse.userID;
-
       } else {
         this.isLoggedIn = false;
       }
@@ -105,7 +105,6 @@ export class UserService {
       if (!decoded.exp) { throw false; }
       console.log(decoded);
       this.auth = decoded.auth;
-
       if (decoded.exp < Date.now().valueOf() / 1000) {
         throw false;
       } else {
@@ -115,9 +114,7 @@ export class UserService {
         this.userModel.first_name = name[0];
         this.userModel.last_name = name[1] || '';
         this.userModel.type = decoded.auth;
-
         console.log(this.userModel);
-
         return true;
       }
     } catch (err) {
