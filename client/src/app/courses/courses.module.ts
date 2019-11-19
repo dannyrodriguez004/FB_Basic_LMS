@@ -21,7 +21,8 @@ import {
   MatDividerModule,
   MatProgressBarModule,
   MatMenuModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatAutocompleteModule
 } from '@angular/material';
 
 import { CoursesRoutingModule } from './courses-routing.module';
@@ -125,8 +126,10 @@ import { NewAnnouncementComponent } from './course/announcements/new-announcemen
     MatDividerModule,
     MatProgressBarModule,
     MatMenuModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatAutocompleteModule
   ],
+  exports: [CourseDetailEditorComponent],
   entryComponents: [
     DiscussionEditorComponent,
     NewDiscussionComponent,

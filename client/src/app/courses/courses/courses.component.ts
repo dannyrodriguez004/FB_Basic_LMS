@@ -6,6 +6,7 @@ import {Subscription} from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { YesNoDialogComponent } from 'src/app/yes-no-dialog/yes-no-dialog.component';
 const COURSE_PER_PAGE = 10;
+const letters = /^[A-Za-z]*$/;
 
 @Component({
   selector: 'app-courses',
@@ -21,6 +22,11 @@ export class CoursesComponent implements OnInit {
   private size = 0;
   currentCategory = 'null';
   loading = false;
+  search = '';
+  predicting = false;
+  predictions: string[] = [];
+  searching = false;
+
 
   constructor(
     private userServices: UserService,
@@ -35,12 +41,25 @@ export class CoursesComponent implements OnInit {
     this.routing.queryParams.subscribe( params => {
       if (params.start) {
         this.startFrom = params.start;
+      } else {
+        this.startFrom = 0;
       }
       if (params.category) {
         this.currentCategory = params.category;
+      } else {
+        this.currentCategory = null;
       }
       if (params.sort) {
         this.sort = params.sort;
+      } else {
+        this.sort = 'name';
+      }
+      if (params.search) {
+        this.search = params.search;
+        this.searching = true;
+      } else {
+        this.search = null;
+        this.searching = false;
       }
     });
     this.fetchPage();
@@ -55,12 +74,19 @@ export class CoursesComponent implements OnInit {
           if (params.category) {
             this.currentCategory = params.category;
           } else {
-            this.currentCategory = 'null';
+            this.currentCategory = null;
           }
           if (params.sort) {
             this.sort = params.sort;
           } else {
             this.sort = 'name';
+          }
+          if (params.search) {
+            this.search = params.search;
+            this.searching = true;
+          } else {
+            this.search = null;
+            this.searching = false;
           }
         });
         this.fetchPage();
@@ -70,15 +96,24 @@ export class CoursesComponent implements OnInit {
 
   fetchPage() {
     this.loading = true;
-    if(this.currentCategory === 'null') {
-      this.coursesServices.getCoursesSortBy(this.sort, this.startFrom).subscribe( (resp: { courses: [], size: number}) => {
+    if (this.currentCategory != null && this.currentCategory !== 'null') {
+      console.log('browsing by category');
+      this.coursesServices.getCoursesCatergorySortBy(this.currentCategory, this.sort, this.startFrom)
+        .subscribe( (resp: { courses: [], size: number}) => {
+        this.size = resp.size;
+        this.courses = resp.courses;
+        this.loading = false;
+      });
+    } else if (this.search != null && this.search.length > 1) {
+      console.log('browsing by search');
+      this.coursesServices.getSearchPage(this.search, this.startFrom).subscribe((resp: { courses: [], size: number}) => {
         this.size = resp.size;
         this.courses = resp.courses;
         this.loading = false;
       });
     } else {
-      this.coursesServices.getCoursesCatergorySortBy(this.currentCategory, this.sort, this.startFrom)
-        .subscribe( (resp: { courses: [], size: number}) => {
+      console.log('browsing normal');
+      this.coursesServices.getCoursesSortBy(this.sort, this.startFrom).subscribe( (resp: { courses: [], size: number}) => {
         this.size = resp.size;
         this.courses = resp.courses;
         this.loading = false;
@@ -166,7 +201,7 @@ export class CoursesComponent implements OnInit {
   // navigates to the last page of discussion posts
   lastPage() {
     if (this.size > COURSE_PER_PAGE) {
-      this.startFrom = Math.trunc(this.size/ COURSE_PER_PAGE) * COURSE_PER_PAGE
+      this.startFrom = Math.trunc(this.size / COURSE_PER_PAGE) * COURSE_PER_PAGE;
     }
     console.log(this);
     this.setParams();
@@ -175,7 +210,8 @@ export class CoursesComponent implements OnInit {
   // sets the parameters for navigation and reloads the discussion
   setParams() {
     this.router.navigate(['/nav/courses'], { queryParams:
-        {start: this.startFrom, category: this.currentCategory, sort: this.sort}});
+        {start: this.startFrom, category: this.currentCategory,
+          sort: this.sort, search: this.search} });
     this.fetchPage();
   }
 
@@ -192,6 +228,42 @@ export class CoursesComponent implements OnInit {
 
   userLoggedIn() {
     return this.userServices.fbLoggedIn();
+  }
+
+  test() {
+    console.log(this.search);
+  }
+
+  doSearch() {
+    this.currentCategory = null;
+    this.startFrom = 0;
+    this.sort = 'name';
+    this.searching = true;
+
+    this.setParams();
+  }
+
+  keyDownFunction(event) {
+    if (event.keyCode === 13) {
+      this.test();
+      this.doSearch();
+
+    } else if ( String.fromCharCode(event.keyCode).match(letters) ) {
+      setTimeout(null, 100);
+      console.log(this.search);
+      this.coursesServices.getPredictions(this.search).subscribe((resp: string[]) => {
+        this.predictions = resp;
+        console.log(resp);
+      });
+
+    } else if (event.keyCode === 32 || event.keyCode === 8) {
+      console.log(this.search);
+      this.coursesServices.getPredictions(this.search).subscribe((resp: string[]) => {
+        this.predictions = resp;
+        console.log(resp);
+      });
+
+    }
   }
 }
 

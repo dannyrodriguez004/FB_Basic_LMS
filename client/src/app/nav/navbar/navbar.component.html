@@ -23,11 +23,12 @@
       </span>
 
       <span>
-            <button *ngIf="this.isAdmin() || loggedIn.value" [routerLink]="['inbox/']" mat-button><mat-icon>forum</mat-icon>Inbox</button>
+
+            <button [routerLink]="['/nav/courses/']" mat-button><mat-icon>chrome_reader_mode</mat-icon>Courses</button>
       </span>
 
-      <span>
-            <button [routerLink]="['/nav/courses/']" mat-button><mat-icon>list</mat-icon>Courses</button>
+    <span>
+            <button *ngIf="this.isAdmin() || loggedIn.value" [routerLink]="['inbox/']" mat-button><mat-icon>forum</mat-icon>Inbox</button>
       </span>
 
       <span>
@@ -63,7 +64,11 @@
                         Logs
                   </button>
 
-                  <button mat-menu-item *ngIf="!loggedIn.value" (click)="doLogin()">
+                  <button *ngIf="this.isAdmin()" [routerLink]="['/nav/dashboard/manager']" mat-menu-item>
+                        <mat-icon>build</mat-icon>Manager
+                  </button>
+
+                  <button mat-menu-item *ngIf="!loggedIn.value && !this.isAdmin()" (click)="doLogin()">
                      <mat-icon>person_add</mat-icon>Login with facebook
                   </button>
 

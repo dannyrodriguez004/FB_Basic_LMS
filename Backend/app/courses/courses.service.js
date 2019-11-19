@@ -1233,9 +1233,76 @@ class CoursesService {
         } catch(err) {
             console.error(err);
         }
-        for(let i = 0; i < page.length; i++) {
-            page[i].instructor = (await userService.getInstructor(page[i].instructor)).name;
+        for(let i = 0; i < page.length - 1; i++) {
+            page[i].instructor = (userService.getInstructor(page[i].instructor)).name;
         }
+        page[page.length - 1].instructor =
+            (await userService.getInstructor(page[page.length - 1].instructor)).name;
+        return {
+            courses: page,
+            size: size,
+        };
+    }
+
+    async searchPrediction(text) {
+        console.log('start at:', text);
+        console.log('end at:', text + "\uf8ff");
+        let payload = [];
+        try {
+            let searchRef = await database.ref('/courses')
+            .orderByChild('name')
+            .startAt(text)
+            .endAt(text + "\uf8ff")
+            .once('value');
+            searchRef.forEach(course => {
+                payload.push(
+                    course.child('name').val(),
+                );
+            });
+        } catch (err) {
+            console.error(err);
+        }
+        return payload;
+    }
+
+    async getSearchPage(text, start) {
+        let page = [];
+        let counter = 0;
+        let size = 0;
+        try {
+            let searchRef = await database.ref('/courses')
+            .orderByChild('name')
+            .startAt(text)
+            .endAt(text + "\uf8ff")
+            .once('value');
+            searchRef.forEach(member => {
+                if(size >= start) {
+                    let course = member.toJSON();
+                    page.push({
+                        id: member.key,
+                        title: course.name,
+                        description: course.description,
+                        instructor: course.instructor_id,
+                        size: course.size,
+                        MAX_SIZE: course.MAX_SIZE,
+                        endEnrollDate: course.endEnrollDate,
+                        category: course.category
+                    });
+                    counter++;
+                    if(counter >= 10) throw "page filled!";
+                } else {
+                    size++;
+                }
+            });
+            size = searchRef.numChildren();
+        } catch(err) {
+            console.error(err);
+        }
+        for(let i = 0; i < page.length - 1; i++) {
+            page[i].instructor = (userService.getInstructor(page[i].instructor)).name;
+        }
+        page[page.length - 1].instructor = (await userService.getInstructor(page[page.length - 1].instructor)).name;
+        console.log(page);
         return {
             courses: page,
             size: size,
@@ -1267,6 +1334,8 @@ class CoursesService {
                 payload.push({
                     id: member.key,
                     name: member.child('name').val(),
+                    instructor: member.child('instructor_id').val(),
+                    category: member.child('category').val(),
                 });
             });
         } catch(err) {
@@ -1287,6 +1356,18 @@ class CoursesService {
             return {stat: false, message: 'Error!'};
         }
         return {stat: true, message: ''};
+    }
+
+    async RemoveCourse(course) {
+        try {
+
+            await database.ref('/courses/' + course).remove();
+
+        } catch(err) {
+            console.log(err);
+            return false;
+        }
+        return true;
     }
 }
 

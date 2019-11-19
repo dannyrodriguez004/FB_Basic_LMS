@@ -309,5 +309,21 @@ module.exports = (passport) => {
         await Utils.AdminLog(req.user, {method: coursesServices.removeModule.name, params: [req.body.course, req.body.moduleId], result: resp}, "Removing Course Module.");
     });
 
+    router.post('/remove-course', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
+        const resp = await coursesServices.RemoveCourse(req.body.courseId);
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.RemoveCourse.name, params: [req.body.courseId], result: resp}, "Removing Course.");
+    })
+
+    router.get('/predict', async(req, res, next) => {
+        const resp = await coursesServices.searchPrediction(req.query.text);
+        res.json(resp);
+    });
+
+    router.get('/search-page', async(req, res, next) => {
+        const resp = await coursesServices.getSearchPage(req.query.text, req.query.start);
+        res.json(resp);
+    });
+
     return router;
 };

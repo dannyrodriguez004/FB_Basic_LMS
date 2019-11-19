@@ -1,3 +1,5 @@
+import { CoursesModule } from './../courses/courses.module';
+import { CourseDetailEditorComponent } from './../courses/course/info/course-detail-editor/course-detail-editor.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
@@ -24,7 +26,9 @@ import { ManageCoursesComponent } from './manage-courses/manage-courses.componen
     MatTableModule,
     MatProgressSpinnerModule,
     MatToolbarModule,
-    MatIconModule
-  ]
+    MatIconModule,
+    CoursesModule
+  ],
+  entryComponents: [CourseDetailEditorComponent]
 })
 export class DashboardModule { }

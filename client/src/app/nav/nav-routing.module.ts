@@ -14,8 +14,10 @@ const routes: Routes = [
         {path: 'add-course', loadChildren: () => import('./newcourse/newcourse.component')
             .then(mod => mod.NewcourseComponent), canActivate: [AuthGuard]},
         {path: 'security', loadChildren: () => import('../security/security.module').then(mod => mod.SecurityModule)},
-        {path: 'security/profile', loadChildren: () => import('../security/profile/profile.component').then(mod => mod.ProfileComponent)},
-        {path: 'inbox', loadChildren: () => import('../inbox/inbox.module').then(mod => mod.InboxModule)}
+        // tslint:disable-next-line:max-line-length
+        {path: 'security/profile', loadChildren: () => import('../security/profile/profile.component').then(mod => mod.ProfileComponent), canActivate: [AuthGuard]},
+        {path: 'inbox', loadChildren: () => import('../inbox/inbox.module').then(mod => mod.InboxModule), canActivate: [AuthGuard]}
+
       ]}
 ];
 
