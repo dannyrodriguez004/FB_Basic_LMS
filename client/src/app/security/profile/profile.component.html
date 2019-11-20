@@ -5,37 +5,37 @@
           border-bottom-color: black;">
       Profile</mat-toolbar-row>
   </mat-toolbar>
-  <mat-toolbar-row style="background-color: #3f51b5; color: #fafafa;
-          border-bottom-style: solid; border-bottom-width: 1px;
-          border-bottom-color: black;">
-    I'm a Student
-    <hr>
-  </mat-toolbar-row>
-  <div>
-  <app-profile-picture></app-profile-picture>
-  <app-details></app-details>
-  </div>
-</div>
-
-<!--  <div class="card-deck-container">-->
-<!--      <ng-container>-->
-<!--    <mat-card class="example-card">-->
-<!--    <mat-card-title> STUDENT INFO </mat-card-title>-->
-<!--    <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>-->
-<!--    <mat-card-content *ngIf="!loading">-->
-<!--      <p>-->
-<!--        <strong>First Name: </strong>{{userServices.fbUser().first_name}}-->
-<!--        <br>-->
-<!--        <strong>Last Name: </strong> {{userServices.fbUser().last_name}}-->
-<!--        <br>-->
-<!--        <strong>Email: </strong>{{userServices.fbUser().email}}-->
-<!--        <br>-->
-<!--        <strong>Phone: </strong>{{userServices.fbUser().phone}}-->
-<!--        <br>-->
-<!--        <strong>Country: </strong>{{userServices.fbUser().country}}-->
-<!--      </p>-->
-<!--    </mat-card-content>-->
-<!--  </mat-card>-->
-<!-- </ng-container>-->
-<!--    </div>-->
+<!--  <mat-toolbar-row style="background-color: #3f51b5; color: #fafafa;-->
+<!--          border-bottom-style: solid; border-bottom-width: 1px;-->
+<!--          border-bottom-color: black;">-->
+<!--    I'm a Student-->
+<!--    <hr>-->
+<!--  </mat-toolbar-row>-->
+<!--  <div>-->
+<!--  <app-profile-picture></app-profile-picture>-->
+<!--  <app-details></app-details>-->
+<!--  </div>-->
 <!--</div>-->
+
+  <div class="card-deck-container">
+      <ng-container>
+    <mat-card class="example-card">
+    <mat-card-title> STUDENT INFO </mat-card-title>
+    <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
+    <mat-card-content *ngIf="!loading">
+      <p>
+        <strong>First Name: </strong>{{userServices.fbUser().first_name}}
+        <br>
+        <strong>Last Name: </strong> {{userServices.fbUser().last_name}}
+        <br>
+        <strong>Email: </strong>{{userServices.fbUser().email}}
+        <br>
+        <strong>Phone: </strong>{{userServices.fbUser().phone}}
+        <br>
+        <strong>Country: </strong>{{userServices.fbUser().country}}
+      </p>
+    </mat-card-content>
+  </mat-card>
+ </ng-container>
+    </div>
+</div>
