@@ -1065,6 +1065,23 @@ class CoursesService {
         return true;
     }
 
+    async removeStudent(student, course) {
+        try {
+            let studentRef = await database.ref('/courses/' + course + '/students/' + student).once('value');
+            if(studentRef.exists()) {
+                await studentRef.ref.remove();
+                let decrement = await database.ref('/courses/' + course).once('value');
+                await decrement.ref.update({size: (decrement.child('size').val() - 1)});
+            } else {
+                return false;
+            }
+            await this.moveFromWaitToRegister(course);
+        } catch(err){
+            return false;
+        }
+        return true;
+    }
+
     async confirmEnrollment(student, course) {
         try {
             if(await userService.enrollIn(student, course)) {

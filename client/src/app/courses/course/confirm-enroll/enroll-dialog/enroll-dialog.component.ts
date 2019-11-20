@@ -9,19 +9,20 @@ import { Component, OnInit, Optional, Inject } from '@angular/core';
   styleUrls: ['./enroll-dialog.component.scss']
 })
 export class EnrollDialogComponent implements OnInit {
-
   // tslint:disable-next-line:variable-name
   current_course = '';
   student: {id: string, fname: string, lname: string, email: string, phone: string};
+  enrolled: boolean;
   constructor(
     public dialogRef: MatDialogRef<EnrollDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) data: {student:
-        {id: string, fname: string, lname: string, email: string, phone: string}, course: string},
+        {id: string, fname: string, lname: string, email: string, phone: string}, course: string, enrolled: boolean},
     private coursesServices: CoursesService,
     private dialog: MatDialog,
   ) {
     this.student = data.student;
     this.current_course = data.course;
+    this.enrolled = data.enrolled;
   }
 
   ngOnInit() {
@@ -60,7 +61,18 @@ export class EnrollDialogComponent implements OnInit {
 
     yesNoDialogRef.afterClosed().subscribe( (resp) => {
       if (resp) {
-        this.coursesServices.removeRegistree(this.student.id, this.current_course).subscribe( (removed) => {
+        if (!this.enrolled) {
+          this.coursesServices.removeRegistree(this.student.id, this.current_course).subscribe((removed) => {
+            if (removed) {
+              this.dialogRef.close(removed);
+            }
+            console.log('removed', removed);
+          });
+          console.log('removing student from list!');
+        }
+      }
+      if (this.enrolled) {
+        this.coursesServices.removeStudent(this.student.id, this.current_course).subscribe((removed) => {
           if (removed) {
             this.dialogRef.close(removed);
           }

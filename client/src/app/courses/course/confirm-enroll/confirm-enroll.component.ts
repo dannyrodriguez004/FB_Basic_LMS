@@ -48,7 +48,7 @@ export class ConfirmEnrollComponent implements OnInit {
   openEnrollDialog(student) {
     const dialogRef = this.dialog.open(EnrollDialogComponent, {
       width: '450px',
-      data: {course: this.current_course, student}
+      data: {course: this.current_course, student, enrolled: false}
     });
     dialogRef.afterClosed().subscribe( (result) => {
       if (result) {

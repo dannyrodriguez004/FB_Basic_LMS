@@ -242,6 +242,12 @@ module.exports = (passport) => {
         await Utils.AdminLog(req.user, {method: coursesServices.removeRegistree.name, params: [req.body.student, req.body.course], result: resp}, "Removing Course Registree.");
     });
 
+    router.post('/remove-student-from-course', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
+        const resp = await coursesServices.removeStudent(req.body.student, req.body.course);
+        await res.json(resp);
+        await Utils.AdminLog(req.user, {method: coursesServices.removeStudent.name, params: [req.body.student, req.body.course], result: resp}, "Removing Student from Course.");
+    });
+
     router.post('/confirm-enrollment', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.confirmEnrollment(req.body.student, req.body.course);
         await res.json(resp);

@@ -198,6 +198,10 @@ export class CoursesService {
     return this.http.post(`${environment.apiAddress}/courses/remove-registree`, {student, course});
   }
 
+  removeStudent(student, course) {
+    return this.http.post(`${environment.apiAddress}/courses/remove-student-from-course`, {student, course});
+  }
+
   confirmEnrollmet(student, course) {
     return this.http.post(`${environment.apiAddress}/courses/confirm-enrollment`, {student, course});
   }

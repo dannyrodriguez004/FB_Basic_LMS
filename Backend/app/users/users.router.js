@@ -9,6 +9,7 @@ module.exports = (passport) => {
      * @param user: {email: string, contactEmail: string, f_name: string, l_name: string, password: string}
      */
     router.post('/add-instructor', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
+        console.log(req.body.user);
         const resp = await usersServices.addInstructor(req.body.user);
         await res.json(resp);
         await Utils.AdminLog(req.user, {method: usersServices.addInstructor.name, params: [req.body.user], result: resp}, "Adding Instructor");

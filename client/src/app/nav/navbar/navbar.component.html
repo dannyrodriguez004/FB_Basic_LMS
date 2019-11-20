@@ -27,7 +27,7 @@
             <button [routerLink]="['/nav/courses/']" mat-button><mat-icon>chrome_reader_mode</mat-icon>Courses</button>
       </span>
 
-    <span>
+      <span>
             <button *ngIf="this.isAdmin() || loggedIn.value" [routerLink]="['inbox/']" mat-button><mat-icon>forum</mat-icon>Inbox</button>
       </span>
 
@@ -56,11 +56,11 @@
                         <mat-icon>fingerprint</mat-icon>Admin Login
                   </button>
 
-                  <button *ngIf="this.isAdmin()" mat-menu-item (click)="openAddCourseDialog()" class="add_button">
-                        <mat-icon>add</mat-icon>Add Course
-                  </button>
+<!--                  <button *ngIf="this.isAdmin()" mat-menu-item (click)="openAddCourseDialog()" class="add_button">-->
+<!--                        <mat-icon>add</mat-icon>Add Course-->
+<!--                  </button>-->
 
-                  <button [routerLink]="['/nav/dashboard/logs']" mat-menu-item>
+                  <button *ngIf="this.isAdmin()" [routerLink]="['/nav/dashboard/logs']" mat-menu-item>
                         Logs
                   </button>
 
@@ -72,13 +72,13 @@
                      <mat-icon>person_add</mat-icon>Login with facebook
                   </button>
 
-                  <button *ngIf="!this.isAdmin() && !this.isRegistered" (click)="openRegisterStudentDialog()" mat-menu-item>
-                        <mat-icon>person_add</mat-icon>REGISTER FROM FACEBOOK
-                  </button>
+<!--                  <button *ngIf="!this.isAdmin() && !this.isRegistered" (click)="openRegisterStudentDialog()" mat-menu-item>-->
+<!--                        <mat-icon>person_add</mat-icon>REGISTER FROM FACEBOOK-->
+<!--                  </button>-->
 
-                  <button [routerLink]="['security/register/']" mat-menu-item>
-                        <mat-icon>person_add</mat-icon>Register
-                  </button>
+<!--                  <button [routerLink]="['security/register/']" mat-menu-item>-->
+<!--                        <mat-icon>person_add</mat-icon>Register-->
+<!--                  </button>-->
 
                   <button *ngIf="this.isAdmin()" mat-menu-item [matMenuTriggerFor]="menu">
                     <mat-icon>list</mat-icon>Manage Courses</button>

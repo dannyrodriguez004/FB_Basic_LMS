@@ -48,7 +48,7 @@ export class AdminRegisterComponent implements OnInit {
       if (resp) {
         this.userServices.addInstructor({
           email: this.registerForm.value.primary,
-          contactEmail: this.registerForm.value,
+          contactEmail: this.registerForm.value.contact,
           f_name: this.registerForm.value.fname,
           l_name: this.registerForm.value.lname,
           password: this.registerForm.value.pass,

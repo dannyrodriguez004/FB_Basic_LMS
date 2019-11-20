@@ -37,13 +37,13 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>Select Authorization Level</mat-label>
-                <mat-select formControlName="auth">
-                    <mat-option>None</mat-option>
-                    <mat-option *ngIf="auth > 0" value="0">Instructor</mat-option>
-                    <mat-option *ngIf="auth > 1" value="1">Admin</mat-option>
-                    <mat-option *ngIf="auth > 1" value="2">Master</mat-option>
-                </mat-select>
+              <mat-label>Select Authorization Level</mat-label>
+              <mat-select formControlName="auth">
+                <mat-option>None</mat-option>
+                <mat-option *ngIf="this.userServices.fbUser().type > 0" value="0">Instructor</mat-option>
+                <mat-option *ngIf="this.userServices.fbUser().type > 1" value="1">Admin</mat-option>
+                <mat-option *ngIf="this.userServices.fbUser().type > 1" value="2">Master</mat-option>
+              </mat-select>
             </mat-form-field>
 
             <div>

@@ -10,12 +10,12 @@ const routes: Routes = [
             .then(mod => mod.DashboardModule), canActivate: [AuthGuard]},
         {path: 'helppage', loadChildren: () => import('../helppage/helppage.module').then(mod => mod.HelppageModule)},
         {path: 'home', loadChildren: () => import('../home/home.module').then(mod => mod.HomeModule)},
-        {path: 'add-user', loadChildren: () => import('./fbregister/fbregister.component').then(mod => mod.FBRegisterComponent)},
-        {path: 'add-course', loadChildren: () => import('./newcourse/newcourse.component')
-            .then(mod => mod.NewcourseComponent), canActivate: [AuthGuard]},
+        // {path: 'add-course', loadChildren: () => import('./newcourse/newcourse.component')
+        //     .then(mod => mod.NewcourseComponent), canActivate: [AuthGuard]},
+        // {path: 'add-user', loadChildren: () => import('./fbregister/fbregister.component').then(mod => mod.FBRegisterComponent)},
         {path: 'security', loadChildren: () => import('../security/security.module').then(mod => mod.SecurityModule)},
-        // tslint:disable-next-line:max-line-length
-        {path: 'security/profile', loadChildren: () => import('../security/profile/profile.component').then(mod => mod.ProfileComponent), canActivate: [AuthGuard]},
+        // {path: 'security/profile', loadChildren: () => import('../security/profile/profile.component')
+        //     .then(mod => mod.ProfileComponent), canActivate: [AuthGuard]},
         {path: 'inbox', loadChildren: () => import('../inbox/inbox.module').then(mod => mod.InboxModule), canActivate: [AuthGuard]}
 
       ]}

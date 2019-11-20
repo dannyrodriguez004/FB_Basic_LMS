@@ -145,7 +145,7 @@ export class NavbarComponent implements OnInit, OnChanges {
       }
       if (this.isAdmin()) {
         console.log('IN LOAD COURSES FOR ADMIN IN NAVBAR');
-        this.adminLoggedIn.next(true);
+        // this.adminLoggedIn.next(true);
         this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
           console.log(resp);
           this.adminCourses = resp;
