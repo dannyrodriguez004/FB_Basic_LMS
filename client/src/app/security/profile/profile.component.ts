@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoursesService } from '../../services/courses.service';
 import { UserService } from '../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import {UtilityService} from '../../services/utility.service';
 
 
 @Component({
@@ -17,10 +18,11 @@ export class ProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private userServices: UserService,
     private coursesServices: CoursesService,
-    private router: Router
+    private router: Router,
+    private utilityServices: UtilityService,
   ) {
     this.userServices.resetUserModel();
-    }
+  }
 
   ngOnInit() {
     this.loading = true;
@@ -33,5 +35,8 @@ export class ProfileComponent implements OnInit {
 
   isAdmin() {
     return this.userServices.getIsAdmin();
+  }
+
+  saveProfilePicture() {
   }
 }

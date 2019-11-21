@@ -15,4 +15,6 @@ export class UserModel {
   country?: string;
   token?: string;
   type: UsertypeModel;
+  photo?: string;
+  photoToken?: string;
 }

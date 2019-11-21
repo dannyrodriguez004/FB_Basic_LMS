@@ -3,23 +3,20 @@
     <mat-toolbar-row style="background-color: #3f51b5; color: #fafafa;
           border-bottom-style: solid; border-bottom-width: 1px;
           border-bottom-color: black;">
-      Profile</mat-toolbar-row>
+      Profile
+    <span class="fill"></span>
+    <button mat-button routerLink="profile-editor/">Edit Profile</button>
+    </mat-toolbar-row>
   </mat-toolbar>
-<!--  <mat-toolbar-row style="background-color: #3f51b5; color: #fafafa;-->
-<!--          border-bottom-style: solid; border-bottom-width: 1px;-->
-<!--          border-bottom-color: black;">-->
-<!--    I'm a Student-->
-<!--    <hr>-->
-<!--  </mat-toolbar-row>-->
-<!--  <div>-->
-<!--  <app-profile-picture></app-profile-picture>-->
-<!--  <app-details></app-details>-->
-<!--  </div>-->
-<!--</div>-->
-
   <div class="card-deck-container">
       <ng-container>
-    <mat-card class="example-card">
+    <mat-card>
+<!--      <button mat-stroked-button type= "button" (click)="filePicker.click()"></button><input type="file" #filePicker>-->
+      <img width="200px" height="200px"
+        src="https://firebasestorage.googleapis.com/v0/b/learnfiu.appspot.com/o/{{this.userServices.fbUser().photo}}?alt=media&token={{this.userServices.fbUser().photoToken}}">
+    </mat-card>
+        <mat-card class="example-card">
+
     <mat-card-title> STUDENT INFO </mat-card-title>
     <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
     <mat-card-content *ngIf="!loading">

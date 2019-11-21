@@ -14,9 +14,12 @@ import {ProfileComponent} from './profile/profile.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { ProfilePictureComponent } from './profile/profile-picture/profile-picture.component';
 import { DetailsComponent } from './profile/details/details.component';
+import { ProfileEditorComponent } from './profile/profile-editor/profile-editor.component';
+import { ImageUploadComponent } from './profile/profile-editor/image-upload/image-upload.component';
 
 @NgModule({
-  declarations: [SecurityComponent, LoginComponent, RegisterComponent, AdminRegisterComponent, ProfileComponent, ProfilePictureComponent, DetailsComponent],
+  declarations: [SecurityComponent, LoginComponent, RegisterComponent, AdminRegisterComponent, ProfileComponent,
+    ProfilePictureComponent, DetailsComponent, ProfileEditorComponent, ImageUploadComponent],
   imports: [
     CommonModule,
     SecurityRoutingModule,

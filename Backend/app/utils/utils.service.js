@@ -24,6 +24,14 @@ class UtilsService {
         }
     }
 
+    // async imageUpload() {
+    //     // Create a root reference
+    //     var storageRef = firebase.storage().ref();
+    //     // Create a reference to 'mountains.jpg'
+    //     var imageRef = storageRef.child('mountains.jpg');
+    //
+    // }
+
     async getLogs() {
         let payload = [];
         try {

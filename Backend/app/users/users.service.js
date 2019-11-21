@@ -233,7 +233,9 @@ class UsersService {
                 last_name: user.last_name,
                 email: user.email,
                 phone: user.phone,
-                country: user.country
+                country: user.country,
+                photo: user.photo,
+                photoToken: user.photoToken
             };
         });
         return userInfo;

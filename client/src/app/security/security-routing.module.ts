@@ -11,13 +11,16 @@ import {
 } from '@angular/material';
 import { RegisterComponent } from './register/register.component';
 import {ProfileComponent} from './profile/profile.component';
+import {ProfileEditorComponent} from './profile/profile-editor/profile-editor.component';
 
 const routes: Routes = [
   {path: '', component: SecurityComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'admin-register', component: AdminRegisterComponent},
-  {path: 'profile', component: ProfileComponent}
+  {path: 'profile', component: ProfileComponent},
+  {path: 'profile-editor', component: ProfileEditorComponent}
+
 ];
 
 @NgModule({
