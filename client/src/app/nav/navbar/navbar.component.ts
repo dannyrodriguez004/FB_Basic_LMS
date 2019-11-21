@@ -1,15 +1,7 @@
-<<<<<<< HEAD
 import { CourseNav } from '../../models/courses.models';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { UserService } from '../../services/user.service';
 import {Component, OnChanges, OnInit} from '@angular/core';
-=======
-import { CoursesService } from 'src/app/services/courses.service';
-import { CourseNav } from './../../courses/courses.models';
-import { Subscription } from 'rxjs/internal/Subscription';
-import { UserService } from '../../services/user.service';
-import { Component, OnInit } from '@angular/core';
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
 import { MatDialog } from '@angular/material';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
 import {Router} from '@angular/router';
@@ -28,16 +20,10 @@ import {CookieService} from 'ngx-cookie-service';
 export class NavbarComponent implements OnInit, OnChanges {
 
   myCourses: CourseNav[] = []; // the user's courses names and id
-<<<<<<< HEAD
   user: UserModel;
   adminCourses: CourseNav[] = [];
   adminLoggedIn;
   // tslint:disable-next-line:variable-name
-=======
-  adminCoureses: CourseNav[] = [];
-
-  private student_id = '';
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   private subscriptions: Subscription[] = [];
   loggedIn;
   loading = false;
@@ -149,7 +135,6 @@ export class NavbarComponent implements OnInit, OnChanges {
    * Load courses, id and name, for the current user.
    */
   loadCourses() {
-<<<<<<< HEAD
     // if (this.loggedIn.value || this.adminLoggedIn.value) {
       if (this.loggedIn.value || this.isAdmin()) {
         if (this.loggedIn.value) {
@@ -167,25 +152,6 @@ export class NavbarComponent implements OnInit, OnChanges {
           this.adminCourses = resp;
         }));
     }
-=======
-    this.subscriptions.push(this.userServices.getStudentCourses(this.student_id).subscribe( (resp: CourseNav[]) => {
-      this.myCourses = resp;
-    }));
-
-    if( this.userServices.getIsAdmin()){
-      this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe( (resp: CourseNav[]) => {
-        this.adminCoureses = resp;
-      }))
-    } 
-  }
-
-  toggleLogin() {
-    this.userServices.toggleLoggedIn();
-  }
-
-  isLoggedIn() {
-    return this.userServices.fbLoggedIn;
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   }
 
   isAdmin() {

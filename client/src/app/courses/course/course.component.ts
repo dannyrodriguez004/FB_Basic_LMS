@@ -51,7 +51,6 @@ private navItem = 'Home';
         this.current_course = params.course;
       }
     }));
-<<<<<<< HEAD
     this.user_id = this.userServices.fbUser().id;
     console.log(this.user_id);
     if (this.isAdmin() || this.user_id) {
@@ -59,21 +58,8 @@ private navItem = 'Home';
         .getCourseInfo(this.current_course)
         .subscribe( (course: {id: string, name: string,
           description: string, instructor: string, students: string[]}) => {
-=======
-
-    this.user_id = this.userServices.user();
-
-    this.subscriptions.push(this.userServices.studentHasCourse(this.user_id, this.current_course).subscribe( (resp:boolean) => {
-      this.authorized = resp;
-
-      if(this.authorized || this.userServices.getIsAdmin()) {
-        this.subscriptions.push(this.coursesServices
-          .getCourseInfo(this.current_course)
-          .subscribe( (course: {id: string, name:string, description: string, instructor: string, students: string[]}) => {
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
           this.course = course;
         }));
-<<<<<<< HEAD
     }
     // else if (this.user_id) {
     //   this.subscriptions.push(this.coursesServices
@@ -99,14 +85,6 @@ private navItem = 'Home';
     //     this.router.navigateByUrl('/');
     //   }
     // }));
-=======
-      } else {
-        this.router.navigateByUrl('/');
-        //console.log("not authorized!");
-      }
-
-    }));
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   }
 
   setNav(val: string) {

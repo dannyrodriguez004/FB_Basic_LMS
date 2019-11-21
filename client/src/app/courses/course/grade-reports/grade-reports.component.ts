@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { CoursesService } from '../../../services/courses.service';
-=======
-import { CoursesService } from 'src/app/services/courses.service';
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
 import { UserService } from '../../../services/user.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Component, OnInit, Input } from '@angular/core';

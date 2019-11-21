@@ -4,10 +4,6 @@ import {CoursesService} from '../../services/courses.service';
 import {UserService} from '../../services/user.service';
 import {Subscription} from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-<<<<<<< HEAD
-=======
-import {Course} from '../courses.models';
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
 import { YesNoDialogComponent } from 'src/app/yes-no-dialog/yes-no-dialog.component';
 const COURSE_PER_PAGE = 10;
 const letters = /^[A-Za-z]*$/;
@@ -23,17 +19,10 @@ export class CoursesComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
   courses = []; // the user's courses names and id
-<<<<<<< HEAD
   private startFrom = 0;
   private sort = 'name';
   private size = 0;
   currentCategory = 'null';
-=======
-  private startFrom: number = 0;
-  private sort: string = 'name';
-  private size: number = 0;
-  currentCategory: string = 'null';
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   loading = false;
   search = '';
   predicting = false;
@@ -48,7 +37,6 @@ export class CoursesComponent implements OnInit {
     private dialog: MatDialog,
     private routing: ActivatedRoute,
     public snackbar: MatSnackBar
-<<<<<<< HEAD
   ) {}
 
   ngOnInit() {
@@ -81,56 +69,20 @@ export class CoursesComponent implements OnInit {
       if (e instanceof NavigationEnd) {
         this.routing.queryParams.subscribe( params => {
           if (params.start) {
-=======
-  ) {
-  }
-
-  ngOnInit() {
-
-    
-
-    this.routing.queryParams.subscribe( params => {
-      if(params.start) {
-        this.startFrom = params.start;
-      }
-      if(params.category) {
-        this.currentCategory = params.category;
-      }
-      if(params.sort) {
-        this.sort = params.sort;
-      }
-    })
-    this.fetchPage();
-
-    this.subscriptions.push(this.router.events.subscribe((e:any) => {
-      if(e instanceof NavigationEnd) {
-        this.routing.queryParams.subscribe( params => {
-          if(params.start) {
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
             this.startFrom = params.start;
           } else {
             this.startFrom = 0;
           }
-<<<<<<< HEAD
           if (params.category) {
             this.currentCategory = params.category;
           } else {
             this.currentCategory = null;
           }
           if (params.sort) {
-=======
-          if(params.category) {
-            this.currentCategory = params.category;
-          } else {
-            this.currentCategory = 'null';
-          }
-          if(params.sort) {
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
             this.sort = params.sort;
           } else {
             this.sort = 'name';
           }
-<<<<<<< HEAD
           if (params.search) {
             this.search = params.search;
             this.searching = true;
@@ -139,9 +91,6 @@ export class CoursesComponent implements OnInit {
             this.searching = false;
           }
         });
-=======
-        })
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
         this.fetchPage();
       }
     }));
@@ -149,7 +98,6 @@ export class CoursesComponent implements OnInit {
 
   fetchPage() {
     this.loading = true;
-<<<<<<< HEAD
     if (this.currentCategory != null && this.currentCategory !== 'null') {
       console.log('browsing by category');
       this.coursesServices.getCoursesCatergorySortBy(this.currentCategory, this.sort, this.startFrom)
@@ -161,27 +109,18 @@ export class CoursesComponent implements OnInit {
     } else if (this.search != null && this.search.length > 1) {
       console.log('browsing by search');
       this.coursesServices.getSearchPage(this.search, this.startFrom).subscribe((resp: { courses: [], size: number}) => {
-=======
-    if(this.currentCategory == 'null') {
-      this.coursesServices.getCoursesSortBy(this.sort, this.startFrom).subscribe( (resp:{ courses: [], size: number}) => {
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
         this.size = resp.size;
         this.courses = resp.courses;
         this.loading = false;
       });
     } else {
-<<<<<<< HEAD
       console.log('browsing normal');
       this.coursesServices.getCoursesSortBy(this.sort, this.startFrom).subscribe( (resp: { courses: [], size: number}) => {
-=======
-      this.coursesServices.getCoursesCatergorySortBy(this.currentCategory, this.sort, this.startFrom).subscribe( (resp:{ courses: [], size: number}) => {
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
         this.size = resp.size;
         this.courses = resp.courses;
         this.loading = false;
       });
     }
-<<<<<<< HEAD
   }
 
   register(course) {
@@ -190,16 +129,6 @@ export class CoursesComponent implements OnInit {
       if (resp.stat) {
         this.coursesServices.tryEnroll(this.userServices.fbUser().id, course).subscribe((result) => {
           if (result) {
-=======
-    
-  }
-
-  register(course) {
-    this.coursesServices.canRegister(this.userServices.user(), course).subscribe((resp:{stat: Boolean, message: string}) => {
-      if(resp.stat) {
-        this.coursesServices.tryEnroll(this.userServices.user(), course).subscribe((resp) => {
-          if(resp) {
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
             this.snackbar.openFromComponent(NotifyEnrolledComponent, {
               duration: 3 * 1000,
             });
@@ -207,34 +136,21 @@ export class CoursesComponent implements OnInit {
         });
       } else {
         console.log(resp.message);
-<<<<<<< HEAD
         if (resp.message === 'Already in class!' || resp.message === 'Already registered!') {
           this.snackbar.openFromComponent(NotifyInClassComponent, {
             duration: 3 * 1000,
           });
         } else if (resp.message === 'Already in waiting-list!') {
-=======
-        if(resp.message == 'Already in class!' || resp.message == 'Already registered!') {
-          this.snackbar.openFromComponent(NotifyInClassComponent, {
-            duration: 3 * 1000,
-          });
-        } else if(resp.message == 'Already in waiting-list!') {
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
           this.snackbar.openFromComponent(NotifyInWaitingComponent, {
             duration: 3 * 1000,
           });
         }
       }
     });
-<<<<<<< HEAD
-=======
-    
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   }
 
   openFullDialog(course) {
     console.log(course);
-<<<<<<< HEAD
     this.coursesServices.canRegister(this.userServices.fbUser().id, course)
       .subscribe((resp: {stat: boolean, message: string}) => {
       if (resp.stat) {
@@ -247,20 +163,6 @@ export class CoursesComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe( (response) => {
           if (response) {
-=======
-    this.coursesServices.canRegister(this.userServices.user(), course).subscribe((resp:{stat: Boolean, message: string}) => {
-      if(resp.stat) {
-        const dialogRef = this.dialog.open(YesNoDialogComponent, {
-          width: "50%",
-          data: {
-            title: "Course is Full!",
-            message: "Would you like to be placed in the waiting list?\n\nYou will be notified if you a spot becomes available!"
-          }
-        });
-    
-        dialogRef.afterClosed().subscribe( (resp) => {
-          if(resp) {
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
             this.register(course);
           }
         });
@@ -268,10 +170,6 @@ export class CoursesComponent implements OnInit {
         console.log(resp.message);
       }
     });
-<<<<<<< HEAD
-=======
-    
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   }
 
   // can only go to a previous page if current start position is not in the first page.
@@ -279,10 +177,6 @@ export class CoursesComponent implements OnInit {
     return this.startFrom >= COURSE_PER_PAGE;
   }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   // navigates to the previous discussion posts page
   back() {
     this.startFrom += -(COURSE_PER_PAGE);
@@ -304,7 +198,6 @@ export class CoursesComponent implements OnInit {
   firstPage() {
     this.startFrom = 0;
     this.setParams();
-<<<<<<< HEAD
   }
 
   // navigates to the last page of discussion posts
@@ -373,8 +266,6 @@ export class CoursesComponent implements OnInit {
       });
 
     }
-=======
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   }
 
   //navigates to the last page of discussion posts
@@ -410,13 +301,8 @@ export class CoursesComponent implements OnInit {
   
 }
 
-<<<<<<< HEAD
 @Component({
   // tslint:disable-next-line:component-selector
-=======
-
-@Component({
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   selector: 'notify-enrolled',
   template: '<p>Successfully registered!</p>',
   styles: [`
@@ -425,17 +311,11 @@ export class CoursesComponent implements OnInit {
     }
   `],
 })
-<<<<<<< HEAD
 
 export class NotifyEnrolledComponent {}
 
 @Component({
   // tslint:disable-next-line:component-selector
-=======
-export class NotifyEnrolledComponent {}
-
-@Component({
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   selector: 'notify-enrolled',
   template: '<p>Already Registered!</p>',
   styles: [`
@@ -444,17 +324,11 @@ export class NotifyEnrolledComponent {}
     }
   `],
 })
-<<<<<<< HEAD
 
 export class NotifyInClassComponent {}
 
 @Component({
   // tslint:disable-next-line:component-selector
-=======
-export class NotifyInClassComponent {}
-
-@Component({
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
   selector: 'notify-enrolled',
   template: '<p>Already in waiting-list!</p>',
   styles: [`
@@ -463,9 +337,5 @@ export class NotifyInClassComponent {}
     }
   `],
 })
-<<<<<<< HEAD
 
 export class NotifyInWaitingComponent {}
-=======
-export class NotifyInWaitingComponent {}
->>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
