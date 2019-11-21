@@ -27,6 +27,7 @@ import { MainComponent } from './main/main.component';
 import { NewcourseComponent } from './newcourse/newcourse.component';
 import { FBRegisterComponent} from './fbregister/fbregister.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ProfileEditorComponent} from '../security/profile/profile-editor/profile-editor.component';
 
 @NgModule({
   declarations: [NavbarComponent, MainComponent, NewcourseComponent, FBRegisterComponent],

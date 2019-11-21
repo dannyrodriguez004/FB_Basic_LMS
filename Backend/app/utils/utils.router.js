@@ -72,6 +72,7 @@ module.exports = (passport) => {
     //         });
     //     }
     // });
+
     router.get('/date', async (req, res, next) => {
         await res.json(new Date());
     });

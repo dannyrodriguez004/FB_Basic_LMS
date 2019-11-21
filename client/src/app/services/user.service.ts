@@ -254,6 +254,26 @@ export class UserService {
     });
   }
 
+  updateUser(userModel) {
+    const opts = {
+      body: userModel
+    };
+    console.log(opts);
+    this.http.post(`${environment.apiAddress}/users/update-user`, opts).subscribe((result: any) => {
+      console.log(result);
+    });
+  }
+
+  updateStudent(userModel) {
+    const opts = {
+      body: userModel
+    };
+    console.log(opts);
+    this.http.post(`${environment.apiAddress}/users/update-student`, opts).subscribe((result: any) => {
+      console.log(result);
+    });
+  }
+
   addInstructor(user) {
     return this.http.post(`${environment.apiAddress}/users/add-instructor`, {user});
   }

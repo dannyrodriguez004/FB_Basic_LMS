@@ -30,7 +30,8 @@ const routes: Routes = [
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    MatButtonModule]
+    MatButtonModule],
+  entryComponents: [ProfileEditorComponent]
 })
 
 export class SecurityRoutingModule { }

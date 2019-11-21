@@ -5,7 +5,8 @@
           border-bottom-color: black;">
       Profile
     <span class="fill"></span>
-    <button mat-button routerLink="profile-editor/">Edit Profile</button>
+      <button mat-button (click)="openEditRegisterProfile()">Edit Profile</button>
+<!--      <button mat-button [routerLink]="['/nav/security/profile-editor']">Edit Profile</button>-->
     </mat-toolbar-row>
   </mat-toolbar>
   <div class="card-deck-container">

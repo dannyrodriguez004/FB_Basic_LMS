@@ -16,6 +16,19 @@ import { ProfilePictureComponent } from './profile/profile-picture/profile-pictu
 import { DetailsComponent } from './profile/details/details.component';
 import { ProfileEditorComponent } from './profile/profile-editor/profile-editor.component';
 import { ImageUploadComponent } from './profile/profile-editor/image-upload/image-upload.component';
+import {AngularEditorModule} from "@kolkov/angular-editor";
+import {MatButtonModule} from "@angular/material/button";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatIconModule} from "@angular/material/icon";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatListModule} from "@angular/material/list";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatTableModule} from "@angular/material/table";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatInputModule} from "@angular/material/input";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
+import {MatTabsModule} from "@angular/material/tabs";
 
 @NgModule({
   declarations: [SecurityComponent, LoginComponent, RegisterComponent, AdminRegisterComponent, ProfileComponent,
@@ -28,8 +41,21 @@ import { ImageUploadComponent } from './profile/profile-editor/image-upload/imag
     MatProgressSpinnerModule,
     FormsModule,
     MatSelectModule,
-    MatProgressSpinnerModule,
-    MatToolbarModule
-  ]
+    MatToolbarModule,
+    AngularEditorModule,
+    MatDialogModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule,
+    MatExpansionModule,
+    MatTableModule,
+    MatButtonToggleModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatTabsModule,
+  ],
+  entryComponents: [ProfileEditorComponent]
 })
 export class SecurityModule { }
