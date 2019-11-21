@@ -15,4 +15,8 @@ export class DetailsComponent implements OnInit {
 
   ngOnInit() {}
 
+  getUser() {
+    return this.userService.fbUser();
+  }
+
 }

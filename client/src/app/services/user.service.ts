@@ -89,10 +89,7 @@ export class UserService {
   resetUserModel() {
     if (this.getToken()) {
       this.isLoggedIn = true;
-      this.subscriptions.push(this.getCurrentUser().subscribe((userInfo: {
-        id: string, first_name: string,
-        last_name: string, email: string, type: UsertypeModel, phone: string, country: string
-      }) => {
+      this.subscriptions.push(this.getCurrentUser().subscribe((userInfo: UserModel) => {
         this.userModel = userInfo;
         console.log(this.userModel);
       }));
@@ -156,13 +153,7 @@ export class UserService {
       console.log('RESULT.AUTHRESPONSE:  ', result.authResponse);
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
         console.log('this is the response:', response);
-        this.userModel = {
-          id: response.id,
-          first_name: response.first_name,
-          last_name: response.last_name,
-          email: response.email,
-          type: UsertypeModel.Student
-        };
+        this.userModel.update(response.id, response.first_name, response.last_name, response.email, null, null, null, response.Student);
         console.log(this.userModel);
         console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
       });

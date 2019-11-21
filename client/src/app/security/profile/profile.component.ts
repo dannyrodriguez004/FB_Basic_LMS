@@ -31,6 +31,10 @@ export class ProfileComponent implements OnInit {
     this.userServices.resetUserModel();
   }
 
+  getUser() {
+    return this.userServices.fbUser();
+  }
+
   ngOnInit() {
     this.loading = true;
     this.userServices.fbUser();

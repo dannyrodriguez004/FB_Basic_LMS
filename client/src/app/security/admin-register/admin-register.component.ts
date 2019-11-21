@@ -72,4 +72,8 @@ export class AdminRegisterComponent implements OnInit {
       this.auth = _auth;
     }
   }
+
+  getAuth() {
+    return this.userServices.getAuth();
+  }
 }

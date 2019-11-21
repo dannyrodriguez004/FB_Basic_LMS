@@ -29,7 +29,7 @@ export class NewMessageComponent implements OnInit {
   recipient: [];
   course = {name: '', id: this.current_course, description: '', instructor: ''};
   loading = true;
-  private myCourses: CourseNav[];
+  public myCourses: CourseNav[];
 
   constructor(
     public dialogRef: MatDialogRef<NewMessageComponent>,

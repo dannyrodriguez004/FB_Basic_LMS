@@ -38,7 +38,7 @@ import { DiscussionComponent } from './course/discussion/discussion.component';
 
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-import { NgxDocViewerModule } from 'ngx-doc-viewer';
+//import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 import { AngularEditorModule} from '@kolkov/angular-editor';
 import { AssessmentComponent } from './assessment/assessment.component';
@@ -119,7 +119,7 @@ import { NewAnnouncementComponent } from './course/announcements/new-announcemen
     MatDatepickerModule,
     MatNativeDateModule,
     MatTabsModule,
-    NgxDocViewerModule,
+    //NgxDocViewerModule,
     MatStepperModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
