@@ -1191,10 +1191,11 @@ class CoursesService {
         let whole_category = [];
         let page = [];
         let counter = 0;
+        
         try {
             let ref = await database.ref('/courses').orderByChild('category').equalTo(category).once('value');
             ref.forEach( (member) => {
-                let course = member.toJSON();
+                var course = member.toJSON();
                 whole_category.push({
                     id: member.key,
                     title: course.name,
@@ -1206,18 +1207,23 @@ class CoursesService {
                     category: course.category,
                 });
             });
+
             whole_category.sort((x, y) => ((x[sortby] === y[sortby]) ? 0 : ((x[sortby] > y[sortby]) ? 1 : -1)));
-            let index;
+
+            let index = 0;
             for(index = start;  (index < 10 && index < whole_category.length); index++) {
                 page.push(whole_category[index]);
                 counter++;
             }
+
             for(let i = 0; i < page.length; i++) {
                 page[i].instructor = (await userService.getInstructor(page[i].instructor)).name;
             }
+
         } catch (err) {
             console.error(err);
         }
+
         return {
             courses: page,
             size: counter,
@@ -1385,6 +1391,22 @@ class CoursesService {
             return false;
         }
         return true;
+    }
+
+    async canRegister(student, course) {
+        try {
+            let ref = await database.ref('/students/' + student + '/enrolled').child(course).once('value');
+            if(ref.exists()) return {stat: false, message: 'Already in class!'};
+            ref = await database.ref('/courses/' + course).once('value');
+
+            if(ref.child('/registered').hasChild(student)) return {stat: false, message: 'Already registered!'};
+            if(ref.child('/waiting-list').hasChild(student)) return {stat: false, message: 'Already in waiting-list!'};
+        } catch(err) {
+            console.error(err);
+            return {stat: false, message: 'Error!'};
+        }
+
+        return {stat: true, message: ''};
     }
 }
 

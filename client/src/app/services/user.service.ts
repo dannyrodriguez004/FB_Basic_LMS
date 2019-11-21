@@ -153,7 +153,13 @@ export class UserService {
       console.log('RESULT.AUTHRESPONSE:  ', result.authResponse);
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
         console.log('this is the response:', response);
-        this.userModel.update(response.id, response.first_name, response.last_name, response.email, null, null, null, response.Student);
+        
+        this.userModel.id = response.id;
+        this.userModel.first_name = response.first_name;
+        this.userModel.last_name = response.last_name;
+        this.userModel.email = response.email;
+        this.userModel.type = UsertypeModel.Student;
+        
         console.log(this.userModel);
         console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
       });

@@ -6,6 +6,7 @@ import { AuthGuard } from '../security/security/auth.guard';
 const routes: Routes = [
     { path: '', component: MainComponent, children: [
         {path: 'courses', loadChildren: () => import('../courses/courses.module').then(mod => mod.CoursesModule), canActivate: [AuthGuard]},
+<<<<<<< HEAD
         {path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module')
             .then(mod => mod.DashboardModule), canActivate: [AuthGuard]},
         {path: 'helppage', loadChildren: () => import('../helppage/helppage.module').then(mod => mod.HelppageModule)},
@@ -18,6 +19,13 @@ const routes: Routes = [
         //     .then(mod => mod.ProfileComponent), canActivate: [AuthGuard]},
         {path: 'inbox', loadChildren: () => import('../inbox/inbox.module').then(mod => mod.InboxModule), canActivate: [AuthGuard]}
 
+=======
+        {path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module').then(mod => mod.DashboardModule), canActivate: [AuthGuard]},
+        {path: 'helppage', loadChildren: () => import('../helppage/helppage.module').then(mod => mod.HelppageModule)},
+        {path: 'home', loadChildren: () => import('../home/home.module').then(mod => mod.HomeModule)},
+        {path: 'add-course', loadChildren: () => import('./newcourse/newcourse.component').then(mod => mod.NewcourseComponent), canActivate: [AuthGuard]},
+        {path: 'security', loadChildren: () => import('../security/security.module').then(mod => mod.SecurityModule)}
+>>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
       ]}
 ];
 

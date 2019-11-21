@@ -1,8 +1,14 @@
 import {Course} from '../../models/courses.models';
 import {Subscription} from 'rxjs';
 import {UserService} from '../../services/user.service';
+<<<<<<< HEAD
 import {Component, Input, OnInit} from '@angular/core';
 import {CoursesService} from '../../services/courses.service';
+=======
+import {Component, OnInit} from '@angular/core';
+import {CoursesService} from '../../services/courses.service';
+
+>>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
 
 @Component({
   selector: 'app-dashboard',
@@ -27,6 +33,7 @@ export class DashboardComponent implements OnInit {
    * Load courses, id and name, for the current user.
    */
   loadCourses() {
+<<<<<<< HEAD
     if (this.userServices.getIsAdmin()) {
       this.coursesServices.getAdminCourses().subscribe((resp: Course[]) => {
         this.myCourses = resp;
@@ -50,6 +57,21 @@ export class DashboardComponent implements OnInit {
           console.log('not authorized!');
         }
       }));
+=======
+    if(this.userServices.getIsAdmin()) {
+      this.coursesServices.getAdminCourses().subscribe(( resp: Course[]) => {
+        this.myCourses = resp;
+      })
+    } else {
+      this.subscriptions.push(this.userServices.getStudentCourses(this.student_id).subscribe( (resp: Course[]) => {
+        this.myCourses = resp;
+      } ));
+    }
+    // this.subscriptions.push(this.coursesServices.getInstructorInfo(this.myCourses)
+    //     .subscribe( (course: (instructor: string, instructorEmail: string}) => {
+    //       this.course = this.coursesServices.getInstructorInfo()
+
+>>>>>>> 46a0012e400e636f693ac8362098da5380f5daf4
     }
   }
 
