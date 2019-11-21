@@ -1,12 +1,9 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-var helmet = require('helmet');
+const helmet = require('helmet');
 const errorHandler = require('./middleware/error-handler.middleware');
-
-
 const firebase = require('firebase-admin');
-
 const firebaseAccountConfig = require('../learnfiu_db.json');
 firebase.initializeApp({
 	credential: firebase.credential.cert(firebaseAccountConfig),
@@ -27,28 +24,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+	res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, OPTIONS');
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
 	next();
 });
 
-
 //------ Routes -------//
-
-const utilsRoutes = require('./utils/utils.router')();
+const utilsRoutes = require('./utils/utils.router')(passport);
 app.use('/utils', utilsRoutes);
 
-const coursesRoutes = require('./courses/courses.router')();
+const coursesRoutes = require('./courses/courses.router')(passport);
 app.use('/courses', coursesRoutes);
 
 const usersRoutes = require('./users/users.router')(passport);
 app.use('/users', usersRoutes);
 
-//const securityRoutes = require('./security/security.router')(passport);
-//app.use('/oauth', securityRoutes);
+const securityRoutes = require('./security/security.router')(passport);
+app.use('/security', securityRoutes);
 
 //------- End --------//
-
 
 app.use(errorHandler);
 

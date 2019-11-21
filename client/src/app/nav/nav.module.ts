@@ -25,9 +25,12 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MainComponent } from './main/main.component';
 import { NewcourseComponent } from './newcourse/newcourse.component';
+import { FBRegisterComponent} from './fbregister/fbregister.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ProfileEditorComponent} from '../security/profile/profile-editor/profile-editor.component';
 
 @NgModule({
-  declarations: [NavbarComponent, MainComponent, NewcourseComponent],
+  declarations: [NavbarComponent, MainComponent, NewcourseComponent, FBRegisterComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -54,10 +57,11 @@ import { NewcourseComponent } from './newcourse/newcourse.component';
     MatSlideToggleModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTabsModule
+    MatTabsModule,
+    MatProgressSpinnerModule,
   ],
   entryComponents: [
-    NewcourseComponent
+    NewcourseComponent, FBRegisterComponent
   ]
 })
 export class NavModule { }

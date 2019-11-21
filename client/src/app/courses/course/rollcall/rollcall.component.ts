@@ -1,8 +1,9 @@
-import { UserService } from './../../../user.service';
+import { UserService } from '../../../services/user.service';
 import { Subscription } from 'rxjs';
-import { CoursesService } from './../../courses.service';
+import { CoursesService } from '../../../services/courses.service';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import {Students} from '../../courses.models';
+import {EnrollDialogComponent} from '../confirm-enroll/enroll-dialog/enroll-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-rollcall',
@@ -12,35 +13,47 @@ import {Students} from '../../courses.models';
 
 export class RollcallComponent implements OnInit {
 
-  private subscriptions: Subscription[] = [];
-  // private students: Students[] =  [];
   loading = true;
-  students =  [];
-  student: {id: string, name: string}[];
+  // tslint:disable-next-line:no-input-rename variable-name
   @Input('current_course') current_course: string;
+  students: {id: string, fname: string, lname: string, email: string, phone: string}[];
+
+  subscriptions: Subscription[] = [];
 
   constructor(
     private courseServices: CoursesService,
     private userServices: UserService,
-  ) {
+    private dialog: MatDialog,
+
+  ) {}
+
+  loadData() {
+    this.subscriptions.push(this.courseServices.getStudents(this.current_course)
+      .subscribe( (resp: {id: string, fname: string, lname: string, email: string, phone: string}[]) => {
+        this.students = resp;
+        console.log(resp);
+      }));
+    this.loading = false;
   }
-  //
-  // loadData() {
-  //   // const student = this.courseServices.getStudents(this.current_course);
-  //   this.subscriptions.push(this.courseServices.getStudents(this.current_course)
-  //     .subscribe( (resp: []) => {
-  //       this.students = resp;
-  //       this.loading = false;
-  //     }));
-  // }
 
   ngOnInit() {
     this.loading = true;
-    // this.loadData();
+    this.loadData();
   }
 
+  openEnrollDialog(student) {
+    const dialogRef = this.dialog.open(EnrollDialogComponent, {
+      width: '450px',
+      data: {course: this.current_course, student, enrolled: true},
+
+    });
+    dialogRef.afterClosed().subscribe( (result) => {
+      if (result) {
+        this.ngOnInit();
+      }
+    });
+  }
   isAdmin() {
     return this.userServices.getIsAdmin();
   }
-
 }

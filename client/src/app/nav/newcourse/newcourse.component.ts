@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs/internal/Subscription';
-import { CoursesService } from '../../courses/courses.service';
+import { CoursesService } from '../../services/courses.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
@@ -16,7 +16,6 @@ export class NewcourseComponent implements OnInit {
   subscriptions: Subscription[] = [];
   courseForm: FormGroup;
   today = new Date();
-
   instructors: {name: string, id: string}[] = [];
   categories: {name: string}[] = [];
   MAX_SIZE: {MAX_SIZE: number};
@@ -38,7 +37,6 @@ export class NewcourseComponent implements OnInit {
     });
   }
 
-
   config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -52,20 +50,18 @@ export class NewcourseComponent implements OnInit {
     defaultFontName: 'Arial',
     customClasses: [
       {
-        name: "titleText",
-        class: "titleText",
-        tag: "h1",
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
       },
     ]
   };
 
 
   addCourse() {
-
-    if(this.courseForm.pristine) {
+    if (this.courseForm.pristine) {
       this.dialogRef.close();
     }  else {
-
       const course = {
         name: this.courseForm.value.title,
         instructor_id: this.courseForm.value.instructor,
@@ -74,33 +70,27 @@ export class NewcourseComponent implements OnInit {
         isOpen: true,
         endEnrollDate: this.courseForm.value.endEnrollDate,
         category: this.courseForm.value.category
-      }
-
+      };
       this.subscriptions.push(this.courseServices.addCourse(course).subscribe( (resp) => {
-        if(resp) {
+        if (resp) {
           this.dialogRef.close(resp);
         }
       }));
     }
-
   }
 
   getDescriptionError() {
     return this.courseForm.hasError('required', 'courseForm.description')  ? '' : 'The description of a course cannot be empty!';
   }
 
-
   ngOnInit() {
     this.subscriptions.push(this.courseServices.getAllInstructors().subscribe( (resp: {name: string, id: string}[]) => {
       this.instructors = resp;
     }));
-    this.subscriptions.push(this.courseServices.getAllCategories().subscribe( (resp: {name: string}[]) => {
-      this.categories = resp;
-    }));
+    this.categories = this.courseServices.getAllCategories();
   }
 
   onNoClick() {
     this.dialogRef.close();
   }
-
 }

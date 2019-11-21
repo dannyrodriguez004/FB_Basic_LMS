@@ -1,7 +1,7 @@
 import { MatDialog } from '@angular/material';
-import { UserService } from './../../../user.service';
+import { UserService } from '../../../services/user.service';
 import { Subscription } from 'rxjs';
-import { CoursesService } from './../../courses.service';
+import { CoursesService } from '../../../services/courses.service';
 
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { CourseDetailEditorComponent } from './course-detail-editor/course-detail-editor.component';
@@ -15,11 +15,10 @@ export class InfoComponent implements OnInit, OnChanges {
 
   subscriptions: Subscription[] = [];
 
+  // tslint:disable-next-line:variable-name no-input-rename
   @Input('current_course') current_course: string;
   courseData: {id: string, name: string, description: string, instructor: string};
-
   loading = true;
-
   description: string;
   instructor: string;
   instructorEmail: string;
@@ -28,8 +27,7 @@ export class InfoComponent implements OnInit, OnChanges {
     private courseServices: CoursesService,
     private userServices: UserService,
     private dialog: MatDialog,
-    ) { }
-
+    ) {}
 
   openEditCourse() {
     const dialogRef = this.dialog.open(CourseDetailEditorComponent, {
@@ -38,21 +36,21 @@ export class InfoComponent implements OnInit, OnChanges {
     });
 
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
-      if(result) {
+      if (result) {
         console.log(result);
       }
     }));
   }
 
   ngOnInit() {
-    //console.log(this.courseData);
     this.loading = true;
-    this.subscriptions.push(this.courseServices.getCourseInfo(this.current_course).subscribe( (resp: {id: string, name:string, description: string, instructor: string}) => {
+    this.subscriptions.push(this.courseServices.getCourseInfo(this.current_course)
+      .subscribe( (resp: {id: string, name: string, description: string, instructor: string}) => {
       this.courseData = resp;
-
-      this.subscriptions.push(this.courseServices.getInstructorInfo(this.courseData.instructor).subscribe( (resp: {contactEmail: string, name: string}) => {
-        this.instructor = resp.name;
-        this.instructorEmail = resp.contactEmail;
+      this.subscriptions.push(this.courseServices.getInstructorInfo(this.courseData.instructor)
+        .subscribe( (response: {contactEmail: string, name: string}) => {
+        this.instructor = response.name;
+        this.instructorEmail = response.contactEmail;
       }));
       this.loading = false;
     }));
@@ -62,9 +60,7 @@ export class InfoComponent implements OnInit, OnChanges {
     return this.userServices.getIsAdmin();
   }
 
-
   ngOnChanges() {
     this.ngOnInit();
   }
-
 }

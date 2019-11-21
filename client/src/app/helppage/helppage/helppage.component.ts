@@ -11,7 +11,6 @@ export class HelppageComponent implements OnInit {
     {name: 'Danny Rodriguez', phone: '(305)-439-1452', email: 'drodr518@fiu.edu'},
     {name: 'Joao Guiramaes', phone: '(999)-999-9999', email: 'xxxxxx@fiu.edu'}
   ];
-
   submittedComplaint = '';
 
   ComplaintSubmitted() {
@@ -19,8 +18,7 @@ export class HelppageComponent implements OnInit {
   }
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
 }
 

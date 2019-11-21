@@ -1,9 +1,8 @@
-import {Course} from '../../courses/courses.models';
+import {Course} from '../../models/courses.models';
 import {Subscription} from 'rxjs';
-import {UserService} from '../../user.service';
-import {Component, OnInit} from '@angular/core';
-import {CoursesService} from '../../courses/courses.service';
-
+import {UserService} from '../../services/user.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {CoursesService} from '../../services/courses.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,35 +14,48 @@ export class DashboardComponent implements OnInit {
 
   private subscriptions: Subscription[] =  [];
   myCourses: Course[] = []; // the user's courses names and id
-
   // tslint:disable-next-line:variable-name
-  private student_id = '';
   constructor(
     private userServices: UserService,
+    private coursesServices: CoursesService,
 
   ) {
-    this.student_id = this.userServices.user(); // get debug student id
+    this.userServices.resetUserModel();
   }
 
   /**
    * Load courses, id and name, for the current user.
    */
   loadCourses() {
-    this.subscriptions.push(this.userServices.getStudentCourses(this.student_id).subscribe( (resp: Course[]) => {
-      this.myCourses = resp;
-    } ));
-
-    // this.subscriptions.push(this.coursesServices.getInstructorInfo(this.myCourses)
-    //     .subscribe( (course: (instructor: string, instructorEmail: string}) => {
-    //       this.course = this.coursesServices.getInstructorInfo()
-
+    if (this.userServices.getIsAdmin()) {
+      this.coursesServices.getAdminCourses().subscribe((resp: Course[]) => {
+        this.myCourses = resp;
+      });
+    } else {
+      this.myCourses = [];
+      this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: Course[]) => {
+        if (this.userServices.fbUser().id) {
+          console.log(this.userServices.fbUser());
+          resp.forEach((course: Course) => {
+            this.coursesServices.getCourseInfo(course.id)
+              .subscribe((courseInfo: any) => {
+                this.coursesServices.getInstructorInfo(courseInfo.instructor).subscribe((instructor: any) => {
+                  console.log('FOO ' + JSON.stringify(instructor));
+                  course.instructor_name = instructor.name;
+                  this.myCourses.push(JSON.parse(JSON.stringify(course)));
+                });
+              });
+          });
+        } else {
+          console.log('not authorized!');
+        }
+      }));
     }
-
+  }
 
   ngOnInit() {
     this.loadCourses();
-
-      }
+  }
 
   isAdmin() {
     return this.userServices.getIsAdmin();

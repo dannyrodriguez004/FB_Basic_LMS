@@ -1,5 +1,5 @@
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { CoursesService } from './../../../courses.service';
+import { CoursesService } from '../../../../services/courses.service';
 import { MatDialogRef, MAT_DIALOG_DATA,  } from '@angular/material';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, Optional, Inject } from '@angular/core';
@@ -13,11 +13,12 @@ export class NewDiscussionComponent implements OnInit {
 
   today = new Date();
   discussionForm: FormGroup;
+  // tslint:disable-next-line:variable-name
   current_course: string;
-
   constructor(
     public dialogRef: MatDialogRef<NewDiscussionComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) data: string,
+    // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private coursesServices: CoursesService,
   ) {
@@ -25,9 +26,8 @@ export class NewDiscussionComponent implements OnInit {
       title: ['', Validators.required],
       description: ['', Validators.required],
       isClosed: [false, Validators.required],
-      endDate: ['', Validators.required]
+      endDate: ['', Validators.required],
     });
-
     this.current_course = data;
   }
 
@@ -44,15 +44,16 @@ export class NewDiscussionComponent implements OnInit {
     defaultFontName: 'Arial',
     customClasses: [
       {
-        name: "titleText",
-        class: "titleText",
-        tag: "h1",
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
       },
     ]
   };
 
   getDescriptionError() {
-    return this.discussionForm.hasError('required', 'discussionForm.description')  ? '' : this.discussionForm.controls['description'].dirty ? 'The description of a discussion cannot be empty!' : '';
+    return this.discussionForm.hasError('required', 'discussionForm.description')  ? ''
+      : this.discussionForm.controls.description.dirty ? 'The description of a discussion cannot be empty!' : '';
   }
 
   ngOnInit() {
@@ -74,5 +75,4 @@ export class NewDiscussionComponent implements OnInit {
   onNoClick() {
     this.dialogRef.close();
   }
-
 }

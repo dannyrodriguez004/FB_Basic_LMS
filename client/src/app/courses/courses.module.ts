@@ -18,14 +18,18 @@ import {
   MatStepperModule,
   MatCheckboxModule,
   MatProgressSpinnerModule,
-  MatDividerModule
+  MatDividerModule,
+  MatProgressBarModule,
+  MatMenuModule,
+  MatSnackBarModule,
+  MatAutocompleteModule
 } from '@angular/material';
 
 import { CoursesRoutingModule } from './courses-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CourseComponent } from './course/course.component';
-import { CoursesComponent } from './courses/courses.component';
+import { CoursesComponent, NotifyEnrolledComponent, NotifyInClassComponent, NotifyInWaitingComponent } from './courses/courses.component';
 import { ModulesComponent } from './course/modules/modules.component';
 import { GradesComponent } from './course/grades/grades.component';
 import { DiscussionsComponent } from './course/discussions/discussions.component';
@@ -51,6 +55,12 @@ import { DocumentViewerComponent } from './course/document-viewer/document-viewe
 import { RollcallComponent } from './course/rollcall/rollcall.component';
 import { PagesComponent } from './course/pages/pages.component';
 import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.component';
+import { EnrollDialogComponent } from './course/confirm-enroll/enroll-dialog/enroll-dialog.component';
+import { GradeReportsComponent } from './course/grade-reports/grade-reports.component';
+import { QuizResultComponent } from './assessment/quiz-result/quiz-result.component';
+import { QuizDialogComponent } from './course/modules/quiz-dialog/quiz-dialog.component';
+import { AnnouncementsComponent } from './course/announcements/announcements.component';
+import { NewAnnouncementComponent } from './course/announcements/new-announcement/new-announcement.component';
 
 
 
@@ -76,7 +86,16 @@ import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.c
     DocumentViewerComponent,
     RollcallComponent,
     PagesComponent,
-    ConfirmEnrollComponent
+    ConfirmEnrollComponent,
+    EnrollDialogComponent,
+    GradeReportsComponent,
+    QuizResultComponent,
+    QuizDialogComponent,
+    NotifyEnrolledComponent,
+    NotifyInClassComponent,
+    NotifyInWaitingComponent,
+    AnnouncementsComponent,
+    NewAnnouncementComponent,
   ],
   imports: [
     CommonModule,
@@ -104,14 +123,25 @@ import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.c
     MatStepperModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
-    MatDividerModule
+    MatDividerModule,
+    MatProgressBarModule,
+    MatMenuModule,
+    MatSnackBarModule,
+    MatAutocompleteModule
   ],
+  exports: [CourseDetailEditorComponent],
   entryComponents: [
     DiscussionEditorComponent,
     NewDiscussionComponent,
+    NewAnnouncementComponent,
     CourseDetailEditorComponent,
     ModuleEditorComponent,
     NewContentComponent,
+    EnrollDialogComponent,
+    QuizDialogComponent,
+    NotifyEnrolledComponent,
+    NotifyInClassComponent,
+    NotifyInWaitingComponent
   ]
 })
 export class CoursesModule { }

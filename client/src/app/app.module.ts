@@ -1,13 +1,9 @@
-import { NewContentComponent } from './courses/course/modules/new-content/new-content.component';
-import { ModuleEditorComponent } from './courses/course/modules/module-editor/module-editor.component';
-import { CourseDetailEditorComponent } from './courses/course/info/course-detail-editor/course-detail-editor.component';
-import { DiscussionEditorComponent } from './courses/course/discussion/discussion-editor/discussion-editor.component';
-import { UserService } from './user.service';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
+/* Angular */
 import { NgModule } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+
+/* Styling */
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './home/home.module';
 import { FormsModule } from '@angular/forms';
@@ -19,14 +15,30 @@ import { MatInputModule,
   MatSortModule,
   MatSelectModule,
   MatDialogModule} from '@angular/material';
-import { NewDiscussionComponent } from './courses/course/discussions/new-discussion/new-discussion.component';
-import { NewcourseComponent } from './nav/newcourse/newcourse.component';
+
+/* Services */
+import { UserService } from './services/user.service';
+
+/* Routing */
+import { AppRoutingModule } from './app-routing.module';
+
+/* App Components */
+import { AppComponent } from './app.component';
 import { YesNoDialogComponent } from './yes-no-dialog/yes-no-dialog.component';
+import { CookieService } from 'ngx-cookie-service';
+import { JwtTokenInterceptorService } from './jwt-token.interceptor';
+import {EnsureHttpsInterceptorModule} from 'angular-interceptors';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { ContextComponent } from './context/context.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    YesNoDialogComponent
+    YesNoDialogComponent,
+    ContextComponent
   ],
   imports: [
     AppRoutingModule,
@@ -42,10 +54,19 @@ import { YesNoDialogComponent } from './yes-no-dialog/yes-no-dialog.component';
     MatExpansionModule,
     MatSortModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    EnsureHttpsInterceptorModule.forRoot(),
+    MatIconModule,
+    MatSidenavModule,
+    MatListModule,
+    MatProgressSpinnerModule
   ],
-  providers: [UserService],
+  providers: [
+    UserService,
+    CookieService,
+    {provide: HTTP_INTERCEPTORS, useClass: JwtTokenInterceptorService, multi: true}
+  ],
   bootstrap: [AppComponent],
-  entryComponents: [YesNoDialogComponent],
+  entryComponents: [YesNoDialogComponent, ContextComponent],
 })
 export class AppModule { }

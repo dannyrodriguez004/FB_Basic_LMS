@@ -3,6 +3,7 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const JwtExtract = require('passport-jwt').ExtractJwt;
 const firebaseDB = require('firebase-admin').database();
 const crypto = require('bcrypt');
+const FacebookTokenStrategy = require('passport-facebook-token');
 
 module.exports = (passport) => {
 
@@ -14,6 +15,16 @@ module.exports = (passport) => {
         callback(null, user);
     });
 
+    passport.use(new FacebookTokenStrategy({
+            clientID: '398974807682335',
+            clientSecret: '69945f3bf613bc74837419d8713eff9e'
+            // callbackURL: "https://locallhost:3001/security/facebook/auth"
+        },
+        function (accessToken, refreshToken, profile, done) {
+            console.log("I AM in FacebookTokenStrategy");
+            console.log(profile);
+        }));
+
     passport.use( new LocalStrategy(
         async function(username, password, callback) {
             if(!username) {
@@ -22,12 +33,10 @@ module.exports = (passport) => {
             if(!password) {
                 return callback(null, false);
             }
-
-            var users = await firebaseDB.ref('/instructors')
+            let users = await firebaseDB.ref('/instructors')
                 .orderByChild('email')
                 .equalTo(username)
                 .once('value');
-            
             if(users.numChildren() != 1) {
                 return callback(null, false);
             } else {
@@ -53,4 +62,4 @@ module.exports = (passport) => {
         function (jwtPayload, callback) {
             return callback(null, jwtPayload);
         }));
-}
+};

@@ -5,7 +5,9 @@ import { HelppageRoutingModule } from './helppage-routing.module';
 import { HelppageComponent } from './helppage/helppage.component';
 import {MatListModule} from '@angular/material/list';
 import {MatIconModule} from '@angular/material/icon';
-
+import {MatCardModule} from '@angular/material/card';
+import {MatTableModule} from '@angular/material/table';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [HelppageComponent],
@@ -13,7 +15,11 @@ import {MatIconModule} from '@angular/material/icon';
     CommonModule,
     HelppageRoutingModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule,
+    MatTableModule,
+    MatToolbarModule
   ]
 })
+
 export class HelppageModule { }

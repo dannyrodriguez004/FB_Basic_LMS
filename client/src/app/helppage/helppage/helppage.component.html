@@ -1,30 +1,56 @@
-<div class="header">
-  <label class="header-text">How Can We Help</label>
-  <br>
-  <input class="header-searchbox" type="text"/>
-  <button class="headerbutton" mat-icon-button color="primary" aria-label="Example icon-button with a heart icon">
-    <mat-icon>search</mat-icon>
-  </button>
-</div>
-<div class="complaintsubmission">
-  <label class="header-text-2">Describe Your Problem</label>
-  <br>
-  <textarea rows="5" style="width: 500px" [value]="'Please explain your problem here!'"></textarea>
-  <br>
-  <button (click)="ComplaintSubmitted()"> Submit </button>
-  <p> {{submittedComplaint}} </p>
-</div>
-<div class="header-2">
-  <hr>
-  <h1 mat-subheader class="mat-subheader">Contact Information</h1>
-  <div class="matlist">
-  <mat-list>
-  <mat-list-item *ngFor="let admin of admins">
-    <mat-icon mat-list-icon class="listicon">contact_support</mat-icon>
-    <h4 mat-line>{{admin.name}}</h4>
-    <p mat-line> Phone: {{admin.phone}} </p>
-    <p mat-line> Email: {{admin.email}} </p>
-  </mat-list-item>
-</mat-list>
-</div>
+<div class="mat-app-background">
+  <ng-container>
+    <mat-toolbar>
+      <mat-toolbar-row style="background-color: #3f51b5; color: #fafafa;
+          border-bottom-style: solid; border-bottom-width: 1px;
+          border-bottom-color: black;">Support
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <mat-card>
+      <mat-card-title> How Can We Help ? </mat-card-title>
+    <mat-card-content>
+        <input
+          matInput
+          type="text"
+          class="header-searchbox"
+          placeholder="Search Solutions">
+        <button mat-icon-button color="primary">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-card-content>
+      </mat-card>
+
+    <mat-card>
+        <mat-card-title> Describe Your Problem </mat-card-title>
+      <mat-card-content>
+      <textarea
+        matInput
+        rows="5"
+        [value]="'Please explain your problem here!'"
+        style="width: 500px"
+      ></textarea>
+      <br>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          (click)="ComplaintSubmitted()">Submit Problem</button>
+      <p> {{submittedComplaint}} </p>
+        </mat-card-content>
+    </mat-card>
+
+  <mat-card>
+      <mat-card-title> Contact Support </mat-card-title>
+    <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let admin of admins">
+        <mat-icon mat-list-icon>contact_support</mat-icon>
+        <h3 mat-line>{{admin.name}}</h3>
+        <p mat-line> Phone: {{admin.phone}}</p>
+        <p mat-line> Email: {{admin.email}} </p>
+      </mat-list-item>
+    </mat-list>
+    </mat-card-content>
+  </mat-card>
+  </ng-container>
 </div>

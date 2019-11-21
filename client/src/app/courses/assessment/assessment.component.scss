@@ -5,6 +5,8 @@ mat-button-toggle, mat-button-toggle-group {
 
 mat-card {
     margin: 1rem;
+    margin-left: 150px;
+    margin-right: 2%;
 }
 
 .controls button {
@@ -26,3 +28,17 @@ mat-card {
     float: right;
 }
 
+div {
+    overflow: visible;
+}
+
+mat-card span button {
+    width: 100%;
+}
+.timer {
+    width: 80px;
+    margin: 18px;
+    margin-top: 3rem;
+    position: fixed;
+    z-index: 2;
+}

@@ -19,18 +19,14 @@ export class NewContentComponent implements OnInit {
     this.data = data;
    }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 
   loading(isLoading) {
     this.isSubmitting = isLoading;
-    if(isLoading) {
+    if (isLoading) {
       document.getElementById('content').style.display = 'none';
     } else {
       document.getElementById('content').style.display = 'block';
     }
   }
-  
-
 }

@@ -1,15 +1,10 @@
-<br>
-<div>
-<mat-card class="HomePage">
-  <mat-card-header>
-    <mat-card-title>Home Page</mat-card-title>
-  </mat-card-header>
-<hr>
-</mat-card>
+<div class="mat-app-background">
+  <ng-container>
+    <mat-toolbar>
+      <mat-toolbar-row style="background-color: #3f51b5; color: #fafafa;">Home Page</mat-toolbar-row>
+    </mat-toolbar>
   <mat-card>
-  <mat-card-header>
     <mat-card-title>About Us</mat-card-title>
-  </mat-card-header>
   <mat-card-content>
     <p>
       The goal of the project is to build a basic Learning Management System (LMS) App on Facebook that allows for online
@@ -18,15 +13,12 @@
       the Facebook platform and maximize the internet speed, considering the low download /upload Internet speed in
       developing countries. Rebuilding from scratch using Angular and NodeJs.
     </p>
-  </mat-card-content>
-  <mat-card-actions>
+    <br>
     <button mat-button>Start Learning!</button>
-  </mat-card-actions>
-    <hr>
+  </mat-card-content>
+
 </mat-card>
-</div>
-<div>
-<mat-card class="Footer">
+<mat-card>
     <mat-card-title>Contact Support</mat-card-title>
   <mat-card-content>
     <mat-list>
@@ -41,9 +33,12 @@
 </mat-card>
   <div>
     <mat-card>
+      <mat-card-title>Privacy</mat-card-title>
+    <mat-card-content>
       <button [routerLink]="['privacy/']" mat-button>Privacy Policy</button>
-      <br>
-      <button [routerLink]="['tos/']" mat-button>Terms of Service</button>
+          <button [routerLink]="['tos/']" mat-button>Terms of Service</button>
+    </mat-card-content>
     </mat-card>
   </div>
+  </ng-container>
 </div>

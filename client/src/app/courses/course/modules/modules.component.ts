@@ -1,11 +1,11 @@
 import { MatDialog } from '@angular/material';
-import { UserService } from './../../../user.service';
-import { CoursesService } from './../../courses.service';
+import { UserService } from '../../../services/user.service';
+import { CoursesService } from '../../../services/courses.service';
 import { Subscription } from 'rxjs';
 import { Component, OnInit, Input } from '@angular/core';
 import { NewContentComponent } from './new-content/new-content.component';
 import { ModuleEditorComponent } from './module-editor/module-editor.component';
-
+import { QuizDialogComponent } from './quiz-dialog/quiz-dialog.component';
 
 @Component({
   selector: 'app-modules',
@@ -14,12 +14,10 @@ import { ModuleEditorComponent } from './module-editor/module-editor.component';
 })
 export class ModulesComponent implements OnInit {
 
+  // tslint:disable-next-line:variable-name no-input-rename
   @Input('current_course') current_course: string;
-
   loading = true;
-
   modules = [];
-
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -28,56 +26,67 @@ export class ModulesComponent implements OnInit {
     private dialog: MatDialog,
     ) { }
 
-  openNewContentDialog(sel_module) {
+  openNewContentDialog(selectModule) {
 
     const dialogRef = this.dialog.open(NewContentComponent, {
       width: '90%',
       data: {
         course: this.current_course,
-        current_module: sel_module
+        current_module: selectModule
       }
     });
 
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
-      if(result) {
+      if (result) {
         this.ngOnInit();
         console.log(result);
       }
     }));
   }
 
-  openEditModuleDialog(course_module) {
+  openEditModuleDialog(courseModule) {
 
-    console.log(course_module);
+    console.log(courseModule);
     const dialogRef = this.dialog.open(ModuleEditorComponent, {
       width: '90%',
-      data: {module: course_module, course_id: this.current_course}
+      data: {module: courseModule, course_id: this.current_course}
     });
-
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
-      if(result) {
+      if (result) {
         this.ngOnInit();
       }
-      
     }));
   }
 
+  openQuizDialog(courseModule, quiz) {
+
+    const dialogRef = this.dialog.open(QuizDialogComponent, {
+      // width: '90%',
+      data: {
+        module: courseModule,
+        course: this.current_course,
+        quiz
+      },
+    });
+
+    this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
+
+    }));
+  }
 
   openInNewTab(url) {
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   }
 
   isAdmin() {
     return this.userServices.getIsAdmin();
   }
-  
+
   ngOnInit() {
     this.loading = true;
     this.subscriptions.push(this.coursesServices.getModules(this.current_course).subscribe( (resp: []) => {
       this.modules = resp;
       this.loading = false;
-      //console.log(resp);
     }));
   }
-
 }
