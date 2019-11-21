@@ -33,7 +33,6 @@ export class NavbarComponent implements OnInit, OnChanges {
     private userServices: UserService,
     private coursesServices: CoursesService,
     private dialog: MatDialog,
-    private coursesServices: CoursesService,
   ) {
     const jwtToken = this.userServices.getToken();
     this.loggedIn = new BehaviorSubject<boolean>(!!jwtToken);

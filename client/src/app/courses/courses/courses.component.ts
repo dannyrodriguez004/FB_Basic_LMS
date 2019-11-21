@@ -8,7 +8,6 @@ import { YesNoDialogComponent } from 'src/app/yes-no-dialog/yes-no-dialog.compon
 const COURSE_PER_PAGE = 10;
 const letters = /^[A-Za-z]*$/;
 
-const COURSE_PER_PAGE = 10;
 
 @Component({
   selector: 'app-courses',
@@ -267,37 +266,6 @@ export class CoursesComponent implements OnInit {
 
     }
   }
-
-  //navigates to the last page of discussion posts
-  lastPage() {
-    if(this.size > COURSE_PER_PAGE) {
-      this.startFrom = Math.trunc(this.size/ COURSE_PER_PAGE) * COURSE_PER_PAGE
-    }
-    console.log(this);
-    this.setParams();
-  }
-
-  // sets the parameters for navigation and reloads the discussion
-  setParams() {
-    this.router.navigate(['/nav/courses'],{ queryParams: {start: this.startFrom, category: this.currentCategory, sort: this.sort} });
-    this.fetchPage();
-  }
-
-  getCategories() {
-    return this.coursesServices.getAllCategories();
-  }
-
-  setCategories(category) {
-    this.currentCategory = category;
-    this.startFrom = 0;
-    this.sort = 'name';
-    this.setParams();
-  }
-
-  userLoggedIn() {
-    return this.userServices.fbLoggedIn();
-  }
-
   
 }
 
