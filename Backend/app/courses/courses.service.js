@@ -220,6 +220,7 @@ class CoursesService {
                     outOf: 0,
                     startTime: "null",
                     score: 0,
+                    coins: content.coins,
                 });
                 let total = 0;
                 content.items.forEach( (item) => {
@@ -832,7 +833,9 @@ class CoursesService {
             score: 0,
             startTime: 'null',
             time: -1,
-            title: 'null',};
+            title: 'null',
+            coins: 0,
+        };
         try {
             let quizzes = await database.ref('/courses/' + course + '/modules/' + module_key + '/content/' + quiz)
                 .once('value');
@@ -847,6 +850,7 @@ class CoursesService {
                 startTime: record.startTime,
                 time: record.time || -1,
                 title: record.title || null,
+                coins: record.coins || 0,
             };
             quizzes = await quizzes.ref.child('items').once('value');
             quizzes.forEach( (item) => {
@@ -1163,6 +1167,11 @@ class CoursesService {
             items: responses,
             attempted: oldRecord.attempted + 1,
         };
+
+        if(oldRecord.attempted < 1 && quiz.coins > 0) {
+            await userService.addCoins(student, quiz.coins);
+        }
+
         for(let i = 0; i < quiz.items.length; i++) {
             if(quiz.items[i].answer == record.items[i].response) record.score += quiz.items[i].value;
         }

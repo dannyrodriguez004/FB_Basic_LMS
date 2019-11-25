@@ -28,10 +28,15 @@
             <mat-checkbox color="primary" (click)="dueCheck()" formControlName="noDueDate">Set Due Date</mat-checkbox>
 
             <mat-form-field class="fill" appearance="outline">
-                    <mat-label>Quiz due date</mat-label>
-                    <input matInput formControlName="dueDate" [min]="today" [matDatepicker]="picker" placeholder="Choose an due date" required>
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
+                <mat-label>Quiz due date</mat-label>
+                <input matInput formControlName="dueDate" [min]="today" [matDatepicker]="picker" placeholder="Choose an due date" required>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field style="margin-left: 1rem;" appearance="outline">
+                <mat-label>Coins</mat-label>
+                <input matInput formControlName="coins" type="number" step="1" required>
             </mat-form-field>
 
             <div>
