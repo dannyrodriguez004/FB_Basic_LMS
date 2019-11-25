@@ -103,5 +103,12 @@ module.exports = (passport) => {
         const resp = await usersServices.studentInDatabase(req.body.userID);
         await res.json(resp);
     });
+
+    router.post('/test-coin', async (req, res, next) => {
+        const resp = await usersServices.addCoins(req.body.student, 1);
+        res.json(resp);
+    });
+
+
     return router;
 };

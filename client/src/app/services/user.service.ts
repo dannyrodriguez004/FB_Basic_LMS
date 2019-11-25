@@ -261,6 +261,10 @@ export class UserService {
     });
   }
 
+  addCoin() {
+    return this.http.post(`${environment.apiAddress}/users/test-coin`, {student: this.userModel.id});
+  }
+
   updateStudent(userModel) {
     const opts = {
       body: userModel

@@ -38,6 +38,10 @@
       <span class="fill"></span>
 
       <span>
+            <button mat-button (click)="addCoin()">Add Coin</button>
+      </span>
+
+      <span>
             <button mat-raised-button *ngIf="loggedIn.value" [mat-menu-trigger-for]="fbMenu"> Profile </button>
         <mat-menu #fbMenu="matMenu">
           <button [routerLink]="['security/profile/']" mat-menu-item> Visit Profile </button>

@@ -47,7 +47,8 @@ class UsersService {
                     lname: user.body.lname.trim(),
                     email: user.body.email.trim(),
                     country: user.body.country.trim(),
-                    phone: user.body.phone.trim()
+                    phone: user.body.phone.trim(),
+                    coins: 0,
                 });
             }
         } catch (err) {
@@ -258,6 +259,21 @@ class UsersService {
             console.error(err);
         }
         return false;
+    }
+
+    async addCoins(student, amount) {
+        try {
+
+            let record = await database.ref('/students/' + student).child('coins').transaction( coins => {
+                return (coins || 0) + amount;
+            });
+
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
     }
 }
 
