@@ -3,11 +3,27 @@
           border-bottom-style: solid; border-bottom-width: 1px;
           border-bottom-color: black;">
   Library of Courses
+
+
+  <span>
   <button mat-button [matMenuTriggerFor]="menu">Select Category</button>
-  <mat-menu #menu="matMenu">
+    <mat-menu #menu="matMenu">
       <button (click)="setCategories('null')" mat-menu-item>None</button>
-    <button (click)="setCategories(cats.name)" *ngFor="let cats of getCategories()" mat-menu-item>{{cats.name}}</button>
-  </mat-menu>
+      <button (click)="setCategories(cats.name)" *ngFor="let cats of getCategories()" mat-menu-item>{{cats.name}}</button>
+    </mat-menu>
+  </span>
+
+
+  <span>
+  <button mat-button [matMenuTriggerFor]="sort">Sort By</button>
+    <mat-menu #sort="matMenu">
+      <button (click)="setSort('name')" mat-menu-item>Course Name</button>
+      <button (click)="setSort('category')" mat-menu-item>Category</button>
+      <button (click)="setSort('endEnrollDate')" mat-menu-item>Enrollmet Deadline</button>
+    </mat-menu>
+  </span>
+
+
 
   <span style="width: 75%; padding-left: 1rem;">
     <form (keydown)="keyDownFunction($event)">
@@ -26,6 +42,11 @@
         </mat-autocomplete>
       </mat-form-field>
     </form>
+  </span>
+
+
+  <span>
+      <mat-slide-toggle (click)="toggleOpen()">{{onlyOpen ? 'Open Courses' : 'All Courses'}}</mat-slide-toggle>
   </span>
   </mat-toolbar-row>
 </mat-toolbar>
@@ -58,7 +79,7 @@
         </p>
       </mat-card-content>
       <mat-card-actions>
-          <button [disabled]="!userLoggedIn()" (click)="course.MAX_SIZE - course.size > 0 ?  register(course.id)
+          <button [disabled]="!userLoggedIn() || !course.isOpen || isAdmin()" (click)="course.MAX_SIZE - course.size > 0 ?  register(course.id)
            : openFullDialog(course.id)" mat-raised-button mat-button color="primary">Register</button>
       </mat-card-actions>
     </mat-card>

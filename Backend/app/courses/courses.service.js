@@ -1195,27 +1195,56 @@ class CoursesService {
         return true;
     }
 
-    async getCoursesPageByCategory(category, sortby, start) {
+    async getCoursesPageByCategory(category, sortby, start, open) {
         sortby = sortby == 'name' ? 'title' : sortby;
         let whole_category = [];
         let page = [];
         let counter = 0;
+
+        
         
         try {
             let ref = await database.ref('/courses').orderByChild('category').equalTo(category).once('value');
-            ref.forEach( (member) => {
-                var course = member.toJSON();
-                whole_category.push({
-                    id: member.key,
-                    title: course.name,
-                    description: course.description,
-                    instructor: course.instructor_id,
-                    size: course.size,
-                    MAX_SIZE: course.MAX_SIZE,
-                    endEnrollDate: course.endEnrollDate,
-                    category: course.category,
+
+            if(open == 'true') {
+
+                ref.forEach( (member) => {
+                    var course = member.toJSON();
+
+                    if(course.isOpen == true){
+                        whole_category.push({
+                            id: member.key,
+                            title: course.name,
+                            description: course.description,
+                            instructor: course.instructor_id,
+                            size: course.size,
+                            MAX_SIZE: course.MAX_SIZE,
+                            endEnrollDate: course.endEnrollDate,
+                            category: course.category,
+                            isOpen: course.isOpen,
+                        });
+                    }
+                    
                 });
-            });
+
+            } else {
+
+                ref.forEach( (member) => {
+                    var course = member.toJSON();
+                    whole_category.push({
+                        id: member.key,
+                        title: course.name,
+                        description: course.description,
+                        instructor: course.instructor_id,
+                        size: course.size,
+                        MAX_SIZE: course.MAX_SIZE,
+                        endEnrollDate: course.endEnrollDate,
+                        category: course.category,
+                        isOpen: course.isOpen,
+                    });
+                });
+            }
+            
 
             whole_category.sort((x, y) => ((x[sortby] === y[sortby]) ? 0 : ((x[sortby] > y[sortby]) ? 1 : -1)));
 
@@ -1239,7 +1268,8 @@ class CoursesService {
         };
     }
 
-    async getCoursesPage(sortBy, start) {
+    async getCoursesPage(sortBy, start, open) {
+
         let page = [];
         let counter = 0;
         let size = 0;
@@ -1247,21 +1277,48 @@ class CoursesService {
             let coursesRef = await database.ref('/courses').once('value');
             size = coursesRef.numChildren();
             coursesRef =  await database.ref('/courses').orderByChild(sortBy).limitToLast(size - start).once('value');
-            coursesRef.forEach( (member) => {
-                if(counter >= 10) throw 'payload full';
-                let course = member.toJSON();
-                page.push({
-                    id: member.key,
-                    title: course.name,
-                    description: course.description,
-                    instructor: course.instructor_id,
-                    size: course.size,
-                    MAX_SIZE: course.MAX_SIZE,
-                    endEnrollDate: course.endEnrollDate,
-                    category: course.category
+            
+            if(open == 'true') {
+
+                coursesRef.forEach( (member) => {
+                    if(counter >= 10) throw 'payload full';
+                    let course = member.toJSON();
+                    if(course.isOpen == true) {
+
+                        page.push({
+                            id: member.key,
+                            title: course.name,
+                            description: course.description,
+                            instructor: course.instructor_id,
+                            size: course.size,
+                            MAX_SIZE: course.MAX_SIZE,
+                            endEnrollDate: course.endEnrollDate,
+                            category: course.category,
+                            isOpen: course.isOpen,
+                        });
+                        counter++;    
+                    }
                 });
-                counter++;
-            });
+            } else {
+                
+                coursesRef.forEach( (member) => {
+                    if(counter >= 10) throw 'payload full';
+                    let course = member.toJSON();
+                    page.push({
+                        id: member.key,
+                        title: course.name,
+                        description: course.description,
+                        instructor: course.instructor_id,
+                        size: course.size,
+                        MAX_SIZE: course.MAX_SIZE,
+                        endEnrollDate: course.endEnrollDate,
+                        category: course.category,
+                        isOpen: course.isOpen,
+                    });
+                    counter++;
+                });
+            }
+            
         } catch(err) {
             console.error(err);
         }
@@ -1318,7 +1375,8 @@ class CoursesService {
                         size: course.size,
                         MAX_SIZE: course.MAX_SIZE,
                         endEnrollDate: course.endEnrollDate,
-                        category: course.category
+                        category: course.category,
+                        isOpen: course.isOpen,
                     });
                     counter++;
                     if(counter >= 10) throw "page filled!";
