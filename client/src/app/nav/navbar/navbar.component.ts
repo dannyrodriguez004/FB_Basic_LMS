@@ -153,11 +153,6 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
   }
 
-  addCoin() {
-    this.userServices.addCoin().subscribe(resp => {
-      console.log(resp);
-    });
-  }
 
   isAdmin() {
     return this.userServices.getIsAdmin();
