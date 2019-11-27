@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { CoursesService } from '../../services/courses.service';
 import { UserService } from '../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
 
   loading = true;
   subscriptions: Subscription[] = [];
-  profilePicURL;
+  loadingPic = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,8 +26,15 @@ export class ProfileComponent implements OnInit {
     private coursesServices: CoursesService,
     private router: Router,
     private utilityServices: UtilityService,
+    private zone: NgZone,
   ) {
     this.userServices.resetUserModel();
+    this.subscriptions.push(this.userServices.profilePicReady.subscribe(bool => {
+      this.zone.run(() => {
+        console.log('############### Profile Pic Ready ' + this.userServices.profilePicURL);
+        this.loadingPic = false;
+      });
+    }));
   }
 
   getUser() {
@@ -35,13 +42,15 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfilePic() {
-    return this.profilePicURL;
+    return this.userServices.profilePicURL;
   }
 
   ngOnInit() {
     this.loading = true;
-    this.profilePicURL = this.userServices.profilePicURL;
+    this.loadingPic = false;
     this.userServices.fbUser();
+
+    this.userServices.getFacebookProfilePic();
 
     // if (!this.userServices.fbUser() && !this.userServices.getIsAdmin()) {
     //     console.log('not authorized!');
@@ -79,4 +88,3 @@ export class ProfileComponent implements OnInit {
   }
 
 }
-

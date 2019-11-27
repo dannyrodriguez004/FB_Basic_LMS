@@ -8,14 +8,23 @@
   <div>
     <div class="card-deck-container">
       <ng-container *ngFor="let course of myCourses" fxLayout="row">
-          <mat-card  [ngStyle]="{'width':'300' + 'px'}">
-            <h1>{{course.name}}</h1>
-            <p>
-              <strong>Instructor: </strong> {{course.instructor_name}}
-              <br>
-            </p>
-            <a [routerLink]="['/nav/courses/view-course']" [queryParams]="{ course: course.id }" mat-button>Syllabus</a>
+          <mat-card  [ngStyle]="{'width':'320' + 'px'}">
+            <h2>{{course.name}}</h2>
+            <mat-card-subtitle>{{course.category}}
+            </mat-card-subtitle>
             <hr>
+            <mat-card-content>
+              <a>Instructor: </a><a style="margin-inline-start: 50px; font-weight: bold">{{course.instructor_name}}</a>
+              <br>
+              <a>Contact Email: </a><a style="margin-inline-start: 20px" href="{{course.email}}"> {{course.email}}</a>
+              <br>
+              <a>Enrolled: </a><a style="margin-inline-start: 95px; font-weight: bold">{{course.size}}</a>
+              <br>
+              <a *ngIf="course.MAX_SIZE > course.size"> Available Spots: </a><a style="margin-inline-start: 50px; font-weight: bold">{{course.MAX_SIZE - course.size}}</a>
+            </mat-card-content>
+<!--            <a [routerLink]="['/nav/courses/view-course']" [queryParams]="{ course: course.id}" mat-button>Announcements</a>-->
+            <span class="fill"></span>
+            <button [routerLink]="['/nav/courses/view-course']" [queryParams]="{ course: course.id }" mat-button>Syllabus</button>
           </mat-card>
       </ng-container>
     </div>

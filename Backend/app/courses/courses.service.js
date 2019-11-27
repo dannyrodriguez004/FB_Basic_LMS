@@ -384,6 +384,7 @@ class CoursesService {
             myCourse = {
                 id: member.key,
                 name: course.name,
+                category: course.category,
                 description: course.description,
                 instructor: course.instructor_id,
                 size: course.size,

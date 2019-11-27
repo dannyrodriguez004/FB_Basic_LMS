@@ -20,6 +20,7 @@ export class UserService {
   private subscriptions: Subscription[] = [];
   FBLoggedIn;
   profilePicURL;
+  profilePicReady;
   private userModel: UserModel = new UserModel();
   // tslint:disable-next-line:variable-name
   private student_id: string; // debugging value
@@ -31,6 +32,7 @@ export class UserService {
     private router: Router) {
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
+    this.profilePicReady = new BehaviorSubject<boolean>(!!this.profilePicURL);
     (window as any).fbAsyncInit = () => {
       FB.init({
         appId: '398974807682335',
@@ -92,18 +94,46 @@ export class UserService {
       this.subscriptions.push(this.getCurrentUser().subscribe((userInfo: UserModel) => {
         this.userModel = userInfo;
         console.log(this.userModel);
+        // this.userModel.photo = this.getFacebookProfilePic();
       }));
+      // tslint:disable-next-line:no-shadowed-variable
+      // const url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
+      // console.log('##################### URL ' + url);
     }
   }
 
   getFacebookProfilePic() {
-    let url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
-    console.log('##################### URL ' + url);
-    FB.api(url, response => {
+    (window as any).fbAsyncInit = () => {
+      FB.init({
+        appId: '398974807682335',
+        cookie: true,
+        xfbml: true,
+        version: 'v4.0'
+      });
+      FB.AppEvents.logPageView();
+      this.loadUser();
+      if (this.getToken()) {
+        // this.getCurrentUser();
+      }
+      const url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
+      console.log('##################### URL ' + url);
+      FB.api(url, response => {
       console.log('###### PHOTO response:', response);
       this.profilePicURL = response.data.url;
-    });
+      this.profilePicReady.next(true);
+      });
+    };
+    // return this.profilePicURL;
   }
+
+  // getFacebookProfilePic() {
+  //   let url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
+  //   console.log('##################### URL ' + url);
+  //   FB.api(url, response => {
+  //     console.log('###### PHOTO response:', response);
+  //     this.profilePicURL = response.data.url;
+  //   });
+  // }
   isTokenFresh(token: string) {
     try {
       const decoded = jwt_decode(token);
@@ -192,39 +222,6 @@ export class UserService {
     const params = {params: new HttpParams().set('key', `${key}`)};
     return this.http.get(`${environment.apiAddress}/users/get-user-info`, params);
   }
-
-  // redirectStudent(user) {
-  //   console.log('IN REDIRECT STUDENT');
-  //   console.log(user);
-  //   this.existingStudent(user).subscribe((resp: boolean) => {
-  //     console.log(resp);
-  //     if (resp) {
-  //       this.getCurrentUser().subscribe((response: any) => {
-  //         console.log('IN REDIRECT STUDENT -> GET CURRENT USER   ', response);
-  //         this.studentID = response.userID;
-  //         this.userModel = response.user_info;
-  //         if (!response.userID) {
-  //           console.log('USER INFO CANNOT BE FOUND');
-  //         } else {
-  //           console.log(this.studentID);
-  //           console.log('USER', this.userModel);
-  //         }
-  //       });
-  //       return this.userModel;
-  //     } else {
-  //     // this.addUser(this.userModel);
-  //     }
-  //   });
-  // }
-
-  // existingStudent(user) {
-  //   const opts = {
-  //     headers:  this.buildHeaders(),
-  //     userID: user
-  //   };
-  //   console.log('IN EXISTING STUDENT', opts);
-  //   return this.http.post(`${environment.apiAddress}/users/existing-student`, opts);
-  // }
 
   logout() {
     // tslint:disable-next-line:triple-equals
