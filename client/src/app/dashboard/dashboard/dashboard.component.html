@@ -5,7 +5,7 @@
           border-bottom-color: black;">Dashboard
     </mat-toolbar-row>
   </mat-toolbar>
-  <div>
+  <div *ngIf="!isAdmin()">
     <div class="card-deck-container">
       <ng-container *ngFor="let course of myCourses" fxLayout="row">
           <mat-card  [ngStyle]="{'width':'320' + 'px'}">
@@ -28,5 +28,28 @@
           </mat-card>
       </ng-container>
     </div>
+  </div>
+    <div *ngIf="isAdmin()">
+      <div class="card-deck-container">
+        <ng-container *ngFor="let course of myCourses" fxLayout="row">
+          <mat-card [routerLink]="['/nav/courses/view-course']" [queryParams]="{ course: course.id }"
+                    mat-button [ngStyle]="{'width':'320' + 'px'}">
+            <h2>{{course.name}}</h2>
+<!--            <mat-card-subtitle>{{course.category}}-->
+<!--            </mat-card-subtitle>-->
+            <hr>
+            <mat-card-content>
+              <a>Last Day for Enrollment: </a><a style="margin-inline-start: 1px; font-weight: bold">{{course.endEnrollDate | date: 'mediumDate'}}</a>
+              <br>
+              <a>Enrolled: </a><a style="margin-inline-start: 95px; font-weight: bold">{{course.size}}</a>
+              <br>
+              <a> Available Spots: </a><a style="margin-inline-start: 50px; font-weight: bold">{{course.MAX_SIZE - course.size}}</a>
+              <br>
+              <strong *ngIf="course.MAX_SIZE == course.size"> CLASS IS FULL </strong>
+            </mat-card-content>
+            <span class="fill"></span>
+          </mat-card>
+        </ng-container>
+      </div>
   </div>
 </div>

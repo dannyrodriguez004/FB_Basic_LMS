@@ -49,13 +49,7 @@ export class ProfileComponent implements OnInit {
     this.loading = true;
     this.loadingPic = false;
     this.userServices.fbUser();
-
     this.userServices.getFacebookProfilePic();
-
-    // if (!this.userServices.fbUser() && !this.userServices.getIsAdmin()) {
-    //     console.log('not authorized!');
-    //     this.router.navigateByUrl('/');
-    //   }
     this.loading = false;
   }
 

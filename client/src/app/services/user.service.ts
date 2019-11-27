@@ -22,9 +22,6 @@ export class UserService {
   profilePicURL;
   profilePicReady;
   private userModel: UserModel = new UserModel();
-  // tslint:disable-next-line:variable-name
-  private student_id: string; // debugging value
-  private admin: {id: string, name: string};
   private auth = 0;
   constructor(
     private http: HttpClient,
@@ -74,19 +71,19 @@ export class UserService {
     }
   }
 
-  isLoggedFacebookLoggedIn() {
-    FB.getLoginStatus( (response) => {
-      if (response.status === 'connected') {
-        console.log('HERE!!!', response);
-        this.isLoggedIn = true;
-        this.userModel.id = response.authResponse.userID;
-      } else {
-        this.isLoggedIn = false;
-      }
-      console.log(this.userModel);
-      return this.isLoggedIn;
-    });
-  }
+  // isLoggedFacebookLoggedIn() {
+  //   FB.getLoginStatus( (response) => {
+  //     if (response.status === 'connected') {
+  //       console.log('HERE!!!', response);
+  //       this.isLoggedIn = true;
+  //       this.userModel.id = response.authResponse.userID;
+  //     } else {
+  //       this.isLoggedIn = false;
+  //     }
+  //     console.log(this.userModel);
+  //     return this.isLoggedIn;
+  //   });
+  // }
 
   resetUserModel() {
     if (this.getToken()) {
@@ -123,17 +120,8 @@ export class UserService {
       this.profilePicReady.next(true);
       });
     };
-    // return this.profilePicURL;
   }
 
-  // getFacebookProfilePic() {
-  //   let url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
-  //   console.log('##################### URL ' + url);
-  //   FB.api(url, response => {
-  //     console.log('###### PHOTO response:', response);
-  //     this.profilePicURL = response.data.url;
-  //   });
-  // }
   isTokenFresh(token: string) {
     try {
       const decoded = jwt_decode(token);
@@ -199,12 +187,6 @@ export class UserService {
         console.log(this.userModel);
         console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
       });
-      // let url = '/' + result.authResponse.userID + '/picture?redirect=false&height=500&width=500';
-      // console.log('##################### URL ' + url);
-      // FB.api(url, response => {
-      //   console.log('###### PHOTO response:', response);
-      //   this.userModel.photo = response.data.url;
-      // });
       if (result.authResponse) {
         this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
           .subscribe((response: any) => {
