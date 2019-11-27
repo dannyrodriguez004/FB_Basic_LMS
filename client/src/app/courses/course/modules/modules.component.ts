@@ -50,11 +50,11 @@ export class ModulesComponent implements OnInit {
     }));
   }
 
-  openVideo(videoURL) {
-    let el = document.getElementById( 'videoDiv' );
+  openVideo(videoURL, title) {
+    let el = document.getElementById( 'videoDiv-' + title );
     if (el) {
       if (el.style.display === 'inline') {
-        this.closeVideo();
+        this.closeVideo(title);
       } else {
         el.style.display = 'inline';
       }
@@ -63,8 +63,8 @@ export class ModulesComponent implements OnInit {
     this.contentEmbedded = videoURL;
   }
 
-  closeVideo() {
-    let el = document.getElementById( 'videoDiv' );
+  closeVideo(title) {
+    let el = document.getElementById( 'videoDiv-' + title);
     el.style.display = 'none';
   }
 

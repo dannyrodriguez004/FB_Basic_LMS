@@ -15,12 +15,12 @@
                   <mat-icon>insert_drive_file</mat-icon>{{content.title}}</a>
                 <a *ngIf="content.outOf != null" mat-list-item (click)="openQuizDialog(module.id, content.id)" >
                   <mat-icon>assessment</mat-icon>{{content.title}}</a>
-                <a *ngIf="content.embedded != null" mat-list-item (click)="openVideo(content.embedded)">
+                <a *ngIf="content.embedded != null" mat-list-item (click)="openVideo(content.embedded, content.title)">
 <!--                <a *ngIf="content.embedded != null" mat-list-item [routerLink]="['/nav/courses/view-course']"-->
 <!--                  [queryParams]="{course: this.current_course, module: module.id, video_id: content.id, select: 'Videos'}">-->
                   <mat-icon>play_circle_filled</mat-icon>{{content.title}}
                 </a>
-          <div id="videoDiv" *ngIf="this.showVideo && content.embedded != null" align="middle" class="video">
+          <div id="videoDiv-{{content.title}}" *ngIf="this.showVideo && content.embedded != null" align="middle" class="video">
             <!--        <a (click)="closeVideo()">Close</a>-->
             <div class="video-foreground">
               <iframe [src]='sanitizer.bypassSecurityTrustResourceUrl(contentEmbedded + "?fs=0")'  frameborder="0" width="800" height="600" allowfullscreen></iframe>
