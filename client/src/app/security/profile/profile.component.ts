@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
 
   loading = true;
   subscriptions: Subscription[] = [];
-  loadingPic = true;
+  loadingPic = false;
 
   constructor(
     private route: ActivatedRoute,
