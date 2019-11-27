@@ -90,16 +90,17 @@ export class UserService {
       this.isLoggedIn = true;
       this.subscriptions.push(this.getCurrentUser().subscribe((userInfo: UserModel) => {
         this.userModel = userInfo;
+        try {
+          this.getFacebookProfilePic();
+        } catch (err) {
+          this.getFacebookProfilePicWithInit();
+        }
         console.log(this.userModel);
-        // this.userModel.photo = this.getFacebookProfilePic();
       }));
-      // tslint:disable-next-line:no-shadowed-variable
-      // const url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
-      // console.log('##################### URL ' + url);
     }
   }
 
-  getFacebookProfilePic() {
+  getFacebookProfilePicWithInit() {
     (window as any).fbAsyncInit = () => {
       FB.init({
         appId: '398974807682335',
@@ -108,19 +109,37 @@ export class UserService {
         version: 'v4.0'
       });
       FB.AppEvents.logPageView();
-      this.loadUser();
-      if (this.getToken()) {
-        // this.getCurrentUser();
-      }
       const url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
       console.log('##################### URL ' + url);
-      FB.api(url, response => {
+      FB.Event.subscribe(FB.api(url, response => {
       console.log('###### PHOTO response:', response);
       this.profilePicURL = response.data.url;
       this.profilePicReady.next(true);
-      });
+    }));
     };
   }
+
+  getFacebookProfilePic() {
+    // (window as any).fbAsyncInit = () => {
+    //   FB.init({
+    //     appId: '398974807682335',
+    //     cookie: true,
+    //     xfbml: true,
+    //     version: 'v4.0'
+    //   });
+    //   FB.AppEvents.logPageView();
+    //   this.loadUser();
+    //   if (this.getToken()) {
+    //     // this.getCurrentUser();
+    //   }
+      const url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
+      console.log('##################### URL ' + url);
+      FB.Event.subscribe(FB.api(url, response => {
+        console.log('###### PHOTO response:', response);
+        this.profilePicURL = response.data.url;
+        this.profilePicReady.next(true);
+      }));
+    }
 
   isTokenFresh(token: string) {
     try {
@@ -215,6 +234,7 @@ export class UserService {
     console.log(this.userModel);
     this.isLoggedIn = false;
     this.auth = -1;
+    this.profilePicURL = '';
     this.router.navigate(['/nav/home']);
     localStorage.removeItem('id_token');
     this.destroyToken();

@@ -5,8 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {UtilityService} from '../../services/utility.service';
 import {UsertypeModel} from '../../models/usertype.model';
 import {MatDialog} from '@angular/material/dialog';
-import {Subscription} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {ProfileEditorComponent} from './profile-editor/profile-editor.component';
+declare var FB: any;
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +19,7 @@ export class ProfileComponent implements OnInit {
   loading = true;
   subscriptions: Subscription[] = [];
   loadingPic = false;
-
+  profilePicURL;
   constructor(
     private route: ActivatedRoute,
     private userServices: UserService,
@@ -29,12 +30,8 @@ export class ProfileComponent implements OnInit {
     private zone: NgZone,
   ) {
     this.userServices.resetUserModel();
-    this.subscriptions.push(this.userServices.profilePicReady.subscribe(bool => {
-      this.zone.run(() => {
-        console.log('############### Profile Pic Ready ' + this.userServices.profilePicURL);
-        this.loadingPic = false;
-      });
-    }));
+    this.profilePicURL = this.userServices.profilePicURL;
+    this.loadingPic = false;
   }
 
   getUser() {
@@ -42,14 +39,27 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfilePic() {
-    return this.userServices.profilePicURL;
+    return this.profilePicURL;
   }
 
   ngOnInit() {
+    console.log('!!!!!!!!!!!!!!!!!!!! In ngOnInit()')
     this.loading = true;
-    this.loadingPic = false;
     this.userServices.fbUser();
-    this.userServices.getFacebookProfilePic();
+    this.loadingPic = false;
+    console.log(this.userServices.profilePicReady.getValue());
+    this.subscriptions.push(this.userServices.profilePicReady.subscribe(bool => {
+      this.zone.run(() => {
+        console.log('############### Profile Pic Ready ' + this.userServices.profilePicURL);
+        this.profilePicURL = this.userServices.profilePicURL;
+        this.loadingPic = false;
+      });
+    }));
+    // try {
+    //   this.userServices.getFacebookProfilePic();
+    // } catch (err) {
+    //   this.userServices.getFacebookProfilePicWithInit();
+    // }
     this.loading = false;
   }
 
@@ -77,7 +87,6 @@ export class ProfileComponent implements OnInit {
         console.log(result);
       }
     }));
-
 
   }
 
