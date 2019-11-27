@@ -14,13 +14,28 @@
             </mat-card-subtitle>
             <hr>
             <mat-card-content>
-              <a>Instructor: </a><a style="margin-inline-start: 50px; font-weight: bold">{{course.instructor_name}}</a>
-              <br>
-              <a>Contact Email: </a><a style="margin-inline-start: 20px" href="{{course.email}}"> {{course.email}}</a>
-              <br>
-              <a>Enrolled: </a><a style="margin-inline-start: 95px; font-weight: bold">{{course.size}}</a>
-              <br>
-              <a *ngIf="course.MAX_SIZE > course.size"> Available Spots: </a><a style="margin-inline-start: 50px; font-weight: bold">{{course.MAX_SIZE - course.size}}</a>
+              <table>
+                <tr>
+                  <td>Instructor:</td>
+                  <td><a style="font-weight: bold">{{course.instructor_name}}</a></td>
+                </tr>
+                <tr>
+                  <td>Contact Email: </td>
+                  <td><a href="{{course.email}}"> {{course.email}}</a></td>
+                </tr>
+                <tr>
+                  <td>Enrolled: </td>
+                  <td><a style="font-weight: bold">{{course.size}}</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <a *ngIf="course.MAX_SIZE > course.size"> Available Spots: </a>
+                  </td>
+                  <td>
+                    <a style="font-weight: bold">{{course.MAX_SIZE - course.size}}</a>
+                  </td>
+                </tr>
+              </table>
             </mat-card-content>
 <!--            <a [routerLink]="['/nav/courses/view-course']" [queryParams]="{ course: course.id}" mat-button>Announcements</a>-->
             <span class="fill"></span>
@@ -39,13 +54,27 @@
 <!--            </mat-card-subtitle>-->
             <hr>
             <mat-card-content>
-              <a>Last Day for Enrollment: </a><a style="margin-inline-start: 1px; font-weight: bold">{{course.endEnrollDate | date: 'mediumDate'}}</a>
-              <br>
-              <a>Enrolled: </a><a style="margin-inline-start: 95px; font-weight: bold">{{course.size}}</a>
-              <br>
-              <a> Available Spots: </a><a style="margin-inline-start: 50px; font-weight: bold">{{course.MAX_SIZE - course.size}}</a>
-              <br>
-              <strong *ngIf="course.MAX_SIZE == course.size"> CLASS IS FULL </strong>
+              <table>
+                <tr>
+                  <td>Last Day for Enrollment: </td>
+                  <td><a style="font-weight: bold">{{course.endEnrollDate | date: 'mediumDate'}}</a></td>
+                </tr>
+                <tr>
+                  <td>Enrolled:</td>
+                  <td>
+                    <a style="font-weight: bold">{{course.size}}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Available Spots: </td>
+                  <td>
+                    <a style="font-weight: bold">{{course.MAX_SIZE - course.size}}</a>
+                    <br />
+                    <strong *ngIf="course.MAX_SIZE == course.size"> CLASS IS FULL </strong>
+                  </td>
+                </tr>
+              </table>
+
             </mat-card-content>
             <span class="fill"></span>
           </mat-card>

@@ -49,7 +49,7 @@
       <span>
 <!--            <button *ngIf="!loggedIn.value" (click)="loadCourses()" mat-raised-button [matMenuTriggerFor]="userMenu"><mat-icon>account_circle</mat-icon>Account</button>-->
 
-            <button (click)="loadCourses()" mat-raised-button [matMenuTriggerFor]="userMenu"><mat-icon>account_circle</mat-icon>Account</button>
+            <button *ngIf="!loggedIn.value" (click)="loadCourses()" mat-raised-button [matMenuTriggerFor]="userMenu"><mat-icon>account_circle</mat-icon>Account</button>
 
             <mat-menu #userMenu="matMenu" >
                   <button *ngIf="!this.isAdmin() && !loggedIn.value" [routerLink]="['security/login/']" mat-menu-item>
