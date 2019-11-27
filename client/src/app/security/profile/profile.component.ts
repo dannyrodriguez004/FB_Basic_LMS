@@ -7,8 +7,6 @@ import {UsertypeModel} from '../../models/usertype.model';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
 import {ProfileEditorComponent} from './profile-editor/profile-editor.component';
-import {FBRegisterComponent} from "../../nav/fbregister/fbregister.component";
-
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +17,7 @@ export class ProfileComponent implements OnInit {
 
   loading = true;
   subscriptions: Subscription[] = [];
+  profilePicURL;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,9 +34,15 @@ export class ProfileComponent implements OnInit {
     return this.userServices.fbUser();
   }
 
+  getProfilePic() {
+    return this.profilePicURL;
+  }
+
   ngOnInit() {
     this.loading = true;
+    this.profilePicURL = this.userServices.profilePicURL;
     this.userServices.fbUser();
+
     // if (!this.userServices.fbUser() && !this.userServices.getIsAdmin()) {
     //     console.log('not authorized!');
     //     this.router.navigateByUrl('/');

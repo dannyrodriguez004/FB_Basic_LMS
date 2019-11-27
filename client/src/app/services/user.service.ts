@@ -19,12 +19,12 @@ export class UserService {
   private isLoggedIn = false;
   private subscriptions: Subscription[] = [];
   FBLoggedIn;
+  profilePicURL;
   private userModel: UserModel = new UserModel();
   // tslint:disable-next-line:variable-name
   private student_id: string; // debugging value
   private admin: {id: string, name: string};
   private auth = 0;
-
   constructor(
     private http: HttpClient,
     private cookies: CookieService,
@@ -96,6 +96,14 @@ export class UserService {
     }
   }
 
+  getFacebookProfilePic() {
+    let url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
+    console.log('##################### URL ' + url);
+    FB.api(url, response => {
+      console.log('###### PHOTO response:', response);
+      this.profilePicURL = response.data.url;
+    });
+  }
   isTokenFresh(token: string) {
     try {
       const decoded = jwt_decode(token);
@@ -153,16 +161,20 @@ export class UserService {
       console.log('RESULT.AUTHRESPONSE:  ', result.authResponse);
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
         console.log('this is the response:', response);
-        
         this.userModel.id = response.id;
         this.userModel.first_name = response.first_name;
         this.userModel.last_name = response.last_name;
         this.userModel.email = response.email;
         this.userModel.type = UsertypeModel.Student;
-        
         console.log(this.userModel);
         console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
       });
+      // let url = '/' + result.authResponse.userID + '/picture?redirect=false&height=500&width=500';
+      // console.log('##################### URL ' + url);
+      // FB.api(url, response => {
+      //   console.log('###### PHOTO response:', response);
+      //   this.userModel.photo = response.data.url;
+      // });
       if (result.authResponse) {
         this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
           .subscribe((response: any) => {

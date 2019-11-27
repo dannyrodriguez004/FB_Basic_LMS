@@ -12,9 +12,10 @@
   <div class="card-deck-container">
       <ng-container>
     <mat-card>
-<!--      <button mat-stroked-button type= "button" (click)="filePicker.click()"></button><input type="file" #filePicker>-->
+<!--<button mat-stroked-button type= "button" (click)="filePicker.click()"></button><input type="file" #filePicker>-->
       <img width="200px" height="200px"
-        src="https://firebasestorage.googleapis.com/v0/b/learnfiu.appspot.com/o/{{getUser().photo}}?alt=media&token={{getUser().photoToken}}">
+           src="{{getProfilePic()}}">
+      <!--        src="https://firebasestorage.googleapis.com/v0/b/learnfiu.appspot.com/o/{{getUser().photo}}?alt=media&token={{getUser().photoToken}}">-->
     </mat-card>
         <mat-card class="example-card">
 
