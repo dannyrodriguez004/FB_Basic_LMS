@@ -6,6 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NewContentComponent } from './new-content/new-content.component';
 import { ModuleEditorComponent } from './module-editor/module-editor.component';
 import { QuizDialogComponent } from './quiz-dialog/quiz-dialog.component';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-modules',
@@ -19,12 +20,17 @@ export class ModulesComponent implements OnInit {
   loading = true;
   modules = [];
   subscriptions: Subscription[] = [];
+  showVideo = false;
+  contentEmbedded = '';
 
   constructor(
     private coursesServices: CoursesService,
     private userServices: UserService,
     private dialog: MatDialog,
-    ) { }
+    private sanitizer: DomSanitizer
+  ) {
+    // this.safeURL = this.sanitizer.bypassSecurityTrustResourceUrl(videoURL)
+  }
 
   openNewContentDialog(selectModule) {
 
@@ -42,6 +48,24 @@ export class ModulesComponent implements OnInit {
         console.log(result);
       }
     }));
+  }
+
+  openVideo(videoURL) {
+    let el = document.getElementById( 'videoDiv' );
+    if (el) {
+      if (el.style.display === 'inline') {
+        this.closeVideo();
+      } else {
+        el.style.display = 'inline';
+      }
+    }
+    this.showVideo = true;
+    this.contentEmbedded = videoURL;
+  }
+
+  closeVideo() {
+    let el = document.getElementById( 'videoDiv' );
+    el.style.display = 'none';
   }
 
   openEditModuleDialog(courseModule) {
