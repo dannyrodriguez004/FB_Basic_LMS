@@ -1,15 +1,24 @@
 <mat-card>
     <div class="modules" *ngFor="let module of modules">
 
+        <mat-card-title>
+            {{module.name}}
+        </mat-card-title>
     
-        <div class="groups" *ngFor="let group of module">
+        <div class="groups" *ngFor="let group of module.groups">
             <div class="step-group">
                 <div class="spacer" *ngIf="2 > group.length"></div>
                 <div class="small-spacer" *ngIf="3 > group.length && group.length >= 2"></div>
-                <app-step [icon]="step.icon" class="step" *ngFor="let step of group">
+                <app-step 
+                [icon]="step.url != null ? 'link' : 
+                        step.page != null ? 'insert_drive_file' :
+                        step.outOf != null ? 'assessment' : 
+                        step.embedded != null ? 'play_circle_filled' : 'not_interested'" class="step" *ngFor="let step of group">
                 </app-step>
             </div>
         </div>
+
+        <br>
 
     </div>
 </mat-card>

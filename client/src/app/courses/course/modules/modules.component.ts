@@ -7,6 +7,23 @@ import { NewContentComponent } from './new-content/new-content.component';
 import { ModuleEditorComponent } from './module-editor/module-editor.component';
 import { QuizDialogComponent } from './quiz-dialog/quiz-dialog.component';
 
+export interface Module {
+  id:string;
+  name:string;
+  resources: Resource[];
+}
+
+export interface Resource {
+  id: string;
+  mod: string;
+  title: string;
+  url: string;
+  link: string;
+  outOf: number;
+  embedded: string;
+  page: string;
+}
+
 @Component({
   selector: 'app-modules',
   templateUrl: './modules.component.html',
@@ -17,7 +34,7 @@ export class ModulesComponent implements OnInit {
   // tslint:disable-next-line:variable-name no-input-rename
   @Input('current_course') current_course: string;
   loading = true;
-  modules = [];
+  modules: Module[] = [];
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -84,7 +101,7 @@ export class ModulesComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.subscriptions.push(this.coursesServices.getModules(this.current_course).subscribe( (resp: []) => {
+    this.subscriptions.push(this.coursesServices.getModules(this.current_course).subscribe( (resp: Module[]) => {
       this.modules = resp;
       this.loading = false;
     }));

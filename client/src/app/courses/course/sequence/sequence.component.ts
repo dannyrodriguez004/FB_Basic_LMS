@@ -1,4 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { CoursesService } from './../../../services/courses.service';
+import { UserService } from './../../../services/user.service';
+import { Component, OnInit, Input, ComponentFactoryResolver } from '@angular/core';
+
+
+export interface Module {
+  id:string;
+  name:string;
+  resources: Resource[];
+}
+
+export interface Resource {
+  id: string;
+  mod: string;
+  title: string;
+  url: string;
+  link: string;
+  outOf: number;
+  embedded: string;
+  page: string;
+}
 
 @Component({
   selector: 'app-sequence',
@@ -7,18 +27,36 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SequenceComponent implements OnInit {
 
-  constructor() { }
+  @Input("course") course: string = '-LoXRZvbw_tJaWGIxgGF';
 
-  modules = [
-    [
-      [{icon: 'alarm'},{icon: 'alarm'},{icon: 'alarm'}],
-      [{icon: 'alarm'},{icon: 'alarm'}],
-      [{icon: 'alarm'}]
-    ],
-    []
-  ];
+  constructor(
+    private userServices:UserService,
+    private courseServices:CoursesService
+    ) { }
+
+  modules = [];
 
   ngOnInit() {
+    this.courseServices.getModules(this.course).subscribe( (resp: Module[]) => {
+      console.log(resp);
+      resp.forEach( mod => {
+        var groups = [];
+        var group = [];
+
+        var i,j,temparray,chunk = 3;
+        for (i=0,j=mod.resources.length; i<j; i+=chunk) {
+            temparray = mod.resources.slice(i,i+chunk);
+            groups.push(temparray);
+        }
+        this.modules.push({
+          id: mod.id,
+          name: mod.name,
+          groups: groups
+        })
+      });
+
+      console.log(this.modules);
+    })
   }
 
 }
