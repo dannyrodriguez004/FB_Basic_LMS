@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NewContentComponent } from './new-content/new-content.component';
 import { ModuleEditorComponent } from './module-editor/module-editor.component';
 import { QuizDialogComponent } from './quiz-dialog/quiz-dialog.component';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import {DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-modules',
@@ -22,7 +22,8 @@ export class ModulesComponent implements OnInit {
   subscriptions: Subscription[] = [];
   showVideo = false;
   contentEmbedded = '';
-
+  safeURL: SafeResourceUrl;
+  openVid: {module: string, content: number} =  {module: null, content: -1};
   constructor(
     private coursesServices: CoursesService,
     private userServices: UserService,
@@ -50,8 +51,10 @@ export class ModulesComponent implements OnInit {
     }));
   }
 
-  openVideo(videoURL, title) {
-    let el = document.getElementById( 'videoDiv-' + title );
+  openVideo(videoURL, module, contentID, title) {
+    this.openVid.module = module;
+    this.openVid.content = contentID;
+    let el = document.getElementById( 'videoDiv-' + this.openVid.module + this.openVid.content + title);
     if (el) {
       if (el.style.display === 'inline') {
         this.closeVideo(title);
@@ -60,7 +63,8 @@ export class ModulesComponent implements OnInit {
       }
     }
     this.showVideo = true;
-    this.contentEmbedded = videoURL;
+    // this.contentEmbedded = videoURL;
+    this.safeURL = videoURL;
   }
 
   closeVideo(title) {
