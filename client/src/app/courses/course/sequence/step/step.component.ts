@@ -7,7 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class StepComponent implements OnInit {
 
-  @Input('icon') icon: string = 'assessment';
+  @Input('icon') icon: string = '';
+  @Input('text') text: string = '';
 
   constructor() { }
 

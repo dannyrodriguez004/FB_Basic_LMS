@@ -9,7 +9,8 @@
 .circle {
     width: 100px;
     height: 100px;
-    background-image: linear-gradient(rgb(93, 109, 201),rgb(93, 109, 201), rgb(61, 71, 129)) ;
+    //background-image: linear-gradient(rgb(93, 109, 201),rgb(93, 109, 201), rgb(61, 71, 129)) ;
+    background-color: rgb(93, 109, 201);
     border-radius: 50%;
     display: inline-block;
     margin-bottom: .5rem;
@@ -23,7 +24,8 @@
 }
 
 .circle:hover {
-    background-image: linear-gradient(rgb(110, 124, 202),rgb(110, 124, 202), rgb(61, 71, 129)) ;
+    //background-image: linear-gradient(rgb(110, 124, 202),rgb(110, 124, 202), rgb(61, 71, 129)) ;
+    background-color: rgb(110, 124, 202);
 }
 
 .circle:active {

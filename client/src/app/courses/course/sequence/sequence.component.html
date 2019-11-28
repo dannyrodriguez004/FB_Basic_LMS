@@ -13,12 +13,14 @@
                 [icon]="step.url != null ? 'link' : 
                         step.page != null ? 'insert_drive_file' :
                         step.outOf != null ? 'assessment' : 
-                        step.embedded != null ? 'play_circle_filled' : 'not_interested'" class="step" *ngFor="let step of group">
+                        step.embedded != null ? 'play_circle_filled' : 'not_interested'"
+                [text]="step.title" class="step" *ngFor="let step of group">
                 </app-step>
             </div>
         </div>
 
         <br>
-
+        <mat-divider></mat-divider>
+        <br>
     </div>
 </mat-card>
