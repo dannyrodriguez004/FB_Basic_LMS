@@ -1,38 +1,38 @@
 .content {
     width: 100px;
     height: 150px;
-    margin: 1rem;
+    margin: 15px;
     cursor: pointer;
+    //background-color: aqua;
 }
 
 .circle {
     width: 100px;
     height: 100px;
-    background-color: red;
+    background-image: linear-gradient(rgb(93, 109, 201),rgb(93, 109, 201), rgb(61, 71, 129)) ;
     border-radius: 50%;
     display: inline-block;
+    margin-bottom: .5rem;
 }
 
 .text {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+    font-weight: bold;
 }
 
 .circle:hover {
-    animation-name: example;
-    animation-duration: .3s;
-    background-color: yellow;
-    
+    background-image: linear-gradient(rgb(110, 124, 202),rgb(110, 124, 202), rgb(61, 71, 129)) ;
+}
+
+.circle:active {
+    background-image: linear-gradient(rgb(43, 54, 119), rgb(61, 65, 87)) ;
 }
 
 .mat-icon {
     margin-left: 12.5px;
     margin-top: 12.5px;
     font-size: 75px;
-}
-
-@keyframes example {
-  from {background-color: red;}
-  to {background-color: yellow;}
+    color: white;
 }

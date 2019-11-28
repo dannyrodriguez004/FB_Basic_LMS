@@ -1,32 +1,38 @@
-.content {
-    width: 100px;
-    height: 150px;
-    margin: 1rem;
-    cursor: pointer;
-}
-
-.circle {
-    width: 100px;
-    height: 100px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.text {
+.step-group {
+    height: 165px;
+    width: 390px;
     margin-left: auto;
     margin-right: auto;
-    text-align: center;
+    margin-top: 1rem;
+    //background-color: chartreuse;
 }
 
-.circle:hover {
-    
-    background-color: red;
-    
+.step {
+    //display: inline-flex;
+    float: left;
 }
 
-.mat-icon {
-    margin-left: 12.5px;
-    margin-top: 12.5px;
-    font-size: 75px;
+.spacer {
+    width: 130px;
+    height: 150px;
+    //display: inline-flex;
+    float: left;
+    //background-color: red;
+}
+
+.small-spacer {
+    width: 65px;
+    height: 150px;
+    float: left;
+    //display: inline-flex;
+    //background-color: blue;
+}
+
+mat-card {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
 }

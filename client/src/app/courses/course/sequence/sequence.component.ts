@@ -9,7 +9,14 @@ export class SequenceComponent implements OnInit {
 
   constructor() { }
 
-  steps = [0,0,0,0,0,0,0,0,0,0,0,0];
+  modules = [
+    [
+      [{icon: 'alarm'},{icon: 'alarm'},{icon: 'alarm'}],
+      [{icon: 'alarm'},{icon: 'alarm'}],
+      [{icon: 'alarm'}]
+    ],
+    []
+  ];
 
   ngOnInit() {
   }
