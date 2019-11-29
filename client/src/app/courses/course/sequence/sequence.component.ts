@@ -1,3 +1,5 @@
+import { MatDialog } from '@angular/material';
+import { QuizDialogComponent } from './../modules/quiz-dialog/quiz-dialog.component';
 import { CoursesService } from './../../../services/courses.service';
 import { UserService } from './../../../services/user.service';
 import { Component, OnInit, Input, ComponentFactoryResolver } from '@angular/core';
@@ -31,7 +33,8 @@ export class SequenceComponent implements OnInit {
 
   constructor(
     private userServices:UserService,
-    private courseServices:CoursesService
+    private courseServices:CoursesService,
+    private dialog:MatDialog
     ) { }
 
   modules = [];
@@ -57,6 +60,26 @@ export class SequenceComponent implements OnInit {
 
       console.log(this.modules);
     })
+  }
+
+  openInNewTab(url) {
+    window.open(url, '_blank');
+  }
+
+  openQuizDialog(courseModule, quiz) {
+
+    const dialogRef = this.dialog.open(QuizDialogComponent, {
+      // width: '90%',
+      data: {
+        module: courseModule,
+        course: this.course,
+        quiz
+      },
+    });
+
+    dialogRef.afterClosed().subscribe( (result) => {
+
+    });
   }
 
 }
