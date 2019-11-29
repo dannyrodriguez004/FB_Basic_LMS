@@ -71,29 +71,31 @@ export class UserService {
     }
   }
 
-  // isLoggedFacebookLoggedIn() {
-  //   FB.getLoginStatus( (response) => {
-  //     if (response.status === 'connected') {
-  //       console.log('HERE!!!', response);
-  //       this.isLoggedIn = true;
-  //       this.userModel.id = response.authResponse.userID;
-  //     } else {
-  //       this.isLoggedIn = false;
-  //     }
-  //     console.log(this.userModel);
-  //     return this.isLoggedIn;
-  //   });
-  // }
+  isLoggedFacebookLoggedIn() {
+    FB.getLoginStatus( (response) => {
+      if (response.status === 'connected') {
+        console.log('HERE!!!', response);
+        this.isLoggedIn = true;
+        this.userModel.id = response.authResponse.userID;
+      } else {
+        this.isLoggedIn = false;
+      }
+      console.log(this.userModel);
+      return this.isLoggedIn;
+    });
+  }
 
   resetUserModel() {
     if (this.getToken()) {
       this.isLoggedIn = true;
       this.subscriptions.push(this.getCurrentUser().subscribe((userInfo: UserModel) => {
         this.userModel = userInfo;
-        try {
-          this.getFacebookProfilePic();
-        } catch (err) {
-          this.getFacebookProfilePicWithInit();
+        if (this.userModel) {
+          try {
+            this.getFacebookProfilePic();
+          } catch (err) {
+              this.getFacebookProfilePicWithInit();
+          }
         }
         console.log(this.userModel);
       }));
@@ -120,18 +122,6 @@ export class UserService {
   }
 
   getFacebookProfilePic() {
-    // (window as any).fbAsyncInit = () => {
-    //   FB.init({
-    //     appId: '398974807682335',
-    //     cookie: true,
-    //     xfbml: true,
-    //     version: 'v4.0'
-    //   });
-    //   FB.AppEvents.logPageView();
-    //   this.loadUser();
-    //   if (this.getToken()) {
-    //     // this.getCurrentUser();
-    //   }
       const url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
       console.log('##################### URL ' + url);
       FB.Event.subscribe(FB.api(url, response => {
@@ -267,7 +257,7 @@ export class UserService {
       body: userModel
     };
     console.log(opts);
-    this.http.post(`${environment.apiAddress}/users/update-user`, opts).subscribe((result: any) => {
+    this.http.post(`${environment.apiAddress}/users/add-user`, opts).subscribe((result: any) => {
       console.log(result);
     });
   }
@@ -281,7 +271,7 @@ export class UserService {
       body: userModel
     };
     console.log(opts);
-    this.http.post(`${environment.apiAddress}/users/update-student`, opts).subscribe((result: any) => {
+    this.http.post(`${environment.apiAddress}/users/add-student`, opts).subscribe((result: any) => {
       console.log(result);
     });
   }

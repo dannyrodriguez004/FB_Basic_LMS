@@ -1,3 +1,4 @@
+
 <mat-accordion *ngIf="!loading" multi="true">
   <mat-expansion-panel *ngFor="let module of modules">
     <mat-expansion-panel-header>
@@ -6,7 +7,7 @@
         {{module.name}}
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <mat-nav-list *ngFor="let content of module.resources">
+    <mat-nav-list *ngFor="let content of module.resources; let i = index" [attr.data-index]="i">
       <a *ngIf="content.url != null" mat-list-item (click)="openInNewTab(content.url)">
         <mat-icon>link</mat-icon>{{content.title}}</a>
       <a *ngIf="content.page != null" mat-list-item [routerLink]="['/nav/courses/view-course']"
@@ -14,14 +15,13 @@
         <mat-icon>insert_drive_file</mat-icon>{{content.title}}</a>
       <a *ngIf="content.outOf != null" mat-list-item (click)="openQuizDialog(module.id, content.id)" >
         <mat-icon>assessment</mat-icon>{{content.title}}</a>
-      <a *ngIf="content.embedded != null" mat-list-item (click)="openVideo(content.embedded, module.id, module.resources.indexOf(content), content.title)">
+      <a *ngIf="content.embedded != null" mat-list-item (click)="openVideo(content.embedded, content.id, i)">
         <mat-icon>play_circle_filled</mat-icon>{{content.title}}
       </a>
-      <div id="videoDiv-{{module.id + module.resources.indexOf(content) + content.title}}" *ngIf="this.showVideo && openVid.module == module.id &&
-                  openVid.content == module.resources.indexOf(content)" align="middle" class="video">
+      <div id="videoDiv-{{content.id}}-{{i}}" *ngIf="this.showVideo && this.showVideo === ('videoDiv-' + content.id + '-' + i) && content.embedded != null" align="middle" class="video">
         <!--        <a (click)="closeVideo()">Close</a>-->
         <div class="video-foreground">
-          <iframe [src]='sanitizer.bypassSecurityTrustResourceUrl(safeURL + "?fs=0")'  frameborder="0" width="800" height="600" allowfullscreen></iframe>
+          <iframe [src]='sanitizer.bypassSecurityTrustResourceUrl(content.embedded + "?fs=0")'  frameborder="0" width="800" height="600" allowfullscreen></iframe>
         </div>
       </div>
     </mat-nav-list>
@@ -44,7 +44,6 @@
     <a (click)="openEditModuleDialog({id:null, name:null, resources: []})" mat-list-item class="add_button"><mat-icon>add</mat-icon>Add Module</a>
   </mat-nav-list>
 </mat-card>
-
 <!--<mat-accordion *ngIf="!loading" multi="true">-->
 <!--  <mat-expansion-panel *ngFor="let module of modules">-->
 <!--    <mat-expansion-panel-header>-->
@@ -53,7 +52,7 @@
 <!--        {{module.name}}-->
 <!--      </mat-panel-title>-->
 <!--    </mat-expansion-panel-header>-->
-<!--    <mat-nav-list *ngFor="let content of module.resources; let i = index" [attr.data-index]="i">-->
+<!--    <mat-nav-list *ngFor="let content of module.resources">-->
 <!--      <a *ngIf="content.url != null" mat-list-item (click)="openInNewTab(content.url)">-->
 <!--        <mat-icon>link</mat-icon>{{content.title}}</a>-->
 <!--      <a *ngIf="content.page != null" mat-list-item [routerLink]="['/nav/courses/view-course']"-->
@@ -61,14 +60,14 @@
 <!--        <mat-icon>insert_drive_file</mat-icon>{{content.title}}</a>-->
 <!--      <a *ngIf="content.outOf != null" mat-list-item (click)="openQuizDialog(module.id, content.id)" >-->
 <!--        <mat-icon>assessment</mat-icon>{{content.title}}</a>-->
-<!--      <a *ngIf="content.embedded != null" mat-list-item (click)="openVideo(content.embedded, content.id, i)">-->
+<!--      <a *ngIf="content.embedded != null" mat-list-item (click)="openVideo(content.embedded, module.id, module.resources.indexOf(content), content.title)">-->
 <!--        <mat-icon>play_circle_filled</mat-icon>{{content.title}}-->
 <!--      </a>-->
-<!--      <div id="videoDiv-{{content.id}}-{{i}}" *ngIf="this.showVideo && this.showVideo === ('videoDiv-' + content.id + '-' + i) && content.embedded != null" align="middle" class="video">-->
+<!--      <div id="videoDiv-{{module.id + module.resources.indexOf(content) + content.title}}" *ngIf="this.showVideo && openVid.module == module.id &&-->
+<!--                  openVid.content == module.resources.indexOf(content)" align="middle" class="video">-->
 <!--        &lt;!&ndash;        <a (click)="closeVideo()">Close</a>&ndash;&gt;-->
-<!--        <h2>videoDiv-{{content.id}}-{{i}}</h2>-->
 <!--        <div class="video-foreground">-->
-<!--          <iframe [src]='sanitizer.bypassSecurityTrustResourceUrl(content.embedded + "?fs=0")'  frameborder="0" width="800" height="600" allowfullscreen></iframe>-->
+<!--          <iframe [src]='sanitizer.bypassSecurityTrustResourceUrl(safeURL + "?fs=0")'  frameborder="0" width="800" height="600" allowfullscreen></iframe>-->
 <!--        </div>-->
 <!--      </div>-->
 <!--    </mat-nav-list>-->

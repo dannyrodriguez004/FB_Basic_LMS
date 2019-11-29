@@ -68,60 +68,59 @@ export class ModulesComponent implements OnInit {
       }
     }));
   }
-
-  openVideo(videoURL, module, contentID, title) {
-    this.openVid.module = module;
-    this.openVid.content = contentID;
-    let el = document.getElementById( 'videoDiv-' + this.openVid.module + this.openVid.content + title);
-    if (el) {
-      if (el.style.display === 'inline') {
-        this.closeVideo(title);
-      } else {
-        el.style.display = 'inline';
-      }
-    }
-    this.showVideo = true;
-    // this.contentEmbedded = videoURL;
-    this.safeURL = videoURL;
-  }
-  // openVideo(videoURL, moduleId, seq) {
-  //   console.log('In openVideo for seq', seq);
-  //   const videoToOpen = 'videoDiv-' + moduleId + '-' + seq;
-  //   if(this.showVideo) {
-  //     console.log('Closing', this.showVideo);
-  //     this.closeVideo();
-  //     if(videoToOpen === this.showVideo) {
+  //
+  // openVideo(videoURL, module, contentID, title) {
+  //   this.openVid.module = module;
+  //   this.openVid.content = contentID;
+  //   let el = document.getElementById( 'videoDiv-' + this.openVid.module + this.openVid.content + title);
+  //   if (el) {
+  //     if (el.style.display === 'inline') {
   //       this.showVideo = undefined;
-  //       return false;
+  //       this.closeVideo(videoURL, module, contentID, title);
   //     } else {
-  //       console.log('1 Opening ', videoToOpen);
-  //       this.showVideo = videoToOpen;
-  //       let el = document.getElementById(this.showVideo);
-  //       if (el) {
-  //         el.style.display = 'inline';
-  //       }
-  //     }
-  //   } else {
-  //     console.log("2 Opening ", videoToOpen);
-  //     this.showVideo = videoToOpen;
-  //     let el = document.getElementById(this.showVideo);
-  //     if(el) {
   //       el.style.display = 'inline';
   //     }
   //   }
+  //   this.showVideo = true;
+  //   // this.contentEmbedded = videoURL;
+  //   this.safeURL = videoURL;
   // }
-
-  closeVideo(title) {
-    let el = document.getElementById( 'videoDiv-' + title);
-    el.style.display = 'none';
+  openVideo(videoURL, moduleId, seq) {
+    const videoToOpen = 'videoDiv-' + moduleId + '-' + seq;
+    if (this.showVideo) {
+      console.log('Closing', this.showVideo);
+      this.closeVideo();
+      if (videoToOpen === this.showVideo) {
+        this.showVideo = undefined;
+        return false;
+      } else {
+        this.showVideo = videoToOpen;
+        let el = document.getElementById(this.showVideo);
+        if (el) {
+          el.style.display = 'inline';
+        }
+      }
+    } else {
+      this.showVideo = videoToOpen;
+      let el = document.getElementById(this.showVideo);
+      if (el) {
+        el.style.display = 'inline';
+      }
+    }
   }
   //
-  // closeVideo() {
-  //   let el = document.getElementById(this.showVideo);
-  //   if(el) {
-  //     el.style.display = 'none';
-  //   }
+  // closeVideo(videoURL, module, contentID, title) {
+  //   let el = document.getElementById( 'videoDiv-' + this.openVid.module + this.openVid.content + title);
+  //   this.showVideo = false;
+  //   el.style.display = 'none';
   // }
+  //
+  closeVideo() {
+    let el = document.getElementById(this.showVideo);
+    if (el) {
+      el.style.display = 'none';
+    }
+  }
 
   openEditModuleDialog(courseModule) {
 
