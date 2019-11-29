@@ -9,8 +9,8 @@ import { QuizDialogComponent } from './quiz-dialog/quiz-dialog.component';
 import {DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
 
 export interface Module {
-  id:string;
-  name:string;
+  id: string;
+  name: string;
   resources: Resource[];
 }
 
@@ -35,9 +35,10 @@ export class ModulesComponent implements OnInit {
   // tslint:disable-next-line:variable-name no-input-rename
   @Input('current_course') current_course: string;
   loading = true;
+// modules = [];
   modules: Module[] = [];
   subscriptions: Subscription[] = [];
-  showVideo = false;
+  showVideo = undefined;
   contentEmbedded = '';
   safeURL: SafeResourceUrl;
   openVid: {module: string, content: number} =  {module: null, content: -1};
@@ -83,11 +84,44 @@ export class ModulesComponent implements OnInit {
     // this.contentEmbedded = videoURL;
     this.safeURL = videoURL;
   }
+  // openVideo(videoURL, moduleId, seq) {
+  //   console.log('In openVideo for seq', seq);
+  //   const videoToOpen = 'videoDiv-' + moduleId + '-' + seq;
+  //   if(this.showVideo) {
+  //     console.log('Closing', this.showVideo);
+  //     this.closeVideo();
+  //     if(videoToOpen === this.showVideo) {
+  //       this.showVideo = undefined;
+  //       return false;
+  //     } else {
+  //       console.log('1 Opening ', videoToOpen);
+  //       this.showVideo = videoToOpen;
+  //       let el = document.getElementById(this.showVideo);
+  //       if (el) {
+  //         el.style.display = 'inline';
+  //       }
+  //     }
+  //   } else {
+  //     console.log("2 Opening ", videoToOpen);
+  //     this.showVideo = videoToOpen;
+  //     let el = document.getElementById(this.showVideo);
+  //     if(el) {
+  //       el.style.display = 'inline';
+  //     }
+  //   }
+  // }
 
   closeVideo(title) {
     let el = document.getElementById( 'videoDiv-' + title);
     el.style.display = 'none';
   }
+  //
+  // closeVideo() {
+  //   let el = document.getElementById(this.showVideo);
+  //   if(el) {
+  //     el.style.display = 'none';
+  //   }
+  // }
 
   openEditModuleDialog(courseModule) {
 
@@ -130,6 +164,7 @@ export class ModulesComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.subscriptions.push(this.coursesServices.getModules(this.current_course).subscribe( (resp: Module[]) => {
+      // this.subscriptions.push(this.coursesServices.getModules(this.current_course).subscribe( (resp: []) => {
       this.modules = resp;
       this.loading = false;
     }));
