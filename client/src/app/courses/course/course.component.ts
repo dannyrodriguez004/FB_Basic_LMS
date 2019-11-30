@@ -12,13 +12,14 @@ import { Subscription } from 'rxjs/internal/Subscription';
 export class CourseComponent implements OnInit, OnChanges {
 
   navs = [
+    {val: 'Syllabus', ico: 'info'},
     {val: 'Home', ico: 'home'},
     {val: 'Modules', ico: 'view_module'},
     {val: 'Grades', ico: 'assessment'},
     {val: 'Discussions', ico: 'forum'},
     {val: 'Roll Call', ico: 'forum'},
     {val: 'Announcements', ico: 'forum'}];
-private navItem = 'Home';
+private navItem = 'Syllabus';
   private subscriptions: Subscription[] = [];
   // tslint:disable-next-line:variable-name
   current_course = '';

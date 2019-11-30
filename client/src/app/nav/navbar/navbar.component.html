@@ -15,7 +15,7 @@
             <button (click)="loadCourses()" mat-button [matMenuTriggerFor]="menu"><mat-icon>list</mat-icon>My Courses</button>
 
             <mat-menu #menu="matMenu">
-                  <button *ngFor="let course of myCourses" [routerLink]="['courses/view-course']" [queryParams]="{course:course.id,select:'Home'}" mat-menu-item>
+                  <button *ngFor="let course of myCourses" [routerLink]="['courses/view-course']" [queryParams]="{course:course.id, select: 'Syllabus'}" mat-menu-item>
                         <mat-icon>class</mat-icon>{{course.name}}
                   </button>
             </mat-menu>
