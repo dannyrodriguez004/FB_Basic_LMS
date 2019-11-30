@@ -1,23 +1,25 @@
-<div class="mat-app-background">
-  <ng-container>
+  <ng-container >
     <mat-toolbar>
       <mat-toolbar-row style="background-color: #3f51b5; color: #fafafa;
           border-bottom-style: solid; border-bottom-width: 1px;
           border-bottom-color: black;">Support
       </mat-toolbar-row>
     </mat-toolbar>
-    <mat-card>
+    <div style="background-color: white; padding: 1rem">
+      <mat-card>
       <mat-card-title style="text-align: center"> FAQ </mat-card-title>
       <br>
-      <mat-card-content style="text-align: center">
-        <br>
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          (click)="ComplaintSubmitted()">Submit Problem</button>
-        <p> {{submittedComplaint}} </p>
-      </mat-card-content>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let faq of faqs">
+          <mat-expansion-panel-header>
+            <mat-panel-title><strong>
+              {{faq.question}}
+              </strong></mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>{{faq.answer}}</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <br>
     </mat-card>
     <mat-card>
         <mat-card-title style="text-align: center"> Describe Your Problem </mat-card-title>
@@ -34,18 +36,18 @@
         </mat-card-content>
     </mat-card>
 
-  <mat-card>
-      <mat-card-title> Contact Support </mat-card-title>
-    <mat-card-content>
-    <mat-list>
-      <mat-list-item *ngFor="let admin of admins">
-        <mat-icon mat-list-icon>contact_support</mat-icon>
-        <h3 mat-line>{{admin.name}}</h3>
-        <p mat-line> Phone: {{admin.phone}}</p>
-        <p mat-line> Email: {{admin.email}} </p>
-      </mat-list-item>
-    </mat-list>
-    </mat-card-content>
-  </mat-card>
-  </ng-container>
+    <mat-card>
+      <mat-card-title>Contact Support</mat-card-title>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let admin of admins">
+            <mat-icon mat-list-icon class="listicon">contact_support</mat-icon>
+            <h4 mat-line>{{admin.name}}</h4>
+            <p mat-line>{{admin.phone}} </p>
+            <a mat-line href="mailto:{{admin.email}}">{{admin.email}} </a>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
 </div>
+</ng-container>

@@ -7,14 +7,13 @@
     <mat-card-title>About Us</mat-card-title>
   <mat-card-content>
     <p>
-      The goal of the project is to build a basic Learning Management System (LMS) App on Facebook that allows for online
-      training in developing countries. This is for short online courses (5 to 15 hours) that include videos posted on
-      youtube or Facebook, multiple-choice tests, PDF materials, and 2-hour live streaming. Everything should be within
-      the Facebook platform and maximize the internet speed, considering the low download /upload Internet speed in
-      developing countries. Rebuilding from scratch using Angular and NodeJs.
+      The get started, please log in with Facebook.  Once logged in, you will be prompted to register.  Once registered,
+      you will be able to register for courses, navigate courses you are registered in via the nav bar, edit your profile,
+      message the instructor or other students for a given course, watch videos from YouTube for a course,
+      take multiple-choice tests, and much much more.
     </p>
     <br>
-    <button mat-button>Start Learning!</button>
+    <button style="width: 100%" [routerLink]="['/nav/courses/']" mat-button>Start Learning!</button>
   </mat-card-content>
 
 </mat-card>
@@ -25,8 +24,8 @@
       <mat-list-item *ngFor="let admin of admins">
         <mat-icon mat-list-icon class="listicon">contact_support</mat-icon>
         <h4 mat-line>{{admin.name}}</h4>
-        <p mat-line> Phone: {{admin.phone}} </p>
-        <p mat-line> Email: {{admin.email}} </p>
+        <p mat-line>{{admin.phone}} </p>
+        <a mat-line href="mailto:{{admin.email}}">{{admin.email}} </a>
       </mat-list-item>
       </mat-list>
   </mat-card-content>

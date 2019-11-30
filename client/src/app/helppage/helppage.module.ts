@@ -8,6 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
 import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [HelppageComponent],
@@ -18,7 +19,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     MatIconModule,
     MatCardModule,
     MatTableModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatExpansionModule
   ]
 })
 
