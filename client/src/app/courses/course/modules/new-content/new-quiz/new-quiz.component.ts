@@ -35,7 +35,8 @@ export class NewQuizComponent implements OnInit {
       noDueDate: [true, Validators.required],
       dueDate: [{value: this.today, disabled: false}, Validators.required],
       isUnlimited: [true, Validators.required],
-      attempts: [{value: 1, disabled: false}, [Validators.min(1), Validators.required]]
+      attempts: [{value: 1, disabled: false}, [Validators.min(1), Validators.required]],
+      coins: [0, [Validators.required, Validators.min(0)]]
     });
     this.newQuestionForm = this.formBuilder.group({
       question: ['', Validators.required],
@@ -100,7 +101,8 @@ export class NewQuizComponent implements OnInit {
       time: this.newQuizForm.value.isTimed ? this.newQuizForm.value.time : -1,
       dueDate: !this.newQuizForm.value.noDueDate ? null : this.newQuizForm.value.dueDate,
       attempts: !this.newQuizForm.value.isUnlimited ? 'unlimited' : this.newQuizForm.value.attempts,
-      items: this.items
+      items: this.items,
+      coins: this.newQuizForm.value.coins,
     };
     this.submitting = true;
     this.isSubmitting.emit(true);

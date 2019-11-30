@@ -42,7 +42,7 @@ export class NewEmbeddedVideoComponent implements OnInit {
   pushEmbed() {
     const content = {
       title: this.newEmbedForm.value.title,
-      embedded: this.newEmbedForm.value.code
+      embedded: 'https://www.youtube.com/embed/' + this.newEmbedForm.value.code.substring(this.newEmbedForm.value.code.indexOf('?v=') + 3)
     };
     this.submitting = true;
     this.isSubmitting.emit(true);

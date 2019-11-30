@@ -241,14 +241,14 @@ export class CoursesService {
     return this.http.post(`${environment.apiAddress}/courses/save-responses`, {student, course, quiz, responses});
   }
 
-  getCoursesSortBy(sort, start) {
-    const params = {params: new HttpParams().set('sort', sort).set('start', start)};
+  getCoursesSortBy(sort, start, open) {
+    const params = {params: new HttpParams().set('sort', sort).set('start', start).set('open', `${open}`)};
     return this.http.get(`${environment.apiAddress}/courses/courses-by`, params);
   }
 
-  getCoursesCatergorySortBy(category, sort, start) {
+  getCoursesCatergorySortBy(category, sort, start, open) {
     const params = {params: new HttpParams().set('category', `${category}`)
-        .set('sort', `${sort}`).set('start', `${start}`)};
+        .set('sort', `${sort}`).set('start', `${start}`).set('open', `${open}`)};
     return this.http.get(`${environment.apiAddress}/courses/courses-cat-by`, params);
   }
 

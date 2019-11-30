@@ -13,8 +13,7 @@ module.exports = (passport) => {
         const resp = await usersServices.addInstructor(req.body.user);
         await res.json(resp);
         await Utils.AdminLog(req.user, {method: usersServices.addInstructor.name, params: [req.body.user], result: resp}, "Adding Instructor");
-    })
-
+    });
 
     router.post('/add-user', async (req, res, next) => {
         const resp = await usersServices.addUser(req.body);
@@ -103,5 +102,7 @@ module.exports = (passport) => {
         const resp = await usersServices.studentInDatabase(req.body.userID);
         await res.json(resp);
     });
+
+
     return router;
 };

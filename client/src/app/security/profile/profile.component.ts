@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { CoursesService } from '../../services/courses.service';
 import { UserService } from '../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {UtilityService} from '../../services/utility.service';
 import {UsertypeModel} from '../../models/usertype.model';
 import {MatDialog} from '@angular/material/dialog';
-import {Subscription} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {ProfileEditorComponent} from './profile-editor/profile-editor.component';
-import {FBRegisterComponent} from "../../nav/fbregister/fbregister.component";
-
+declare var FB: any;
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +18,8 @@ export class ProfileComponent implements OnInit {
 
   loading = true;
   subscriptions: Subscription[] = [];
-
+  loadingPic = false;
+  profilePicURL;
   constructor(
     private route: ActivatedRoute,
     private userServices: UserService,
@@ -27,21 +27,39 @@ export class ProfileComponent implements OnInit {
     private coursesServices: CoursesService,
     private router: Router,
     private utilityServices: UtilityService,
+    private zone: NgZone,
   ) {
     this.userServices.resetUserModel();
+    this.profilePicURL = this.userServices.profilePicURL;
+    this.loadingPic = false;
   }
 
   getUser() {
     return this.userServices.fbUser();
   }
 
+  getProfilePic() {
+    return this.profilePicURL;
+  }
+
   ngOnInit() {
+    console.log('!!!!!!!!!!!!!!!!!!!! In ngOnInit()')
     this.loading = true;
     this.userServices.fbUser();
-    // if (!this.userServices.fbUser() && !this.userServices.getIsAdmin()) {
-    //     console.log('not authorized!');
-    //     this.router.navigateByUrl('/');
-    //   }
+    this.loadingPic = false;
+    console.log(this.userServices.profilePicReady.getValue());
+    this.subscriptions.push(this.userServices.profilePicReady.subscribe(bool => {
+      this.zone.run(() => {
+        console.log('############### Profile Pic Ready ' + this.userServices.profilePicURL);
+        this.profilePicURL = this.userServices.profilePicURL;
+        this.loadingPic = false;
+      });
+    }));
+    // try {
+    //   this.userServices.getFacebookProfilePic();
+    // } catch (err) {
+    //   this.userServices.getFacebookProfilePicWithInit();
+    // }
     this.loading = false;
   }
 
@@ -70,8 +88,6 @@ export class ProfileComponent implements OnInit {
       }
     }));
 
-
   }
 
 }
-

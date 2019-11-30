@@ -4,36 +4,42 @@
           border-bottom-style: solid; border-bottom-width: 1px;
           border-bottom-color: black;">
       Profile
-    <span class="fill"></span>
+      <span class="fill"></span>
       <button mat-button (click)="openEditRegisterProfile()">Edit Profile</button>
-<!--      <button mat-button [routerLink]="['/nav/security/profile-editor']">Edit Profile</button>-->
     </mat-toolbar-row>
   </mat-toolbar>
   <div class="card-deck-container">
-      <ng-container>
-    <mat-card>
-<!--      <button mat-stroked-button type= "button" (click)="filePicker.click()"></button><input type="file" #filePicker>-->
-      <img width="200px" height="200px"
-        src="https://firebasestorage.googleapis.com/v0/b/learnfiu.appspot.com/o/{{getUser().photo}}?alt=media&token={{getUser().photoToken}}">
-    </mat-card>
-        <mat-card class="example-card">
+    <ng-container>
 
-    <mat-card-title> STUDENT INFO </mat-card-title>
-    <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
-    <mat-card-content *ngIf="!loading">
-      <p>
-        <strong>First Name: </strong>{{getUser().first_name}}
+      <mat-card class="example-card">
+        <h2 style="text-align: center"> {{getUser().first_name}}'s Profile </h2>
+        <hr>
+        <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
+        <div style="text-align: center" *ngIf="!loadingPic">
+          <img class="circular--square" width="200px" height="200px" src="{{getProfilePic()}}">
+        </div>
+        <mat-card-content class="card-container-left" *ngIf="!loading">
         <br>
-        <strong>Last Name: </strong> {{getUser().last_name}}
-        <br>
-        <strong>Email: </strong>{{getUser().email}}
-        <br>
-        <strong>Phone: </strong>{{getUser().phone}}
-        <br>
-        <strong>Country: </strong>{{getUser().country}}
-      </p>
-    </mat-card-content>
-  </mat-card>
- </ng-container>
-    </div>
+          <table>
+            <tr>
+              <td>First Name:</td><td style="margin-inline-start: 50px; font-weight: bold">{{getUser().first_name}}</td>
+            </tr>
+            <tr>
+              <td>Last Name:</td><td style="margin-inline-start: 50px; font-weight: bold">{{getUser().last_name}}</td>
+            </tr>
+            <tr>
+              <td>Email:</td><td style="margin-inline-start: 50px; font-weight: bold">{{getUser().email}}</td>
+            </tr>
+            <tr>
+              <td>Phone:</td><td style="margin-inline-start: 50px; font-weight: bold">{{getUser().phone}}</td>
+            </tr>
+            <tr>
+              <td>Country:</td><td style="margin-inline-start: 50px; font-weight: bold">{{getUser().country}}</td>
+            </tr>
+          </table>
+
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+  </div>
 </div>

@@ -8,7 +8,7 @@ module.exports = (passport) => {
     // add course to app
     router.post('/add-course', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addCourse(req.body.course);
-        await res.json(resp);
+        res.json(resp);
         await  Utils.AdminLog(req.user, {method: coursesServices.addCourse.name, params: [req.body.course], result: resp}, "Adding New Course");
     });
 
@@ -17,15 +17,15 @@ module.exports = (passport) => {
         req.body.discussion.public = true;
         const resp = await coursesServices.addDiscussion(req.body.course, req.body.discussion);
         console.log(req.body.discussion);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.addDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Adding New Discussion");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.addDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Adding New Discussion");
     });
 
     router.post('/add-course-conversation', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         req.body.discussion.public = false;
         console.log(req.body.discussion);
         const resp = await coursesServices.addDiscussion(req.body.course, req.body.discussion);
-        await res.json(resp);
+        res.json(resp);
         // Utils.AdminLog(req.user, {method: coursesServices.addDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Adding New Discussion");
     });
 
@@ -42,282 +42,278 @@ module.exports = (passport) => {
         }
         console.log(user);
         const resp = await coursesServices.getConversations(user, isAdmin);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.post('/add-course-announcement', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addAnnouncement(req.body.course, req.body.announcement);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.addAnnouncement.name, params: [req.body.course, req.body.announcement], result: resp}, "Adding New Announcement");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.addAnnouncement.name, params: [req.body.course, req.body.announcement], result: resp}, "Adding New Announcement");
     });
 
     // add post to a discussion
     router.post('/add-discussion-post', async (req, res, next) => {
         const resp = await coursesServices.addDiscussionPost(req.body.course, req.body.discussion, req.body.post);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.post('/add-conversation-message', async (req, res, next) => {
         const resp = await coursesServices.addConversationMessage(req.body.conversation.courseId, req.body.discussion, req.body.conversation);
-        await res.json(resp);
+        res.json(resp);
     });
 
     // add module to a course
     router.post('/add-module', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addCourseModule(req.body.course, req.body.module);
-        await res.json({success: resp});
+        res.json({success: resp});
         await  Utils.AdminLog(req.user, {method: coursesServices.addCourseModule.name, params: [req.body.course, req.body.module], result: resp}, "Adding New Module");
     });
 
     // add link content to module
     router.post('/add-module-link', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleLink(req.body.course, req.body.module, req.body.content);
-        await res.json({success: resp});
-        await Utils.AdminLog(req.user, {method: coursesServices.addModuleLink.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding a link to a module.");
+        res.json({success: resp});
+        Utils.AdminLog(req.user, {method: coursesServices.addModuleLink.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding a link to a module.");
     });
 
     // add quiz content to module
     router.post('/add-module-quiz', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleQuiz(req.body.course, req.body.module, req.body.content);
-        await res.json({success: resp});
-        await Utils.AdminLog(req.user, {method: coursesServices.addModuleQuiz.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding a quiz to a Module");
+        res.json({success: resp});
+        Utils.AdminLog(req.user, {method: coursesServices.addModuleQuiz.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding a quiz to a Module");
     });
 
     // add external link to module
     router.post('/add-module-url', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleUrl(req.body.course, req.body.module, req.body.content);
-        await res.json({success: resp});
-        await Utils.AdminLog(req.user, {method: coursesServices.addModuleUrl.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding an external link to a module.");
+        res.json({success: resp});
+        Utils.AdminLog(req.user, {method: coursesServices.addModuleUrl.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding an external link to a module.");
     });
 
     router.post('/add-module-content', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.addModuleContent(req.body.course, req.body.module, req.body.content);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.addModuleContent.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding a content to a module.");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.addModuleContent.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Adding a content to a module.");
     });
     
     // get info for a course
     router.get('/course-info', async (req, res, next) => {
         const resp = await coursesServices.getCourseInfo(req.query.key);
-        await res.json(resp);
+        res.json(resp);
     });
 
     // get all courses infos
     router.get('/courses', async ( req, res, next) => {
         const resp = await coursesServices.getAllCourses();
-        await res.json(resp);
+        res.json(resp);
     });
 
     // get course discussions
     router.get('/course-discussions', async (req, res, next) => {
         const resp = await coursesServices.getDiscussions(req.query.course, true);
-        await res.json(resp);
+        res.json(resp);
     });
 
     // get course announcements
     router.get('/course-announcements', async (req, res, next) => {
         const resp = await coursesServices.getAnnouncements(req.query.course);
-        await res.json(resp);
+        res.json(resp);
     });
     // get course discussion info
     router.get('/course-discussion-info', async (req, res, next) => {
         const resp = await coursesServices.getDiscussionInfo(req.query.course, req.query.discussion);
-        await res.json(resp);
+        res.json(resp);
     });
     
     // get all posts from a discussion
     router.get('/discussion-posts', async (req, res, next) => {
         const resp = await coursesServices.getDiscussionPosts(req.query.course, req.query.discussion);
-        await res.json(resp);
+        res.json(resp);
     });
 
     // get upto 50 posts from a discussion starting from start element
     router.get('/discussion-posts-from', async (req, res, next) => {
         const resp = await coursesServices.getDiscussionPostsFrom(req.query.course, req.query.discussion, Number(req.query.start));
-        await res.json(resp);
+        res.json(resp);
     });
 
     // get all info for all modules in a course
     router.get('/modules', async (req, res, next) => {
         const resp = await coursesServices.getCourseModules(req.query.course);
-        await res.json(resp);
+        res.json(resp);
     });
 
     // get all info for all modules in a course
     // router.get('/course-students', async (req, res, next) => {
     //     const resp = await coursesServices.getCourseStudents(req.query.course);
-    //     await res.json(resp);
+    //     res.json(resp);
     // });
 
     router.get('/page', async (req, res, next) => {
         //console.log(req.query);
         const resp = await coursesServices.getPage(req.query.course, req.query.module, req.query.page);
-        await res.json(resp);
+        res.json(resp);
     });
 
     // get all the courses that a student is enrolled in
     // router.get('/student-courses', async (req, res, next) => {
     //     const resp = await coursesServices.getMyCourses(req.decoded);
-    //     await res.json(resp);
+    //     res.json(resp);
     // })
 
     // get all the courses that a student is enrolled in
     router.get('/student-courses', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.getMyCourses(req.user);
-        await res.json(resp);
+        res.json(resp);
     });
 
     // get whether a student is enrolled in a particullar course
     router.get('/student-has-course', passport.authenticate('jwt', {session:true}), async (req, res, next) => {
         const resp = await coursesServices.studentHasCourse(req.user, req.query.course);
-        await res.json(resp);
+        res.json(resp);
     });
 
 
     // get a student's grades for a particular course
     router.get('/student-grades', async(req, res, next) => {
         const resp = await coursesServices.getStudentGrades(req.query.course, req.query.student);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.post('/update-course', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.updateCourse(req.body.course);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.updateCourse.name, params: [req.body.course], result: resp}, "Updating Course Information.");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.updateCourse.name, params: [req.body.course], result: resp}, "Updating Course Information.");
     });
 
     router.post('/remove-content', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeContent(req.body.course, req.body.module, req.body.content);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.removeContent.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Removing Course Content.");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.removeContent.name, params: [req.body.course, req.body.module, req.body.content], result: resp}, "Removing Course Content.");
     });
 
     router.get('/course-module', async(req, res, next) => {
         const resp = await coursesServices.getModule(req.query.course, req.query.module);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.post('/update-discussion', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.updateDiscussion(req.body.course, req.body.discussion);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.updateDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Updating Course Discussion.");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.updateDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Updating Course Discussion.");
     });
 
     router.post('/remove-discussion', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeDiscussion(req.body.course, req.body.discussion);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.removeDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Removing Course Discussion.");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.removeDiscussion.name, params: [req.body.course, req.body.discussion], result: resp}, "Removing Course Discussion.");
     });
 
     router.get('/registered-students', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.getRegistered(req.query.course);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.post('/signup', async(req, res, next) => {
         const resp = await coursesServices.signUpFor(req.body.student, req.body.course);
-        await res.json(resp);
+        res.json(resp);
     });
 
 
     router.get('/course-students', async(req, res, next) => {
         const resp = await coursesServices.getStudents(req.query.course, req.query.student);
-        await res.json(resp);
+        res.json(resp);
     });
 
     // get courses
     router.get('/courses', async (req, res, next) => {
         const resp = await coursesServices.getAllCourses();
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.get('/waiting-list-size', async(req, res, next) => {
         const resp = await coursesServices.waitingListSize(req.query.course);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.post('/remove-registree', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeRegistree(req.body.student, req.body.course);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.removeRegistree.name, params: [req.body.student, req.body.course], result: resp}, "Removing Course Registree.");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.removeRegistree.name, params: [req.body.student, req.body.course], result: resp}, "Removing Course Registree.");
     });
 
     router.post('/remove-student-from-course', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeStudent(req.body.student, req.body.course);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.removeStudent.name, params: [req.body.student, req.body.course], result: resp}, "Removing Student from Course.");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.removeStudent.name, params: [req.body.student, req.body.course], result: resp}, "Removing Student from Course.");
     });
 
     router.post('/confirm-enrollment', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.confirmEnrollment(req.body.student, req.body.course);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.confirmEnrollment.name, params: [req.body.student, req.body.course], result: resp}, "Confirming Student Enrollment.");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.confirmEnrollment.name, params: [req.body.student, req.body.course], result: resp}, "Confirming Student Enrollment.");
     });
 
     router.get('/course-students-2', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.getCourseStudent(req.query.course);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.get('/module-quiz', async(req, res, next) => {
         const resp = await coursesServices.getQuiz(req.query.course, req.query.module, req.query.quiz);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.post('/set-start-time', async(req, res, next) => {
         const resp = await coursesServices.setQuizStartTime(req.body.student, req.body.course, req.body.quiz);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.post('/submit-quiz', async(req, res, next) => {
         const resp = await coursesServices.submitQuizForGrade(req.body.student, req.body.course, req.body.module, req.body.quiz, req.body.responses);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.get('/student-record', async(req, res, next) => {
         const resp = await coursesServices.getStudentRecord(req.query.student, req.query.course, req.query.quiz);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.get('/quiz-info', async(req, res, next) => {
         const resp = await coursesServices.getQuizInfo(req.query.course, req.query.module, req.query.quiz);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.post('/save-responses', async(req, res, next) => {
         const resp = await coursesServices.saveResponses(req.body.student, req.body.course, req.body.quiz, req.body.responses);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.get('/courses-by', async(req, res, next) => {
-        const resp = await coursesServices.getCoursesPage(req.query.sort, Number(req.query.start));
-        await res.json(resp);
+        const resp = await coursesServices.getCoursesPage(req.query.sort, Number(req.query.start), req.query.open);
+        res.json(resp);
     });
 
-    router.get('/courses-cat-by', async(req, res, next) => {
-        const resp = await coursesServices.getCoursesPageByCategory(req.query.category, req.query.sort, Number(req.query.start));
-        await res.json(resp);
-    });
 
     router.get('/courses-cat-by', async(req, res, next) => {
-        const resp = await coursesServices.getCoursesPageByCategory(req.query.category, req.query.sort, Number(req.query.start));
+        const resp = await coursesServices.getCoursesPageByCategory(req.query.category, req.query.sort, Number(req.query.start), req.query.open);
         res.json(resp);
     });
 
     router.get('/admin-courses', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
         const resp = await coursesServices.getAdminCourses(req.user);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.get('/can-register', async (req, res, next) => {
         const resp = await coursesServices.canRegister(req.query.student, req.query.course);
-        await res.json(resp);
+        res.json(resp);
     });
 
     router.post('/remove-module', passport.authenticate('jwt', {session: true}), async(req, res, next) => {
         const resp = await coursesServices.removeModule(req.body.course, req.body.moduleId);
-        await res.json(resp);
-        await Utils.AdminLog(req.user, {method: coursesServices.removeModule.name, params: [req.body.course, req.body.moduleId], result: resp}, "Removing Course Module.");
+        res.json(resp);
+        Utils.AdminLog(req.user, {method: coursesServices.removeModule.name, params: [req.body.course, req.body.moduleId], result: resp}, "Removing Course Module.");
     });
 
     router.post('/remove-course', passport.authenticate('jwt', {session: true}), async(req, res, next) => {

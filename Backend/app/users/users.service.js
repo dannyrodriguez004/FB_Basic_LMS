@@ -39,17 +39,18 @@ class UsersService {
 
     async addStudent(user) {
         try {
-            let students = await database.ref('/students').orderByKey().equalTo(user.body.key).once('value');
-            if(!students || !students.hasChildren()) {
+            // let students = await database.ref('/students').orderByKey().equalTo(user.body.key).once('value');
+            // if(!students || !students.hasChildren()) {
                 await database.ref('/students').child(user.body.key).set({
                     token: user.body.token,
                     fname: user.body.fname.trim(),
                     lname: user.body.lname.trim(),
                     email: user.body.email.trim(),
                     country: user.body.country.trim(),
-                    phone: user.body.phone.trim()
+                    phone: user.body.phone.trim(),
+                    coins: 0,
                 });
-            }
+            // }
         } catch (err) {
             console.error(err);
             return false;
@@ -59,15 +60,14 @@ class UsersService {
     }
 
     /**
-     * 
      * @param {key: string, name: string} user 
      * 
      * @return true if successfully added new user
      */
     async addUser (user_info) {
         try {
-            let users = await database.ref('/users').orderByKey().equalTo(user_info.body.userID).once('value');
-            if(!users || !users.hasChildren()) {
+            // let users = await database.ref('/users').orderByKey().equalTo(user_info.body.userID).once('value');
+            // if(!users || !users.hasChildren()) {
                 await database.ref('/users').child(user_info.body.userID).set({
                     first_name: user_info.body.first_name.trim(),
                     last_name: user_info.body.last_name.trim(),
@@ -76,9 +76,9 @@ class UsersService {
                     type: 'student',
                     country: user_info.body.country.trim()
                 });
-            } else {
-                console.log('USER ALREADY EXISTS');
-            }
+            // } else {
+            //     console.log('USER ALREADY EXISTS');
+            // }
         } catch (err) {
             console.error(err);
             return false;
@@ -258,6 +258,21 @@ class UsersService {
             console.error(err);
         }
         return false;
+    }
+
+    async addCoins(student, amount) {
+        try {
+
+            let record = await database.ref('/students/' + student).child('coins').transaction( coins => {
+                return (coins || 0) + amount;
+            });
+
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+
+        return true;
     }
 }
 

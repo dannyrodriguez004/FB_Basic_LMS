@@ -61,6 +61,8 @@ import { QuizResultComponent } from './assessment/quiz-result/quiz-result.compon
 import { QuizDialogComponent } from './course/modules/quiz-dialog/quiz-dialog.component';
 import { AnnouncementsComponent } from './course/announcements/announcements.component';
 import { NewAnnouncementComponent } from './course/announcements/new-announcement/new-announcement.component';
+import { SequenceComponent } from './course/sequence/sequence.component';
+import { StepComponent } from './course/sequence/step/step.component';
 
 
 
@@ -96,6 +98,8 @@ import { NewAnnouncementComponent } from './course/announcements/new-announcemen
     NotifyInWaitingComponent,
     AnnouncementsComponent,
     NewAnnouncementComponent,
+    SequenceComponent,
+    StepComponent,
   ],
   imports: [
     CommonModule,

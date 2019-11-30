@@ -27,6 +27,7 @@ export class CoursesComponent implements OnInit {
   predicting = false;
   predictions: string[] = [];
   searching = false;
+  onlyOpen = false;
 
 
   constructor(
@@ -62,6 +63,9 @@ export class CoursesComponent implements OnInit {
         this.search = null;
         this.searching = false;
       }
+      if(params.open) {
+        this.onlyOpen = params.open == true ? true : false;
+      } else { this.onlyOpen = false;}
     });
     this.fetchPage();
     this.subscriptions.push(this.router.events.subscribe((e: any) => {
@@ -89,6 +93,9 @@ export class CoursesComponent implements OnInit {
             this.search = null;
             this.searching = false;
           }
+          if(params.open) {
+            this.onlyOpen = params.open;
+          } else { this.onlyOpen = false;}
         });
         this.fetchPage();
       }
@@ -99,7 +106,7 @@ export class CoursesComponent implements OnInit {
     this.loading = true;
     if (this.currentCategory != null && this.currentCategory !== 'null') {
       console.log('browsing by category');
-      this.coursesServices.getCoursesCatergorySortBy(this.currentCategory, this.sort, this.startFrom)
+      this.coursesServices.getCoursesCatergorySortBy(this.currentCategory, this.sort, this.startFrom, this.onlyOpen)
         .subscribe( (resp: { courses: [], size: number}) => {
         this.size = resp.size;
         this.courses = resp.courses;
@@ -114,12 +121,21 @@ export class CoursesComponent implements OnInit {
       });
     } else {
       console.log('browsing normal');
-      this.coursesServices.getCoursesSortBy(this.sort, this.startFrom).subscribe( (resp: { courses: [], size: number}) => {
+      this.coursesServices.getCoursesSortBy(this.sort, this.startFrom, this.onlyOpen).subscribe( (resp: { courses: [], size: number}) => {
         this.size = resp.size;
         this.courses = resp.courses;
         this.loading = false;
       });
     }
+  }
+
+  toggleOpen() {
+    this.onlyOpen = !this.onlyOpen;
+    this.fetchPage();
+  }
+
+  myColor() {
+    return this.onlyOpen ? 'warn' : 'primary';
   }
 
   register(course) {
@@ -212,7 +228,7 @@ export class CoursesComponent implements OnInit {
   setParams() {
     this.router.navigate(['/nav/courses'], { queryParams:
         {start: this.startFrom, category: this.currentCategory,
-          sort: this.sort, search: this.search} });
+          sort: this.sort, search: this.search, open: this.onlyOpen}});
     this.fetchPage();
   }
 
@@ -224,6 +240,13 @@ export class CoursesComponent implements OnInit {
     this.currentCategory = category;
     this.startFrom = 0;
     this.sort = 'name';
+    this.setParams();
+  }
+
+  setSort(sort) {
+    this.sort = sort;
+    this.startFrom = 0;
+    //this.currentCategory = 'null';
     this.setParams();
   }
 
@@ -265,6 +288,10 @@ export class CoursesComponent implements OnInit {
       });
 
     }
+  }
+  
+  isAdmin() {
+    return this.userServices.getIsAdmin();
   }
   
 }

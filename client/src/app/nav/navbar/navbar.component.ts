@@ -153,6 +153,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
   }
 
+
   isAdmin() {
     return this.userServices.getIsAdmin();
   }

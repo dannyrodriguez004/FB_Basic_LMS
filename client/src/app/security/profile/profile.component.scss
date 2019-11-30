@@ -1,28 +1,32 @@
-#profile {
-  width: 100%;
-  min-height: 100vh;
-  background-color: white;
-  margin: 0;
-  padding: 0;
-}
-
-.title {
-  text-align: center;
-}
-
-.subtitle {
-  text-align: center;
-  color: #727878;
-}
-
-#profile .row > div {
-  margin-bottom: 20px;
-}
-
+//#profile {
+//  width: 100%;
+//  min-height: 100vh;
+//  background-color: white;
+//  margin: 0;
+//  padding: 0;
+//}
+//
+//.title {
+//  text-align: center;
+//}
+//
+//.subtitle {
+//  text-align: center;
+//  color: #727878;
+//}
+//
+//#profile .row > div {
+//  margin-bottom: 20px;
+//}
 .mat-app-background{
   background-color: white;
   height: 100%;
 }
+
+.circular--square {
+  border-radius: 50%;
+}
+
 
 header{
   //background-color: lightblue;
@@ -51,6 +55,13 @@ mat-card {
   flex-flow: column;
 }
 
+.card-container-right{
+  display: inline;
+}
+
+.card-container-left{
+  display: inline;
+}
 .card-deck-container {
   width: 100%;
   position: relative;
@@ -66,19 +77,19 @@ mat-card {
   padding: 3px 3px 3px 3px;
 }
 
-label{
-  display:block;
-  margin-top:20px;
-}
-
-input{
-  padding:8px;
-  border-radius: 5px;
-  width:350px;
-  font-size:16px;
-  margin-top:2px;
-  // margin-bottom:2px;
-}
+//label{
+//  display:block;
+//  margin-top:20px;
+//}
+//
+//input{
+//  padding:8px;
+//  border-radius: 5px;
+//  width:350px;
+//  font-size:16px;
+//  margin-top:2px;
+//  // margin-bottom:2px;
+//}
 
 button{
   background: white;
