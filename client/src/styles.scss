@@ -23,3 +23,7 @@ body {
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Opera and Firefox */
 }
+
+.app-full-bleed-dialog .mat-dialog-container {
+    padding: 0;
+}

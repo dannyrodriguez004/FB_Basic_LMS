@@ -14,7 +14,7 @@
                     <a *ngIf="step.page != null" [routerLink]="['/nav/courses/view-course']"
                     [queryParams]="{course: course, module: module.id, page_id: step.id, select: 'Page'}"><app-step [icon]="'insert_drive_file'" [text]="step.title"></app-step></a>
                     <a *ngIf="step.outOf != null" (click)="openQuizDialog(module.id, step.id)"><app-step [icon]="'assessment'" [text]="step.title"></app-step></a>
-                    <a *ngIf="step.embedded != null"><app-step [icon]="'play_circle_filled'" [text]="step.title"></app-step></a>
+                    <a *ngIf="step.embedded != null" (click)="openVideo(step.embedded + '?fs=0')"><app-step [icon]="'play_circle_filled'" [text]="step.title"></app-step></a>
                 </div>
             </div>
         </div>
