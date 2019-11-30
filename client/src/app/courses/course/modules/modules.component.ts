@@ -6,10 +6,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NewContentComponent } from './new-content/new-content.component';
 import { ModuleEditorComponent } from './module-editor/module-editor.component';
 import { QuizDialogComponent } from './quiz-dialog/quiz-dialog.component';
+import {DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
 
 export interface Module {
-  id:string;
-  name:string;
+  id: string;
+  name: string;
   resources: Resource[];
 }
 
@@ -34,14 +35,21 @@ export class ModulesComponent implements OnInit {
   // tslint:disable-next-line:variable-name no-input-rename
   @Input('current_course') current_course: string;
   loading = true;
+// modules = [];
   modules: Module[] = [];
   subscriptions: Subscription[] = [];
-
+  showVideo = undefined;
+  contentEmbedded = '';
+  safeURL: SafeResourceUrl;
+  openVid: {module: string, content: number} =  {module: null, content: -1};
   constructor(
     private coursesServices: CoursesService,
     private userServices: UserService,
     private dialog: MatDialog,
-    ) { }
+    private sanitizer: DomSanitizer
+  ) {
+    // this.safeURL = this.sanitizer.bypassSecurityTrustResourceUrl(videoURL)
+  }
 
   openNewContentDialog(selectModule) {
 
@@ -59,6 +67,59 @@ export class ModulesComponent implements OnInit {
         console.log(result);
       }
     }));
+  }
+  //
+  // openVideo(videoURL, module, contentID, title) {
+  //   this.openVid.module = module;
+  //   this.openVid.content = contentID;
+  //   let el = document.getElementById( 'videoDiv-' + this.openVid.module + this.openVid.content + title);
+  //   if (el) {
+  //     if (el.style.display === 'inline') {
+  //       this.showVideo = undefined;
+  //       this.closeVideo(videoURL, module, contentID, title);
+  //     } else {
+  //       el.style.display = 'inline';
+  //     }
+  //   }
+  //   this.showVideo = true;
+  //   // this.contentEmbedded = videoURL;
+  //   this.safeURL = videoURL;
+  // }
+  openVideo(videoURL, moduleId, seq) {
+    const videoToOpen = 'videoDiv-' + moduleId + '-' + seq;
+    if (this.showVideo) {
+      console.log('Closing', this.showVideo);
+      this.closeVideo();
+      if (videoToOpen === this.showVideo) {
+        this.showVideo = undefined;
+        return false;
+      } else {
+        this.showVideo = videoToOpen;
+        let el = document.getElementById(this.showVideo);
+        if (el) {
+          el.style.display = 'inline';
+        }
+      }
+    } else {
+      this.showVideo = videoToOpen;
+      let el = document.getElementById(this.showVideo);
+      if (el) {
+        el.style.display = 'inline';
+      }
+    }
+  }
+  //
+  // closeVideo(videoURL, module, contentID, title) {
+  //   let el = document.getElementById( 'videoDiv-' + this.openVid.module + this.openVid.content + title);
+  //   this.showVideo = false;
+  //   el.style.display = 'none';
+  // }
+  //
+  closeVideo() {
+    let el = document.getElementById(this.showVideo);
+    if (el) {
+      el.style.display = 'none';
+    }
   }
 
   openEditModuleDialog(courseModule) {
@@ -102,6 +163,7 @@ export class ModulesComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.subscriptions.push(this.coursesServices.getModules(this.current_course).subscribe( (resp: Module[]) => {
+      // this.subscriptions.push(this.coursesServices.getModules(this.current_course).subscribe( (resp: []) => {
       this.modules = resp;
       this.loading = false;
     }));

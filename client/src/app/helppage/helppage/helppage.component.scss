@@ -15,15 +15,16 @@ header{
 
 mat-card {
   width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+  //display: flex;
   background-color: #c5dce9e0;
-  padding: 1rem;
-  margin-top: 20px;
-  margin-left: 20px;
 }
 
-mat-card-content{
-  padding-left: 20px;
-}
+//mat-card-content{
+//  text-align: 20px;
+//}
 
 mat-card-title{
   margin: auto;

@@ -30,6 +30,16 @@ export class DashboardComponent implements OnInit {
     if (this.userServices.getIsAdmin()) {
       this.coursesServices.getAdminCourses().subscribe((resp: Course[]) => {
         this.myCourses = resp;
+        resp.forEach((course: Course) => {
+          this.coursesServices.getCourseInfo(course.id)
+            .subscribe((courseInfo: any) => {
+              course.size = courseInfo.size;
+              course.MAX_SIZE = courseInfo.MAX_SIZE;
+              course.endEnrollDate = courseInfo.endEnrollDate;
+              course.category = courseInfo.category;
+              console.log(course.MAX_SIZE);
+            });
+        });
       });
     } else {
       this.myCourses = [];
@@ -39,9 +49,15 @@ export class DashboardComponent implements OnInit {
           resp.forEach((course: Course) => {
             this.coursesServices.getCourseInfo(course.id)
               .subscribe((courseInfo: any) => {
+                course.size = courseInfo.size;
+                course.MAX_SIZE = courseInfo.MAX_SIZE;
+                // course.endEnrollDate = courseInfo.endEnrollDate;
+                course.category = courseInfo.category;
+                console.log(course.MAX_SIZE);
                 this.coursesServices.getInstructorInfo(courseInfo.instructor).subscribe((instructor: any) => {
                   console.log('FOO ' + JSON.stringify(instructor));
                   course.instructor_name = instructor.name;
+                  course.email = instructor.contactEmail;
                   this.myCourses.push(JSON.parse(JSON.stringify(course)));
                 });
               });

@@ -7,29 +7,24 @@
       </mat-toolbar-row>
     </mat-toolbar>
     <mat-card>
-      <mat-card-title> How Can We Help ? </mat-card-title>
-    <mat-card-content>
-        <input
-          matInput
-          type="text"
-          class="header-searchbox"
-          placeholder="Search Solutions">
-        <button mat-icon-button color="primary">
-          <mat-icon>search</mat-icon>
-        </button>
-      </mat-card-content>
-      </mat-card>
-
-    <mat-card>
-        <mat-card-title> Describe Your Problem </mat-card-title>
-      <mat-card-content>
-      <textarea
-        matInput
-        rows="5"
-        [value]="'Please explain your problem here!'"
-        style="width: 500px"
-      ></textarea>
+      <mat-card-title style="text-align: center"> FAQ </mat-card-title>
       <br>
+      <mat-card-content style="text-align: center">
+        <br>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          (click)="ComplaintSubmitted()">Submit Problem</button>
+        <p> {{submittedComplaint}} </p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+        <mat-card-title style="text-align: center"> Describe Your Problem </mat-card-title>
+          <br>
+        <mat-card-content style="text-align: center">
+          <textarea matInput rows="5" [value]="'Please explain your problem here!'" style="width: 500px"></textarea>
+          <br>
         <button
           mat-raised-button
           color="primary"

@@ -1,40 +1,92 @@
 
 <mat-accordion *ngIf="!loading" multi="true">
-    <mat-expansion-panel *ngFor="let module of modules">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                <mat-icon>folder_open</mat-icon>
-                {{module.name}}
-            </mat-panel-title>
-        </mat-expansion-panel-header>
+  <mat-expansion-panel *ngFor="let module of modules">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon>folder_open</mat-icon>
+        {{module.name}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-nav-list *ngFor="let content of module.resources; let i = index" [attr.data-index]="i">
+      <a *ngIf="content.url != null" mat-list-item (click)="openInNewTab(content.url)">
+        <mat-icon>link</mat-icon>{{content.title}}</a>
+      <a *ngIf="content.page != null" mat-list-item [routerLink]="['/nav/courses/view-course']"
+         [queryParams]="{course: this.current_course, module: module.id, page_id: content.id, select: 'Page'}">
+        <mat-icon>insert_drive_file</mat-icon>{{content.title}}</a>
+      <a *ngIf="content.outOf != null" mat-list-item (click)="openQuizDialog(module.id, content.id)" >
+        <mat-icon>assessment</mat-icon>{{content.title}}</a>
+      <a *ngIf="content.embedded != null" mat-list-item (click)="openVideo(content.embedded, content.id, i)">
+        <mat-icon>play_circle_filled</mat-icon>{{content.title}}
+      </a>
+      <div id="videoDiv-{{content.id}}-{{i}}" *ngIf="this.showVideo && this.showVideo === ('videoDiv-' + content.id + '-' + i) && content.embedded != null" align="middle" class="video">
+        <!--        <a (click)="closeVideo()">Close</a>-->
+        <div class="video-foreground">
+          <iframe [src]='sanitizer.bypassSecurityTrustResourceUrl(content.embedded + "?fs=0")'  frameborder="0" width="800" height="600" allowfullscreen></iframe>
+        </div>
+      </div>
+    </mat-nav-list>
 
-        <mat-nav-list *ngFor="let content of module.resources">
-                <a *ngIf="content.url != null" mat-list-item (click)="openInNewTab(content.url)">
-                  <mat-icon>link</mat-icon>{{content.title}}</a>
-                <a *ngIf="content.page != null" mat-list-item [routerLink]="['/nav/courses/view-course']"
-                   [queryParams]="{course: this.current_course, module: module.id, page_id: content.id, select: 'Page'}">
-                  <mat-icon>insert_drive_file</mat-icon>{{content.title}}</a>
-                <a *ngIf="content.outOf != null" mat-list-item (click)="openQuizDialog(module.id, content.id)" >
-                  <mat-icon>assessment</mat-icon>{{content.title}}</a>
-                <a *ngIf="content.embedded != null" mat-list-item>
-                  <mat-icon>play_circle_filled</mat-icon>{{content.title}}</a>
-        </mat-nav-list>
-
-        <mat-nav-list *ngIf="this.isAdmin()">
-            <a (click)="openEditModuleDialog(module)" mat-list-item class="add_button"><mat-icon>edit</mat-icon>Edit Module</a>
-            <a (click)="openNewContentDialog(module.id)" mat-list-item><mat-icon>add</mat-icon>Add Content</a>
-        </mat-nav-list>
-    </mat-expansion-panel>
+    <mat-nav-list *ngIf="this.isAdmin()">
+      <a (click)="openEditModuleDialog(module)" mat-list-item class="add_button"><mat-icon>edit</mat-icon>Edit Module</a>
+      <a (click)="openNewContentDialog(module.id)" mat-list-item><mat-icon>add</mat-icon>Add Content</a>
+    </mat-nav-list>
+  </mat-expansion-panel>
 </mat-accordion>
 
 <br *ngIf="modules.length != 0">
 
 <mat-card *ngIf="1 > modules.length || this.isAdmin()">
-    <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
-    <div *ngIf="1 > modules.length" class="empty_message">
-        There are no modules.
-    </div>
-    <mat-nav-list *ngIf="this.isAdmin()">
-        <a (click)="openEditModuleDialog({id:null, name:null, resources: []})" mat-list-item class="add_button"><mat-icon>add</mat-icon>Add Module</a>
-    </mat-nav-list>
+  <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>
+  <div *ngIf="1 > modules.length" class="empty_message">
+    There are no modules.
+  </div>
+  <mat-nav-list *ngIf="this.isAdmin()">
+    <a (click)="openEditModuleDialog({id:null, name:null, resources: []})" mat-list-item class="add_button"><mat-icon>add</mat-icon>Add Module</a>
+  </mat-nav-list>
 </mat-card>
+<!--<mat-accordion *ngIf="!loading" multi="true">-->
+<!--  <mat-expansion-panel *ngFor="let module of modules">-->
+<!--    <mat-expansion-panel-header>-->
+<!--      <mat-panel-title>-->
+<!--        <mat-icon>folder_open</mat-icon>-->
+<!--        {{module.name}}-->
+<!--      </mat-panel-title>-->
+<!--    </mat-expansion-panel-header>-->
+<!--    <mat-nav-list *ngFor="let content of module.resources">-->
+<!--      <a *ngIf="content.url != null" mat-list-item (click)="openInNewTab(content.url)">-->
+<!--        <mat-icon>link</mat-icon>{{content.title}}</a>-->
+<!--      <a *ngIf="content.page != null" mat-list-item [routerLink]="['/nav/courses/view-course']"-->
+<!--         [queryParams]="{course: this.current_course, module: module.id, page_id: content.id, select: 'Page'}">-->
+<!--        <mat-icon>insert_drive_file</mat-icon>{{content.title}}</a>-->
+<!--      <a *ngIf="content.outOf != null" mat-list-item (click)="openQuizDialog(module.id, content.id)" >-->
+<!--        <mat-icon>assessment</mat-icon>{{content.title}}</a>-->
+<!--      <a *ngIf="content.embedded != null" mat-list-item (click)="openVideo(content.embedded, module.id, module.resources.indexOf(content), content.title)">-->
+<!--        <mat-icon>play_circle_filled</mat-icon>{{content.title}}-->
+<!--      </a>-->
+<!--      <div id="videoDiv-{{module.id + module.resources.indexOf(content) + content.title}}" *ngIf="this.showVideo && openVid.module == module.id &&-->
+<!--                  openVid.content == module.resources.indexOf(content)" align="middle" class="video">-->
+<!--        &lt;!&ndash;        <a (click)="closeVideo()">Close</a>&ndash;&gt;-->
+<!--        <div class="video-foreground">-->
+<!--          <iframe [src]='sanitizer.bypassSecurityTrustResourceUrl(safeURL + "?fs=0")'  frameborder="0" width="800" height="600" allowfullscreen></iframe>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </mat-nav-list>-->
+
+<!--    <mat-nav-list *ngIf="this.isAdmin()">-->
+<!--      <a (click)="openEditModuleDialog(module)" mat-list-item class="add_button"><mat-icon>edit</mat-icon>Edit Module</a>-->
+<!--      <a (click)="openNewContentDialog(module.id)" mat-list-item><mat-icon>add</mat-icon>Add Content</a>-->
+<!--    </mat-nav-list>-->
+<!--  </mat-expansion-panel>-->
+<!--</mat-accordion>-->
+
+<!--<br *ngIf="modules.length != 0">-->
+
+<!--<mat-card *ngIf="1 > modules.length || this.isAdmin()">-->
+<!--  <mat-spinner *ngIf="loading" style="margin-left: auto; margin-right: auto;"></mat-spinner>-->
+<!--  <div *ngIf="1 > modules.length" class="empty_message">-->
+<!--    There are no modules.-->
+<!--  </div>-->
+<!--  <mat-nav-list *ngIf="this.isAdmin()">-->
+<!--    <a (click)="openEditModuleDialog({id:null, name:null, resources: []})" mat-list-item class="add_button"><mat-icon>add</mat-icon>Add Module</a>-->
+<!--  </mat-nav-list>-->
+<!--</mat-card>-->

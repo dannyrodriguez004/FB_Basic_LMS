@@ -19,18 +19,17 @@ export class UserService {
   private isLoggedIn = false;
   private subscriptions: Subscription[] = [];
   FBLoggedIn;
+  profilePicURL;
+  profilePicReady;
   private userModel: UserModel = new UserModel();
-  // tslint:disable-next-line:variable-name
-  private student_id: string; // debugging value
-  private admin: {id: string, name: string};
   private auth = 0;
-
   constructor(
     private http: HttpClient,
     private cookies: CookieService,
     private router: Router) {
     const jwtToken = this.getToken();
     this.FBLoggedIn = new BehaviorSubject<boolean>(!!jwtToken);
+    this.profilePicReady = new BehaviorSubject<boolean>(!!this.profilePicURL);
     (window as any).fbAsyncInit = () => {
       FB.init({
         appId: '398974807682335',
@@ -91,10 +90,46 @@ export class UserService {
       this.isLoggedIn = true;
       this.subscriptions.push(this.getCurrentUser().subscribe((userInfo: UserModel) => {
         this.userModel = userInfo;
+        if (this.userModel) {
+          try {
+            this.getFacebookProfilePic();
+          } catch (err) {
+              this.getFacebookProfilePicWithInit();
+          }
+        }
         console.log(this.userModel);
       }));
     }
   }
+
+  getFacebookProfilePicWithInit() {
+    (window as any).fbAsyncInit = () => {
+      FB.init({
+        appId: '398974807682335',
+        cookie: true,
+        xfbml: true,
+        version: 'v4.0'
+      });
+      FB.AppEvents.logPageView();
+      const url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
+      console.log('##################### URL ' + url);
+      FB.Event.subscribe(FB.api(url, response => {
+      console.log('###### PHOTO response:', response);
+      this.profilePicURL = response.data.url;
+      this.profilePicReady.next(true);
+    }));
+    };
+  }
+
+  getFacebookProfilePic() {
+      const url = '/' + this.userModel.id + '/picture?redirect=false&height=500&width=500';
+      console.log('##################### URL ' + url);
+      FB.Event.subscribe(FB.api(url, response => {
+        console.log('###### PHOTO response:', response);
+        this.profilePicURL = response.data.url;
+        this.profilePicReady.next(true);
+      }));
+    }
 
   isTokenFresh(token: string) {
     try {
@@ -153,13 +188,11 @@ export class UserService {
       console.log('RESULT.AUTHRESPONSE:  ', result.authResponse);
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
         console.log('this is the response:', response);
-        
         this.userModel.id = response.id;
         this.userModel.first_name = response.first_name;
         this.userModel.last_name = response.last_name;
         this.userModel.email = response.email;
         this.userModel.type = UsertypeModel.Student;
-        
         console.log(this.userModel);
         console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
       });
@@ -181,39 +214,6 @@ export class UserService {
     return this.http.get(`${environment.apiAddress}/users/get-user-info`, params);
   }
 
-  // redirectStudent(user) {
-  //   console.log('IN REDIRECT STUDENT');
-  //   console.log(user);
-  //   this.existingStudent(user).subscribe((resp: boolean) => {
-  //     console.log(resp);
-  //     if (resp) {
-  //       this.getCurrentUser().subscribe((response: any) => {
-  //         console.log('IN REDIRECT STUDENT -> GET CURRENT USER   ', response);
-  //         this.studentID = response.userID;
-  //         this.userModel = response.user_info;
-  //         if (!response.userID) {
-  //           console.log('USER INFO CANNOT BE FOUND');
-  //         } else {
-  //           console.log(this.studentID);
-  //           console.log('USER', this.userModel);
-  //         }
-  //       });
-  //       return this.userModel;
-  //     } else {
-  //     // this.addUser(this.userModel);
-  //     }
-  //   });
-  // }
-
-  // existingStudent(user) {
-  //   const opts = {
-  //     headers:  this.buildHeaders(),
-  //     userID: user
-  //   };
-  //   console.log('IN EXISTING STUDENT', opts);
-  //   return this.http.post(`${environment.apiAddress}/users/existing-student`, opts);
-  // }
-
   logout() {
     // tslint:disable-next-line:triple-equals
     if (this.cookies.getAll() != {}) {
@@ -224,6 +224,7 @@ export class UserService {
     console.log(this.userModel);
     this.isLoggedIn = false;
     this.auth = -1;
+    this.profilePicURL = '';
     this.router.navigate(['/nav/home']);
     localStorage.removeItem('id_token');
     this.destroyToken();
@@ -256,7 +257,7 @@ export class UserService {
       body: userModel
     };
     console.log(opts);
-    this.http.post(`${environment.apiAddress}/users/update-user`, opts).subscribe((result: any) => {
+    this.http.post(`${environment.apiAddress}/users/add-user`, opts).subscribe((result: any) => {
       console.log(result);
     });
   }
@@ -270,7 +271,7 @@ export class UserService {
       body: userModel
     };
     console.log(opts);
-    this.http.post(`${environment.apiAddress}/users/update-student`, opts).subscribe((result: any) => {
+    this.http.post(`${environment.apiAddress}/users/add-student`, opts).subscribe((result: any) => {
       console.log(result);
     });
   }

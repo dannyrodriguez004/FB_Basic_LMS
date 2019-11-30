@@ -3,6 +3,7 @@ export class Course {
     id: string; // databse key
     name: string; // course name
     description: string; // course description
+    category: string;
   // tslint:disable-next-line:variable-name
     instructor_id: number;  // instructor databse key
   // tslint:disable-next-line:variable-name
@@ -12,6 +13,8 @@ export class Course {
     assignments: Assessment[]; // assessment objs
     modules: Module[]; // module objs
     discussions: Discussion[]; // discussion objs
+    email?: string;
+    endEnrollDate?: string;
 }
 export class Students {
   id: string;
