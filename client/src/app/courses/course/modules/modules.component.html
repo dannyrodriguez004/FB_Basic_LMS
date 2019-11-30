@@ -21,7 +21,7 @@
       <div id="videoDiv-{{content.id}}-{{i}}" *ngIf="this.showVideo && this.showVideo === ('videoDiv-' + content.id + '-' + i) && content.embedded != null" align="middle" class="video">
         <!--        <a (click)="closeVideo()">Close</a>-->
         <div class="video-foreground">
-          <iframe [src]='sanitizer.bypassSecurityTrustResourceUrl(content.embedded + "?fs=0")'  frameborder="0" width="800" height="600" allowfullscreen></iframe>
+          <iframe [src]='sanitizeURL(content.embedded + "?fs=0")'  frameborder="0" width="800" height="600" allowfullscreen></iframe>
         </div>
       </div>
     </mat-nav-list>

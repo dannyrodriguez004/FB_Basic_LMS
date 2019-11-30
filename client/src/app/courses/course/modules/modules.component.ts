@@ -168,4 +168,8 @@ export class ModulesComponent implements OnInit {
       this.loading = false;
     }));
   }
+
+  sanitizeURL(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url)
+  }
 }
