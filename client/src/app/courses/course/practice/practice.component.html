@@ -1,0 +1,11 @@
+<mat-card style="width: 90%; height: 90%;">
+    <mat-card-title>
+        {{quiz.title}}
+    </mat-card-title>
+    
+    <mat-card-content>
+        <div>
+            <mat-icon class='star'  *ngFor="let star of getStarts()">star</mat-icon>
+        </div>
+    </mat-card-content>
+</mat-card>

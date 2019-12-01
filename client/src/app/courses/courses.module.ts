@@ -64,6 +64,7 @@ import { NewAnnouncementComponent } from './course/announcements/new-announcemen
 import { SequenceComponent } from './course/sequence/sequence.component';
 import { StepComponent } from './course/sequence/step/step.component';
 import { VideoPopComponent } from './course/sequence/video-pop/video-pop.component';
+import { PracticeComponent } from './course/practice/practice.component';
 
 
 
@@ -102,6 +103,7 @@ import { VideoPopComponent } from './course/sequence/video-pop/video-pop.compone
     SequenceComponent,
     StepComponent,
     VideoPopComponent,
+    PracticeComponent,
   ],
   imports: [
     CommonModule,
@@ -148,7 +150,8 @@ import { VideoPopComponent } from './course/sequence/video-pop/video-pop.compone
     NotifyEnrolledComponent,
     NotifyInClassComponent,
     NotifyInWaitingComponent,
-    VideoPopComponent
+    VideoPopComponent,
+    PracticeComponent
   ]
 })
 export class CoursesModule { }
