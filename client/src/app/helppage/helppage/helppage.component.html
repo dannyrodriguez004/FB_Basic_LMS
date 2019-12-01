@@ -25,7 +25,7 @@
         <mat-card-title style="text-align: center"> Describe Your Problem </mat-card-title>
           <br>
         <mat-card-content style="text-align: center">
-          <textarea matInput rows="5" [value]="'Please explain your problem here!'" style="width: 500px"></textarea>
+          <textarea matInput [(ngModel)]="messageText" rows="5" style="width: 500px"></textarea>
           <br>
         <button
           mat-raised-button
@@ -44,7 +44,7 @@
             <mat-icon mat-list-icon class="listicon">contact_support</mat-icon>
             <h4 mat-line>{{admin.name}}</h4>
             <p mat-line>{{admin.phone}} </p>
-            <a mat-line href="mailto:{{admin.email}}">{{admin.email}} </a>
+            <a mat-line target="_blank" href="mailto:{{admin.email}}">{{admin.email}} </a>
           </mat-list-item>
         </mat-list>
       </mat-card-content>

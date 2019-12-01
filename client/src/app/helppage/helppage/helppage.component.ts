@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./helppage.component.scss']
 })
 export class HelppageComponent implements OnInit {
-
+  messageText: string;
   faqs = [
     {
       question: 'How do I log in with Facebook?',
@@ -55,11 +55,12 @@ export class HelppageComponent implements OnInit {
   ];
 
   submittedComplaint = '';
-
   ComplaintSubmitted() {
+    window.open('mailto:drodr518@fiu.edu?subject=CUSTOMER SUPPORT MESSAGE&body=' + this.messageText);
     this.submittedComplaint = 'Thank you for your submission, we will be contacting you as soon as possible';
   }
-  constructor() { }
+
+  constructor() {}
 
   ngOnInit() {}
 
