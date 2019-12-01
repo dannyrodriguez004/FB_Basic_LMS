@@ -1,3 +1,4 @@
+import { VideoPopComponent } from './video-pop/video-pop.component';
 import { MatDialog } from '@angular/material';
 import { QuizDialogComponent } from './../modules/quiz-dialog/quiz-dialog.component';
 import { CoursesService } from './../../../services/courses.service';
@@ -64,6 +65,17 @@ export class SequenceComponent implements OnInit {
 
   openInNewTab(url) {
     window.open(url, '_blank');
+  }
+
+  openVideo(url) {
+
+    const dialogRef = this.dialog.open(VideoPopComponent, {
+      panelClass: 'app-full-bleed-dialog',
+      width: '90%',
+      height: '90%',
+      data: url
+    });
+
   }
 
   openQuizDialog(courseModule, quiz) {
