@@ -185,21 +185,21 @@ export class UserService {
     FB.login(result => {
       console.log(result);
       const params = {params: new HttpParams().set('userID', result.authResponse.userID)};
-      console.log('RESULT.AUTHRESPONSE:  ', result.authResponse);
+      console.log('188 - userServices.submitLogin() -- FB.login result.authResponse:   ', result.authResponse);
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
-        console.log('this is the response:', response);
+        console.log('190 - userServices.submitLogin() -- FB.api response:   ', response);
         this.userModel.id = response.id;
         this.userModel.first_name = response.first_name;
         this.userModel.last_name = response.last_name;
         this.userModel.email = response.email;
         this.userModel.type = UsertypeModel.Student;
-        console.log(this.userModel);
-        console.log('Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
+        console.log('196 - userServices.submitLogin() -- FB.api this.userModel:   ', this.userModel);
+        console.log('197 - Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
       });
       if (result.authResponse) {
         this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
           .subscribe((response: any) => {
-            console.log('POST RESPONSE', response);
+            console.log('202 - userServices.submitLogin() -- http.post(..security/auth/facebook) response:   ', response);
             this.saveToken(response.token);
             this.cookies.set('fb-token', response.token, 2, '/');
             this.FBLoggedIn.next(true);
@@ -208,6 +208,11 @@ export class UserService {
       }
     }, {scope: 'email', return_scopes: true});
   }
+
+  // facebookLogin() {
+  //   this.submitLogin();
+  //   return this.FBLoggedIn;
+  // }
 
   getUserInfo(key) {
     const params = {params: new HttpParams().set('key', `${key}`)};
