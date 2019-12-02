@@ -6,7 +6,12 @@
     </mat-toolbar-row>
   </mat-toolbar>
   <div *ngIf="!isAdmin()">
-    <div class="card-deck-container">
+    <div class="card-deck-container" *ngIf="!loading">
+      <mat-card style="text-align:center"  *ngIf="myCourses.length === 0">
+        <mat-card-title>No Courses Yet</mat-card-title>
+        <hr>
+        <button mat-button [routerLink]="['/nav/courses/']">Start Registering For Courses Now!</button>
+      </mat-card>
       <ng-container *ngFor="let course of myCourses" fxLayout="row">
           <mat-card  [ngStyle]="{'width':'320' + 'px'}">
             <h2>{{course.name}}</h2>

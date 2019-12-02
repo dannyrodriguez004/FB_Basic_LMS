@@ -11,7 +11,7 @@ import {CoursesService} from '../../services/courses.service';
 })
 
 export class DashboardComponent implements OnInit {
-
+  loading = true;
   private subscriptions: Subscription[] =  [];
   myCourses: Course[] = []; // the user's courses names and id
   // tslint:disable-next-line:variable-name
@@ -44,6 +44,9 @@ export class DashboardComponent implements OnInit {
     } else {
       this.myCourses = [];
       this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: Course[]) => {
+        if (resp && resp.length === 0) {
+          this.loading = false;
+        }
         if (this.userServices.fbUser().id) {
           console.log(this.userServices.fbUser());
           resp.forEach((course: Course) => {
@@ -59,6 +62,7 @@ export class DashboardComponent implements OnInit {
                   course.instructor_name = instructor.name;
                   course.email = instructor.contactEmail;
                   this.myCourses.push(JSON.parse(JSON.stringify(course)));
+                  this.loading = false;
                 });
               });
           });
@@ -70,6 +74,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.loadCourses();
   }
 
