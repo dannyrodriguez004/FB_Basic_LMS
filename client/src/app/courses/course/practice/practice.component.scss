@@ -1,0 +1,42 @@
+.star {
+
+    font-size: xx-large;
+    margin: 1rem;
+    color: #eca611;
+
+    float: left;
+
+    -webkit-animation-name: gold; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+    animation-name: gold;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    
+}
+
+@keyframes gold {
+    0%{color: #eca611;}
+    25%{color: #fdc823;}
+    50%{color: #fff36a;}
+    75%{color: #fdc823;}
+    100%{color: #eca611;}
+  }
+
+  mat-button-toggle, mat-button-toggle-group {
+    width: 100%;
+}
+
+.actions {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.actions button {
+    float: right;
+    margin-left: 1rem;
+}
+
+body {
+    background-color: lightblue;
+}

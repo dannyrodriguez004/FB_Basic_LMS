@@ -649,7 +649,7 @@ class CoursesService {
             student.forEach( (item) => {
                 payload.courses.push({id: item.child('id').toJSON()});
             })
-            let courses = await database.ref('/courses').once('value');
+            let courses = await database.ref('/courses').orderByChild('name').once('value');
             for(var i =0; i < payload.courses.length; i++){
                 payload.courses[i].name = (courses.child(payload.courses[i].id).child('name').val());
             }

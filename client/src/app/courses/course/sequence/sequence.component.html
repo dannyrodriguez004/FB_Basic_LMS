@@ -1,4 +1,5 @@
-<mat-card>
+<mat-card *ngIf="!loading">
+    <button (click)="test()">Open Pactice</button>
     <div class="modules" *ngFor="let module of modules">
 
         <mat-card-title>
@@ -23,4 +24,12 @@
         <mat-divider></mat-divider>
         <br>
     </div>
+
+    <div style="text-align: center;" *ngIf="1 > modules.length">
+        Empty Course
+    </div>
+</mat-card>
+
+<mat-card *ngIf="loading">
+        <mat-spinner  style="margin-left: auto; margin-right: auto;"></mat-spinner>
 </mat-card>

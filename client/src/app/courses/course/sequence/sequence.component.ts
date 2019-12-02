@@ -1,3 +1,4 @@
+import { PracticeComponent } from './../practice/practice.component';
 import { VideoPopComponent } from './video-pop/video-pop.component';
 import { MatDialog } from '@angular/material';
 import { QuizDialogComponent } from './../modules/quiz-dialog/quiz-dialog.component';
@@ -30,6 +31,8 @@ export interface Resource {
 })
 export class SequenceComponent implements OnInit {
 
+  public loading = false;
+
   @Input("course") course: string = '-LoXRZvbw_tJaWGIxgGF';
 
   constructor(
@@ -41,8 +44,9 @@ export class SequenceComponent implements OnInit {
   modules = [];
 
   ngOnInit() {
+    this.loading = true;
     this.courseServices.getModules(this.course).subscribe( (resp: Module[]) => {
-      console.log(resp);
+
       resp.forEach( mod => {
         var groups = [];
         var group = [];
@@ -59,7 +63,7 @@ export class SequenceComponent implements OnInit {
         })
       });
 
-      console.log(this.modules);
+      this.loading = false;
     })
   }
 
@@ -91,6 +95,18 @@ export class SequenceComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe( (result) => {
 
+    });
+  }
+
+  test(mod, contId) {
+    const dialogRef = this.dialog.open(PracticeComponent, {
+      //panelClass: 'app-full-bleed-dialog',
+      width: '90%',
+      data: {
+        course: this.course,
+        module: mod,
+        contId: contId
+      }
     });
   }
 

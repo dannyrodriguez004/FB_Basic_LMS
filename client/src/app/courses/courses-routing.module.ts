@@ -1,4 +1,4 @@
-import { SequenceComponent } from './course/sequence/sequence.component';
+import { PracticeComponent } from './course/practice/practice.component';
 import { ConfirmEnrollComponent } from './course/confirm-enroll/confirm-enroll.component';
 import { AssessmentComponent } from './assessment/assessment.component';
 import { CoursesComponent } from './courses/courses.component';
@@ -16,7 +16,7 @@ const routes: Routes = [
     {path:'result', component: QuizResultComponent, canActivate: [AuthGuard]},
     {path:'confirm-enroll', component: ConfirmEnrollComponent, canActivate: [AuthGuard]},
     {path:'conversations', component: DiscussionsComponent, canActivate: [AuthGuard]},
-    {path:'seq', component: SequenceComponent},
+    {path:'seq', component: PracticeComponent},
     {path:'**', redirectTo: '' },
 ];
 
