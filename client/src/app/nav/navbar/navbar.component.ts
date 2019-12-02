@@ -39,16 +39,18 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.userServices.submitLogin();
     this.userServices.FBLoggedIn.subscribe(bool => {
       console.log('############### FBLoggedIn changed to ' + bool);
+      // this.loggedIn.next(true);
       this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
-        console.log('42 - navbar.doLogin() - userServices.getCurrentUser() resp.user_info', resp);
+        console.log('42 - navbar.doLogin() - userServices.getCurrentUser() resp.user_info\n', resp);
         this.loadCourses();
-        if (resp.registered) {
-          this.loggedIn.next(true);
-          this.isRegistered = true;
-          console.log('48 - navbar.doLogin() - userServices.getCurrentUser() resp.user_info', resp);
-        } else {
+        if (!resp.registered) {
           this.isRegistered = false;
           this.openRegisterStudentDialog();
+        } else {
+          this.isRegistered = true;
+          console.log('48 - navbar.doLogin() - userServices.getCurrentUser() resp.registered\n', resp.registered);
+          this.loggedIn.next(true);
+// window.localStorage.user_info = JSON.stringify(resp.user_info);
         }
       }));
     });
@@ -60,10 +62,10 @@ export class NavbarComponent implements OnInit, OnChanges {
     const dialogRef = this.dialog.open(FBRegisterComponent, {
       width: '90%',
       data: {
-        // id: this.userServices.fbUser().id,
-        // first_name: this.userServices.fbUser().first_name,
-        // last_name: this.userServices.fbUser().last_name,
-        // email: this.userServices.fbUser().email,
+        id: this.userServices.fbUser().id,
+        first_name: this.userServices.fbUser().first_name,
+        last_name: this.userServices.fbUser().last_name,
+        email: this.userServices.fbUser().email,
         type: UsertypeModel.Student
       }
     });
@@ -71,12 +73,13 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
       if (result) {
         this.isRegistered = true;
-        this.loggedIn.next(true);
-        console.log(result);
-      } else {
-        this.isRegistered = false;
-        this.loggedIn.next(false);
+        // this.loggedIn.next(true);
+        console.log('77 - NAVBAR - dialogRef.afterClosed() - result\n', result);
       }
+        // else {
+      //   this.isRegistered = false;
+      //   this.loggedIn.next(false);
+      // }
     }));
   }
 
@@ -89,27 +92,11 @@ export class NavbarComponent implements OnInit, OnChanges {
   // Runs whenever this component is loaded
   ngOnInit() {
     this.loadCourses();
-    console.log('92 - navbar.component.ts ngOnInit() - this.userServices.getCurrentUser():  ',
-      this.userServices.getCurrentUser());
+    console.log('95 - NAVBAR - ngOnInit() - userServices.getCurrentUser():  \n', this.userServices.getCurrentUser());
   }
 
   ngOnChanges() {
     this.ngOnInit();
-  }
-
-  openAddCourseDialog() {
-    const dialogRef = this.dialog.open(NewcourseComponent, {
-      width: '90%',
-      data: {
-        name: 'Insert Course Title Here',
-        description: 'Enter Course description here'
-      }
-    });
-    this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
-      if (result) {
-        console.log(result);
-      }
-    }));
   }
 
   /**
@@ -118,8 +105,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   loadCourses() {
       if (this.loggedIn.value || this.isAdmin()) {
         if (this.loggedIn.value) {
-          console.log('121 - navbar.component.ts loadCourses() - this.loggedIn.value:    ',
-            this.loggedIn.value);
+          console.log('108 - NAVBAR - loadCourses() - this.loggedIn.value: \n', this.loggedIn.value);
           this.subscriptions.push(this.coursesServices.getStudentCourses().subscribe((resp: CourseNav[]) => {
             this.myCourses = resp;
           }));
@@ -128,7 +114,7 @@ export class NavbarComponent implements OnInit, OnChanges {
       if (this.isAdmin()) {
         // this.adminLoggedIn.next(true);
         this.subscriptions.push(this.coursesServices.getAdminCourses().subscribe((resp: CourseNav[]) => {
-          console.log(resp);
+          console.log('117 - NAVBAR - loadCourses() - getAdminCourses\n', resp);
           this.adminCourses = resp;
         }));
     }

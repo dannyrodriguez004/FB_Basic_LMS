@@ -185,21 +185,21 @@ export class UserService {
     FB.login(result => {
       console.log(result);
       const params = {params: new HttpParams().set('userID', result.authResponse.userID)};
-      console.log('188 - userServices.submitLogin() -- FB.login result.authResponse:   ', result.authResponse);
+      console.log('188 - userSERVICE - submitLogin.FB.login.result.authResponse:\n', result.authResponse);
       FB.api('/me', {fields: 'first_name, last_name, email'}, response => {
-        console.log('190 - userServices.submitLogin() -- FB.api response:   ', response);
+        console.log('190 - userSERVICE.submitLogin.FB.api.response:\n', response);
         this.userModel.id = response.id;
         this.userModel.first_name = response.first_name;
         this.userModel.last_name = response.last_name;
         this.userModel.email = response.email;
         this.userModel.type = UsertypeModel.Student;
-        console.log('196 - userServices.submitLogin() -- FB.api this.userModel:   ', this.userModel);
+        console.log('196 - userSERVICE.submitLogin.FB.api,this.userModel:\n', this.userModel);
         console.log('197 - Good to see you, ' + response.first_name + '  ' + response.last_name + '    .' + response.email);
       });
       if (result.authResponse) {
         this.http.post(`${environment.apiAddress}/security/auth/facebook`, params)
           .subscribe((response: any) => {
-            console.log('202 - userServices.submitLogin() -- http.post(..security/auth/facebook) response:   ', response);
+            console.log('202 - userSERVICE.submitLogin.http.post(security/auth/facebook).response:\n', response);
             this.saveToken(response.token);
             this.cookies.set('fb-token', response.token, 2, '/');
             this.FBLoggedIn.next(true);
@@ -251,9 +251,9 @@ export class UserService {
     const opts = {
       body: userModel
     };
-    console.log(opts);
+    console.log('254 - userSERVICE.addUser.opts\n', opts);
     this.http.post(`${environment.apiAddress}/users/add-user`, opts).subscribe((result: any) => {
-      console.log(result);
+      console.log('256 - userSERVICE.addUser.http.post(users/add-user).result:\n', result);
     });
   }
 
@@ -261,9 +261,9 @@ export class UserService {
     const opts = {
       body: userModel
     };
-    console.log(opts);
+    console.log('264 - userSERVICE.updateUser.opts\n', opts);
     this.http.post(`${environment.apiAddress}/users/add-user`, opts).subscribe((result: any) => {
-      console.log(result);
+      console.log('266 - userSERVICE.updateUser.http.post(users/add-user).result:\n', result);
     });
   }
 
@@ -275,9 +275,9 @@ export class UserService {
     const opts = {
       body: userModel
     };
-    console.log(opts);
+    console.log('278 - userSERVICE.updateStudent.opts\n', opts);
     this.http.post(`${environment.apiAddress}/users/add-student`, opts).subscribe((result: any) => {
-      console.log(result);
+      console.log('280 - userSERVICE.updateStudent.http.post(users/add-student).result:\n', result);
     });
   }
 
@@ -289,9 +289,9 @@ export class UserService {
     const opts = {
       body: user
     };
-    console.log(opts);
+    console.log('292 - userSERVICE.updateUser.opts\n', opts);
     return this.http.post(`${environment.apiAddress}/users/add-student`, opts).subscribe((result: any) => {
-      console.log(result);
+      console.log('294 - userSERVICE.updateUser.http.post(users/add-student).result:\n', result);
     });
   }
 

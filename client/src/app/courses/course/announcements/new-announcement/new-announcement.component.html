@@ -5,7 +5,7 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Announcement End Date</mat-label>
-    <input matInput formControlName="date" [min]="today" [matDatepicker]="picker" placeholder="Choose an end date" required>
+    <input matInput formControlName="date" [min]="today" [matDatepicker]="picker" placeholder="Date Posted:" required>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
@@ -17,7 +17,7 @@
   </mat-form-field>
 
   <div>
-    <mat-label><strong>Announcement Description:</strong></mat-label>
+    <mat-label><strong>Description:</strong></mat-label>
     <angular-editor formControlName="description" [config]="config"></angular-editor>
     <mat-error *ngIf="announcementForm.controls['description'].invalid">{{getDescriptionError()}}</mat-error>
   </div>

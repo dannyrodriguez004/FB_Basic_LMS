@@ -14,7 +14,7 @@
       <span *ngIf="loggedIn.value">
             <button (click)="loadCourses()" mat-button [matMenuTriggerFor]="menu"><mat-icon>list</mat-icon>My Courses</button>
 
-            <mat-menu #menu="matMenu" >
+            <mat-menu #menu="matMenu">
                   <button *ngIf="myCourses.length === 0" [routerLink]="['/nav/courses/']" mat-menu-item>
                     <mat-icon>class</mat-icon>Start Adding Courses Now!
                   </button>

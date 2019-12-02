@@ -1,12 +1,9 @@
 import {UsertypeModel} from './usertype.model';
 
 export class UserModel {
-
   constructor() {
     this.type = UsertypeModel.Guest;
   }
-
-
   id: string;
   // tslint:disable-next-line:variable-name
   first_name: string;
@@ -20,9 +17,8 @@ export class UserModel {
   photo?: string;
   photoToken?: string;
 
-  update(id?: string, fname?: string, lname?: string,
-    email?: string, phone?: string, country?: string,
-    token?: string, type?: UsertypeModel, photo?:string, photoToken?:string) {
+  update(id?: string, fname?: string, lname?: string, email?: string, phone?: string, country?: string,
+         token?: string, type?: UsertypeModel, photo?: string, photoToken?: string) {
     this.id = id ? id : this.id;
     this.first_name = fname ? fname : this.first_name;
     this.last_name = lname ? lname: this.last_name;

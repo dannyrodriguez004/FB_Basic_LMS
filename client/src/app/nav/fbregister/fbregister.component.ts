@@ -24,7 +24,7 @@ export class FBRegisterComponent implements OnInit {
     private userServices: UserService,
     private router: Router,
     public dialogRef: MatDialogRef<FBRegisterComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) data: {id: string}) {
+    @Optional() @Inject(MAT_DIALOG_DATA) data: {userModel}) {
       console.log('FBUSER', this.userServices.fbUser());
       this.user = this.userServices.fbUser();
       this.registerForm = this.formBuilder.group({
