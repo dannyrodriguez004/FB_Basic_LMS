@@ -27,7 +27,7 @@ export class FBRegisterComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) data: {id: string, first_name: string, last_name: string, email: string}) {
     console.log(data.id);
     this.registerForm = this.formBuilder.group({
-      id: data.id,
+      // id: data.id,
       first_name: [data.first_name, Validators.required],
       last_name: [data.last_name, Validators.required],
       email: [data.email, [Validators.email, Validators.required]],
@@ -59,7 +59,7 @@ export class FBRegisterComponent implements OnInit {
   register() {
     this.loading = true;
     this.userServices.addUser( {
-          userID: this.registerForm.value.id,
+          userID: this.userServices.fbUser().id,
           email: this.registerForm.value.email,
           first_name: this.registerForm.value.first_name,
           last_name: this.registerForm.value.last_name,
@@ -67,7 +67,7 @@ export class FBRegisterComponent implements OnInit {
           country: this.registerForm.value.country
         });
     this.userServices.addStudent( {
-      key: this.registerForm.value.id,
+      key: this.userServices.fbUser().id,
       email: this.registerForm.value.email,
       fname: this.registerForm.value.first_name,
       lname: this.registerForm.value.last_name,

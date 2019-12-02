@@ -39,9 +39,12 @@ class UsersService {
 
     async addStudent(user) {
         try {
+            console.log(user);
             // let students = await database.ref('/students').orderByKey().equalTo(user.body.key).once('value');
             // if(!students || !students.hasChildren()) {
-                await database.ref('/students').child(user.body.key).set({
+            const id = user.body.key;
+            console.log(id);
+                await database.ref('/students').child(user.body.key).update({
                     token: user.body.token,
                     fname: user.body.fname.trim(),
                     lname: user.body.lname.trim(),
@@ -66,9 +69,12 @@ class UsersService {
      */
     async addUser (user_info) {
         try {
+            console.log(user_info);
             // let users = await database.ref('/users').orderByKey().equalTo(user_info.body.userID).once('value');
             // if(!users || !users.hasChildren()) {
-                await database.ref('/users').child(user_info.body.userID).set({
+            const id = user_info.body.userID;
+            console.log(id);
+                await database.ref('/users').child(id).update({
                     first_name: user_info.body.first_name.trim(),
                     last_name: user_info.body.last_name.trim(),
                     phone: user_info.body.phone.trim(),

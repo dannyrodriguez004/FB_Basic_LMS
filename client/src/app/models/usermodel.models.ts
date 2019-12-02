@@ -20,9 +20,9 @@ export class UserModel {
   photo?: string;
   photoToken?: string;
 
-  update(id?:string, fname?:string, lname?:string, 
-    email?:string, phone?:string, country?:string, 
-    token?:string, type?:UsertypeModel, photo?:string, photoToken?:string) {
+  update(id?: string, fname?: string, lname?: string,
+    email?: string, phone?: string, country?: string,
+    token?: string, type?: UsertypeModel, photo?:string, photoToken?:string) {
     this.id = id ? id : this.id;
     this.first_name = fname ? fname : this.first_name;
     this.last_name = lname ? lname: this.last_name;

@@ -1084,7 +1084,6 @@ class CoursesService {
             } else {
                 return false;
             }
-            await this.moveFromWaitToRegister(course);
         } catch(err){
             return false;
         }

@@ -82,7 +82,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     const dialogRef = this.dialog.open(FBRegisterComponent, {
       width: '90%',
       data: {
-        id: this.userServices.fbUser().id,
+        // id: this.userServices.fbUser().id,
         first_name: this.userServices.fbUser().first_name,
         last_name: this.userServices.fbUser().last_name,
         email: this.userServices.fbUser().email,
