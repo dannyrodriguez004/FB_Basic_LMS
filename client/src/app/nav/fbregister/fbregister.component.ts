@@ -24,15 +24,15 @@ export class FBRegisterComponent implements OnInit {
     private userServices: UserService,
     private router: Router,
     public dialogRef: MatDialogRef<FBRegisterComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) data: {id: string, first_name: string, last_name: string, email: string}) {
-    console.log(data.id);
-    this.registerForm = this.formBuilder.group({
-      // id: data.id,
-      first_name: [data.first_name, Validators.required],
-      last_name: [data.last_name, Validators.required],
-      email: [data.email, [Validators.email, Validators.required]],
-      phone: ['', Validators.required],
-      country: ['', Validators.required]
+    @Optional() @Inject(MAT_DIALOG_DATA) data: {id: string}) {
+      console.log('FBUSER', this.userServices.fbUser());
+      this.user = this.userServices.fbUser();
+      this.registerForm = this.formBuilder.group({
+        first_name: [this.user.first_name, Validators.required],
+        last_name: [this.user.last_name, Validators.required],
+        email: [this.user.email, [Validators.email, Validators.required]],
+        phone: ['', Validators.required],
+        country: ['', Validators.required]
     });
   }
 

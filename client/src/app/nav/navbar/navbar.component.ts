@@ -83,9 +83,9 @@ export class NavbarComponent implements OnInit, OnChanges {
       width: '90%',
       data: {
         // id: this.userServices.fbUser().id,
-        first_name: this.userServices.fbUser().first_name,
-        last_name: this.userServices.fbUser().last_name,
-        email: this.userServices.fbUser().email,
+        // first_name: this.userServices.fbUser().first_name,
+        // last_name: this.userServices.fbUser().last_name,
+        // email: this.userServices.fbUser().email,
         type: UsertypeModel.Student
       }
     });
@@ -95,6 +95,9 @@ export class NavbarComponent implements OnInit, OnChanges {
         this.isRegistered = true;
         this.loggedIn.next(true);
         console.log(result);
+      } else {
+        this.isRegistered = false;
+        this.loggedIn.next(false);
       }
     }));
   }
