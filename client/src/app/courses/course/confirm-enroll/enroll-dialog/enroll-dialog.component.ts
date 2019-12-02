@@ -2,6 +2,7 @@ import { YesNoDialogComponent } from 'src/app/yes-no-dialog/yes-no-dialog.compon
 import { CoursesService } from 'src/app/services/courses.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Component, OnInit, Optional, Inject } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-enroll-dialog',
@@ -18,7 +19,8 @@ export class EnrollDialogComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) data: {student:
         {id: string, fname: string, lname: string, email: string, phone: string}, course: string, enrolled: boolean},
     private coursesServices: CoursesService,
-    private dialog: MatDialog,
+    public dialog: MatDialog,
+    public router: Router
   ) {
     this.student = data.student;
     this.current_course = data.course;
