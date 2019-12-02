@@ -49,7 +49,7 @@ export class NavbarComponent implements OnInit, OnChanges {
           this.openRegisterStudentDialog();
         } else {
           this.isRegistered = true;
-          console.log('48 - navbar.doLogin() - userServices.getCurrentUser() resp.registered\n', resp.registered);
+          console.log('52 - navbar.doLogin() - userServices.getCurrentUser() resp.registered\n', resp.registered);
           this.loggedIn.next(true);
           this.ngOnChanges();
         }
@@ -69,17 +69,16 @@ export class NavbarComponent implements OnInit, OnChanges {
         type: UsertypeModel.Student
       }
     });
-
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
+      console.log('LINE &$ $#########$');
       if (result) {
         this.isRegistered = true;
-        // this.loggedIn.next(true);
+        this.loggedIn.next(true);
         console.log('77 - NAVBAR - dialogRef.afterClosed() - result\n', result);
+      } else {
+        this.isRegistered = false;
+        this.loggedIn.next(false);
       }
-        // else {
-      //   this.isRegistered = false;
-      //   this.loggedIn.next(false);
-      // }
     }));
   }
 

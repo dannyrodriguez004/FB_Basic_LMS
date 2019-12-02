@@ -289,9 +289,9 @@ export class UserService {
     const opts = {
       body: user
     };
-    console.log('292 - userSERVICE.updateUser.opts\n', opts);
+    console.log('292 - userSERVICE.addStudent.opts\n', opts);
     return this.http.post(`${environment.apiAddress}/users/add-student`, opts).subscribe((result: any) => {
-      console.log('294 - userSERVICE.updateUser.http.post(users/add-student).result:\n', result);
+      console.log('294 - userSERVICE.addStudent.http.post(users/add-student).result:\n', result);
     });
   }
 

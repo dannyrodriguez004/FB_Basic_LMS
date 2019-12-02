@@ -76,7 +76,7 @@ export class FBRegisterComponent implements OnInit {
       token: 'Student'
     });
     this.loading = false;
-    this.dialogRef.close();
+    this.dialogRef.close(true);
 
   }
 
