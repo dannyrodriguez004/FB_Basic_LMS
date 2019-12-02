@@ -387,6 +387,7 @@ class CoursesService {
                 category: course.category,
                 description: course.description,
                 instructor: course.instructor_id,
+                // instructorName: course.instructor_name,
                 size: course.size,
                 MAX_SIZE: course.MAX_SIZE,
                 endEnrollDate: course.endEnrollDate,
@@ -1041,6 +1042,26 @@ class CoursesService {
         }
         return payload;
     }
+    //
+    // async getCourseInstructor(course) {
+    //     let payload = [];
+    //     let ids = [];
+    //     try {
+    //         let registered = await database.ref('/courses/' + course + '/students').once('value');
+    //         registered.forEach((item) => {
+    //             ids.push(item.child('id').val());
+    //         });
+    //         let index;
+    //         for (index = 0; index < ids.length; index++) {
+    //             let temp = await userService.getStudentDetail(ids[index]);
+    //             temp.id = ids[index];
+    //             payload.push(temp);
+    //         }
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    //     return payload;
+    // }
 
     async waitingListSize(course) {
         let size = 0;

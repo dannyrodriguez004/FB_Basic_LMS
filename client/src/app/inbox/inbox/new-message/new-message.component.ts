@@ -28,6 +28,7 @@ export class NewMessageComponent implements OnInit {
   recipients: {id: '', fname: '', lname: '', email: ''}[];
   recipient: [];
   course = {name: '', id: this.current_course, description: '', instructor: ''};
+  // course = {name: '', id: this.current_course, description: '', instructor: '', instructorName: '', instructorEmail: ''};
   loading = true;
   public myCourses: CourseNav[];
 
@@ -43,6 +44,7 @@ export class NewMessageComponent implements OnInit {
       description: ['', Validators.required],
       courseId: ['', Validators.required],
       recipients: ['', Validators.required]
+      // instructor: ['', Validators.required]
     });
     this.current_course = data;
   }
@@ -95,14 +97,23 @@ export class NewMessageComponent implements OnInit {
       .getCourseInfo(val)
       .subscribe( (course: {id: string, name: string,
         description: string, instructor: string, students: string[]}) => {
+        // description: string, instructor: string, instructorName: string, instructorEmail: string, students: string[]}) => {
         this.course  = course;
+        // this.coursesServices.getInstructorInfo(course.instructor).subscribe((instructor: any) => {
+        //   console.log('FOO ' + JSON.stringify(instructor));
+        //   this.course.instructorName = instructor.name;
+        //   this.course.instructorEmail = instructor.contactEmail;
+        //   // this.myCourses.push(JSON.parse(JSON.stringify(course)));
+        // });
         console.log(this.course);
       }));
   }
 
   chooseRecipient(event: any) {
-    console.log(event.value);
-    this.recipient = event.value;
+    // if (event && event.value) {
+      console.log(event.value);
+      this.recipient = event.value;
+    // }
   }
 
   getStudents(courseId) {
@@ -112,6 +123,9 @@ export class NewMessageComponent implements OnInit {
         console.log('STUDENTS', response);
       }));
   }
+
+  // getInstructor(courseId) {
+  // }
 
   sendMessage() {
     const conversation = {

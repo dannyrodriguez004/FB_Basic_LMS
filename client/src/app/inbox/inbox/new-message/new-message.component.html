@@ -12,9 +12,16 @@
   <mat-form-field appearance="outline">
     <mat-select (selectionChange)="chooseRecipient($event)" multiple formControlName="recipients">
       <mat-option>None</mat-option>
-      <mat-option *ngFor="let recipient of recipients" value="{{recipient.id}}">{{recipient.fname + ' ' + recipient.lname}} </mat-option>
+      <mat-option *ngFor="let recipient of recipients" value="{{recipient.id}}">
+        {{recipient.fname + ' ' + recipient.lname}}</mat-option>
     </mat-select>
   </mat-form-field>
+
+<!--  <mat-form-field *ngIf="course.instructor != null" appearance="outline">-->
+<!--    <mat-select  (selectionChange)="chooseRecipient($event)" formControlName="recipients">-->
+<!--      <mat-option [value]="course.instructor">{{course.instructorName}}</mat-option>-->
+<!--    </mat-select>-->
+<!--  </mat-form-field>-->
 
   <mat-form-field appearance="outline">
     <mat-label>Conversation Title</mat-label>
