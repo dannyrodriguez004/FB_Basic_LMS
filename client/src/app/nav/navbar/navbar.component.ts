@@ -4,13 +4,11 @@ import { UserService } from '../../services/user.service';
 import {Component, OnChanges, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
-import {Router} from '@angular/router';
 import {UserModel} from '../../models/usermodel.models';
 import {CoursesService} from '../../services/courses.service';
 import { FBRegisterComponent } from '../fbregister/fbregister.component';
 import {BehaviorSubject} from 'rxjs';
 import {UsertypeModel} from '../../models/usertype.model';
-import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,17 +20,15 @@ export class NavbarComponent implements OnInit, OnChanges {
   myCourses: CourseNav[] = []; // the user's courses names and id
   user: UserModel;
   adminCourses: CourseNav[] = [];
-  adminLoggedIn;
-  // tslint:disable-next-line:variable-name
-  private subscriptions: Subscription[] = [];
+  public subscriptions: Subscription[] = [];
   loggedIn;
   loading = false;
-  private isRegistered: boolean;
+  public isRegistered: boolean;
 
   constructor(
     private userServices: UserService,
     private coursesServices: CoursesService,
-    private dialog: MatDialog,
+    public dialog: MatDialog,
   ) {
     const jwtToken = this.userServices.getToken();
     this.loggedIn = new BehaviorSubject<boolean>(!!jwtToken);
@@ -48,34 +44,21 @@ export class NavbarComponent implements OnInit, OnChanges {
       this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
         console.log(resp);
         this.loadCourses();
-        if (!resp.registered) {
-          this.isRegistered = false;
-          this.openRegisterStudentDialog();
-        } else {
+        if (resp.registered) {
           this.loggedIn.next(true);
+          // if (this.myCourses.length > 0) {
+          //   this.hasCourses.next(true);
+          // }
           this.isRegistered = true;
           console.log('AFTER DO LOGIN', resp.user_info);
-          // window.localStorage.user_info = JSON.stringify(resp.user_info);
+        } else {
+          this.isRegistered = false;
+          this.openRegisterStudentDialog();
         }
       }));
     });
+    // this.loggedIn.next(this.isRegistered);
   }
-  // doLogin() {
-  //   this.userServices.submitLogin();
-  //   this.loggedIn.next(true);
-  //   this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
-  //     console.log(resp);
-  //     this.loadCourses();
-  //     if (!resp.user_info) {
-  //       this.isRegistered = false;
-  //       this.openRegisterStudentDialog();
-  //     } else {
-  //       this.isRegistered = true;
-  //       console.log('AFTER DO LOGIN', resp.user_info);
-  //       // window.localStorage.user_info = JSON.stringify(resp.user_info);
-  //     }
-  //   }));
-  // }
 
   openRegisterStudentDialog() {
     this.dialog.closeAll();
@@ -138,7 +121,6 @@ export class NavbarComponent implements OnInit, OnChanges {
    * Load courses, id and name, for the current user.
    */
   loadCourses() {
-    // if (this.loggedIn.value || this.adminLoggedIn.value) {
       if (this.loggedIn.value || this.isAdmin()) {
         if (this.loggedIn.value) {
           console.log('IN LOAD COURSES FOR STUDENT IN NAVBAR');
