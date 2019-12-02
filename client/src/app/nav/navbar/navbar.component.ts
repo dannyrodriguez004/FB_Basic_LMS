@@ -1,7 +1,7 @@
 import { CourseNav } from '../../models/courses.models';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { UserService } from '../../services/user.service';
-import {Component, OnChanges, OnInit} from '@angular/core';
+import {Component, NgZone, OnChanges, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import {NewcourseComponent} from '../newcourse/newcourse.component';
 import {UserModel} from '../../models/usermodel.models';
@@ -29,6 +29,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     private userServices: UserService,
     private coursesServices: CoursesService,
     public dialog: MatDialog,
+    public zone: NgZone
   ) {
     const jwtToken = this.userServices.getToken();
     this.loggedIn = new BehaviorSubject<boolean>(!!jwtToken);
@@ -50,11 +51,10 @@ export class NavbarComponent implements OnInit, OnChanges {
           this.isRegistered = true;
           console.log('48 - navbar.doLogin() - userServices.getCurrentUser() resp.registered\n', resp.registered);
           this.loggedIn.next(true);
-// window.localStorage.user_info = JSON.stringify(resp.user_info);
+          this.ngOnChanges();
         }
       }));
     });
-    // this.loggedIn.next(this.isRegistered);
   }
 
   openRegisterStudentDialog() {
@@ -91,12 +91,20 @@ export class NavbarComponent implements OnInit, OnChanges {
 
   // Runs whenever this component is loaded
   ngOnInit() {
-    this.loadCourses();
+    this.subscriptions.push(this.userServices.FBLoggedIn.subscribe( bool => {
+      this.zone.run(() => {
+        this.loadCourses();
+      });
+    }));
     console.log('95 - NAVBAR - ngOnInit() - userServices.getCurrentUser():  \n', this.userServices.getCurrentUser());
   }
 
   ngOnChanges() {
-    this.ngOnInit();
+    this.subscriptions.push(this.userServices.FBLoggedIn.subscribe( bool => {
+      this.zone.run(() => {
+        this.loadCourses();
+      });
+    }));
   }
 
   /**
