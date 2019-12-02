@@ -45,7 +45,6 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.userServices.submitLogin();
     this.userServices.FBLoggedIn.subscribe(bool => {
       console.log('############### FBLoggedIn changed to ' + bool);
-      this.loggedIn.next(true);
       this.subscriptions.push(this.userServices.getCurrentUser().subscribe((resp: any) => {
         console.log(resp);
         this.loadCourses();
@@ -53,6 +52,7 @@ export class NavbarComponent implements OnInit, OnChanges {
           this.isRegistered = false;
           this.openRegisterStudentDialog();
         } else {
+          this.loggedIn.next(true);
           this.isRegistered = true;
           console.log('AFTER DO LOGIN', resp.user_info);
           // window.localStorage.user_info = JSON.stringify(resp.user_info);
@@ -93,6 +93,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.subscriptions.push(dialogRef.afterClosed().subscribe( (result) => {
       if (result) {
         this.isRegistered = true;
+        this.loggedIn.next(true);
         console.log(result);
       }
     }));

@@ -1077,6 +1077,10 @@ class CoursesService {
                 await studentRef.ref.remove();
                 let decrement = await database.ref('/courses/' + course).once('value');
                 await decrement.ref.update({size: (decrement.child('size').val() - 1)});
+                let studentEnroll = await database.ref('/students/' + student + '/enrolled/' + course).once('value');
+                if (studentEnroll.exists()) {
+                    await studentEnroll.ref.remove();
+                }
             } else {
                 return false;
             }
