@@ -100,9 +100,8 @@ export class SequenceComponent implements OnInit {
 
   test(mod, contId) {
     const dialogRef = this.dialog.open(PracticeComponent, {
-      panelClass: 'app-full-bleed-dialog',
+      //panelClass: 'app-full-bleed-dialog',
       width: '90%',
-      height: '90%',
       data: {
         course: this.course,
         module: mod,

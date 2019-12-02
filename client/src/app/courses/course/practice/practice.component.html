@@ -1,11 +1,39 @@
-<mat-card style="width: 90%; height: 90%;">
-    <mat-card-title>
+
+<mat-toolbar color="primary">
+    <h1>
         {{quiz.title}}
-    </mat-card-title>
-    
-    <mat-card-content>
-        <div>
-            <mat-icon class='star'  *ngFor="let star of getStarts()">star</mat-icon>
-        </div>
-    </mat-card-content>
-</mat-card>
+    </h1>
+    <span class="fill"></span>
+    <mat-icon class="star noselect"  *ngFor="let star of getStarts()">star</mat-icon>
+</mat-toolbar>
+
+<div *ngIf="!isDone()">
+
+    <div style="width: 100%; text-align: center;">
+        <h2>Question {{quiz.items.indexOf(select) + 1}}</h2>
+        <h2>{{select.question}}</h2>
+    </div>
+
+    <mat-button-toggle-group [(ngModel)]="response" vertical>
+        <mat-button-toggle [disabled]="isDisabled()" *ngFor="let res of select.options" value="{{select.options.indexOf(res)}}" id="{{select.options.indexOf(res)}}" aria-label="Text align center">
+            {{res}}
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+
+</div>
+
+<div *ngIf="isDone()" style="width: 100%; text-align: center;">
+
+        <h1>Score: {{getCorrect()}}/{{quiz.items.length}}</h1>
+        <h1>{{getPercent()}}%</h1>
+        <mat-progress-bar [color]="barColor" [value]="getPercent()"></mat-progress-bar>
+
+</div>
+
+<div class="actions">
+    <button *ngIf="canNext()" mat-button [disabled]="(!canNext() || response == null || !isSubmitted())" (click)="next()">Next</button>
+    <button *ngIf="!isDisabled()" mat-button [disabled]="response == null || isDisabled() || isSubmitted()" (click)="submit()">Submit</button>
+    <button *ngIf="!canNext() && isDisabled() && !completed" mat-button (click)="result()">Results</button>
+    <button *ngIf="isDone()" mat-button (click)="close()">Close</button>
+</div>
+
